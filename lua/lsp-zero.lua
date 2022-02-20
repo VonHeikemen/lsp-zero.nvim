@@ -17,7 +17,6 @@ end
 
 M.setup = function()
   local settings = require('lsp-zero.settings')
-  local sync_state = true
 
   if settings.manage_nvim_cmp then
     M.setup_nvim_cmp({})
@@ -30,13 +29,9 @@ M.setup = function()
   end
 
   if settings.suggest_lsp_servers then
+    safe_call(state.sync)
     lsp_install.on_server_ready(function(server)
-      if sync_state then
-        safe_call(state.sync)
-        sync_state = false
-      else
         safe_call(state.check_server, server)
-      end
     end)
   end
 
