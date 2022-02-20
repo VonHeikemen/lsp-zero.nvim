@@ -194,7 +194,7 @@ If you wish to disable an feature replace `true` with `false`.
 
 ### About nvim-cmp
 
-Some details that you should now. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. Inside `lsp-zero` we need the following sources:
+Some details that you should know. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. Inside `lsp-zero` we need the following sources:
 
 * [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
 
