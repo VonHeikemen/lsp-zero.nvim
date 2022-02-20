@@ -1,4 +1,4 @@
-> Project status: Early development, breaking changes can happen at any moment. Looking for testers to provide feedback. Mostly usable.
+> Project status: Early development, breaking changes can happen at any moment. Looking for testers to provide feedback (there is a [discussion open](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1)). Mostly usable. I have a added a [minimal config](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Minimal-test-config) in the wiki, for those who know how to handle multiple configuration files.
 
 # LSP Zero
 
