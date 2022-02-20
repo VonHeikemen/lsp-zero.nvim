@@ -1,0 +1,69 @@
+local preset = {}
+local icons = {}
+
+icons.sign = function()
+  return {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = ''
+  }
+end
+
+preset.defaults = function()
+  return {
+    'defaults',
+    suggest_lsp_servers = false,
+    setup_servers_on_start = false,
+    set_lsp_keymaps = true,
+    configure_diagnostics = true,
+    cmp_capabilities = false,
+    manage_nvim_cmp = false,
+    state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
+    sign_icons = icons.sign()
+  }
+end
+
+preset.recommended = function()
+  local opts = preset.defaults()
+
+  opts[1] = 'recommended'
+  opts.suggest_lsp_servers = true
+  opts.setup_servers_on_start = true
+  opts.cmp_capabilities = true
+  opts.manage_nvim_cmp = true
+
+  return opts
+end
+
+preset['lsp-compe'] = function()
+  local opts = preset.recommended()
+
+  opts[1] = 'lsp-compe'
+  opts.manage_nvim_cmp = false
+
+  return opts
+end
+
+preset['lsp-only'] = function()
+  local opts = preset.recommended()
+
+  opts[1] = 'lsp-only'
+  opts.manage_nvim_cmp = false
+  opts.cmp_capabilities = false
+
+  return opts
+end
+
+preset['manual-setup'] = function()
+  local opts = preset.recommended()
+
+  opts[1] = 'manual-setup'
+  opts.suggest_lsp_servers = false
+  opts.setup_servers_on_start = false
+
+  return opts
+end
+
+return preset
+

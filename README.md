@@ -1,0 +1,397 @@
+> Project status: Early development, breaking changes can happen at any moment. Looking for testers to provide feedback. Mostly usable.
+
+# LSP Zero
+
+Say you want to get started using the native LSP client that comes with neovim. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
+
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the native LSP client to work together nicely. Additionally, with the help of [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/), it can let you install language servers from inside neovim.
+
+Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.preset('recommended')
+lsp.setup()
+```
+
+`.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they will be explained in detail later.
+
+## Quickstart (for the impatient)
+
+This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
+
+### Installing
+
+Use your favorite plugin manager to install this plugin and all its lua dependencies.
+
+With `packer`:
+
+```lua
+use {
+  'VonHeikemen/lsp-zero.nvim',
+  requires = {
+    -- LSP Support
+    {'neovim/nvim-lspconfig'},
+    {'williamboman/nvim-lsp-installer'},
+
+    -- Autocompletion
+    {'hrsh7th/nvim-cmp'},
+    {'hrsh7th/cmp-buffer'},
+    {'hrsh7th/cmp-path'},
+    {'saadparwaiz1/cmp_luasnip'},
+    {'hrsh7th/cmp-nvim-lsp'},
+    {'hrsh7th/cmp-nvim-lua'},
+
+    -- Snippets
+    {'L3MON4D3/LuaSnip'},
+    {'rafamadriz/friendly-snippets'},
+  }
+}
+```
+
+With `paq`:
+
+```lua
+{'VonHeikemen/lsp-zero.nvim'};
+
+-- LSP Support
+{'neovim/nvim-lspconfig'};
+{'williamboman/nvim-lsp-installer'};
+
+-- Autocompletion
+{'hrsh7th/nvim-cmp'};
+{'hrsh7th/cmp-buffer'};
+{'hrsh7th/cmp-path'};
+{'saadparwaiz1/cmp_luasnip'};
+{'hrsh7th/cmp-nvim-lsp'};
+{'hrsh7th/cmp-nvim-lua'};
+
+-- Snippets
+{'L3MON4D3/LuaSnip'};
+{'rafamadriz/friendly-snippets'};
+```
+
+With `vim-plug`:
+
+```vim
+" LSP Support
+Plug 'neovim/nvim-lspconfig'
+Plug 'williamboman/nvim-lsp-installer'
+
+" Autocompletion
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-buffer'
+Plug 'hrsh7th/cmp-path'
+Plug 'saadparwaiz1/cmp_luasnip'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'hrsh7th/cmp-nvim-lua'
+
+"  Snippets
+Plug 'L3MON4D3/LuaSnip'
+Plug 'rafamadriz/friendly-snippets'
+
+Plug 'VonHeikemen/lsp-zero.nvim'
+```
+
+### Requirements for language servers
+
+I would suggest you make a quick read in to the [installation section of nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/#installation).
+
+Make sure you have at least the minimum requirements listed in `unix systems` or `windows`. And maybe `nodejs` and `npm`, I know a lot of servers are hosted on `npm`.
+
+### Usage
+
+Inside your configuration file add this.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.preset('recommended')
+lsp.setup()
+```
+
+If you wish to add support for your config written in lua, add this after `.setup()`.
+
+```lua
+lsp.nvim_workspace()
+```
+
+Note. If you are using `init.vim` wrap the code above with this.
+
+```vim
+lua <<EOF
+  -- code goes in here
+EOF
+```
+
+## Available presets
+
+Presets are a combinations of options that determine how `.setup()` will behave, they can enable or disable features.
+
+### recommended
+
+* Setup every language server installed with `nvim-lsp-installer` at startup.
+* Suggest to install a language server when you encounter a new filetype.
+* Setup `nvim-cmp` with some default completion sources, this includes support for LSP based completion.
+* Setup some default keybindings for `nvim-cmp`.
+* Show diagnostic info with "nice" icons.
+* Diagnostic messages are shown in a floating window.
+* Setup some keybindings related to LSP actions, things like go to definition or rename variable.
+
+### lsp-compe
+
+Is the same as the `recommended` except that it assumes you want full control over the configuration for `nvim-cmp`. It'll provide the `capabilities` config to the languages server but the rest of the config is controlled by the user.
+
+### lsp-only
+
+Is the same as the `recommended` without any support for `nvim-cmp`.
+
+### manual-setup
+
+Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. Servers will need to be configured manually by the user.
+
+## Choose your features
+
+For this you'll need to delete `.preset()`,  use `set_preferences` instead. This function takes a "table" of options, they describe the features this plugin offers.
+
+These are the options the `recommended` preset uses.
+
+```lua
+lsp.set_preferences({
+  suggest_lsp_servers = true,
+  setup_servers_on_start = true,
+  set_lsp_keymaps = true,
+  configure_diagnostics = true,
+  cmp_capabilities = true,
+  manage_nvim_cmp = true,
+  sign_icons = {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = ''
+  }
+})
+```
+
+If you wish to disable an feature replace `true` with `false`.
+
+* `suggest_lsp_servers` enables the suggestions of lsp servers when you enter a filetype for the first time.
+
+* `setup_servers_on_start` gets a list of installed servers and configures them with some default features.
+
+* `set_lsp_keymaps` add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc.
+
+* `configure_diagnostics` uses the built-in function `vim.diagnostic.config` to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
+
+* `cmp_capabilities` sends the `nvim-cmp` capabilities to the language server.
+
+* `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
+
+* `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
+
+## Autocompletion
+
+### About nvim-cmp
+
+Some details that you should now. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. Inside `lsp-zero` we need the following sources:
+
+* [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
+
+* [cmp-path](https://github.com/hrsh7th/cmp-path): gives completions based on the filesystem.
+
+* [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip): it shows snippets in the suggestions.
+
+* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data send by the language server.
+
+* [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua): provides completions based on neovim's lua api.
+
+### Default keybindings
+
+* `<Enter>`: Confirms selection.
+
+* `<Up>`: Navigate to previous item on the list.
+
+* `<Down>`: Navigate to the next item on the list.
+
+* `<Ctrl-u>`: Scroll up in the item's documentation.
+
+* `<Ctrl-f>`: Scroll down in the item's documentation.
+
+* `<Ctrl-e>`: Toggles the completion.
+
+* `<Ctrl-d>`: Go to the next placeholder in the snippet.
+
+* `<Ctrl-b>`: Go to the previous placeholder in the snippet.
+
+* `<Tab>`: Enables completion when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list.
+
+* `<S-Tab>`: When the completion menu is visible navigate to the previous item in the list.
+
+## LSP
+
+### Default keybindings
+
+When a language server gets attached to a buffer you gain access some keybindings. All of these map to a built-in function so you can get more details using the `:help` command.
+
+* `K`: Displays hover information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.hover()`.
+
+* `gd`: Jumps to the definition of the symbol under the cursor. See `:help vim.lsp.buf.definition()`.
+
+* `gD`: Jumps to the declaration of the symbol under the cursor. Some servers don't implement this feature. See `:help vim.lsp.buf.declaration()`.
+
+* `gi`: Lists all the implementations for the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.implementation()`.
+
+* `go`: Jumps to the definition of the type of the symbol under the cursor. See `:help vim.lsp.buf.type_definition()`.
+
+* `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.references()`.
+
+* `qs`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`.
+
+* `qc`: Renames all references to the symbol under the cursor. See `:help vim.lsp.buf.rename()`.
+
+* `qa`: Selects a code action available at the current cursor position. See `:help vim.lsp.buf.code_action()`.
+
+### Commands
+
+* `LspZeroFormat`: Formats the current buffer. See `:help vim.lsp.buf.formatting()`.
+
+* `LspZeroWorkspaceRemove`: Remove the folder at path from the workspace folders. See `:help vim.lsp.buf.remove_workspace_folder()`.
+
+* `LspZeroWorkspaceAdd`: Add the folder at path to the workspace folders. See `:help vim.lsp.buf.add_workspace_folder()`.
+
+* `LspZeroWorkspaceList`: List workspace folders. See `vim.lsp.buf.list_workspace_folders()`.
+
+## Diagnostics
+
+In addition to the lsp keymap you also have access to these keybindings when a server is attached to a buffer.
+
+* `qd`: Show diagnostics in a floating window. See `:help vim.diagnostic.open_float()`.
+* `[d`: Move to the previous diagnostic in the current buffer. See `:help vim.diagnostic.goto_prev()`.
+* `]d`: Move to the next diagnostic. See `:help vim.diagnostic.goto_next()`.
+
+## Language servers and nvim-lsp-installer
+
+Install and updates of language servers is done with [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/).
+
+To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `nvim-lsp-installer` will try to suggest a language server based on the filetype of the current buffer.
+
+To check for updates on the language servers use the command `LspInstallInfo`. A floating window will open showing you all the language servers you have installed. If there is any update available, the item will display a message. Navigate to that item and press `u` to install the update.
+
+To uninstall a server use the command `LspInstallInfo`. Navigate to the language server you want to delete and press `X`.
+
+To know more about the available bindings inside the floating window of `LspInstallInfo` press `?`.
+
+## Global command
+
+* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.setup_servers()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim.
+
+## Lua api
+
+### `.preset({name})`
+
+It creates a combination of settings safe to use for specific cases.
+
+### `.set_preferences({opts})`
+
+It gives the user control over the options available in the plugin. Use it if none of the preset fit your needs.
+
+### `.setup()`
+
+The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be used right after `.preset()` or `.set_preferences()`.
+
+It is not strictly needed if you plan to manage the language servers by yourself.
+
+### `.setup_servers({list})`
+
+Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers.
+
+```lua
+local lsp_opts = {
+  flags = {
+    debounce_text_changes = 200,
+  }
+}
+
+lsp.setup_servers({
+  'html',
+  'cssls',
+  opts = lsp_opts
+})
+```
+
+There is also the property `root_dir`, when set to `true` it will set the root directory of the language server to be the working directory in neovim. `opts` and `root_dir` are mutually exclusive.
+
+```lua
+lsp.setup_servers({
+  root_dir = true,
+  'html',
+  'cssls'
+})
+```
+
+### `.configure({name}, {opts})`
+
+Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. More details of these options can be found [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
+```lua
+lsp.configure('tsserver', {
+  flags = {
+    debounce_text_changes = 500,
+  },
+  on_attach = function(client, bufnr)
+    client.resolved_capabilities.document_formatting = false
+  end
+})
+```
+
+### `.ensure_installed({list})`
+
+Installs all the servers in `{list}` if they are missing.
+
+```lua
+lsp.ensure_installed({
+  'html',
+  'cssls',
+  'tsserver'
+})
+```
+
+### `.nvim_workspace({opts})`
+
+Configures the language server for lua with all the options needed to provide completions specific to neovim.
+
+`{opts}` supports two properties:
+
+* `root_dir`: a function that determines the working directory of the language server.
+
+* `library`: a list of paths that the server should analyze.
+
+By default only the runtime files of neovim and `vim.stdpath('config')` will be included.
+If you wish to add every plugin you'll need to do this.
+
+```lua
+lsp.nvim_workspace({
+  library = vim.api.nvim_get_runtime_file('', true)
+})
+```
+
+### `.setup_nvim_cmp({opts})`
+
+In the case you don't use `.setup()` at startup, you can call `.setup_nvim_cmp` to configure `nvim-cmp`.
+
+With `{opts}` you can override some of the options for `nvim-cmp`:
+
+* sources
+* documentation
+* formatting
+* mapping
+
+If you wish to know what those properties you'll need to read `nvim-cmp`'s documentation.
+
+## Support
+
+If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
+
+[![buy me a coffee](https://res.cloudinary.com/vonheikemen/image/upload/v1618466522/buy-me-coffee_ah0uzh.png)](https://www.buymeacoffee.com/vonheikemen)
+
