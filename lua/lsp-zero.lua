@@ -48,12 +48,17 @@ M.setup = function()
 end
 
 M.preset = function(name)
-  M.set_preferences(M.create_preset(name))
+  local opts = M.create_preset(name)
+  if not opts[1] then return end
+
+  M.set_preferences(opts)
 end
 
 M.set_preferences = function(opts)
   local settings = require('lsp-zero.settings')
-  if not opts[1] then return end
+  if type(opts[1]) ~= 'string' then
+    opts[1] = 'custom'
+  end
 
   local new_settings = vim.tbl_extend('force', settings, opts)
 
