@@ -1,4 +1,4 @@
-local M = {}
+local M = {common_on_attach = function(arg) return arg end}
 local s = {}
 
 local state = {
@@ -30,6 +30,7 @@ M.setup = function(server_name, opts)
 
   opts.on_attach = function(...)
     s.on_attach(...)
+    if M.common_on_attach then M.common_on_attach(...) end
     if custom_attach then custom_attach(...) end
   end
 

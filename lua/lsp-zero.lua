@@ -4,6 +4,7 @@ local preset = require('lsp-zero.presets')
 local state = require('lsp-zero.state')
 local util = require('lsp-zero.utils')
 local lsp_install = require('nvim-lsp-installer')
+local Server = require('lsp-zero.server')
 
 local internal = {
   cmp_opts = {},
@@ -29,7 +30,7 @@ local run = function(args)
   end
 
   if user_config.setup_servers_on_start then
-    local configure = require('lsp-zero.server').setup
+    local configure = Server.setup
 
     lsp_install.on_server_ready(function(server)
       local server_opts = args.server_opts[server.name] or {}
@@ -107,7 +108,7 @@ M.setup_servers = function(list)
     return internal.fn.setup_servers(list)
   end
 
-  require('lsp-zero.server').setup_servers(list)
+  Server.setup_servers(list)
 end
 
 M.configure = function(server_name, opts)
@@ -117,7 +118,13 @@ M.configure = function(server_name, opts)
     return internal.fn.configure(server_name, opts)
   end
 
-  require('lsp-zero.server').setup(server_name, opts)
+  Server.setup(server_name, opts)
+end
+
+M.on_attach = function(fn)
+  if type(fn) == 'function' then
+    Server.common_on_attach = fn
+  end
 end
 
 M.setup_nvim_cmp = function(opts)
@@ -132,7 +139,7 @@ M.setup_nvim_cmp = function(opts)
 end
 
 M.ensure_installed = function(list)
-  require('lsp-zero.server').ensure_installed(list)
+  Server.ensure_installed(list)
 end
 
 M.nvim_workspace = function(opts)

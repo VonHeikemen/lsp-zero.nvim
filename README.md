@@ -345,6 +345,31 @@ lsp.configure('tsserver', {
 })
 ```
 
+### `.on_attach({callback})`
+
+Execute `{callback}` function every time a server is attached to a buffer.
+
+Let's say you want to disable all the default keybindings and you want to declare your own.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.set_preferences({
+  set_lsp_keymaps = false
+})
+
+lsp.on_attach(function(client, bufnr)
+  local noremap = {noremap = true}
+  local map = function(...) vim.api.nvim_buf_set_keymap(0, ...) end
+
+  map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+  -- more code  ...
+end)
+
+lsp.setup()
+```
+
 ### `.ensure_installed({list})`
 
 Installs all the servers in `{list}` if they are missing.
