@@ -147,12 +147,12 @@ s.set_keymaps = function(bufnr)
   map('n', 'gi', lsp 'buf.implementation()')
   map('n', 'go', lsp 'buf.type_definition()')
   map('n', 'gr', lsp 'buf.references()')
-  map('n', 'qs', lsp 'buf.signature_help()')
-  map('n', 'qc', lsp 'buf.rename()')
-  map('n', 'qa', lsp 'buf.code_action()')
+  map('n', '<C-k>', lsp 'buf.signature_help()')
+  map('n', '<F2>', lsp 'buf.rename()')
+  map('n', '<F4>', lsp 'buf.code_action()')
 
   if global_config.configure_diagnostics then
-    map('n', 'qd', diagnostic 'open_float()')
+    map('n', 'gl', diagnostic 'open_float()')
     map('n', '[d', diagnostic 'goto_prev()')
     map('n', ']d', diagnostic 'goto_next()')
   end

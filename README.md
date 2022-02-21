@@ -247,11 +247,11 @@ When a language server gets attached to a buffer you gain access some keybinding
 
 * `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.references()`.
 
-* `qs`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`.
+* `<Ctrl-k>`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`.
 
-* `qc`: Renames all references to the symbol under the cursor. See `:help vim.lsp.buf.rename()`.
+* `<F2>`: Renames all references to the symbol under the cursor. See `:help vim.lsp.buf.rename()`.
 
-* `qa`: Selects a code action available at the current cursor position. See `:help vim.lsp.buf.code_action()`.
+* `<F4>`: Selects a code action available at the current cursor position. See `:help vim.lsp.buf.code_action()`.
 
 ### Commands
 
@@ -261,13 +261,13 @@ When a language server gets attached to a buffer you gain access some keybinding
 
 * `LspZeroWorkspaceAdd`: Add the folder at path to the workspace folders. See `:help vim.lsp.buf.add_workspace_folder()`.
 
-* `LspZeroWorkspaceList`: List workspace folders. See `vim.lsp.buf.list_workspace_folders()`.
+* `LspZeroWorkspaceList`: List workspace folders. See `:help vim.lsp.buf.list_workspace_folders()`.
 
 ## Diagnostics
 
 In addition to the lsp keymap you also have access to these keybindings when a server is attached to a buffer.
 
-* `qd`: Show diagnostics in a floating window. See `:help vim.diagnostic.open_float()`.
+* `gl`: Show diagnostics in a floating window. See `:help vim.diagnostic.open_float()`.
 * `[d`: Move to the previous diagnostic in the current buffer. See `:help vim.diagnostic.goto_prev()`.
 * `]d`: Move to the next diagnostic. See `:help vim.diagnostic.goto_next()`.
 
