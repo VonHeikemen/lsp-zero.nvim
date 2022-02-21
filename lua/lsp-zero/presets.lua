@@ -20,7 +20,7 @@ preset.defaults = function()
     cmp_capabilities = false,
     manage_nvim_cmp = false,
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
-    sign_icons = icons.sign()
+    sign_icons = icons.sign(),
   }
 end
 

@@ -5,6 +5,12 @@ local state = require('lsp-zero.state')
 local util = require('lsp-zero.utils')
 local lsp_install = require('nvim-lsp-installer')
 
+local internal = {
+  cmp_opts = {},
+  servers = {},
+  fn = {}
+}
+
 local safe_call = function(fn, ...)
   local ok, res = pcall(fn, ...)
   if not ok then
@@ -15,27 +21,30 @@ local safe_call = function(fn, ...)
   return res
 end
 
-M.setup = function()
-  local settings = require('lsp-zero.settings')
+local run = function(args)
+  local user_config = args.settings
 
-  if settings.manage_nvim_cmp then
-    M.setup_nvim_cmp({})
+  if user_config.manage_nvim_cmp then
+    require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
 
-  if settings.setup_servers_on_start then
+  if user_config.setup_servers_on_start then
+    local configure = require('lsp-zero.server').setup
+
     lsp_install.on_server_ready(function(server)
-      M.configure(server.name, {autostart = true})
+      local server_opts = args.server_opts[server.name] or {}
+      server_opts.autostart = true
+
+      configure(server.name, server_opts)
     end)
   end
 
-  if settings.suggest_lsp_servers then
+  if user_config.suggest_lsp_servers then
     safe_call(state.sync)
     lsp_install.on_server_ready(function(server)
-        safe_call(state.check_server, server)
+      safe_call(state.check_server, server)
     end)
-  end
 
-  if settings.suggest_lsp_servers then
     local autocmd = [[
       augroup lsp_cmds
         autocmd!
@@ -47,9 +56,22 @@ M.setup = function()
   end
 end
 
+M.setup = function()
+  local settings = require('lsp-zero.settings')
+
+  return run({
+    settings = settings,
+    cmp_opts = internal.cmp_opts,
+    server_opts = internal.servers
+  })
+end
+
 M.preset = function(name)
   local opts = M.create_preset(name)
-  if not opts[1] then return end
+  if not opts[1] then
+    error('(lsp-zero) Invalid preset')
+    return
+  end
 
   M.set_preferences(opts)
 end
@@ -78,21 +100,39 @@ M.create_preset = function(name)
   return preset[name]()
 end
 
-
 M.setup_servers = function(list)
+  local settings = require('lsp-zero.settings')
+
+  if settings.setup_servers_on_start then
+    return internal.fn.setup_servers(list)
+  end
+
   require('lsp-zero.server').setup_servers(list)
 end
 
 M.configure = function(server_name, opts)
+  local settings = require('lsp-zero.settings')
+
+  if settings.setup_servers_on_start then
+    return internal.fn.configure(server_name, opts)
+  end
+
   require('lsp-zero.server').setup(server_name, opts)
+end
+
+M.setup_nvim_cmp = function(opts)
+  local settings = require('lsp-zero.settings')
+
+  if settings.manage_nvim_cmp then
+    return internal.fn.configure(opts)
+  end
+
+  local msg = 'Settings for nvim_cmp should be handled by the user.'
+  vim.notify(msg, vim.log.levels.WARN)
 end
 
 M.ensure_installed = function(list)
   require('lsp-zero.server').ensure_installed(list)
-end
-
-M.setup_nvim_cmp = function(opts)
-  require('lsp-zero.nvim-cmp-setup').call_setup(opts)
 end
 
 M.nvim_workspace = function(opts)
@@ -172,6 +212,24 @@ M.suggest_server = function()
 
   if answer == 1 then
     vim.cmd('LspInstall')
+  end
+end
+
+internal.fn.setup_nvim_cmp = function(settings)
+  internal.cmp_opts = settings
+end
+
+internal.fn.configure = function(name, settings)
+  internal.servers[name] = settings
+end
+
+internal.fn.setup_servers = function(list)
+  if list.opts == nil and list.root_dir == true then
+    list.opts = {root_dir = function() return vim.fn.getcwd() end}
+  end
+
+  for _, server in ipairs(list) do
+    internal.servers[server] = list.opts
   end
 end
 

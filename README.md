@@ -111,7 +111,7 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-If you wish to add support for your config written in lua, add this after `.setup()`.
+If you wish to add support for your config written in lua, add this before `.setup()`.
 
 ```lua
 lsp.nvim_workspace()
@@ -174,7 +174,7 @@ lsp.set_preferences({
 })
 ```
 
-If you wish to disable an feature replace `true` with `false`.
+If you want to disable an feature replace `true` with `false`.
 
 * `suggest_lsp_servers` enables the suggestions of lsp servers when you enter a filetype for the first time.
 
@@ -298,7 +298,7 @@ It gives the user control over the options available in the plugin. Use it if no
 
 ### `.setup()`
 
-The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be used right after `.preset()` or `.set_preferences()`.
+The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be the last function you call.
 
 It is not strictly needed if you plan to manage the language servers by yourself.
 
@@ -367,8 +367,7 @@ Configures the language server for lua with all the options needed to provide co
 
 * `library`: a list of paths that the server should analyze.
 
-By default only the runtime files of neovim and `vim.stdpath('config')` will be included.
-If you wish to add every plugin you'll need to do this.
+By default only the runtime files of neovim and `vim.stdpath('config')` will be included.  To add the path to every plugin you'll need to do this.
 
 ```lua
 lsp.nvim_workspace({
@@ -378,16 +377,14 @@ lsp.nvim_workspace({
 
 ### `.setup_nvim_cmp({opts})`
 
-In the case you don't use `.setup()` at startup, you can call `.setup_nvim_cmp` to configure `nvim-cmp`.
-
-With `{opts}` you can override some of the options for `nvim-cmp`:
+It allows you to override some of the options for `nvim-cmp`:
 
 * sources
 * documentation
 * formatting
 * mapping
 
-If you wish to know what those properties you'll need to read `nvim-cmp`'s documentation.
+To get information about these option go to [nvim-cmp's documentation](https://github.com/hrsh7th/nvim-cmp).
 
 ## Support
 
