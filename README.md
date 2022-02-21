@@ -112,7 +112,7 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-If you wish to add support for your config written in lua, add this before `.setup()`.
+If you wish to add support for your config written in lua, add this line above `lsp.setup()`.
 
 ```lua
 lsp.nvim_workspace()
