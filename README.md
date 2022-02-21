@@ -15,6 +15,7 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 lsp.setup()
 ```
+> If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
 
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they will be explained in detail later.
 
