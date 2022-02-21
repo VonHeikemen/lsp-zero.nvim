@@ -285,7 +285,7 @@ To know more about the available bindings inside the floating window of `LspInst
 
 ## Global command
 
-* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.setup_servers()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. Note that this command is only safe to use if you disable `setup_servers_on_start`.
+* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.setup_servers()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. Note that this command for when you decide to handle the configuration of servers manually, it will only do something when `setup_servers_on_start` is disabled.
 
 ## Lua api
 
