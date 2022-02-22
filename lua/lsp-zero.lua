@@ -24,27 +24,21 @@ end
 
 local run = function(args)
   local user_config = args.settings
+  local configure = Server.setup
 
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
 
-  if user_config.setup_servers_on_start then
-    local configure = Server.setup
+  local manual_setup = user_config.suggest_lsp_servers == false
+    and user_config.setup_servers_on_start == false
 
-    lsp_install.on_server_ready(function(server)
-      local server_opts = args.server_opts[server.name] or {}
-      server_opts.autostart = true
-
-      configure(server.name, server_opts)
-    end)
+  if manual_setup then
+    return
   end
 
   if user_config.suggest_lsp_servers then
     safe_call(state.sync)
-    lsp_install.on_server_ready(function(server)
-      safe_call(state.check_server, server)
-    end)
 
     local autocmd = [[
       augroup lsp_cmds
@@ -55,6 +49,27 @@ local run = function(args)
 
     vim.cmd(autocmd)
   end
+
+  local setup_server = function(server)
+    local server_opts = args.server_opts[server.name] or {}
+    server_opts.autostart = true
+
+    configure(server.name, server_opts)
+  end
+
+  local update_state = function(server)
+    safe_call(state.check_server, server)
+  end
+
+  lsp_install.on_server_ready(function(server)
+    if user_config.setup_servers_on_start then
+      setup_server(server)
+    end
+
+    if user_config.suggest_lsp_servers then
+      update_state(server)
+    end
+  end)
 end
 
 M.setup = function()
