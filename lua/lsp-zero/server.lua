@@ -3,7 +3,8 @@ local s = {}
 
 local state = {
   global_cmds = false,
-  capabilities = nil
+  capabilities = nil,
+  call_diagnostic = false
 }
 
 local global_config = require('lsp-zero.settings')
@@ -98,6 +99,10 @@ s.on_attach = function(_, bufnr)
 end
 
 s.diagnostics = function()
+  if state.call_diagnostic then return end
+
+  state.call_diagnostic = true
+
   local sign = function(opts)
     vim.fn.sign_define(opts.name, {
       texthl = opts.name,
