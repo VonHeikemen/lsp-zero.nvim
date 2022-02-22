@@ -29,7 +29,8 @@ M.sync = function()
     util.write_file(path, vim.json.encode(defaults))
     new_state = defaults
   else
-    new_state = vim.json.decode(util.read_file(path))
+    state = vim.json.decode(util.read_file(path))
+    return
   end
 
   local servers = get_installed_servers()
