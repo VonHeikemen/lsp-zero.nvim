@@ -235,8 +235,13 @@ M.suggest_server = function()
 
   state.save_filetype(ft)
 
-  local server_available = util.should_suggest_server(ft)
+  local server_available = util.should_suggest_server(ft, {})
   if not server_available then return end
+
+  if #internal.install_servers > 0 then
+    local is_there = util.should_suggest_server(ft, internal.install_servers)
+    if is_there then return end
+  end
 
   local answer = vim.fn.confirm(
     'Would you like to install a language server for this filetype?',
