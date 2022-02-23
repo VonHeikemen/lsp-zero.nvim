@@ -2,9 +2,7 @@ local M = {common_on_attach = function(arg) return arg end}
 local s = {}
 
 local state = {
-  global_cmds = false,
   capabilities = nil,
-  call_diagnostic = false
 }
 
 local global_config = require('lsp-zero.settings')
@@ -16,13 +14,15 @@ M.setup = function(server_name, opts)
   local custom_attach = opts.on_attach
 
   local ok, server = get_server(server_name)
-
   if not ok then
     return
   end
 
+  s.call_once()
+
   if opts.root_dir == true then
     opts.root_dir = function() return vim.fn.getcwd() end
+    opts.autostart = true
   end
 
   if opts.capabilities == nil and global_config.cmp_capabilities then
@@ -35,6 +35,14 @@ M.setup = function(server_name, opts)
     if custom_attach then custom_attach(...) end
   end
 
+  server:setup_lsp(opts)
+
+  if opts.autostart then
+    lspconfig[server.name].manager.try_add_wrapper()
+  end
+end
+
+s.call_once = function()
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,
     {
@@ -53,28 +61,15 @@ M.setup = function(server_name, opts)
     s.diagnostics()
   end
 
-  local lsp = lspconfig[server.name]
-
-  if lsp == nil then
-    server:setup(opts)
-    return
+  local fmt = string.format
+  local command = function(name, str)
+    vim.cmd(fmt('command! %s lua %s', name, str))
   end
 
-  local default_opts = server:get_default_options()
+  command('LspZeroWorkspaceAdd', 'vim.lsp.buf.add_workspace_folder()')
+  command('LspZeroWorkspaceList', 'vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))')
 
-  if default_opts.cmd and opts.cmd == nil then
-    opts.cmd = default_opts.cmd
-  end
-
-  if default_opts.cmd_env and opts.cmd_env == nil then
-    opts.cmd_env = default_opts.cmd_env
-  end
-
-  lsp.setup(opts)
-
-  if opts.autostart then
-    lsp.manager.try_add_wrapper()
-  end
+  s.call_once = function() end
 end
 
 s.on_attach = function(_, bufnr)
@@ -83,26 +78,15 @@ s.on_attach = function(_, bufnr)
   end
 
   local fmt = string.format
-  local command = function(name, str, attr)
-    attr = attr or ''
-    vim.cmd(fmt('command! %s %s lua %s', attr, name, str))
+  local command = function(name, str)
+    vim.cmd(fmt('command! -buffer %s lua %s', name, str))
   end
 
-  command('LspZeroFormat', 'vim.lsp.buf.formatting()', '-buffer')
-  command('LspZeroWorkspaceRemove', 'vim.lsp.buf.remove_workspace_folder()', '-buffer')
-
-  if not state.global_cmds then
-    command('LspZeroWorkspaceAdd', 'vim.lsp.buf.add_workspace_folder()')
-    command('LspZeroWorkspaceList', 'vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))')
-    state.global_cmds = false
-  end
+  command('LspZeroFormat', 'vim.lsp.buf.formatting()')
+  command('LspZeroWorkspaceRemove', 'vim.lsp.buf.remove_workspace_folder()')
 end
 
 s.diagnostics = function()
-  if state.call_diagnostic then return end
-
-  state.call_diagnostic = true
-
   local sign = function(opts)
     vim.fn.sign_define(opts.name, {
       texthl = opts.name,
