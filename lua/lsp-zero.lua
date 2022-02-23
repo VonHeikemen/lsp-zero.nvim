@@ -152,7 +152,7 @@ M.setup_nvim_cmp = function(opts)
   local settings = require('lsp-zero.settings')
 
   if settings.manage_nvim_cmp then
-    return internal.fn.configure(opts)
+    return internal.fn.setup_nvim_cmp(opts)
   end
 
   local msg = 'Settings for nvim_cmp should be handled by the user.'
