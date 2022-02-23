@@ -120,13 +120,15 @@ M.call_setup = function(opts)
     config.mapping = M.default_mappings()
   end
 
+  config.documentation = {
+    maxheight = 15,
+    maxwidth = 50,
+    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+  }
+
   if type(opts.documentation) == 'table' then
     config.documentation = merge(
-      {
-        maxheight = 15,
-        maxwidth = 50,
-        border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-      },
+      config.documentation,
       opts.documentation or {}
     )
   elseif opts.documentation == false then
