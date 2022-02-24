@@ -119,11 +119,14 @@ If you wish to add support for your config written in lua, add this line above `
 lsp.nvim_workspace()
 ```
 
-Note. If you are using `init.vim` wrap the code above with this.
+Note. If you are using `init.vim` you can wrap the code in `lua-heredoc`s.
 
 ```vim
 lua <<EOF
-  -- code goes in here
+local lsp = require('lsp-zero')
+
+lsp.preset('recommended')
+lsp.setup()
 EOF
 ```
 
@@ -302,8 +305,6 @@ It gives the user control over the options available in the plugin. Use it if no
 
 The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be the last function you call.
 
-It is not strictly needed if you plan to manage the language servers by yourself.
-
 ### `.setup_servers({list})`
 
 Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers.
@@ -394,7 +395,7 @@ Configures the language server for lua with all the options needed to provide co
 
 * `library`: a list of paths that the server should analyze.
 
-By default only the runtime files of neovim and `vim.stdpath('config')` will be included.  To add the path to every plugin you'll need to do this.
+By default only the runtime files of neovim and `vim.stdpath('config')` will be included. To add the path to every plugin you'll need to do this.
 
 ```lua
 lsp.nvim_workspace({
