@@ -1,6 +1,7 @@
-> Project status: Early development. I'm happy with the api but breaking changes can happen. The plugin is usable (works on my machine).
+> Project status: All initial features (the ones I want) have been implemented. API is stable, meaning I'm not going to change anything that is documented here or in the help page. Still early days so bugs can still be lurking around... I haven't found anything, if you have, let me know.
 > 
 > Looking for testers to provide feedback (there is a [discussion open](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1)).  I have a added a [minimal config](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Minimal-test-config) in the wiki, for those who know how to handle multiple configuration files.
+
 # LSP Zero
 
 Say you want to get started using the native LSP client that comes with neovim. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
