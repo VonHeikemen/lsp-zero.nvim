@@ -1,4 +1,4 @@
-> Project status: All initial features (the ones I want) have been implemented. API is stable, meaning I'm not going to change anything that is documented here or in the help page. Still early days so bugs can still be lurking around... I haven't found anything, if you have, let me know.
+> Project status: All initial features (the ones I want) have been implemented. API is stable, meaning I'm not going to change anything that is documented here or in the help page. Still early days so minor bugs can still be lurking around, if you find one let me know.
 > 
 > Looking for testers to provide feedback (there is a [discussion open](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1)).  I have a added a [minimal config](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Minimal-test-config) in the wiki, for those who know how to handle multiple configuration files.
 
