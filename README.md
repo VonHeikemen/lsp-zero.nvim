@@ -20,6 +20,18 @@ lsp.setup()
 
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they will be explained in detail later.
 
+## Demo
+
+https://user-images.githubusercontent.com/20980671/155446244-14ac3b82-44fd-4011-b25a-e4934db954dc.mp4
+
+Featured in the video:
+* Fully functional completion engine (`nvim-cmp`).
+* Completions provided by the language server (`sumneko_lua`), as well as other sources.
+* Snippet expansion and navigation between placeholders.
+* Diagnostic icon showing in the gutter.
+* Showing diagnostic message in a floating window.
+* Code actions.
+
 ## Quickstart (for the impatient)
 
 This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
