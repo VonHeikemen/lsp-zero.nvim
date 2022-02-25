@@ -1,5 +1,3 @@
-> Project status: Looking for testers to provide feedback (there is a [discussion open](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1)).  I have a added a [minimal config](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Minimal-test-config) in the wiki, for those who know how to handle multiple configuration files.
-
 # LSP Zero
 
 Say you want to get started using the native LSP client that comes with neovim. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
@@ -17,6 +15,8 @@ lsp.setup()
 > If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
 
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they will be explained in detail later.
+
+If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1).
 
 ## Demo
 
