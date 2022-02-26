@@ -14,7 +14,7 @@ lsp.setup()
 ```
 > If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
 
-`.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they will be explained in detail later.
+`.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
 
 If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1).
 
@@ -165,11 +165,11 @@ Is the same as the `recommended` without any support for `nvim-cmp`.
 
 ### manual-setup
 
-Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. Servers will need to be configured manually by the user.
+Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. The user will need to call the functions `.setup_servers()` or `.configure()` in order to initializ the language servers (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
 ## Choose your features
 
-For this you'll need to delete `.preset()`,  use `set_preferences` instead. This function takes a "table" of options, they describe the features this plugin offers.
+For this I would recommend to deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
 
 These are the options the `recommended` preset uses.
 
@@ -316,9 +316,24 @@ It gives the user control over the options available in the plugin. Use it if no
 
 The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be the last function you call.
 
+### `.configure({name}, {opts})`
+
+Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. More details of these options can be found [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
+```lua
+lsp.configure('tsserver', {
+  flags = {
+    debounce_text_changes = 500,
+  },
+  on_attach = function(client, bufnr)
+    client.resolved_capabilities.document_formatting = false
+  end
+})
+```
+
 ### `.setup_servers({list})`
 
-Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers.
+Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers. Under the hood it calls `.configure()` for each server on `{list}`.
 
 ```lua
 local lsp_opts = {
@@ -334,28 +349,13 @@ lsp.setup_servers({
 })
 ```
 
-There is also the property `root_dir`, when set to `true` it will set the root directory of the language server to be the working directory in neovim. `opts` and `root_dir` are mutually exclusive.
+There is a special property called `root_dir`, when set to `true` it will set the root directory of the language server to be the working directory in neovim. `opts` and `root_dir` are mutually exclusive.
 
 ```lua
 lsp.setup_servers({
   root_dir = true,
   'html',
   'cssls'
-})
-```
-
-### `.configure({name}, {opts})`
-
-Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. More details of these options can be found [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
-
-```lua
-lsp.configure('tsserver', {
-  flags = {
-    debounce_text_changes = 500,
-  },
-  on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
-  end
 })
 ```
 
