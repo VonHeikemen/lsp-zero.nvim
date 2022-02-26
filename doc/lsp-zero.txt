@@ -79,8 +79,10 @@ These are the available presets.
 
   manual-setup: ~
       Is the same as `recommended`, but without automatic setup for language
-      servers. Suggestions for language server will be disabled. Servers will
-      need to be configured manually by the user.
+      servers. Suggestions for language server will be disabled.The user
+      will need to call the functions |lsp-zero.setup_servers()| or
+      |lsp-zero.configure()| in order to initialize the language servers.
+      See |lsp-zero-lua-api| for more details on these functions.
 
 ==============================================================================
 Preferences                                             *lsp-zero-preferences*
