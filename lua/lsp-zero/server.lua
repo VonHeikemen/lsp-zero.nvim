@@ -6,10 +6,10 @@ local state = {
 }
 
 local global_config = require('lsp-zero.settings')
-local lspconfig = require('lspconfig')
-local get_server = require('nvim-lsp-installer.servers').get_server
 
 M.setup = function(server_name, opts)
+  local get_server = require('nvim-lsp-installer.servers').get_server
+
   opts = opts or {}
   local custom_attach = opts.on_attach
 
@@ -38,11 +38,13 @@ M.setup = function(server_name, opts)
   server:setup_lsp(opts)
 
   if opts.autostart then
-    lspconfig[server.name].manager.try_add_wrapper()
+    s.lspconfig[server.name].manager.try_add_wrapper()
   end
 end
 
 s.call_once = function()
+  s.lspconfig = require('lspconfig')
+
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,
     {
@@ -178,6 +180,8 @@ M.setup_servers = function(list)
 end
 
 M.ensure_installed = function(list)
+  local get_server = require('nvim-lsp-installer.servers').get_server
+
   for _, name in pairs(list) do
     local ok, server = get_server(name)
     if ok and not server:is_installed() then

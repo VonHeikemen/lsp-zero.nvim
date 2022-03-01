@@ -3,7 +3,6 @@ local M = {}
 local preset = require('lsp-zero.presets')
 local state = require('lsp-zero.state')
 local util = require('lsp-zero.utils')
-local lsp_install = require('nvim-lsp-installer')
 local Server = require('lsp-zero.server')
 
 local internal = {
@@ -62,6 +61,8 @@ local run = function(args)
   local update_state = function(server)
     safe_call(state.check_server, server)
   end
+
+  local lsp_install = require('nvim-lsp-installer')
 
   lsp_install.on_server_ready(function(server)
     if handle_setup then

@@ -2,7 +2,6 @@ local M = {}
 
 local settings = require('lsp-zero.settings')
 local util = require('lsp-zero.utils')
-local get_installed_servers = require('nvim-lsp-installer').get_installed_servers
 local state = {ok = false}
 
 local defaults = {
@@ -22,6 +21,7 @@ local defaults = {
 }
 
 M.sync = function()
+  local get_installed_servers = require('nvim-lsp-installer').get_installed_servers
   local path = settings.state_file
   local new_state = {}
 

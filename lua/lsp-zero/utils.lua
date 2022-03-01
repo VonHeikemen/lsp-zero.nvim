@@ -1,8 +1,8 @@
 local M = {}
 local uv = vim.loop
-local lsp_install = require('nvim-lsp-installer')
 
 M.should_suggest_server = function(current_filetype, servers)
+  local lsp_install = require('nvim-lsp-installer')
   local get_server = #servers == 0
 
   if get_server then
