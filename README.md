@@ -190,7 +190,7 @@ lsp.set_preferences({
 })
 ```
 
-If you want to disable an feature replace `true` with `false`.
+If you want to disable a feature replace `true` with `false`.
 
 * `suggest_lsp_servers` enables the suggestions of lsp servers when you enter a filetype for the first time.
 
@@ -210,7 +210,7 @@ If you want to disable an feature replace `true` with `false`.
 
 ### About nvim-cmp
 
-Some details that you should know. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. Inside `lsp-zero` we need the following sources:
+Some details that you should know. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. `lsp-zero` depends on the following sources:
 
 * [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
 
@@ -246,9 +246,9 @@ Some details that you should know. The plugin responsable for autocompletion is 
 
 ## LSP
 
-### Default keybindings
+When a language server gets attached to a buffer you gain access some keybindings and commands. All of these are bound to built-in functions, so you can get more details using the `:help` command.
 
-When a language server gets attached to a buffer you gain access some keybindings. All of these map to a built-in function so you can get more details using the `:help` command.
+### Default keybindings
 
 * `K`: Displays hover information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.hover()`.
 
@@ -323,7 +323,7 @@ Useful when you need to pass some custom options to a specific language server. 
 ```lua
 lsp.configure('tsserver', {
   flags = {
-    debounce_text_changes = 500,
+    debounce_text_changes = 200,
   },
   on_attach = function(client, bufnr)
     client.resolved_capabilities.document_formatting = false
