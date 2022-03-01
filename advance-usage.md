@@ -187,5 +187,44 @@ The option you want is `mapping`. The trickiest. Here you are going to find your
 
 Want to know how much fun you can have creating your own mappings? Check out the wiki section [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) and scroll down all the way where it says `Autocompletion`.
 
+### "Unmap" a default keybinding
+
+You can disable any default keymap by overriding the `mapping` property in `nvim-cmp`. Use `lsp.defaults.cmp_mappings()` to expose the default keybindings then "delete" the one you want. Let's make an example with `Tab`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local cmp_mapping = lsp.defaults.cmp_mappings()
+
+-- "unmap" <Tab>
+cmp_mapping['<Tab>'] = nil
+
+lsp.setup_nvim_cmp({
+  mapping = cmp_mapping
+})
+
+lsp.setup()
+```
+
+### Adding a source
+
+You can extend the sources by overriding the `sources` property. Use `lsp.defaults.cmp_sources()` to expose the default sources and then insert the new source.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local cmp_sources = lsp.defaults.cmp_sources()
+
+table.insert(cmp_sources, {name = 'name-of-new-source'})
+
+lsp.setup_nvim_cmp({
+  sources = cmp_sources
+})
+
+lsp.setup()
+```
+
 Finally, in case no one has told you this today... you should read `nvim-cmp`'s documentation. You are awesome. Have a nice day.
 

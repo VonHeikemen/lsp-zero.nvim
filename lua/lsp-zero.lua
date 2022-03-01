@@ -221,6 +221,17 @@ M.nvim_workspace = function(opts)
   M.configure('sumneko_lua', server_opts)
 end
 
+
+M.defaults = {}
+
+M.defaults.cmp_mappings = function()
+  return require('lsp-zero.nvim-cmp-setup').default_mappings()
+end
+
+M.defaults.cmp_sources = function()
+  return require('lsp-zero.nvim-cmp-setup').sources()
+end
+
 M.suggest_server = function()
   local ft = vim.bo.filetype
 

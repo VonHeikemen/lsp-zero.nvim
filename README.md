@@ -425,6 +425,13 @@ It allows you to override some of the options for `nvim-cmp`:
 
 To get information about these option go to [nvim-cmp's documentation](https://github.com/hrsh7th/nvim-cmp).
 
+### `.defaults`
+
+A table that exposes default settings.
+
+* `.defaults.cmp_mappings()`: returns a table with the default keybindings for `nvim-cmp`.
+* `.defaults.cmp_sources()`: returns the list of "sources" used in `nvim-cmp`.
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).

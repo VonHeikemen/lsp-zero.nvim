@@ -527,6 +527,16 @@ Lua API                                                     *lsp-zero-lua-api*
 
       To get information about these option go to |nvim-cmp|'s documentation.
 
+                                            *lsp-zero.defaults.cmp_mappings()*
+
+  .defaults.cmp_mappings(): ~
+      Returns a table with the default keybindings for `nvim-cmp`.
+
+                                             *lsp-zero.defaults.cmp_sources()*
+
+  .defaults.cmp_sources(): ~
+     Returns the list of "sources" used in `nvim-cmp`.
+
 ==============================================================================
 Support                                                    *lsp-zero-donation*
 
