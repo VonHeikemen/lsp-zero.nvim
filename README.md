@@ -310,7 +310,23 @@ It creates a combination of settings safe to use for specific cases.
 
 ### `.set_preferences({opts})`
 
-It gives the user control over the options available in the plugin. Use it if none of the preset fit your needs.
+It gives the user control over the options available in the plugin.
+
+You can use it to override options from a preset. For example, you could change the diagnostics icons after setting the preset.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.set_preferences({
+  sign_icons = {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = ''
+  }
+})
+```
 
 ### `.setup()`
 
@@ -363,7 +379,7 @@ lsp.setup_servers({
 
 Execute `{callback}` function every time a server is attached to a buffer.
 
-Let's say you want to disable all the default keybindings and you want to declare your own.
+Let's say you want to disable all the default keybindings for lsp actions and diagnostics, and then declare your own.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -425,12 +441,13 @@ It allows you to override some of the options for `nvim-cmp`:
 
 To get information about these option go to [nvim-cmp's documentation](https://github.com/hrsh7th/nvim-cmp).
 
-### `.defaults`
+### `.defaults.cmp_mappings()`
 
-A table that exposes default settings.
+Returns a table with the default keybindings for `nvim-cmp`
 
-* `.defaults.cmp_mappings()`: returns a table with the default keybindings for `nvim-cmp`.
-* `.defaults.cmp_sources()`: returns the list of "sources" used in `nvim-cmp`.
+### `.defaults.cmp_sources()`
+
+Returns the list of "sources" used in `nvim-cmp`.
 
 ## Support
 

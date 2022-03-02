@@ -351,7 +351,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
   .set_preferences({opts}): ~
       It gives the user control over the options available in the plugin.
-      Use it if none of the preset fit your needs.
+      You are allowed to use it to override the options set by a preset.
 
       {opts} is table with the properties:
 
