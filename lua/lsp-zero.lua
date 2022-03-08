@@ -113,6 +113,10 @@ M.use = function(servers, lsp_opts, force)
     local common = internal.servers[name] or {}
     local opts = vim.tbl_deep_extend('force', {}, common, lsp_opts)
     opts.autostart = true
+    opts.on_attach = function(...)
+      if common.on_attach then common.on_attach(...) end
+      if lsp_opts.on_attach then lsp_opts.on_attach(...) end
+    end
 
     Server.setup(name, opts)
   end
