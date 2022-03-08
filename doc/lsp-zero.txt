@@ -38,7 +38,7 @@ If your config file is written in vimscript use |lua-heredoc|.
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
 
-Presets are a combinations of options that determine how |lsp-zero.setup()| 
+Presets are a combinations of options that determine how |lsp-zero.setup()|
 will behave, they can enable or disable features.
 
 They are created when you use the function |lsp-zero.preset()|.
@@ -82,7 +82,15 @@ These are the available presets.
       servers. Suggestions for language server will be disabled.The user
       will need to call the functions |lsp-zero.setup_servers()| or
       |lsp-zero.configure()| in order to initialize the language servers.
-      See |lsp-zero-lua-api| for more details on these functions.
+      See |lsp-zero-lua-api| for more details of these functions.
+
+  per-project: ~
+      Very similar to `manual-setup`. Automatic setup for language servers
+      and suggestions are disabled. The user can setup default options for
+      each server using |lsp-zero.setup_servers()| or |lsp-zero.configure()|.
+      In order to initialize the server the user will need to call the
+      `.use()` function. See |lsp-zero-lua-api| section for more details
+      of these functions.
 
 ==============================================================================
 Preferences                                             *lsp-zero-preferences*
@@ -98,7 +106,11 @@ These are the available options.
       for the first time.
 
   setup_servers_on_start: ~
-      Gets a list of installed servers and configures them.
+      when set to `true` all installed servers will be initialized on startup.
+      When is set to the string `"per-project"` only the servers listed with
+      the function |lsp-zero.use()| will be initialized. If the value is
+      `false` servers will be initialized when you call |lsp-zero.configure()|
+      or |lsp-zero.setup_servers()|.
 
   set_lsp_keymaps: ~
       Add keybindings to a buffer with a language server attached.
@@ -320,7 +332,7 @@ server you want to install. If you don't provide a name the command will try
 to suggest a language server based on the filetype of the current buffer.
 
 To check for updates on the language servers use the command `LspInstallInfo`.
-A floating window will open showing you all the language servers you have 
+A floating window will open showing you all the language servers you have
 installed. If there is any update available, the item will display a message.
 Navigate to that item and press u to install the update.
 
@@ -339,7 +351,7 @@ Lua API                                                     *lsp-zero-lua-api*
       It creates a combination of settings safe to use for specific cases.
 
       {name} can be one of the following:
-        
+
           * `recommended`
           * `lsp-compe`
           * `lsp-only`
@@ -361,9 +373,13 @@ Lua API                                                     *lsp-zero-lua-api*
               for the first time.
 
           setup_servers_on_start: ~
-              (boolean) When enabled it calls the setup function of every
-              language server installed with `nvim-lsp-installer`.
-          
+              (boolean | string) If `true` it calls the setup function of
+              every language server installed with `nvim-lsp-installer`. When
+              the value is `false` servers will initialized when you call
+              |lsp-zero.configure()| or |lsp-zero.setup_servers()|. When set
+              to "per-project", only servers listed with the function
+              |lsp-zero.use()| will be initialized.
+
           set_lsp_keymaps: ~
               (boolean) Decides whether or not the default keymaps
               should be used (see |lsp-zero-keybindings|).
@@ -384,7 +400,7 @@ Lua API                                                     *lsp-zero-lua-api*
           sign_icons: ~
               (table) The list of icons to use when showing the location of a
               diagnostic in a line.
-              
+
               It can have the following properties:
 
                   * `error`
@@ -526,6 +542,69 @@ Lua API                                                     *lsp-zero-lua-api*
           * mapping
 
       To get information about these option go to |nvim-cmp|'s documentation.
+
+                                                              *lsp-zero.use()*
+
+  .use({server}, {opts}): ~
+      For when you want full control of the servers you want to use in
+      particular project. It is meant to be called in project local config.
+
+      Ideally, you would setup some default values for your servers in your
+      neovim configuration using |lsp-zero.setup_servers()|
+      or |lsp-zero.configure()|. For example.
+
+>
+      -- init.lua
+
+      local lsp = require('lsp-zero')
+      lsp.preset('per-project')
+
+      lsp.configure('pyright', {
+        flags = {
+          debounce_text_changes = 200,
+        }
+      })
+
+      lsp.setup()
+<
+
+      And then in your local config you can add even more options.
+
+>
+      -- local config
+
+      local lsp = require('lsp-zero')
+
+      lsp.use('pyright', {
+        settings = {
+          python = {
+            analysis = {
+              extraPaths = {'/path/to/my/dependencies'},
+            }
+          }
+        }
+      })
+<
+
+      Options from |lsp-zero.configure()| will be merged with the ones on
+      |lsp-zero.use()| and the server will be initialized.
+
+      |lsp-zero.use()| can also take a list of servers. All the servers on
+      the list will share the same options.
+
+>
+      -- local config
+
+      local lsp = require('lsp-zero')
+
+      local lsp_options = {
+        flags = {
+          debounce_text_changes = 200,
+        }
+      }
+
+      lsp.use({'html', 'cssls'}, lsp_opts)
+<
 
                                             *lsp-zero.defaults.cmp_mappings()*
 

@@ -49,6 +49,10 @@ local run = function(args)
     ]]
 
     vim.cmd(autocmd)
+  else
+    -- suggest is false and setup is per project
+    -- then there is nothing left to do
+    if handle_setup == 'per-project' then return end
   end
 
   local setup_server = function(server)
@@ -65,7 +69,7 @@ local run = function(args)
   local lsp_install = require('nvim-lsp-installer')
 
   lsp_install.on_server_ready(function(server)
-    if handle_setup then
+    if handle_setup == true then
       setup_server(server)
     end
 
@@ -87,6 +91,31 @@ M.setup = function()
     cmp_opts = internal.cmp_opts,
     server_opts = internal.servers
   })
+end
+
+M.use = function(servers, lsp_opts, force)
+  local settings = require('lsp-zero.settings')
+  if not force and settings.setup_servers_on_start ~= 'per-project' then
+    return
+  end
+
+  lsp_opts = lsp_opts or {}
+
+  if not lsp_opts.root_dir then
+    lsp_opts.root_dir = true
+  end
+
+  if type(servers) == 'string' then
+    servers = {servers}
+  end
+
+  for _, name in pairs(servers) do
+    local common = internal.servers[name] or {}
+    local opts = vim.tbl_deep_extend('force', {}, common, lsp_opts)
+    opts.autostart = true
+
+    Server.setup(name, opts)
+  end
 end
 
 M.preset = function(name)
@@ -220,7 +249,6 @@ M.nvim_workspace = function(opts)
 
   M.configure('sumneko_lua', server_opts)
 end
-
 
 M.defaults = {}
 
