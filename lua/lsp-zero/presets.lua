@@ -65,5 +65,15 @@ preset['manual-setup'] = function()
   return opts
 end
 
+preset['per-project'] = function()
+  local opts = preset.recommended()
+
+  opts[1] = 'per-project'
+  opts.suggest_lsp_servers = false
+  opts.setup_servers_on_start = 'per-project'
+
+  return opts
+end
+
 return preset
 

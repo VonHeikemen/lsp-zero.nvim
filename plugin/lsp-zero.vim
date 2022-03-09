@@ -1,1 +1,1 @@
-command! -nargs=* -bang LspZeroSetupServers lua require('lsp-zero').setup_servers({root_dir = '<bang>' == '!', <f-args>})
+command! -nargs=* -bang LspZeroSetupServers lua require('lsp-zero').use({<f-args>}, {root_dir = '<bang>' == '!'}, true)

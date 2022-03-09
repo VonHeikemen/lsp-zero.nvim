@@ -167,6 +167,10 @@ Is the same as the `recommended` without any support for `nvim-cmp`.
 
 Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. The user will need to call the functions `.setup_servers()` or `.configure()` in order to initialize the language servers (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
+### per-project
+
+Very similar to `manual-setup`. Automatic setup for language servers and suggestions are disabled. The user can setup default options for each server using `.setup_servers()` or `.configure()`. In order to initialize the server the user will need to call the `.use()` function. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
+
 ## Choose your features
 
 For this I would recommend to deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
@@ -194,7 +198,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `suggest_lsp_servers` enables the suggestions of lsp servers when you enter a filetype for the first time.
 
-* `setup_servers_on_start` gets a list of installed servers and configures them with some default features.
+* `setup_servers_on_start` when set to `true` all installed servers will be initialized on startup. When is set to the string `"per-project"` only the servers listed with the function `.use()` will be initialized. If the value is `false` servers will be initialized when you call `.configure()` or `.setup_servers()`.
 
 * `set_lsp_keymaps` add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc.
 
@@ -300,7 +304,7 @@ To know more about the available bindings inside the floating window of `LspInst
 
 ## Global command
 
-* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.setup_servers()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. Note that this command for when you decide to handle the configuration of servers manually, it will only do something when `setup_servers_on_start` is disabled.
+* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
 
 ## Lua api
 
@@ -440,6 +444,63 @@ It allows you to override some of the options for `nvim-cmp`:
 * mapping
 
 To get information about these option go to [nvim-cmp's documentation](https://github.com/hrsh7th/nvim-cmp).
+
+### `.use({server}, {opts})`
+
+For when you want full control of the servers you want to use in particular project. It is meant to be called in project local config.
+
+Ideally, you would setup some default values for your servers in your neovim config using `.setup_servers()` or `.configure()`. Example.
+
+```lua
+-- init.lua
+
+local lsp = require('lsp-zero')
+lsp.preset('per-project')
+
+lsp.configure('pyright', {
+  flags = {
+    debounce_text_changes = 200,
+  }
+})
+
+lsp.setup()
+```
+
+And then in your local config you can tweak the server options even more.
+
+```lua
+-- local config
+
+local lsp = require('lsp-zero')
+
+lsp.use('pyright', {
+  settings = {
+    python = {
+      analysis = {
+        extraPaths = {'/path/to/my/dependencies'},
+      }
+    }
+  }
+})
+```
+
+Options from `.configure()` will be merged with the ones on `.use()` and the server will be initialized.
+
+`.use()` can also take a list of servers. All the servers on the list will share the same options.
+
+```lua
+-- local config
+
+local lsp = require('lsp-zero')
+
+local lsp_options = {
+  flags = {
+    debounce_text_changes = 200,
+  }
+}
+
+lsp.use({'html', 'cssls'}, lsp_opts)
+```
 
 ### `.defaults.cmp_mappings()`
 
