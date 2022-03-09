@@ -95,7 +95,10 @@ end
 
 M.use = function(servers, lsp_opts, force)
   local settings = require('lsp-zero.settings')
-  if not force and settings.setup_servers_on_start ~= 'per-project' then
+  local check_enabled = not force
+  local enabled = settings.setup_servers_on_start == 'per-project'
+
+  if check_enabled and not enabled then
     return
   end
 
@@ -110,10 +113,14 @@ M.use = function(servers, lsp_opts, force)
   end
 
   for _, name in pairs(servers) do
-    local common = internal.servers[name] or {}
-    local opts = vim.tbl_deep_extend('force', {}, common, lsp_opts)
-    opts.autostart = true
+    local opts = vim.tbl_deep_extend(
+      'force',
+      {},
+      internal.servers[name] or {},
+      lsp_opts
+    )
 
+    opts.autostart = true
     Server.setup(name, opts)
   end
 end
