@@ -15,6 +15,7 @@ preset.defaults = function()
     'defaults',
     suggest_lsp_servers = false,
     setup_servers_on_start = false,
+    call_servers = 'local',
     set_lsp_keymaps = true,
     configure_diagnostics = true,
     cmp_capabilities = false,
@@ -71,6 +72,17 @@ preset['per-project'] = function()
   opts[1] = 'per-project'
   opts.suggest_lsp_servers = false
   opts.setup_servers_on_start = 'per-project'
+
+  return opts
+end
+
+preset['system-lsp'] = function()
+  local opts = preset.recommended()
+
+  opts[1] = 'system-lsp'
+  opts.suggest_lsp_servers = false
+  opts.setup_servers_on_start = false
+  opts.call_servers = 'global'
 
   return opts
 end

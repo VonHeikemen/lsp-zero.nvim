@@ -35,7 +35,7 @@ M.setup = function(server_name, opts)
     if custom_attach then custom_attach(...) end
   end
 
-  server:setup_lsp(opts)
+  s.call_setup(server, opts)
 
   if opts.autostart then
     s.lspconfig[server.name].manager.try_add_wrapper()
@@ -44,6 +44,16 @@ end
 
 s.call_once = function()
   s.lspconfig = require('lspconfig')
+
+  if global_config.call_servers == 'global' then
+    s.call_setup = function(server, opts)
+      s.lspconfig[server.name].setup(opts)
+    end
+  else
+    s.call_setup = function(server, opts)
+      server:setup_lsp(opts)
+    end
+  end
 
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,

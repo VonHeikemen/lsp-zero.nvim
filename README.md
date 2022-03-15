@@ -171,6 +171,10 @@ Is the same as `recommended`, but without automatic setup for language servers. 
 
 Very similar to `manual-setup`. Automatic setup for language servers and suggestions are disabled. The user can setup default options for each server using `.setup_servers()` or `.configure()`. In order to initialize the server the user will need to call the `.use()` function. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
+### system-lsp
+
+Is the same as `manual-setup`, automatic setup for language servers and suggestions are going to be disabled. It is designed to call language servers installed "globally" on the system. The user will need to call `.configure()` or `.setup_servers()` in order to initialize the language servers. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
+
 ## Choose your features
 
 For this I would recommend to deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
@@ -185,6 +189,7 @@ lsp.set_preferences({
   configure_diagnostics = true,
   cmp_capabilities = true,
   manage_nvim_cmp = true,
+  call_servers = 'local'
   sign_icons = {
     error = '✘',
     warn = '▲',
@@ -207,6 +212,8 @@ If you want to disable a feature replace `true` with `false`.
 * `cmp_capabilities` sends the `nvim-cmp` capabilities to the language server.
 
 * `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
+
+* `call_servers` if set to `"local"` it will call servers installed with `nvim-lsp-installer`. If set to `"global"` it will call servers available globally on the system.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
 
