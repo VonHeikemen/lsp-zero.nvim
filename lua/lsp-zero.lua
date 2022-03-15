@@ -33,8 +33,9 @@ local run = function(args)
   end
 
   local manual_setup = suggest == false and handle_setup == false
+  local use_global = user_config.call_servers == 'global'
 
-  if manual_setup then
+  if manual_setup or use_global then
     return
   end
 
@@ -198,6 +199,10 @@ end
 
 M.ensure_installed = function(list)
   local settings = require('lsp-zero.settings')
+  local use_global = settings.call_servers == 'global'
+
+  if use_global then return end
+
   if settings.suggest_lsp_servers or settings.setup_servers_on_start then
     internal.install_servers = list
   else

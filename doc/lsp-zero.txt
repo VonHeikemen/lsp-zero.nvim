@@ -92,6 +92,14 @@ These are the available presets.
       `.use()` function. See |lsp-zero-lua-api| section for more details
       of these functions.
 
+  system-lsp: ~
+      Is the same as `manual-setup`, automatic setup for language servers
+      and suggestions are going to be disabled. It is designed to call
+      language servers installed "globally" on the system. The user will
+      need to call |lsp-zero.configure()| or |lsp-zero.setup_servers()|
+      in order to initialize the language servers. See |lsp-zero-lua-api|
+      section for more details of these functions.
+
 ==============================================================================
 Preferences                                             *lsp-zero-preferences*
 
@@ -129,6 +137,11 @@ These are the available options.
       Use the default setup for `nvim-cmp`. It configures keybindings and
       completion sources for `nvim-cmp`.
 
+  call_servers: ~
+      If set to the value `"local"` it will call servers installed with
+      |nvim-lsp-installer|. If set to `"global"` it will call servers
+      available globally on the system.
+
   sign_icons: ~
       Set the icons shown in the "gutter" on the line diagnostics
       messages are located.
@@ -143,6 +156,7 @@ The code below describes the same features the `recommended` preset enables.
     configure_diagnostics = true,
     cmp_capabilities = true,
     manage_nvim_cmp = true,
+    call_servers = 'local'
     sign_icons = {
       error = '✘',
       warn = '▲',
