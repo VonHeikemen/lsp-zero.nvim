@@ -3,13 +3,29 @@ local s = {}
 
 local state = {
   capabilities = nil,
+  exclude = {}
 }
 
 local global_config = require('lsp-zero.settings')
 
-M.setup = function(server_name, opts)
+M.setup = function(server_name, user_opts)
+  if state.exclude[server_name] then return end
+
+  local opts = M.build_options(server_name, user_opts)
+
+  local lspconfig = require('lspconfig')
+  local lsp = lspconfig[server_name]
+  lsp.setup(opts)
+
+  if opts.autostart and lsp.manager then
+    lsp.manager.try_add_wrapper()
+  end
+end
+
+M.build_options = function(name, opts)
   opts = opts or {}
   local custom_attach = opts.on_attach
+  state.exclude[name] = true
 
   s.call_once()
 
@@ -28,29 +44,22 @@ M.setup = function(server_name, opts)
     if custom_attach then custom_attach(...) end
   end
 
-  s.call_setup(server_name, opts)
+  if global_config.call_servers == 'local' then
+    local ok, server = s.get_server(name)
 
-  if opts.autostart then
-    local lsp = s.lspconfig[server_name]
-    if lsp.manager then lsp.manager.try_add_wrapper() end
+    if not ok then return opts end
+
+    return vim.tbl_deep_extend(
+      'force',
+      server:get_default_options(),
+      opts
+    )
   end
+
+  return opts
 end
 
 s.call_once = function()
-  s.lspconfig = require('lspconfig')
-
-  if global_config.call_servers == 'global' then
-    s.call_setup = function(name, opts)
-      s.lspconfig[name].setup(opts)
-    end
-  else
-    s.get_server = require('nvim-lsp-installer.servers').get_server
-    s.call_setup = function(name, opts)
-      local ok, server = s.get_server(name)
-      if ok then server:setup_lsp(opts) end
-    end
-  end
-
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,
     {
@@ -64,6 +73,10 @@ s.call_once = function()
       border = 'rounded',
     }
   )
+
+  if global_config.call_servers == 'local' then
+    s.get_server = require('nvim-lsp-installer.servers').get_server
+  end
 
   if global_config.configure_diagnostics then
     s.diagnostics()

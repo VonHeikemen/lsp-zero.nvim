@@ -509,6 +509,30 @@ local lsp_options = {
 lsp.use({'html', 'cssls'}, lsp_opts)
 ```
 
+### `.build_options({server}, {opts})`
+
+Returns all the parameters necessary to start a language using `nvim-lspconfig`'s setup function. After calling this function you'll need to initialize the language server by other means.
+
+The `{opts}` table will be merged with the rest of the default options for `{server}`.
+
+This function was designed as an escape hatch, so you can call a language server using other tools.
+
+If you want to use `rust-tools`, this is how you'll do it.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local lsp_rust = lsp.build_options('rust_analyzer', {})
+
+lsp.setup()
+
+-- Initialize rust_analyzer with rust-tools
+require('rust-tools').setup({server = lsp_rust})
+```
+
+In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.
+
 ### `.defaults.cmp_mappings()`
 
 Returns a table with the default keybindings for `nvim-cmp`

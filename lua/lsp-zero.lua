@@ -160,6 +160,10 @@ M.create_preset = function(name)
   return preset[name]()
 end
 
+M.build_options = function(name, opts)
+  return Server.build_options(name, opts)
+end
+
 M.setup_servers = function(list)
   local settings = require('lsp-zero.settings')
 
