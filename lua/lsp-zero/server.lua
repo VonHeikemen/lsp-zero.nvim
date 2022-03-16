@@ -160,6 +160,7 @@ s.set_keymaps = function(bufnr)
   map('n', '<C-k>', lsp 'buf.signature_help()')
   map('n', '<F2>', lsp 'buf.rename()')
   map('n', '<F4>', lsp 'buf.code_action()')
+  map('x', '<F4>', lsp 'buf.range_code_action()')
 
   if global_config.configure_diagnostics then
     map('n', 'gl', diagnostic 'open_float()')
