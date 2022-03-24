@@ -445,6 +445,7 @@ lsp.nvim_workspace({
 
 It allows you to override some of the options for `nvim-cmp`:
 
+* completion
 * sources
 * documentation
 * formatting

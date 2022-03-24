@@ -550,6 +550,7 @@ Lua API                                                     *lsp-zero-lua-api*
   .setup_nvim_cmp({opts}): ~
       It allows you to override some of the options for `nvim-cmp`:
 
+          * completion
           * sources
           * documentation
           * formatting

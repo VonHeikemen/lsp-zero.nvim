@@ -135,6 +135,10 @@ M.call_setup = function(opts)
     config.documentation = opts.documentation
   end
 
+  if type(opts.completion) == 'table' then
+    config.completion = merge(config.completion, opts.completion)
+  end
+
   config.formatting = merge(
     {
       fields = {'abbr', 'menu', 'kind'},
