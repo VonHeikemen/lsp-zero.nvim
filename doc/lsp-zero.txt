@@ -438,7 +438,7 @@ Lua API                                                     *lsp-zero-lua-api*
 >
       local lsp_opts = {
         flags = {
-          debounce_text_changes = 200,
+          debounce_text_changes = 150,
         }
       }
 
@@ -472,7 +472,7 @@ Lua API                                                     *lsp-zero-lua-api*
 >
       lsp.configure('tsserver', {
         flags = {
-          debounce_text_changes = 500,
+          debounce_text_changes = 150,
         },
         on_attach = function(client, bufnr)
           client.resolved_capabilities.document_formatting = false
@@ -576,7 +576,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
       lsp.configure('pyright', {
         flags = {
-          debounce_text_changes = 200,
+          debounce_text_changes = 150,
         }
       })
 
@@ -614,7 +614,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
       local lsp_options = {
         flags = {
-          debounce_text_changes = 200,
+          debounce_text_changes = 150,
         }
       }
 
@@ -640,12 +640,13 @@ Lua API                                                     *lsp-zero-lua-api*
       local lsp = require('lsp-zero')
       lsp.preset('recommended')
 
-      local lsp_rust = lsp.build_options('rust_analyzer', {})
+      -- Initialize rust_analyzer with rust-tools
+      require('rust-tools').setup({
+        server = lsp.build_options('rust_analyzer', {})
+      })
 
       lsp.setup()
 
-      -- Initialize rust_analyzer with rust-tools
-      require('rust-tools').setup({server = lsp_rust})
 <
 
       In case you are using the `recommended` preset (or any preset that

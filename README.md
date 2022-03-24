@@ -350,7 +350,7 @@ Useful when you need to pass some custom options to a specific language server. 
 ```lua
 lsp.configure('tsserver', {
   flags = {
-    debounce_text_changes = 200,
+    debounce_text_changes = 150,
   },
   on_attach = function(client, bufnr)
     client.resolved_capabilities.document_formatting = false
@@ -365,7 +365,7 @@ Used to configure the servers specified in `{list}`. If you provide the `opts` p
 ```lua
 local lsp_opts = {
   flags = {
-    debounce_text_changes = 200,
+    debounce_text_changes = 150,
   }
 }
 
@@ -467,7 +467,7 @@ lsp.preset('per-project')
 
 lsp.configure('pyright', {
   flags = {
-    debounce_text_changes = 200,
+    debounce_text_changes = 150,
   }
 })
 
@@ -524,12 +524,13 @@ If you want to use `rust-tools`, this is how you'll do it.
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-local lsp_rust = lsp.build_options('rust_analyzer', {})
+-- Initialize rust_analyzer with rust-tools
+require('rust-tools').setup({
+  server = lsp.build_options('rust_analyzer', {})
+})
 
 lsp.setup()
 
--- Initialize rust_analyzer with rust-tools
-require('rust-tools').setup({server = lsp_rust})
 ```
 
 In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.
