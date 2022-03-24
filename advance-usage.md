@@ -68,7 +68,7 @@ lsp.setup_servers({
 -- configure an individual server
 lsp.configure('tsserver', {
   flags = {
-    debounce_text_changes = 500,
+    debounce_text_changes = 150,
   },
   on_attach = function(client, bufnr)
     client.resolved_capabilities.document_formatting = false
@@ -221,6 +221,21 @@ table.insert(cmp_sources, {name = 'name-of-new-source'})
 
 lsp.setup_nvim_cmp({
   sources = cmp_sources
+})
+
+lsp.setup()
+```
+
+### Invoke completion menu manually
+
+Not a fan of constant completion suggestions? Don't worry there is a way to invoke the completion only demand. If you set `completion.autocomplete` to `false`, the menu will only show up when you press `tab` or `ctrl + e`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup_nvim_cmp({
+  completion = { autocomplete = false }
 })
 
 lsp.setup()
