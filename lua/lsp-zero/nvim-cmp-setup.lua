@@ -106,6 +106,7 @@ M.call_setup = function(opts)
         luasnip.lsp_expand(args.body)
       end,
     },
+    window = {},
   }
 
   if type(opts.sources) == 'table' then
