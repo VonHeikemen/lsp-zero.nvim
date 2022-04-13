@@ -120,19 +120,19 @@ M.call_setup = function(opts)
     config.mapping = M.default_mappings()
   end
 
-  config.documentation = {
+  config.window.documentation = {
     maxheight = 15,
     maxwidth = 50,
     border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
   }
 
-  if type(opts.documentation) == 'table' then
-    config.documentation = merge(
-      config.documentation,
-      opts.documentation or {}
+  if type(opts.window.documentation) == 'table' then
+    config.window.documentation = merge(
+      config.window.documentation,
+      opts.window.documentation or {}
     )
-  elseif opts.documentation == false then
-    config.documentation = opts.documentation
+  elseif opts.window.documentation == false then
+    config.window.documentation = opts.window.documentation
   end
 
   if type(opts.completion) == 'table' then
