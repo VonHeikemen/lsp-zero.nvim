@@ -150,18 +150,19 @@ lsp.setup()
 
 ### Documentation window
 
-We can change that too. There's the `documentation` option. Is the same as `nvim-cmp`. And these are the defaults.
+We can change that too. There's the `documentation` option. Is the same as `nvim-cmp`'s `window.documentation` option. And these are the defaults.
 
 ```lua
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 lsp.setup_nvim_cmp({
-  -- change any of it to whatever you like
   documentation = {
-    maxheight = 15,
-    maxwidth = 50,
-    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
+    max_height = 15,
+    max_width = 60,
+    border = 'rounded',
+    winhighlight = 'Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None',
+    zindex = 1001
   }
 })
 

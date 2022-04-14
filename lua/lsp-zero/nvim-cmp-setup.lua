@@ -106,6 +106,29 @@ M.call_setup = function(opts)
         luasnip.lsp_expand(args.body)
       end,
     },
+    window = {
+      documentation = merge(
+        cmp.config.window.bordered(),
+        {
+          max_height = 15,
+          max_width = 60,
+        }
+      )
+    },
+    formatting = {
+      fields = {'abbr', 'menu', 'kind'},
+      format = function(entry, item)
+        local short_name = {
+          nvim_lsp = 'LSP',
+          nvim_lua = 'nvim'
+        }
+
+        local menu_name = short_name[entry.source.name] or entry.source.name
+
+        item.menu = string.format('[%s]', menu_name)
+        return item
+      end,
+    }
   }
 
   if type(opts.sources) == 'table' then
@@ -120,42 +143,22 @@ M.call_setup = function(opts)
     config.mapping = M.default_mappings()
   end
 
-  config.documentation = {
-    maxheight = 15,
-    maxwidth = 50,
-    border = { "╭", "─", "╮", "│", "╯", "─", "╰", "│" },
-  }
-
   if type(opts.documentation) == 'table' then
-    config.documentation = merge(
-      config.documentation,
-      opts.documentation or {}
+    config.window.documentation = merge(
+      config.window.documentation,
+      opts.documentation
     )
   elseif opts.documentation == false then
-    config.documentation = opts.documentation
+    config.window.documentation = cmp.config.disable
   end
 
   if type(opts.completion) == 'table' then
     config.completion = merge(config.completion, opts.completion)
   end
 
-  config.formatting = merge(
-    {
-      fields = {'abbr', 'menu', 'kind'},
-      format = function(entry, item)
-        local short_name = {
-          nvim_lsp = 'LSP',
-          nvim_lua = 'nvim'
-        }
-
-        local menu_name = short_name[entry.source.name] or entry.source.name
-
-        item.menu = string.format('[%s]', menu_name)
-        return item
-      end,
-    },
-    opts.formatting or {}
-  )
+  if type(opts.formatting) == 'table' then
+    config.formatting = merge(config.formatting, opts.formatting)
+  end
 
   cmp.setup(config)
 end

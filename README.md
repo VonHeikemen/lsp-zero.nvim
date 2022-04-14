@@ -443,15 +443,19 @@ lsp.nvim_workspace({
 
 ### `.setup_nvim_cmp({opts})`
 
-It allows you to override some of the options for `nvim-cmp`:
+`{opts}` is table that will allow you to override some of `nvim-cmp` defaults:
 
-* completion
-* sources
-* documentation
-* formatting
-* mapping
+* `completion`: Configures the behavior of the completion menu. You can find more details about its properities if you start typing the command `:help cmp-config.completion`.
 
-To get information about these option go to [nvim-cmp's documentation](https://github.com/hrsh7th/nvim-cmp).
+* `sources`: List of configurations for "data sources". See `:help cmp-config.sources` to know more.
+
+* `documentation`: Modifies the look of the documentation window. You can find more details about its properities if you start typing the command `:help cmp-config.window`.
+
+* `formatting`: Modifies the look of the completion menu. You can find more details about its properities if you start typing the command `:help cmp-config.formatting`.
+
+* `mapping`: Sets the keybindings. See `:help cmp-mapping`.
+
+Some example config of these options are featured in [nvim-cmp's readme](https://github.com/hrsh7th/nvim-cmp).
 
 ### `.use({server}, {opts})`
 
