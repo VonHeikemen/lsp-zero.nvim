@@ -547,6 +547,10 @@ Returns a table with the default keybindings for `nvim-cmp`
 
 Returns the list of "sources" used in `nvim-cmp`.
 
+### `defaults.nvim_workspace()`
+
+Returns the neovim specific settings for `sumneko_lua` language server.
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).

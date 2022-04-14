@@ -217,35 +217,7 @@ end
 M.nvim_workspace = function(opts)
   opts = opts or {}
   local settings = require('lsp-zero.settings')
-  local runtime_path = vim.split(package.path, ';')
-  table.insert(runtime_path, 'lua/?.lua')
-  table.insert(runtime_path, 'lua/?/init.lua')
-
-  local server_opts = {
-    settings = {
-      Lua = {
-        -- Disable telemetry
-        telemetry = {enable = false},
-        runtime = {
-          -- Tell the language server which version of Lua you're using
-          -- (most likely LuaJIT in the case of Neovim)
-          version = 'LuaJIT',
-          path = runtime_path,
-        },
-        diagnostics = {
-          -- Get the language server to recognize the `vim` global
-          globals = {'vim'}
-        },
-        workspace = {
-          library = {
-            -- Make the server aware of Neovim runtime files
-            vim.fn.expand('$VIMRUNTIME/lua'),
-            vim.fn.stdpath('config') .. '/lua'
-          }
-        }
-      }
-    }
-  }
+  local server_opts = M.defaults.nvim_workspace()
 
   if opts.library then
     server_opts.settings.Lua.workspace.library = opts.library
@@ -274,6 +246,38 @@ end
 
 M.defaults.cmp_sources = function()
   return require('lsp-zero.nvim-cmp-setup').sources()
+end
+
+M.defaults.nvim_workspace = function()
+  local runtime_path = vim.split(package.path, ';')
+  table.insert(runtime_path, 'lua/?.lua')
+  table.insert(runtime_path, 'lua/?/init.lua')
+
+  return {
+    settings = {
+      Lua = {
+        -- Disable telemetry
+        telemetry = {enable = false},
+        runtime = {
+          -- Tell the language server which version of Lua you're using
+          -- (most likely LuaJIT in the case of Neovim)
+          version = 'LuaJIT',
+          path = runtime_path,
+        },
+        diagnostics = {
+          -- Get the language server to recognize the `vim` global
+          globals = {'vim'}
+        },
+        workspace = {
+          library = {
+            -- Make the server aware of Neovim runtime files
+            vim.fn.expand('$VIMRUNTIME/lua'),
+            vim.fn.stdpath('config') .. '/lua'
+          }
+        }
+      }
+    }
+  }
 end
 
 M.suggest_server = function()

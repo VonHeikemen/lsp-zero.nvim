@@ -677,7 +677,12 @@ Lua API                                                     *lsp-zero-lua-api*
                                              *lsp-zero.defaults.cmp_sources()*
 
   .defaults.cmp_sources(): ~
-     Returns the list of "sources" used in `nvim-cmp`.
+      Returns the list of "sources" used in `nvim-cmp`.
+
+                                             *lsp-zero.defaults.nvim_workspace()*
+
+  .defaults.nvim_workspace(): ~
+      Returns the neovim specific settings for `sumneko_lua` language server.
 
 ==============================================================================
 Support                                                    *lsp-zero-donation*
