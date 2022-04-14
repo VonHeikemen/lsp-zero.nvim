@@ -27,6 +27,7 @@ local run = function(args)
   local configure = Server.setup
   local suggest = user_config.suggest_lsp_servers
   local handle_setup = user_config.setup_servers_on_start
+  local config_callback = user_config.config_callback
 
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
@@ -60,6 +61,12 @@ local run = function(args)
     local server_opts = args.server_opts[server.name] or {}
     server_opts.autostart = true
 
+    if config_callback ~= nil then
+      custom_opts = config_callback(server)
+      vim.tbl_deep_extend(server_opts, custom_opts)
+    end
+
+    
     configure(server.name, server_opts)
   end
 
