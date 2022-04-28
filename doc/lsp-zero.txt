@@ -169,6 +169,9 @@ The code below describes the same features the `recommended` preset enables.
 It is possible to override the preferences of a preset if you use
 |lsp-zero.set_preferences()| right after |lsp-zero.preset()|.
 
+For example,  you could disable automatic suggestions for language servers
+even if you are using the `recommended` preset.
+
 >
   local lsp = require('lsp-zero')
   lsp.preset('recommended')
@@ -177,15 +180,6 @@ It is possible to override the preferences of a preset if you use
     suggest_lsp_servers = false
   })
 <
-
-I say it's safe to play around with these settings after you declare a preset.
-
-    * set_lsp_keymaps
-    * configure_diagnostics
-    * sign_icons
-
-The others will have a bigger impact on the behaviour of the plugin. If you
-decide to override them, you better know what you are doing.
 
 ==============================================================================
 Autocomplete                                           *lsp-zero-autocomplete*
@@ -370,6 +364,8 @@ Lua API                                                     *lsp-zero-lua-api*
           * `lsp-compe`
           * `lsp-only`
           * `manual-setup`
+          * `per-project`
+          * `system-lsp`
 
       For more details about them see |lsp-zero-presets|.
 
@@ -475,7 +471,7 @@ Lua API                                                     *lsp-zero-lua-api*
           debounce_text_changes = 150,
         },
         on_attach = function(client, bufnr)
-          client.resolved_capabilities.document_formatting = false
+          print('hello tsserver')
         end
       })
 <
@@ -498,10 +494,10 @@ Lua API                                                     *lsp-zero-lua-api*
       })
 
       lsp.on_attach(function(client, bufnr)
-        local noremap = {noremap = true}
-        local map = function(...) vim.api.nvim_buf_set_keymap(0, ...) end
+        local noremap = {buffer = bufnr, remap = false}
+        local bind = vim.keymap.set
 
-        map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+        bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
         -- more code  ...
       end)
 
@@ -650,7 +646,7 @@ Lua API                                                     *lsp-zero-lua-api*
       This function was designed as an escape hatch, so you can call
       a language server using other tools.
 
-      If you want to use `rust-tools`, this is how you'll do it.
+      For example, if you want to use `rust-tools`, this is how you'll do it.
 
 >
       local lsp = require('lsp-zero')
@@ -662,7 +658,6 @@ Lua API                                                     *lsp-zero-lua-api*
       })
 
       lsp.setup()
-
 <
 
       In case you are using the `recommended` preset (or any preset that

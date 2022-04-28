@@ -10,10 +10,10 @@ lsp.preset('recommended')
 
 lsp.set_preferences({
   sign_icons = {
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = ''
+    error = 'E',
+    warn = 'W',
+    hint = 'H',
+    info = 'I'
   }
 })
 ```
@@ -22,15 +22,7 @@ lsp.set_preferences({
 
 Be careful though. If you are going to override a preset do it right after calling `.preset()`.
 
-I say it's safe to play around with these settings after you declare a preset.
-
-* `set_lsp_keymaps`
-
-* `configure_diagnostics`
-
-* `sign_icons`
-
-The rest? Well... I just hope you know what you are doing. If you have any questions you can stop by the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) page.
+If you have any questions you can stop by the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) page.
 
 ## Configuring language servers
 
@@ -71,17 +63,19 @@ lsp.configure('tsserver', {
     debounce_text_changes = 150,
   },
   on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
+    print('hello tsserver')
   end
 })
 
 -- the function below will be executed whenever
 -- a language server is attached to a buffer
 lsp.on_attach(function(client, bufnr)
-  local noremap = {noremap = true}
-  local map = function(...) vim.api.nvim_buf_set_keymap(0, ...) end
+  local noremap = {buffer = bufnr, remap = false}
+  local bind = vim.keymap.set
 
-  map('n', 'Q', ':lua print("hello")<cr>', noremap)
+  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+  bind('n', 'Q', function() print('Hello') end, {buffer = bufnr, desc = 'Say hello'})
+  -- more code  ...
 end)
 
 -- setup must be the last function
@@ -184,7 +178,29 @@ lsp.setup()
 
 ### Changing the keybindings
 
-The option you want is `mapping`. The trickiest. Here you are going to find yourself in an all or nothing situation, if you choose to use it then **you** are in charge of all mappings, all the defaults will disappear.
+The option you want is `mapping`. The trickiest. Here you are going to find yourself in an all or nothing situation, if you choose to use it then **you** are in charge of all mappings, all the defaults will disappear. But don't worry, you can access those defaults with the function `lsp.defaults.cmp_mappings()`.
+
+Here is an example adding bindings for `<C-n>` and `<C-p>` to navigate the completion list.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local cmp = require('cmp')
+local cmp_mappings = lsp.defaults.cmp_mappings()
+
+-- go to previous item
+cmp_mappings['<C-p>'] = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
+
+-- go to next item
+cmp_mappings['<C-n>'] = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
+
+lsp.setup_nvim_cmp({
+  mapping = cmp_mappings
+})
+
+lsp.setup()
+```
 
 Want to know how much fun you can have creating your own mappings? Check out the wiki section [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) and scroll down all the way where it says `Autocompletion`.
 

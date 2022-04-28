@@ -111,7 +111,7 @@ Plug 'VonHeikemen/lsp-zero.nvim'
 
 I would suggest you make a quick read in to the [installation section of nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/#installation).
 
-Make sure you have at least the minimum requirements listed in `unix systems` or `windows`. And maybe `nodejs` and `npm`, I know a lot of servers are hosted on `npm`.
+Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
 ### Usage
 
@@ -323,20 +323,17 @@ It creates a combination of settings safe to use for specific cases.
 
 It gives the user control over the options available in the plugin.
 
-You can use it to override options from a preset. For example, you could change the diagnostics icons after setting the preset.
+You can use it to override options from a preset. For example, you could disable the automatic suggestions for language servers even if you are using the `recommended` preset.
 
 ```lua
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 lsp.set_preferences({
-  sign_icons = {
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = ''
-  }
+  suggest_lsp_servers = false
 })
+
+lsp.setup()
 ```
 
 ### `.setup()`
@@ -353,7 +350,7 @@ lsp.configure('tsserver', {
     debounce_text_changes = 150,
   },
   on_attach = function(client, bufnr)
-    client.resolved_capabilities.document_formatting = false
+    print('hello tsserver')
   end
 })
 ```
@@ -401,10 +398,10 @@ lsp.set_preferences({
 })
 
 lsp.on_attach(function(client, bufnr)
-  local noremap = {noremap = true}
-  local map = function(...) vim.api.nvim_buf_set_keymap(0, ...) end
+  local noremap = {buffer = bufnr, remap = false}
+  local bind = vim.keymap.set
 
-  map('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
   -- more code  ...
 end)
 
@@ -507,7 +504,7 @@ local lsp = require('lsp-zero')
 
 local lsp_options = {
   flags = {
-    debounce_text_changes = 200,
+    debounce_text_changes = 150,
   }
 }
 
@@ -522,7 +519,7 @@ The `{opts}` table will be merged with the rest of the default options for `{ser
 
 This function was designed as an escape hatch, so you can call a language server using other tools.
 
-If you want to use `rust-tools`, this is how you'll do it.
+For example, if you want to use `rust-tools`, this is how you'll do it.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -534,7 +531,6 @@ require('rust-tools').setup({
 })
 
 lsp.setup()
-
 ```
 
 In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.
@@ -547,7 +543,7 @@ Returns a table with the default keybindings for `nvim-cmp`
 
 Returns the list of "sources" used in `nvim-cmp`.
 
-### `defaults.nvim_workspace()`
+### `.defaults.nvim_workspace()`
 
 Returns the neovim specific settings for `sumneko_lua` language server.
 
