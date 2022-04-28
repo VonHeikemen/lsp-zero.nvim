@@ -63,21 +63,13 @@ local run = function(args)
     configure(server.name, server_opts)
   end
 
-  local update_state = function(server)
-    safe_call(state.check_server, server)
-  end
-
   local lsp_install = require('nvim-lsp-installer')
 
-  lsp_install.on_server_ready(function(server)
+  for _, server in pairs(lsp_install.get_installed_servers()) do
     if handle_setup == true then
       setup_server(server)
     end
-
-    if suggest then
-      update_state(server)
-    end
-  end)
+  end
 
   if #internal.install_servers > 0 then
     Server.ensure_installed(internal.install_servers)
@@ -281,27 +273,37 @@ M.defaults.nvim_workspace = function()
 end
 
 M.suggest_server = function()
+  local settings = require('lsp-zero.settings')
+  local use_global = settings.call_servers == 'global'
   local ft = vim.bo.filetype
 
-  if vim.bo.buftype == 'prompt' or ft == '' or ft == nil then
+  if use_global or vim.bo.buftype == 'prompt' or ft == '' or ft == nil then
     return
   end
 
   local current_state = state.get()
+
   if not current_state.ok then return end
 
   local visited = current_state.filetypes[ft]
   if visited then return end
 
   state.save_filetype(ft)
+  local lsp_install = require('nvim-lsp-installer')
 
-  local server_available = util.should_suggest_server(ft, {})
+  local is_there = util.should_suggest_server(
+    ft,
+    lsp_install.get_installed_servers()
+  )
+
+  if is_there then return end
+
+  local server_available = util.should_suggest_server(
+    ft,
+    lsp_install.get_available_servers()
+  )
+
   if not server_available then return end
-
-  if #internal.install_servers > 0 then
-    local is_there = util.should_suggest_server(ft, internal.install_servers)
-    if is_there then return end
-  end
 
   local answer = vim.fn.confirm(
     'Would you like to install a language server for this filetype?',

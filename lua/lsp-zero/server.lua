@@ -201,13 +201,26 @@ end
 
 M.ensure_installed = function(list)
   local get_server = require('nvim-lsp-installer.servers').get_server
+  local installed = false
 
   for _, name in pairs(list) do
     local ok, server = get_server(name)
     if ok and not server:is_installed() then
-      vim.notify("Installing " .. name, vim.log.levels.INFO)
+      installed = true
+      vim.notify('[lsp-zero] Installing ' .. name, vim.log.levels.INFO)
       server:install()
+
+      if global_config.suggest_lsp_servers then
+        require('lsp-zero.state').check_server(server)
+      end
     end
+  end
+
+  if installed then
+    local msg = '[lsp-zero] Execute the command :LspInstallInfo to track the process of installation.\n'
+      .. 'And, restart neovim when finished to initialize language servers properly.'
+
+    vim.notify(msg, vim.log.levels.INFO)
   end
 end
 

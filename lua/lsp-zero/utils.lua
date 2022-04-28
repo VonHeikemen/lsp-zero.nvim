@@ -2,22 +2,8 @@ local M = {}
 local uv = vim.loop
 
 M.should_suggest_server = function(current_filetype, servers)
-  local lsp_install = require('nvim-lsp-installer')
-  local get_server = #servers == 0
-
-  if get_server then
-    servers = lsp_install.get_available_servers()
-  end
-
   for _, s in pairs(servers) do
-    local fts = {}
-
-    if get_server then
-      fts = s:get_supported_filetypes()
-    else
-      local ok, server = lsp_install.get_server(s)
-      fts = ok and server:get_supported_filetypes() or {}
-    end
+    local fts = s:get_supported_filetypes()
 
     for _, ft in pairs(type(fts) == 'table' and fts or {}) do
       if current_filetype == ft then

@@ -14,6 +14,8 @@ local defaults = {
     nofile = true,
     qf = true,
     quickfix = true,
+    netrw = true,
+    lspinfo = true,
   },
 
   -- cache server history
