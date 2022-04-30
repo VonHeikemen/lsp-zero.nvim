@@ -113,7 +113,6 @@ M.use = function(servers, lsp_opts, force)
       lsp_opts
     )
 
-    opts.autostart = true
     Server.setup(name, opts)
   end
 end

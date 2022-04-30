@@ -17,8 +17,8 @@ M.setup = function(server_name, user_opts)
   local lsp = lspconfig[server_name]
   lsp.setup(opts)
 
-  if opts.autostart and lsp.manager then
-    lsp.manager.try_add_wrapper()
+  if vim.v.vim_did_enter == 1 then
+    s.autostart(lsp, opts.autostart)
   end
 end
 
@@ -31,7 +31,6 @@ M.build_options = function(name, opts)
 
   if opts.root_dir == true then
     opts.root_dir = function() return vim.fn.getcwd() end
-    opts.autostart = true
   end
 
   if opts.capabilities == nil and global_config.cmp_capabilities then
@@ -42,18 +41,6 @@ M.build_options = function(name, opts)
     s.on_attach(...)
     if M.common_on_attach then M.common_on_attach(...) end
     if custom_attach then custom_attach(...) end
-  end
-
-  if global_config.call_servers == 'local' then
-    local ok, server = s.get_server(name)
-
-    if not ok then return opts end
-
-    return vim.tbl_deep_extend(
-      'force',
-      server:get_default_options(),
-      opts
-    )
   end
 
   return opts
@@ -75,7 +62,7 @@ s.call_once = function()
   )
 
   if global_config.call_servers == 'local' then
-    s.get_server = require('nvim-lsp-installer.servers').get_server
+    require('nvim-lsp-installer').setup({})
   end
 
   if global_config.configure_diagnostics then
@@ -184,6 +171,16 @@ s.use_cmp = function()
   )
 
   return state.capabilities
+end
+
+s.autostart = function(lsp, autostart)
+  if autostart == nil then
+    autostart = vim.F.if_nil(lsp.autostart, true)
+  end
+
+  if autostart and lsp.manager then
+    lsp.manager.try_add_wrapper()
+  end
 end
 
 M.setup_servers = function(list)
