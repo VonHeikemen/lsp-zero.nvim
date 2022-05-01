@@ -64,6 +64,7 @@ local run = function(args)
   end
 
   local lsp_install = require('nvim-lsp-installer')
+  util.setup_lsp_installer()
 
   for _, server in pairs(lsp_install.get_installed_servers()) do
     if handle_setup == true then

@@ -7,6 +7,7 @@ local state = {
 }
 
 local global_config = require('lsp-zero.settings')
+local util = require('lsp-zero.utils')
 
 M.setup = function(server_name, user_opts)
   if state.exclude[server_name] then return end
@@ -62,7 +63,7 @@ s.call_once = function()
   )
 
   if global_config.call_servers == 'local' then
-    require('nvim-lsp-installer').setup({})
+    util.setup_lsp_installer()
   end
 
   if global_config.configure_diagnostics then

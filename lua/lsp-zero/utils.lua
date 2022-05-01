@@ -29,5 +29,10 @@ M.read_file = function(path)
   return contents
 end
 
+M.setup_lsp_installer = function()
+  require('nvim-lsp-installer').setup({})
+  M.setup_lsp_installer = function(arg) return arg end
+end
+
 return M
 
