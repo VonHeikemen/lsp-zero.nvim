@@ -201,6 +201,8 @@ M.ensure_installed = function(list)
   local get_server = require('nvim-lsp-installer.servers').get_server
   local installed = false
 
+  util.setup_lsp_installer()
+
   for _, name in pairs(list) do
     local ok, server = get_server(name)
     if ok and not server:is_installed() then
