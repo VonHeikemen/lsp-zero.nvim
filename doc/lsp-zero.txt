@@ -131,7 +131,7 @@ These are the available options.
       to navigate between the location of these errors.
 
   cmp_capabilities: ~
-      Sends the `nvim-cmp` capabilities to the language server.
+      Tell the language servers what capabilities `nvim-cmp` supports.
 
   manage_nvim_cmp: ~
       Use the default setup for `nvim-cmp`. It configures keybindings and
@@ -624,7 +624,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
       local lsp = require('lsp-zero')
 
-      local lsp_options = {
+      local lsp_opts = {
         flags = {
           debounce_text_changes = 150,
         }

@@ -1,8 +1,8 @@
 # LSP Zero
 
-Say you want to get started using the native LSP client that comes with neovim. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
+Say you want to start using neovim's built-in LSP client. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
 
-The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the native LSP client to work together nicely. Additionally, with the help of [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/), it can let you install language servers from inside neovim.
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client to work together nicely. Additionally, with the help of [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/), it can let you install language servers from inside neovim.
 
 Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
 
@@ -16,7 +16,7 @@ lsp.setup()
 
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
 
-If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/1).
+If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/).
 
 ## Demo
 
@@ -177,7 +177,7 @@ Is the same as `manual-setup`, automatic setup for language servers and suggesti
 
 ## Choose your features
 
-For this I would recommend to deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
+For this I would recommend deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
 
 These are the options the `recommended` preset uses.
 
@@ -209,7 +209,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `configure_diagnostics` uses the built-in function `vim.diagnostic.config` to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
 
-* `cmp_capabilities` sends the `nvim-cmp` capabilities to the language server.
+* `cmp_capabilities` tell the language servers what capabilities `nvim-cmp` supports.
 
 * `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
 
@@ -257,7 +257,7 @@ Some details that you should know. The plugin responsable for autocompletion is 
 
 ## LSP
 
-When a language server gets attached to a buffer you gain access some keybindings and commands. All of these are bound to built-in functions, so you can get more details using the `:help` command.
+When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these are bound to built-in functions, so you can get more details using the `:help` command.
 
 ### Default keybindings
 
@@ -502,7 +502,7 @@ Options from `.configure()` will be merged with the ones on `.use()` and the ser
 
 local lsp = require('lsp-zero')
 
-local lsp_options = {
+local lsp_opts = {
   flags = {
     debounce_text_changes = 150,
   }
