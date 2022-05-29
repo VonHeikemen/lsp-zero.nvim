@@ -189,7 +189,7 @@ lsp.set_preferences({
   configure_diagnostics = true,
   cmp_capabilities = true,
   manage_nvim_cmp = true,
-  call_servers = 'local'
+  call_servers = 'local',
   sign_icons = {
     error = '✘',
     warn = '▲',
