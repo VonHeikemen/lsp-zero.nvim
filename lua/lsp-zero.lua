@@ -28,6 +28,9 @@ local run = function(args)
   local suggest = user_config.suggest_lsp_servers
   local handle_setup = user_config.setup_servers_on_start
 
+  local lsp_install = require('nvim-lsp-installer')
+  util.setup_lsp_installer()
+
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
@@ -62,9 +65,6 @@ local run = function(args)
 
     configure(server.name, server_opts)
   end
-
-  local lsp_install = require('nvim-lsp-installer')
-  util.setup_lsp_installer()
 
   for _, server in pairs(lsp_install.get_installed_servers()) do
     if handle_setup == true then
