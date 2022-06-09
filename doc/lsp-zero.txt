@@ -350,6 +350,22 @@ language server you want to delete and press X.
 To know more about the available bindings inside the floating window of
 `LspInstallInfo` press `?`.
 
+If you need to customize `nvim-lsp-installer` make sure you do it before
+calling the `lsp-zero` module.
+
+>
+  require('nvim-lsp-installer').settings({
+    ui = {
+      border = 'rounded'
+    }
+  })
+
+  local lsp = require('lsp-zero')
+  lsp.preset('recommended')
+
+  lsp.setup()
+<
+
 ==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
 
@@ -674,7 +690,7 @@ Lua API                                                     *lsp-zero-lua-api*
   .defaults.cmp_sources(): ~
       Returns the list of "sources" used in `nvim-cmp`.
 
-                                             *lsp-zero.defaults.nvim_workspace()*
+                                          *lsp-zero.defaults.nvim_workspace()*
 
   .defaults.nvim_workspace(): ~
       Returns the neovim specific settings for `sumneko_lua` language server.

@@ -309,6 +309,21 @@ To uninstall a server use the command `LspInstallInfo`. Navigate to the language
 
 To know more about the available bindings inside the floating window of `LspInstallInfo` press `?`.
 
+If you need to customize `nvim-lsp-installer` make sure you do it before calling the `lsp-zero` module.
+
+```lua
+require('nvim-lsp-installer').settings({
+  ui = {
+    border = 'rounded'
+  }
+})
+
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+```
+
 ## Global command
 
 * `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
