@@ -558,6 +558,10 @@ Returns a table with the default keybindings for `nvim-cmp`
 
 Returns the list of "sources" used in `nvim-cmp`.
 
+### `.defaults.cmp_config()`
+
+Returns the entire configuration table for `nvim-cmp`.
+
 ### `.defaults.nvim_workspace()`
 
 Returns the neovim specific settings for `sumneko_lua` language server.

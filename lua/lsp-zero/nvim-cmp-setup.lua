@@ -86,18 +86,10 @@ M.default_mappings = function()
   }
 end
 
-M.call_setup = function(opts)
-  opts = opts or {}
-
-  require('lsp-zero.snippets')
-
-  global_config.cmp_capabilities = true
-
-  vim.opt.completeopt:append('menu')
-  vim.opt.completeopt:append('menuone')
-  vim.opt.completeopt:append('noselect')
-
-  local config = {
+M.cmp_config = function()
+  return {
+    sources = M.sources(),
+    mapping = M.default_mappings(),
     completion = {
       completeopt = 'menu,menuone,noinsert'
     },
@@ -130,17 +122,25 @@ M.call_setup = function(opts)
       end,
     }
   }
+end
+
+M.call_setup = function(opts)
+  opts = opts or {}
+
+  global_config.cmp_capabilities = true
+
+  vim.opt.completeopt:append('menu')
+  vim.opt.completeopt:append('menuone')
+  vim.opt.completeopt:append('noselect')
+
+  local config = M.cmp_config()
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
-  else
-    config.sources = M.sources()
   end
 
   if type(opts.mapping) == 'table' then
     config.mapping = opts.mapping
-  else
-    config.mapping = M.default_mappings()
   end
 
   if type(opts.documentation) == 'table' then

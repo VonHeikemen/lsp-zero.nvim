@@ -28,6 +28,8 @@ local run = function(args)
   local suggest = user_config.suggest_lsp_servers
   local handle_setup = user_config.setup_servers_on_start
 
+  require('lsp-zero.snippets')
+
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
@@ -238,6 +240,10 @@ end
 
 M.defaults.cmp_sources = function()
   return require('lsp-zero.nvim-cmp-setup').sources()
+end
+
+M.defaults.cmp_config = function()
+  return require('lsp-zero.nvim-cmp-setup').cmp_config()
 end
 
 M.defaults.nvim_workspace = function()

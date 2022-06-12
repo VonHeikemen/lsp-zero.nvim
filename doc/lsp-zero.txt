@@ -690,6 +690,11 @@ Lua API                                                     *lsp-zero-lua-api*
   .defaults.cmp_sources(): ~
       Returns the list of "sources" used in `nvim-cmp`.
 
+                                              *lsp-zero.defaults.cmp_config()*
+
+  .defaults.cmp_config(): ~
+      Returns the entire configuration table for `nvim-cmp`.
+
                                           *lsp-zero.defaults.nvim_workspace()*
 
   .defaults.nvim_workspace(): ~
