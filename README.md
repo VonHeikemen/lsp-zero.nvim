@@ -109,7 +109,7 @@ Plug 'VonHeikemen/lsp-zero.nvim'
 
 ### Requirements for language servers
 
-I would suggest you make a quick read in to the [installation section of nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/#installation).
+I would suggest you make a quick read in to the [requirements section of nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/#requirements).
 
 Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
