@@ -258,5 +258,25 @@ lsp.setup_nvim_cmp({
 lsp.setup()
 ```
 
+### The current api is not enough?
+
+Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. Don't worry I won't leave you alone on this. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function `lsp.defaults.cmp_config()` to get the default configuration table.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('lsp-compe')
+
+lsp.setup()
+
+local cmp = require('cmp')
+local cmp_config = lsp.defaults.cmp_config()
+
+---
+-- do whatever you want here...
+---
+
+cmp.setup(cmp_config)
+```
+
 Finally, in case no one has told you this today... you should read `nvim-cmp`'s documentation. You are awesome. Have a nice day.
 
