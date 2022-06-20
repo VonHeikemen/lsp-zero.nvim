@@ -282,7 +282,8 @@ so you can get more details using the `:help` command.
 
   <Ctrl-k>: ~
       Displays signature information about the symbol under the cursor in a
-      floating window. See |vim.lsp.buf.signature_help()|.
+      floating window. See |vim.lsp.buf.signature_help()|. If a mapping 
+      already exists for this key this function is not bound.
 
   <F2>: ~
       Renames all references to the symbol under the cursor.

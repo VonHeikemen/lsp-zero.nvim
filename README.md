@@ -273,7 +273,7 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 * `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.references()`.
 
-* `<Ctrl-k>`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`.
+* `<Ctrl-k>`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`. If a mapping already exists for this key this function is not bound.
 
 * `<F2>`: Renames all references to the symbol under the cursor. See `:help vim.lsp.buf.rename()`.
 

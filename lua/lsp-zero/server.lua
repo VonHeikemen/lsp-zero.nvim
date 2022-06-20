@@ -3,7 +3,8 @@ local s = {}
 
 local state = {
   capabilities = nil,
-  exclude = {}
+  exclude = {},
+  map_ctrlk = false,
 }
 
 local global_config = require('lsp-zero.settings')
@@ -69,6 +70,8 @@ s.call_once = function()
   if global_config.configure_diagnostics then
     s.diagnostics()
   end
+
+  state.map_ctrlk = vim.fn.mapcheck('<C-k>', 'n') == ''
 
   local fmt = string.format
   local command = function(name, str)
@@ -145,10 +148,13 @@ s.set_keymaps = function(bufnr)
   map('n', 'gi', lsp 'buf.implementation()')
   map('n', 'go', lsp 'buf.type_definition()')
   map('n', 'gr', lsp 'buf.references()')
-  map('n', '<C-k>', lsp 'buf.signature_help()')
   map('n', '<F2>', lsp 'buf.rename()')
   map('n', '<F4>', lsp 'buf.code_action()')
   map('x', '<F4>', lsp 'buf.range_code_action()')
+
+  if state.map_ctrlk then
+    map('n', '<C-k>', lsp 'buf.signature_help()')
+  end
 
   if global_config.configure_diagnostics then
     map('n', 'gl', diagnostic 'open_float()')
