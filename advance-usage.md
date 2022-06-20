@@ -83,6 +83,36 @@ end)
 lsp.setup()
 ```
 
+## Setup LSP keybindings in vimscript
+
+The easiest way I can think of is using a global function. Somewhere in your config you declare a function with your keybindings.
+
+```vim
+function! LspAttached() abort
+  nnoremap <buffer> <leader>r <cmd>lua vim.lsp.buf.rename()<cr>
+  nnoremap <buffer> <leader>k <cmd>lua vim.lsp.buf.signature_help()<CR>
+  " and many more ...
+endfunction
+```
+
+Next you call that function when the LSP server is attached to a buffer.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+-- Disable default keybindings (optional)
+lsp.set_preferences({
+  set_lsp_keymaps = false
+})
+
+lsp.on_attach(function(client, bufnr)
+  vim.call('LspAttached')
+end)
+
+lsp.setup()
+```
+
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
