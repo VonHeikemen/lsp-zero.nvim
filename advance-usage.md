@@ -113,6 +113,25 @@ end)
 lsp.setup()
 ```
 
+## Can I use that one language server I have installed globally?
+
+Sure. For this you'll need to use `lspconfig` directly and create your server options with the `.build_options` function.
+
+Let's pretend `tsserver` is installed globally.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+require('lspconfig').tsserver.setup(
+  lsp.build_options('tsserver', {
+    --- custom options go here
+  })
+)
+
+lsp.setup()
+```
+
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
