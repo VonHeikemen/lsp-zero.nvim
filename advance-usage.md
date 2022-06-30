@@ -132,6 +132,8 @@ require('lspconfig').tsserver.setup(
 lsp.setup()
 ```
 
+If you are going to use `lsp.on_attach` make sure to do it before calling any language server.
+
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
