@@ -13,11 +13,11 @@ end
 preset.defaults = function()
   return {
     'defaults',
-    suggest_lsp_servers = false,
-    setup_servers_on_start = false,
-    call_servers = 'local',
     set_lsp_keymaps = true,
     configure_diagnostics = true,
+    call_servers = 'global',
+    suggest_lsp_servers = false,
+    setup_servers_on_start = false,
     cmp_capabilities = false,
     manage_nvim_cmp = false,
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
@@ -33,6 +33,7 @@ preset.recommended = function()
   opts.setup_servers_on_start = true
   opts.cmp_capabilities = true
   opts.manage_nvim_cmp = true
+  opts.call_servers = 'local'
 
   return opts
 end

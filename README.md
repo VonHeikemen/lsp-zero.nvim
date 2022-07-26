@@ -213,7 +213,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
 
-* `call_servers` if set to `"local"` it will call servers installed with `nvim-lsp-installer`. If set to `"global"` it will call servers available globally on the system.
+* `call_servers` if set to `'local'` it'll try to setup one of the supported installers (`nvim-lsp-installer` or `mason.nvim`). If set to `'lsp-installer'` it will setup nvim-lsp-installer. If set to `mason` it will setup mason.nvim. If set to `'global'` it will only try to use language servers available globally.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
 
@@ -301,6 +301,8 @@ In addition to the lsp keymap you also have access to these keybindings when a s
 
 Install and updates of language servers is done with [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/).
 
+> Note: nvim-lsp-installer will be replace by mason.nvim in the far (very far) future. For now, both are supported. But you can only have one installed.
+
 To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `nvim-lsp-installer` will try to suggest a language server based on the filetype of the current buffer.
 
 To check for updates on the language servers use the command `LspInstallInfo`. A floating window will open showing you all the language servers you have installed. If there is any update available, the item will display a message. Navigate to that item and press `u` to install the update.
@@ -313,6 +315,45 @@ If you need to customize `nvim-lsp-installer` make sure you do it before calling
 
 ```lua
 require('nvim-lsp-installer').settings({
+  ui = {
+    border = 'rounded'
+  }
+})
+
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+```
+
+### Mason.nvim
+
+On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of nvim-lsp-installer would stop. He will focus on a new installer called [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
+
+At the moment `lsp-zero` supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is opt-in. If you set the option `call_servers` to `'local'` (is what the `recommended` preset does) lsp-zero will try to choose the installer based on what plugins are available. You can choose explicitly what installer you want by setting `call_servers` to `'lsp-installer` or `mason`.
+
+If you want to migrate away from nvim-lsp-installer first remove all servers installed. Execute.
+
+```vim
+:LspUninstallAll
+```
+
+Optionally, you can reset the state of the server suggestions.
+
+```vim
+:lua require('lsp-zero.state').reset()
+```
+
+Next, remove nvim-lsp-installer from neovim. Use whatever method your plugin manager has.
+
+Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
+
+To install packages with mason.nvim use the command `:Mason`. A floating window will show up, it will have the same keybindings as nvim-lsp-installer window.
+
+If you want to customize mason.nvim, you should do it before calling the lsp-zero module. Here is an example.
+
+```lua
+require('mason.settings').set({
   ui = {
     border = 'rounded'
   }

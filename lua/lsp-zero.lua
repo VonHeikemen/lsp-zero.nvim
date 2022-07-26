@@ -1,8 +1,6 @@
 local M = {}
 
 local preset = require('lsp-zero.presets')
-local state = require('lsp-zero.state')
-local util = require('lsp-zero.utils')
 local Server = require('lsp-zero.server')
 
 local internal = {
@@ -41,6 +39,8 @@ local run = function(args)
     return
   end
 
+  local state = require('lsp-zero.state')
+
   if suggest then
     safe_call(state.sync)
 
@@ -58,21 +58,16 @@ local run = function(args)
     if handle_setup == 'per-project' then return end
   end
 
-  local setup_server = function(server)
-    local server_opts = args.server_opts[server.name] or {}
+  local setup_server = function(name)
+    local server_opts = args.server_opts[name] or {}
     server_opts.autostart = true
 
-    configure(server.name, server_opts)
+    configure(name, server_opts)
   end
 
-  local lsp_install = require('nvim-lsp-installer')
-  util.setup_lsp_installer()
-
-  for _, server in pairs(lsp_install.get_installed_servers()) do
-    if handle_setup == true then
-      setup_server(server)
-    end
-  end
+  local installer = require('lsp-zero.installer')
+  installer.choose()
+  installer.fn.use(setup_server)
 
   if #internal.install_servers > 0 then
     Server.ensure_installed(internal.install_servers)
@@ -123,7 +118,7 @@ end
 M.preset = function(name)
   local opts = M.create_preset(name)
   if not opts[1] then
-    error('(lsp-zero) Invalid preset')
+    error('[lsp-zero] Invalid preset')
     return
   end
 
@@ -145,8 +140,8 @@ end
 
 M.create_preset = function(name)
   if preset[name] == nil then
-    local msg = "%s is not a valid preset."
-    vim.notify(msg, vim.log.levels.WARN)
+    local msg = "[lsp-zero] '%s' is not a valid preset."
+    vim.notify(msg:format(name), vim.log.levels.WARN)
 
     return {false}
   end
@@ -191,7 +186,7 @@ M.setup_nvim_cmp = function(opts)
     return internal.fn.setup_nvim_cmp(opts)
   end
 
-  local msg = 'Settings for nvim_cmp should be handled by the user.'
+  local msg = '[lsp-zero] Settings for nvim_cmp should be handled by the user.'
   vim.notify(msg, vim.log.levels.WARN)
 end
 
@@ -287,6 +282,7 @@ M.suggest_server = function()
     return
   end
 
+  local state = require('lsp-zero.state')
   local current_state = state.get()
 
   if not current_state.ok then return end
@@ -295,18 +291,22 @@ M.suggest_server = function()
   if visited then return end
 
   state.save_filetype(ft)
-  local lsp_install = require('nvim-lsp-installer')
+
+  local util = require('lsp-zero.utils')
+  local installer = require('lsp-zero.installer')
+
+  installer.choose()
 
   local is_there = util.should_suggest_server(
     ft,
-    lsp_install.get_installed_servers()
+    installer.fn.get_servers()
   )
 
   if is_there then return end
 
   local server_available = util.should_suggest_server(
     ft,
-    lsp_install.get_available_servers()
+    util.available_servers()
   )
 
   if not server_available then return end
