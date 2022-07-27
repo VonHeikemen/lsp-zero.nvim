@@ -113,6 +113,19 @@ I would suggest you make a quick read in to the [requirements section of nvim-ls
 
 Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
+Is worth mention right now that nvim-lsp-installer will be replaced in the future by [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer is based on nvim-lsp-installer and created by the same author. Both are supported in lsp-zero at the moment. Which one I recommend? nvim-lsp-installer. mason.nvim is still very new (I advice you wait a little bit), but if you'd like to try it replace this plugin:
+
+```
+williamboman/nvim-lsp-installer
+```
+
+With these two plugins.
+
+```
+williamboman/mason.nvim
+williamboman/mason-lspconfig.nvim
+```
+
 ### Usage
 
 Inside your configuration file add this.
@@ -330,7 +343,7 @@ lsp.setup()
 
 On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of nvim-lsp-installer would stop. He will focus on a new installer called [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
 
-At the moment `lsp-zero` supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is opt-in. If you set the option `call_servers` to `'local'` (is what the `recommended` preset does) lsp-zero will try to choose the installer based on what plugins are available. You can choose explicitly what installer you want by setting `call_servers` to `'lsp-installer` or `mason`.
+At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is opt-in. If you set the option `call_servers` to `'local'` (this is what the `recommended` preset does) lsp-zero will try to choose the installer based on what plugins are available. You can choose explicitly what installer you want by setting `call_servers` to `'lsp-installer'` or `'mason'`.
 
 If you want to migrate away from nvim-lsp-installer first remove all servers installed. Execute.
 
