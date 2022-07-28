@@ -23,7 +23,7 @@ end
 M.default_mappings = function()
   return {
     -- confirm selection
-    ['<CR>'] = cmp.mapping.confirm({select = true}),
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
 
     -- navigate items on the list
     ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
