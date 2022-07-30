@@ -113,7 +113,9 @@ I would suggest you make a quick read in to the [requirements section of nvim-ls
 
 Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
-Is worth mention right now that nvim-lsp-installer will be replaced in the future by [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer is based on nvim-lsp-installer and created by the same author. Both are supported in lsp-zero at the moment. Which one I recommend? nvim-lsp-installer. mason.nvim is still very new (I advice you wait a little bit), but if you'd like to try it replace this plugin:
+Is worth mention right now that nvim-lsp-installer will be replaced in the future by [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer is based on nvim-lsp-installer and created by the same author. Both are supported in lsp-zero at the moment. Which one I recommend? `nvim-lsp-installer`.
+
+mason.nvim is still very new, but if you'd like to try it replace this plugin:
 
 ```
 williamboman/nvim-lsp-installer
