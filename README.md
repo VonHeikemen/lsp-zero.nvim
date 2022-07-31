@@ -501,7 +501,7 @@ Configures the language server for lua with all the options needed to provide co
 
 * `library`: a list of paths that the server should analyze.
 
-By default only the runtime files of neovim and `vim.stdpath('config')` will be included. To add the path to every plugin you'll need to do this.
+By default only the runtime files of neovim and `vim.fn.stdpath('config')` will be included. To add the path to every plugin you'll need to do this.
 
 ```lua
 lsp.nvim_workspace({
