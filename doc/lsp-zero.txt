@@ -310,7 +310,10 @@ so you can get more details using the `:help` command.
                                                     *lsp-zero-buffer-commands*
 
   LspZeroFormat: ~
-      Formats the current buffer. See |vim.lsp.buf.formatting()|.
+      Formats the current buffer or range. If the "bang" is provided
+      formatting will be synchronous (ex: `LspZeroFormat!`). See
+      |vim.lsp.buf.formatting()|, |vim.lsp.buf.range_formatting()| 
+      and |vim.lsp.buf.formatting_sync()|.
 
   LspZeroWorkspaceRemove: ~
       Remove the folder at path from the workspace folders.

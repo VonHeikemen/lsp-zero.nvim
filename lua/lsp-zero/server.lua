@@ -8,7 +8,6 @@ local state = {
 }
 
 local global_config = require('lsp-zero.settings')
-local util = require('lsp-zero.utils')
 
 M.setup = function(server_name, user_opts)
   if state.exclude[server_name] then return end
@@ -90,12 +89,16 @@ s.on_attach = function(_, bufnr)
   end
 
   local fmt = string.format
-  local command = function(name, str)
-    vim.cmd(fmt('command! -buffer %s lua %s', name, str))
+  local command = function(name, attr, str)
+    vim.cmd(fmt('command! -buffer %s %s lua %s', attr, name, str))
   end
 
-  command('LspZeroFormat', 'vim.lsp.buf.formatting()')
-  command('LspZeroWorkspaceRemove', 'vim.lsp.buf.remove_workspace_folder()')
+  command(
+    'LspZeroFormat',
+    '-range -bang',
+    "require('lsp-zero.server').format_cmd(<line1>, <line2>, <count>, '<bang>' == '!')"
+  )
+  command('LspZeroWorkspaceRemove', '', 'vim.lsp.buf.remove_workspace_folder()')
 end
 
 s.diagnostics = function()
@@ -207,6 +210,26 @@ M.ensure_installed = function(list)
   local installer = require('lsp-zero.installer')
   installer.choose()
   installer.fn.install(list)
+end
+
+M.format_cmd = function(line1, line2, count, bang)
+  local has_range = line2 == count
+  local execute = vim.lsp.buf.formatting
+
+  if bang then
+    if has_range then
+      local msg = "Synchronous formatting doesn't support ranges"
+      vim.notify(msg, vim.log.levels.ERROR)
+      return
+    end
+    execute = vim.lsp.buf.formatting_sync
+  end
+
+  if has_range then
+    execute = vim.lsp.buf.range_formatting
+  end
+
+  execute()
 end
 
 return M

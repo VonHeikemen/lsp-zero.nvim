@@ -296,7 +296,7 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 ### Commands
 
-* `LspZeroFormat`: Formats the current buffer. See `:help vim.lsp.buf.formatting()`.
+* `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be synchronous (ex: `LspZeroFormat!`). See `:help vim.lsp.buf.formatting()`, `:help vim.lsp.buf.range_formatting()`, `:help vim.lsp.buf.formatting_sync()`.
 
 * `LspZeroWorkspaceRemove`: Remove the folder at path from the workspace folders. See `:help vim.lsp.buf.remove_workspace_folder()`.
 
