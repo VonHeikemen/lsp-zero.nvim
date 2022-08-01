@@ -89,6 +89,7 @@ end
 M.cmp_config = function()
   return {
     sources = M.sources(),
+    performance = M.performance(),
     mapping = M.default_mappings(),
     completion = {
       completeopt = 'menu,menuone,noinsert'
