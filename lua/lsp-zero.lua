@@ -237,6 +237,10 @@ M.defaults.cmp_sources = function()
   return require('lsp-zero.nvim-cmp-setup').sources()
 end
 
+M.defaults.cmp_performance = function()
+  return require('lsp-zero.nvim-cmp-setup').performance()
+end
+
 M.defaults.cmp_config = function()
   return require('lsp-zero.nvim-cmp-setup').cmp_config()
 end

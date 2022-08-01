@@ -93,6 +93,7 @@ M.cmp_config = function()
     completion = {
       completeopt = 'menu,menuone,noinsert'
     },
+    performance = {},
     snippet = {
       expand = function(args)
         luasnip.lsp_expand(args.body)
@@ -137,6 +138,10 @@ M.call_setup = function(opts)
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
+  end
+
+  if type(opts.performance) == 'table' then
+    config.performance = opts.performance
   end
 
   if type(opts.mapping) == 'table' then
