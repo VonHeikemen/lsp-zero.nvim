@@ -596,12 +596,12 @@ For example, if you want to use `rust-tools`, this is how you'll do it.
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
--- Initialize rust_analyzer with rust-tools
-require('rust-tools').setup({
-  server = lsp.build_options('rust_analyzer', {})
-})
+local rust_lsp = lsp.build_options('rust_analyzer', {})
 
 lsp.setup()
+
+-- Initialize rust_analyzer with rust-tools
+require('rust-tools').setup({server = rust_lsp})
 ```
 
 In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.

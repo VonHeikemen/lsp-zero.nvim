@@ -734,12 +734,12 @@ Lua API                                                     *lsp-zero-lua-api*
       local lsp = require('lsp-zero')
       lsp.preset('recommended')
 
-      -- Initialize rust_analyzer with rust-tools
-      require('rust-tools').setup({
-        server = lsp.build_options('rust_analyzer', {})
-      })
+      local rust_lsp = lsp.build_options('rust_analyzer', {})
 
       lsp.setup()
+
+      -- Initialize rust_analyzer with rust-tools
+      require('rust-tools').setup({server = rust_lsp})
 <
 
       In case you are using the `recommended` preset (or any preset that
