@@ -155,8 +155,10 @@ end
 
 M.setup_servers = function(list)
   local settings = require('lsp-zero.settings')
+  local delay_setup = not list.force
+  list.force = nil
 
-  if settings.setup_servers_on_start then
+  if settings.setup_servers_on_start and delay_setup then
     return internal.fn.setup_servers(list)
   end
 
@@ -164,9 +166,13 @@ M.setup_servers = function(list)
 end
 
 M.configure = function(server_name, opts)
-  local settings = require('lsp-zero.settings')
+  opts = opts or {}
 
-  if settings.setup_servers_on_start then
+  local settings = require('lsp-zero.settings')
+  local delay_setup = not opts.force_setup
+  opts.force_setup = nil
+
+  if settings.setup_servers_on_start and delay_setup then
     return internal.fn.configure(server_name, opts)
   end
 

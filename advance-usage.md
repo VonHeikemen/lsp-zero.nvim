@@ -115,19 +115,18 @@ lsp.setup()
 
 ## Can I use that one language server I have installed globally?
 
-Sure. For this you'll need to use `lspconfig` directly and create your server options with the `.build_options` function.
-
-Let's pretend `tsserver` is installed globally.
+Yes, call the function `.configure()` and set the option `force_setup` to `true`.
 
 ```lua
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-require('lspconfig').tsserver.setup(
-  lsp.build_options('tsserver', {
-    --- custom options go here
-  })
-)
+lsp.configure('dartls', {
+  force_setup = true,
+  on_attach = function()
+    print('hello dartls')
+  end,
+})
 
 lsp.setup()
 ```

@@ -413,7 +413,7 @@ The one that coordinates the call to other setup functions. Handles the configur
 
 ### `.configure({name}, {opts})`
 
-Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. More details of these options can be found [here](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. You can find more details in the help page `:help lspconfig-setup`.
 
 ```lua
 lsp.configure('tsserver', {
@@ -424,6 +424,12 @@ lsp.configure('tsserver', {
     print('hello tsserver')
   end
 })
+```
+
+If you have a server installed globally you can use the option `force_setup` to skip any internal check.
+
+```lua
+lsp.configure('dartls', {force_setup = true})
 ```
 
 ### `.setup_servers({list})`
@@ -437,21 +443,13 @@ local lsp_opts = {
   }
 }
 
-lsp.setup_servers({
-  'html',
-  'cssls',
-  opts = lsp_opts
-})
+lsp.setup_servers({'html', 'cssls', opts = lsp_opts})
 ```
 
-There is a special property called `root_dir`, when set to `true` it will set the root directory of the language server to be the working directory in neovim. `opts` and `root_dir` are mutually exclusive.
+If the servers you want to call are installed globally use the option `force` to skip any internal check.
 
 ```lua
-lsp.setup_servers({
-  root_dir = true,
-  'html',
-  'cssls'
-})
+lsp.setup_servers({'dartls', 'vls', force = true})
 ```
 
 ### `.on_attach({callback})`
