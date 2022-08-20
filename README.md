@@ -2,7 +2,7 @@
 
 Say you want to start using neovim's built-in LSP client. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
 
-The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client to work together nicely. Additionally, with the help of [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/), it can let you install language servers from inside neovim.
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client to work together nicely. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
 
 Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
 
@@ -46,7 +46,8 @@ use {
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},
-    {'williamboman/nvim-lsp-installer'},
+    {'williamboman/mason.nvim'},
+    {'williamboman/mason-lspconfig.nvim'},
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},
@@ -70,7 +71,8 @@ With `paq`:
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};
-{'williamboman/nvim-lsp-installer'};
+{'williamboman/mason.nvim'};
+{'williamboman/mason-lspconfig.nvim'};
 
 -- Autocompletion
 {'hrsh7th/nvim-cmp'};
@@ -90,7 +92,8 @@ With `vim-plug`:
 ```vim
 " LSP Support
 Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/nvim-lsp-installer'
+Plug 'williamboman/mason.nvim'
+Plug 'williamboman/mason-lspconfig.nvim'
 
 " Autocompletion
 Plug 'hrsh7th/nvim-cmp'
@@ -109,24 +112,9 @@ Plug 'VonHeikemen/lsp-zero.nvim'
 
 ### Requirements for language servers
 
-I would suggest you make a quick read in to the [requirements section of nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/#requirements).
+I would suggest you make a quick read in to the [requirements section of mason.nvim](https://github.com/williamboman/mason.nvim#requirements).
 
 Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
-
-Is worth mention right now that nvim-lsp-installer will be replaced in the future by [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer is based on nvim-lsp-installer and created by the same author. Both are supported in lsp-zero at the moment. Which one I recommend? `nvim-lsp-installer`.
-
-mason.nvim is still very new, but if you'd like to try it replace this plugin:
-
-```
-williamboman/nvim-lsp-installer
-```
-
-With these two plugins.
-
-```
-williamboman/mason.nvim
-williamboman/mason-lspconfig.nvim
-```
 
 ### Usage
 
@@ -162,7 +150,7 @@ Presets are a combinations of options that determine how `.setup()` will behave,
 
 ### recommended
 
-* Setup every language server installed with `nvim-lsp-installer` at startup.
+* Setup every language server installed with `mason.nvim` at startup.
 * Suggest to install a language server when you encounter a new filetype.
 * Setup `nvim-cmp` with some default completion sources, this includes support for LSP based completion.
 * Setup some default keybindings for `nvim-cmp`.
@@ -228,7 +216,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
 
-* `call_servers` if set to `'local'` it'll try to setup one of the supported installers (`nvim-lsp-installer` or `mason.nvim`). If set to `'lsp-installer'` it will setup nvim-lsp-installer. If set to `mason` it will setup mason.nvim. If set to `'global'` it will only try to use language servers available globally.
+* `call_servers` if set to `'local'` it'll try to setup one of the supported installers (mason.nvim or nvim-lsp-installer). If set to `'lsp-installer'` it will setup nvim-lsp-installer. If set to `mason` it will setup mason.nvim. If set to `'global'` it will only try to use language servers available globally.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
 
@@ -276,60 +264,58 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 ### Default keybindings
 
-* `K`: Displays hover information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.hover()`.
+* `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
 
-* `gd`: Jumps to the definition of the symbol under the cursor. See `:help vim.lsp.buf.definition()`.
+* `gd`: Jumps to the definition of the symbol under the cursor. See [:help vim.lsp.buf.definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.definition()).
 
-* `gD`: Jumps to the declaration of the symbol under the cursor. Some servers don't implement this feature. See `:help vim.lsp.buf.declaration()`.
+* `gD`: Jumps to the declaration of the symbol under the cursor. Some servers don't implement this feature. See [:help vim.lsp.buf.declaration()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.declaration()).
 
-* `gi`: Lists all the implementations for the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.implementation()`.
+* `gi`: Lists all the implementations for the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.implementation()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.implementation()).
 
-* `go`: Jumps to the definition of the type of the symbol under the cursor. See `:help vim.lsp.buf.type_definition()`.
+* `go`: Jumps to the definition of the type of the symbol under the cursor. See [:help vim.lsp.buf.type_definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.type_definition()).
 
-* `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See `:help vim.lsp.buf.references()`.
+* `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.references()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.references()).
 
-* `<Ctrl-k>`: Displays signature information about the symbol under the cursor in a floating window. See `:help vim.lsp.buf.signature_help()`. If a mapping already exists for this key this function is not bound.
+* `<Ctrl-k>`: Displays signature information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.signature_help()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.signature_help()). If a mapping already exists for this key this function is not bound.
 
-* `<F2>`: Renames all references to the symbol under the cursor. See `:help vim.lsp.buf.rename()`.
+* `<F2>`: Renames all references to the symbol under the cursor. See [:help vim.lsp.buf.rename()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.rename()).
 
-* `<F4>`: Selects a code action available at the current cursor position. See `:help vim.lsp.buf.code_action()`.
+* `<F4>`: Selects a code action available at the current cursor position. See [:help vim.lsp.buf.code_action()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.code_action()).
 
 ### Commands
 
-* `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be synchronous (ex: `LspZeroFormat!`). See `:help vim.lsp.buf.formatting()`, `:help vim.lsp.buf.range_formatting()`, `:help vim.lsp.buf.formatting_sync()`.
+* `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be synchronous (ex: `LspZeroFormat!`). See [:help vim.lsp.buf.formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting()), [:help vim.lsp.buf.range_formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.range_formatting()), [:help vim.lsp.buf.formatting_sync()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting_sync()).
 
-* `LspZeroWorkspaceRemove`: Remove the folder at path from the workspace folders. See `:help vim.lsp.buf.remove_workspace_folder()`.
+* `LspZeroWorkspaceRemove`: Remove the folder at path from the workspace folders. See [:help vim.lsp.buf.remove_workspace_folder()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.remove_workspace_folder()).
 
-* `LspZeroWorkspaceAdd`: Add the folder at path to the workspace folders. See `:help vim.lsp.buf.add_workspace_folder()`.
+* `LspZeroWorkspaceAdd`: Add the folder at path to the workspace folders. See [:help vim.lsp.buf.add_workspace_folder()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.add_workspace_folder()).
 
-* `LspZeroWorkspaceList`: List workspace folders. See `:help vim.lsp.buf.list_workspace_folders()`.
+* `LspZeroWorkspaceList`: List workspace folders. See [:help vim.lsp.buf.list_workspace_folders()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.list_workspace_folders()).
 
 ## Diagnostics
 
 In addition to the lsp keymap you also have access to these keybindings when a server is attached to a buffer.
 
-* `gl`: Show diagnostics in a floating window. See `:help vim.diagnostic.open_float()`.
-* `[d`: Move to the previous diagnostic in the current buffer. See `:help vim.diagnostic.goto_prev()`.
-* `]d`: Move to the next diagnostic. See `:help vim.diagnostic.goto_next()`.
+* `gl`: Show diagnostics in a floating window. See [:help vim.diagnostic.open_float()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.open_float()).
+* `[d`: Move to the previous diagnostic in the current buffer. See [:help vim.diagnostic.goto_prev()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_prev()).
+* `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
-## Language servers and nvim-lsp-installer
+## Language servers and mason.nvim
 
-Install and updates of language servers is done with [nvim-lsp-installer](https://github.com/williamboman/nvim-lsp-installer/).
+Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim).
 
-> Note: nvim-lsp-installer will be replace by mason.nvim in the far (very far) future. For now, both are supported. But you can only have one installed.
+To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `mason-lspconfig.nvim` will try to suggest a language server based on the filetype of the current buffer.
 
-To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `nvim-lsp-installer` will try to suggest a language server based on the filetype of the current buffer.
+To check for updates on the language servers use the command `Mason`. A floating window will open showing you all the tools mason.nvim can install. You can filter the packages by categories for example, language servers are in the second category, so if you press the number `2` it'll show only the language servers. The packages you have installed will appear at the top. If there is any update available the item will display a message. Navigate to that item and press `u` to install the update.
 
-To check for updates on the language servers use the command `LspInstallInfo`. A floating window will open showing you all the language servers you have installed. If there is any update available, the item will display a message. Navigate to that item and press `u` to install the update.
+To uninstall a package use the command `Mason`. Navigate to the item you want to delete and press `X`.
 
-To uninstall a server use the command `LspInstallInfo`. Navigate to the language server you want to delete and press `X`.
+To know more about the available bindings inside the floating window of `Mason` press `?`.
 
-To know more about the available bindings inside the floating window of `LspInstallInfo` press `?`.
-
-If you need to customize `nvim-lsp-installer` make sure you do it before calling the `lsp-zero` module.
+If you need to customize `mason.nvim` make sure you do it before calling the `lsp-zero` module.
 
 ```lua
-require('nvim-lsp-installer').settings({
+require('mason.settings').set({
   ui = {
     border = 'rounded'
   }
@@ -341,13 +327,13 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-### Mason.nvim
+### nvim-lsp-installer
 
-On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of nvim-lsp-installer would stop. He will focus on a new installer called [mason.nvim](https://github.com/williamboman/mason.nvim). This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
+On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of that project would stop. He will focus on [mason.nvim](https://github.com/williamboman/mason.nvim) instead. This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
 
-At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is opt-in. If you set the option `call_servers` to `'local'` (this is what the `recommended` preset does) lsp-zero will try to choose the installer based on what plugins are available. You can choose explicitly what installer you want by setting `call_servers` to `'lsp-installer'` or `'mason'`.
+At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is recommended now.
 
-If you want to migrate away from nvim-lsp-installer first remove all servers installed. Execute.
+To migrate away from nvim-lsp-installer first remove all servers installed. Execute.
 
 ```vim
 :LspUninstallAll
@@ -362,23 +348,6 @@ Optionally, you can reset the state of the server suggestions.
 Next, remove nvim-lsp-installer from neovim. Use whatever method your plugin manager has.
 
 Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
-
-To install packages with mason.nvim use the command `:Mason`. A floating window will show up, it will have the same keybindings as nvim-lsp-installer window.
-
-If you want to customize mason.nvim, you should do it before calling the lsp-zero module. Here is an example.
-
-```lua
-require('mason.settings').set({
-  ui = {
-    border = 'rounded'
-  }
-})
-
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.setup()
-```
 
 ## Global command
 

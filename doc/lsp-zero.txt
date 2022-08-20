@@ -8,7 +8,7 @@ Introduction                                                  *lsp-zero-intro*
 
 The purpose of this plugin is to bundle all the "boilerplate code" needed
 to get |nvim-cmp| (a popular completion engine) and the native |LSP| client to
-work together nicely. Additionally, with the help of |nvim-lsp-installer|,
+work together nicely. Additionally, with the help of |mason.nvim|,
 it can let you install language servers from inside neovim.
 
 ==============================================================================
@@ -51,7 +51,7 @@ They are created when you use the function |lsp-zero.preset()|.
 These are the available presets.
 
   recommended: ~
-     * Setup every language server installed with |nvim-lsp-installer|
+     * Setup every language server installed with |mason.nvim|
        at startup.
 
      * Suggest to install a language server when you encounter a new filetype.
@@ -139,7 +139,7 @@ These are the available options.
 
   call_servers: ~
       if set to `'local'` it'll try to setup one of the supported installers
-      (nvim-lsp-installer or mason.nvim). If set to `'lsp-installer'`
+      (mason.nvim or nvim-lsp-installer). If set to `'lsp-installer'`
       it will setup nvim-lsp-installer. If set to `mason` it will setup
       mason.nvim. If set to `'global'` it will only try to use language
       servers available globally.
@@ -339,32 +339,31 @@ so you can get more details using the `:help` command.
 ==============================================================================
 Server Installer                                          *lsp-zero-installer*
 
-Install and updates of language servers is done with |nvim-lsp-installer|.
-
-Note: nvim-lsp-installer will be replace by mason.nvim in the far 
-(very far) future. For now, both are supported. But you can only 
-have one installed.
+Install and updates of language servers is done with |mason.nvim|.
 
 To install a server manually use the command `LspInstall` with the name of the
 server you want to install. If you don't provide a name the command will try
 to suggest a language server based on the filetype of the current buffer.
 
-To check for updates on the language servers use the command `LspInstallInfo`.
-A floating window will open showing you all the language servers you have
-installed. If there is any update available, the item will display a message.
+To check for updates on the language servers use the command `Mason`.
+A floating window will open showing you all the packages mason.nvim can
+install. You can filter the packages by categories for example, language
+servers are in the second category, so if you press the number `2` it'll 
+show only the language servers. The packages you have installed will appear
+at the top. If there is any update available, the item will display a message.
 Navigate to that item and press u to install the update.
 
-To uninstall a server use the command LspInstallInfo. Navigate to the
-language server you want to delete and press X.
+To uninstall a server use the command Mason. Navigate to the language server
+you want to delete and press X.
 
 To know more about the available bindings inside the floating window of
-`LspInstallInfo` press `?`.
+`Mason` press `?`.
 
-If you need to customize `nvim-lsp-installer` make sure you do it before
+If you need to customize `mason.nvim` make sure you do it before
 calling the `lsp-zero` module.
 
 >
-  require('nvim-lsp-installer').settings({
+  require('mason.settings').set({
     ui = {
       border = 'rounded'
     }
@@ -377,21 +376,16 @@ calling the `lsp-zero` module.
 <
 
 
-Mason.nvim                                     *lsp-zero-installer-mason.nvim*
+Migrate from nvim-lsp-installer                   *lsp-zero-installer-migrate*
 
 On July 24 (2022) the author of nvim-lsp-installer announced the development
-of nvim-lsp-installer would stop. He will focus on a new installer called 
-mason.nvim. This new installer has a bigger scope, it can install
-LSP servers, formatters, linters, etc.
+of that project would stop. He will focus mason.nvim. This new installer has 
+a bigger scope, it can install LSP servers, formatters, linters, etc.
 
 At the moment `lsp-zero` supports both nvim-lsp-installer and mason.nvim.
-Usage of mason.nvim is opt-in. If you set the option `call_servers`
-to `'local'` (is what the `recommended` preset does) lsp-zero will
-try to choose the installer based on what plugins are available. You
-can choose explicitly what installer you want by setting `call_servers`
-to `'lsp-installer` or `mason`.
+Usage of mason.nvim is recommended.
 
-If you want to migrate away from nvim-lsp-installer first remove all servers
+To migrate away from nvim-lsp-installer first remove all servers
 installed. Execute.
 
 >
@@ -411,26 +405,6 @@ Last step is to install mason.nvim and mason-lspconfig:
 
  - https://github.com/williamboman/mason.nvim 
  - https://github.com/williamboman/mason-lspconfig.nvim
-
-To install packages with mason.nvim use the command `:Mason`. A
-floating window will show up, it will have the same keybindings 
-as nvim-lsp-installer window.
-
-If you want to customize mason.nvim, you should do it before calling
-the lsp-zero module. Here is an example.
-
->
-  require('mason.settings').set({
-    ui = {
-      border = 'rounded'
-    }
-  })
-
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
-
-  lsp.setup()
-<
 
 ==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
@@ -466,7 +440,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
           setup_servers_on_start: ~
               (boolean | string) If `true` it calls the setup function of
-              every language server installed with `nvim-lsp-installer`. When
+              every language server installed with `mason.nvim`. When
               the value is `false` servers will initialized when you call
               |lsp-zero.configure()| or |lsp-zero.setup_servers()|. When set
               to "per-project", only servers listed with the function
