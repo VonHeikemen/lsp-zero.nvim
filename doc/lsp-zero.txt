@@ -357,7 +357,7 @@ To uninstall a server use the command Mason. Navigate to the language server
 you want to delete and press X.
 
 To know more about the available bindings inside the floating window of
-`Mason` press `?`.
+`Mason` press `g?`.
 
 If you need to customize `mason.nvim` make sure you do it before
 calling the `lsp-zero` module.

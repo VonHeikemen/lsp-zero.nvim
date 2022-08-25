@@ -310,7 +310,7 @@ To check for updates on the language servers use the command `Mason`. A floating
 
 To uninstall a package use the command `Mason`. Navigate to the item you want to delete and press `X`.
 
-To know more about the available bindings inside the floating window of `Mason` press `?`.
+To know more about the available bindings inside the floating window of `Mason` press `g?`.
 
 If you need to customize `mason.nvim` make sure you do it before calling the `lsp-zero` module.
 
