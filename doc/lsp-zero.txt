@@ -284,7 +284,7 @@ so you can get more details using the `:help` command.
 
   <Ctrl-k>: ~
       Displays signature information about the symbol under the cursor in a
-      floating window. See |vim.lsp.buf.signature_help()|. If a mapping 
+      floating window. See |vim.lsp.buf.signature_help()|. If a mapping
       already exists for this key this function is not bound.
 
   <F2>: ~
@@ -312,7 +312,7 @@ so you can get more details using the `:help` command.
   LspZeroFormat: ~
       Formats the current buffer or range. If the "bang" is provided
       formatting will be synchronous (ex: `LspZeroFormat!`). See
-      |vim.lsp.buf.formatting()|, |vim.lsp.buf.range_formatting()| 
+      |vim.lsp.buf.formatting()|, |vim.lsp.buf.range_formatting()|
       and |vim.lsp.buf.formatting_sync()|.
 
   LspZeroWorkspaceRemove: ~
@@ -348,7 +348,7 @@ to suggest a language server based on the filetype of the current buffer.
 To check for updates on the language servers use the command `Mason`.
 A floating window will open showing you all the packages mason.nvim can
 install. You can filter the packages by categories for example, language
-servers are in the second category, so if you press the number `2` it'll 
+servers are in the second category, so if you press the number `2` it'll
 show only the language servers. The packages you have installed will appear
 at the top. If there is any update available, the item will display a message.
 Navigate to that item and press u to install the update.
@@ -379,7 +379,7 @@ calling the `lsp-zero` module.
 Migrate from nvim-lsp-installer                   *lsp-zero-installer-migrate*
 
 On July 24 (2022) the author of nvim-lsp-installer announced the development
-of that project would stop. He will focus mason.nvim. This new installer has 
+of that project would stop. He will focus mason.nvim. This new installer has
 a bigger scope, it can install LSP servers, formatters, linters, etc.
 
 At the moment `lsp-zero` supports both nvim-lsp-installer and mason.nvim.
@@ -403,7 +403,7 @@ manager has.
 
 Last step is to install mason.nvim and mason-lspconfig:
 
- - https://github.com/williamboman/mason.nvim 
+ - https://github.com/williamboman/mason.nvim
  - https://github.com/williamboman/mason-lspconfig.nvim
 
 ==============================================================================
@@ -717,20 +717,57 @@ Lua API                                                     *lsp-zero-lua-api*
       sets `setup_servers_on_start` to `true`) you need to call
       `.build_options` before calling `.setup()`.
 
-                                            *lsp-zero.defaults.cmp_mappings()*
-
-  .defaults.cmp_mappings(): ~
-      Returns a table with the default keybindings for `nvim-cmp`.
-
                                              *lsp-zero.defaults.cmp_sources()*
 
   .defaults.cmp_sources(): ~
       Returns the list of "sources" used in `nvim-cmp`.
 
+                                            *lsp-zero.defaults.cmp_mappings()*
+
+  .defaults.cmp_mappings(): ~
+      Returns a table with the default keybindings for `nvim-cmp`. If you
+      provide the `{opts}` table it'll merge it with the defaults, this
+      way you can extend or change the values easily.
+
+>
+      local lsp = require('lsp-zero')
+      lsp.preset('recommended')
+
+      local cmp = require('cmp')
+      local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+      lsp.setup_nvim_cmp({
+        mapping = lsp.defaults.cmp_mappings({
+          ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+          ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+        })
+      })
+
+      lsp.setup()
+<
+
                                               *lsp-zero.defaults.cmp_config()*
 
   .defaults.cmp_config(): ~
-      Returns the entire configuration table for `nvim-cmp`.
+      Returns the entire configuration table for `nvim-cmp`. If you provide
+      the `{opts}` table it'll merge it with the defaults, this way you can
+      extend or change the values easily.
+
+>
+      local lsp = require('lsp-zero')
+      lsp.preset('lsp-compe')
+
+      lsp.setup()
+
+      local cmp = require('cmp')
+      local cmp_config = lsp.defaults.cmp_config({
+        window = {
+          completion = cmp.config.window.bordered()
+        }
+      })
+
+      cmp.setup(cmp_config)
+<
 
                                           *lsp-zero.defaults.nvim_workspace()*
 

@@ -573,17 +573,50 @@ require('rust-tools').setup({server = rust_lsp})
 
 In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.
 
-### `.defaults.cmp_mappings()`
-
-Returns a table with the default keybindings for `nvim-cmp`
-
 ### `.defaults.cmp_sources()`
 
 Returns the list of "sources" used in `nvim-cmp`.
 
-### `.defaults.cmp_config()`
+### `.defaults.cmp_mappings({opts})`
 
-Returns the entire configuration table for `nvim-cmp`.
+Returns a table with the default keybindings for `nvim-cmp`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local cmp = require('cmp')
+local cmp_select = {behavior = cmp.SelectBehavior.Select}
+
+lsp.setup_nvim_cmp({
+  mapping = lsp.defaults.cmp_mappings({
+    ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+    ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+  })
+})
+
+lsp.setup()
+```
+
+### `.defaults.cmp_config({opts})`
+
+Returns the entire configuration table for `nvim-cmp`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('lsp-compe')
+
+lsp.setup()
+
+local cmp = require('cmp')
+local cmp_config = lsp.defaults.cmp_config({
+  window = {
+    completion = cmp.config.window.bordered()
+  }
+})
+
+cmp.setup(cmp_config)
+```
 
 ### `.defaults.nvim_workspace()`
 

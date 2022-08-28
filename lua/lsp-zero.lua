@@ -235,16 +235,28 @@ end
 
 M.defaults = {}
 
-M.defaults.cmp_mappings = function()
-  return require('lsp-zero.nvim-cmp-setup').default_mappings()
+M.defaults.cmp_mappings = function(opts)
+  local mappings = require('lsp-zero.nvim-cmp-setup').default_mappings()
+
+  if type(opts) == 'table' then
+    return vim.tbl_deep_extend('force', mappings, opts)
+  end
+
+  return mappings
 end
 
 M.defaults.cmp_sources = function()
   return require('lsp-zero.nvim-cmp-setup').sources()
 end
 
-M.defaults.cmp_config = function()
-  return require('lsp-zero.nvim-cmp-setup').cmp_config()
+M.defaults.cmp_config = function(opts)
+  local config = require('lsp-zero.nvim-cmp-setup').cmp_config()
+
+  if type(opts) == 'table' then
+    return vim.tbl_deep_extend('force', config, opts)
+  end
+
+  return config 
 end
 
 M.defaults.nvim_workspace = function()
