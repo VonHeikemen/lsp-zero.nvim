@@ -1,7 +1,5 @@
 # LSP Zero
 
-Say you want to start using neovim's built-in LSP client. You browse around the internet and find some blogposts and repositories... everything seems overwhelming. If this scenario sounds familiar to you, then this plugin might be able to help you.
-
 The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client to work together nicely. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
 
 Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
@@ -327,7 +325,7 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-### nvim-lsp-installer
+### Migrate from nvim-lsp-installer to mason.nvim
 
 On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of that project would stop. He will focus on [mason.nvim](https://github.com/williamboman/mason.nvim) instead. This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
 
