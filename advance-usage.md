@@ -131,15 +131,15 @@ lsp.configure('dartls', {
 lsp.setup()
 ```
 
-If you are going to use `lsp.on_attach` make sure to do it before calling any language server.
-
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
 
 ### Setting up sources
 
-Using the `sources` option you can specify the priority of each source by changing the order. You could also include new ones. Basically, do whatever you want. Check out `nvim-cmp`'s documentation to know what are the possibilities.
+Using the `sources` option you can specify the priority of each source by changing the order. You could also include new ones. Check out `nvim-cmp`'s documentation to know what are the possibilities.
+
+Here is an example that recreates the default configuration for sources.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -205,6 +205,8 @@ lsp.setup_nvim_cmp({
     max_height = 15,
     max_width = 60,
     border = 'rounded',
+    col_offset = 0,
+    side_padding = 1,
     winhighlight = 'Normal:Normal,FloatBorder:Normal,CursorLine:Visual,Search:None',
     zindex = 1001
   }
@@ -237,13 +239,11 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 local cmp = require('cmp')
-local cmp_mappings = lsp.defaults.cmp_mappings()
-
--- go to previous item
-cmp_mappings['<C-p>'] = cmp.mapping.select_prev_item({behavior = cmp.SelectBehavior.Select}),
-
--- go to next item
-cmp_mappings['<C-n>'] = cmp.mapping.select_next_item({behavior = cmp.SelectBehavior.Select}),
+local cmp_select = {behavior = cmp.SelectBehavior.Select}
+local cmp_mappings = lsp.defaults.cmp_mappings({
+  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
+  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+})
 
 lsp.setup_nvim_cmp({
   mapping = cmp_mappings
@@ -302,7 +302,7 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 lsp.setup_nvim_cmp({
-  completion = { autocomplete = false }
+  completion = {autocomplete = false}
 })
 
 lsp.setup()
@@ -310,7 +310,7 @@ lsp.setup()
 
 ### The current api is not enough?
 
-Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. Don't worry I won't leave you alone on this. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function `lsp.defaults.cmp_config()` to get the default configuration table.
+Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function `lsp.defaults.cmp_config()` to extend or change the default configuration table.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -319,11 +319,11 @@ lsp.preset('lsp-compe')
 lsp.setup()
 
 local cmp = require('cmp')
-local cmp_config = lsp.defaults.cmp_config()
-
----
--- do whatever you want here...
----
+local cmp_config = lsp.defaults.cmp_config({
+  window = {
+    completion = cmp.config.window.bordered()
+  }
+})
 
 cmp.setup(cmp_config)
 ```
