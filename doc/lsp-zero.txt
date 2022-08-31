@@ -618,6 +618,11 @@ Lua API                                                     *lsp-zero-lua-api*
               details about its properities if you start typing the
               command `:help cmp-config.formatting`.
 
+          preselect: ~
+              By default, the first item in the completion menu is preselected.
+              Disable this behaviour by setting this to `cmp.PreselectMode.None`.
+              See |cmp-config.preselect| to know more.
+
           mapping: ~
               Sets the keybindings. See |cmp-mapping|.
 

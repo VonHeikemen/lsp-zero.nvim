@@ -484,6 +484,8 @@ lsp.nvim_workspace({
 
 * `documentation`: Modifies the look of the documentation window. You can find more details about its properities if you start typing the command `:help cmp-config.window`.
 
+* `preselect`: By default, the first item in the completion menu is preselected. Disable this behaviour by setting this to `cmp.PreselectMode.None`.
+
 * `formatting`: Modifies the look of the completion menu. You can find more details about its properities if you start typing the command `:help cmp-config.formatting`.
 
 * `mapping`: Sets the keybindings. See `:help cmp-mapping`.
