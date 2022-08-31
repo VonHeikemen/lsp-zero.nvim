@@ -135,6 +135,23 @@ lsp.setup()
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
 
+### Don't preselect first match
+
+You want to modify `completion.completeopt`. For this to work write all the defaults and then add `noselect`. Like this. 
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup_nvim_cmp({
+  completion = {
+    completeopt = 'menu,menuone,noinsert,noselect'
+  },
+})
+
+lsp.setup()
+```
+
 ### Setting up sources
 
 Using the `sources` option you can specify the priority of each source by changing the order. You could also include new ones. Check out `nvim-cmp`'s documentation to know what are the possibilities.
