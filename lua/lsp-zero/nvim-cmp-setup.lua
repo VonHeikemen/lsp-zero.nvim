@@ -89,6 +89,7 @@ end
 M.cmp_config = function()
   return {
     sources = M.sources(),
+    preselect = cmp.PreselectMode.Item,
     mapping = M.default_mappings(),
     completion = {
       completeopt = 'menu,menuone,noinsert'
@@ -158,6 +159,10 @@ M.call_setup = function(opts)
 
   if type(opts.formatting) == 'table' then
     config.formatting = merge(config.formatting, opts.formatting)
+  end
+
+  if opts.preselect ~= nil then
+    config.preselect = opts.preselect
   end
 
   cmp.setup(config)
