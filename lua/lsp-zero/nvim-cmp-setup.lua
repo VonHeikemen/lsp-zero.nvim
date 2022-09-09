@@ -37,7 +37,6 @@ M.default_mappings = function()
     ['<C-e>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
         cmp.close()
-        fallback()
       else
         cmp.complete()
       end
