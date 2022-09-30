@@ -213,8 +213,15 @@ M.ensure_installed = function(list)
 end
 
 M.format_cmd = function(line1, line2, count, bang)
+  local execute = vim.lsp.buf.format
+
+  if execute then
+    execute({async = bang})
+    return
+  end
+
   local has_range = line2 == count
-  local execute = vim.lsp.buf.formatting
+  execute = vim.lsp.buf.formatting
 
   if bang then
     if has_range then
