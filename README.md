@@ -214,7 +214,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
 
-* `call_servers` if set to `'local'` it'll try to setup one of the supported installers (mason.nvim or nvim-lsp-installer). If set to `'lsp-installer'` it will setup nvim-lsp-installer. If set to `mason` it will setup mason.nvim. If set to `'global'` it will only try to use language servers available globally.
+* `call_servers` if set to `'local'` it'll try to setup one of the supported installers. If set to `'global'` it will only try to use language servers available globally.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
 
@@ -300,7 +300,9 @@ In addition to the lsp keymap you also have access to these keybindings when a s
 
 ## Language servers and mason.nvim
 
-Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim).
+Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim). 
+
+> With mason.nvim you can also install formatters and debuggers, but `lsp-zero` will only configure LSP servers.
 
 To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `mason-lspconfig.nvim` will try to suggest a language server based on the filetype of the current buffer.
 
