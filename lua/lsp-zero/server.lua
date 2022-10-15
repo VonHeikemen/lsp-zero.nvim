@@ -176,7 +176,7 @@ s.use_cmp = function()
     return {}
   end
 
-  state.capabilities = source.update_capabilities(
+  state.capabilities = source.default_capabilities(
     vim.lsp.protocol.make_client_capabilities()
   )
 
