@@ -176,7 +176,11 @@ s.use_cmp = function()
     return {}
   end
 
-  state.capabilities = source.default_capabilities()
+  state.capabilities = vim.tbl_deep_extend(
+    'force',
+    vim.lsp.protocol.make_client_capabilities(),
+    source.default_capabilities()
+  )
 
   return state.capabilities
 end
