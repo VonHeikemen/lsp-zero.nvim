@@ -142,6 +142,25 @@ lsp.setup()
 EOF
 ```
 
+The `recommended` preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
+
+If you already know what language servers you want, you can use the function `.ensure_installed` to install them automatically. Here is an example.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.preset('recommended')
+
+lsp.ensure_installed({
+  'tsserver',
+  'eslint',
+  'sumneko_lua',
+})
+
+lsp.nvim_workspace()
+lsp.setup()
+```
+
 ## Available presets
 
 Presets are a combinations of options that determine how `.setup()` will behave, they can enable or disable features.
