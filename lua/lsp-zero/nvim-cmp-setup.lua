@@ -1,8 +1,8 @@
 local M = {}
 local s = {}
 
-local cmp = require('cmp')
-local luasnip = require('luasnip')
+local ok_cmp, cmp = pcall(require, 'cmp')
+local ok_luasnip, luasnip = pcall(require, 'luasnip')
 local global_config = require('lsp-zero.settings')
 
 local merge = function(a, b)
@@ -127,13 +127,27 @@ end
 M.call_setup = function(opts)
   opts = opts or {}
 
+  if not ok_cmp then
+    local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
+    vim.notify(msg, vim.log.levels.WARN)
+    return
+  end
+
+  local config = M.cmp_config()
+
+  if not ok_luasnip then
+    config.snippet = nil
+    if global_config[1] == 'recommended' then
+      local msg = "[lsp-zero] Could not find luasnip. Snippet expansion will not work if luasnip is not installed."
+      vim.notify(msg, vim.log.levels.WARN)
+    end
+  end
+
   global_config.cmp_capabilities = true
 
   vim.opt.completeopt:append('menu')
   vim.opt.completeopt:append('menuone')
   vim.opt.completeopt:append('noselect')
-
-  local config = M.cmp_config()
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
