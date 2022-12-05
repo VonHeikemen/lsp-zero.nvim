@@ -183,6 +183,20 @@ even if you are using the `recommended` preset.
   })
 <
 
+Note: If you notice the sign_icons "pop up" and moving your screen is because
+you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
+the space in the gutter.
+
+>
+  set signcolumn=yes
+<
+
+If you use lua.
+
+>
+  vim.opt.signcolumn = 'yes'
+<
+
 ==============================================================================
 Autocomplete                                           *lsp-zero-autocomplete*
 

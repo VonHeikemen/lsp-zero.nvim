@@ -237,6 +237,18 @@ If you want to disable a feature replace `true` with `false`.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
 
+Note: If you notice the sign_icons "pop up" and moving your screen is because you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve the space in the gutter.
+
+```vim
+set signcolumn=yes
+```
+
+If you use lua
+
+```lua
+vim.opt.signcolumn = 'yes'
+```
+
 ## Autocompletion
 
 ### About nvim-cmp
