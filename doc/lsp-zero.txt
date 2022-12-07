@@ -1,5 +1,5 @@
 ==============================================================================
-*lsp-zero*
+*lsp-zero.txt*
 
 A starting point to setup some lsp related features in neovim.
 
@@ -7,8 +7,8 @@ A starting point to setup some lsp related features in neovim.
 Introduction                                                  *lsp-zero-intro*
 
 The purpose of this plugin is to bundle all the "boilerplate code" needed
-to get |nvim-cmp| (a popular completion engine) and the native |LSP| client to
-work together nicely. Additionally, with the help of |mason.nvim|,
+to have |nvim-cmp| (a popular completion engine) and the native |LSP| client
+working together nicely. Additionally, with the help of |mason.nvim|,
 it can let you install language servers from inside neovim.
 
 ==============================================================================
@@ -18,22 +18,58 @@ The fastest way to get started is by using a "preset" and immediately call
 the |lsp-zero.setup()| function.
 
 >
-    local lsp = require('lsp-zero')
-    lsp.preset('recommended')
-    lsp.setup()
+  local lsp = require('lsp-zero')
+
+  lsp.preset('recommended')
+  lsp.setup()
 <
 
 If your config file is written in vimscript use |lua-heredoc|.
 
 >
-    lua <<EOF
-    local lsp = require('lsp-zero')
+  lua <<EOF
+  local lsp = require('lsp-zero')
 
-    lsp.preset('recommended')
-    lsp.setup()
-    EOF
+  lsp.preset('recommended')
+  lsp.setup()
+  EOF
 <
 
+The `recommended` preset will enable automatic suggestions of LSP servers.
+Any time you open a filetype for the first time it'll try to ask if you want
+to install a language server that supports it.
+
+If you already know what language servers you want, you can use the function
+|lsp.ensure_installed()| to install them automatically. Here is an example.
+
+>
+  local lsp = require('lsp-zero')
+  lsp.preset('recommended')
+
+  lsp.ensure_installed({
+    'tsserver',
+    'eslint',
+    'sumneko_lua',
+  })
+
+  lsp.nvim_workspace()
+
+  lsp.setup()
+>
+
+Note: If you notice the sign_icons "pop up" and moving your screen is because
+you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
+the space in the gutter.
+
+>
+  set signcolumn=yes
+<
+
+If you use lua.
+
+>
+  vim.opt.signcolumn = 'yes'
+<
 
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
@@ -181,20 +217,6 @@ even if you are using the `recommended` preset.
   lsp.set_preferences({
     suggest_lsp_servers = false
   })
-<
-
-Note: If you notice the sign_icons "pop up" and moving your screen is because
-you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
-the space in the gutter.
-
->
-  set signcolumn=yes
-<
-
-If you use lua.
-
->
-  vim.opt.signcolumn = 'yes'
 <
 
 ==============================================================================
@@ -396,11 +418,11 @@ On July 24 (2022) the author of nvim-lsp-installer announced the development
 of that project would stop. He will focus mason.nvim. This new installer has
 a bigger scope, it can install LSP servers, formatters, linters, etc.
 
-At the moment `lsp-zero` supports both nvim-lsp-installer and mason.nvim.
-Usage of mason.nvim is recommended.
+At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. But
+you should migrate to mason.nvim as soon as possible. nvim-lsp-installer no
+longer receives any updates.
 
-To migrate away from nvim-lsp-installer first remove all servers
-installed. Execute.
+To migrate away from nvim-lsp-installer first remove all servers installed.
 
 >
   :LspUninstallAll

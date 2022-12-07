@@ -1,6 +1,6 @@
 # LSP Zero
 
-The purpose of this plugin is to bundle all the "boilerplate code" necessary to get [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client to work together nicely. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular completion engine) and the LSP client working together nicely. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
 
 Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
 
@@ -10,9 +10,9 @@ local lsp = require('lsp-zero')
 lsp.preset('recommended')
 lsp.setup()
 ```
-> If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
-
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
+
+If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
 
 If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/).
 
@@ -148,7 +148,6 @@ If you already know what language servers you want, you can use the function `.e
 
 ```lua
 local lsp = require('lsp-zero')
-
 lsp.preset('recommended')
 
 lsp.ensure_installed({
@@ -158,6 +157,7 @@ lsp.ensure_installed({
 })
 
 lsp.nvim_workspace()
+
 lsp.setup()
 ```
 
@@ -236,18 +236,6 @@ If you want to disable a feature replace `true` with `false`.
 * `call_servers` if set to `'local'` it'll try to setup one of the supported installers. If set to `'global'` it will only try to use language servers available globally.
 
 * `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
-
-Note: If you notice the sign_icons "pop up" and moving your screen is because you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve the space in the gutter.
-
-```vim
-set signcolumn=yes
-```
-
-If you use lua
-
-```lua
-vim.opt.signcolumn = 'yes'
-```
 
 ## Autocompletion
 
@@ -329,6 +317,18 @@ In addition to the lsp keymap you also have access to these keybindings when a s
 * `[d`: Move to the previous diagnostic in the current buffer. See [:help vim.diagnostic.goto_prev()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_prev()).
 * `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
+If you notice the sign_icons "pop up" and moving your screen is because you have `signcolumn` set to `auto`. I recommend setting to "yes" to preserve the space in the gutter.
+
+```vim
+set signcolumn=yes
+```
+
+If you use lua.
+
+```lua
+vim.opt.signcolumn = 'yes'
+```
+
 ## Language servers and mason.nvim
 
 Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim). 
@@ -362,7 +362,7 @@ lsp.setup()
 
 On July 24 (2022) the author of nvim-lsp-installer [announced](https://github.com/williamboman/nvim-lsp-installer/discussions/876) the development of that project would stop. He will focus on [mason.nvim](https://github.com/williamboman/mason.nvim) instead. This new installer has a bigger scope, it can install LSP servers, formatters, linters, etc.
 
-At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. Usage of mason.nvim is recommended now.
+At the moment lsp-zero supports both nvim-lsp-installer and mason.nvim. But you should migrate to mason.nvim as soon as possible. nvim-lsp-installer no longer receives any updates.
 
 To migrate away from nvim-lsp-installer first remove all servers installed. Execute.
 
@@ -467,10 +467,10 @@ lsp.set_preferences({
 })
 
 lsp.on_attach(function(client, bufnr)
-  local noremap = {buffer = bufnr, remap = false}
+  local opts = {buffer = bufnr, remap = false}
   local bind = vim.keymap.set
 
-  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
   -- more code  ...
 end)
 
