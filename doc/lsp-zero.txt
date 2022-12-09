@@ -40,7 +40,7 @@ Any time you open a filetype for the first time it'll try to ask if you want
 to install a language server that supports it.
 
 If you already know what language servers you want, you can use the function
-|lsp.ensure_installed()| to install them automatically. Here is an example.
+|lsp-zero.ensure_installed()| to install them automatically.
 
 >
   local lsp = require('lsp-zero')
@@ -56,20 +56,6 @@ If you already know what language servers you want, you can use the function
 
   lsp.setup()
 >
-
-Note: If you notice the sign_icons "pop up" and moving your screen is because
-you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
-the space in the gutter.
-
->
-  set signcolumn=yes
-<
-
-If you use lua.
-
->
-  vim.opt.signcolumn = 'yes'
-<
 
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
@@ -380,6 +366,45 @@ so you can get more details using the `:help` command.
       will be the same as neovim. Note that this command for when you
       decide to handle the configuration of servers manually, it will
       only do something when `setup_servers_on_start` is disabled.
+
+==============================================================================
+Diagnostics config                                       *lsp-zero-diagnostic*
+
+Diagnostics can be configured using the function |vim.diagnostic.config()|.
+If you only want to override some settings lsp-zero provides, make sure you
+call `vim.diagnostic.config` after lsp-zero's setup.
+
+Here is an example that restores the built-in configuration for diagnostics.
+
+>
+  local lsp = require('lsp-zero')
+  lsp.preset('recommended')
+
+  lsp.setup()
+
+  vim.diagnostic.config({
+    virtual_text = true,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = false,
+    float = true,
+  })
+<
+
+If you notice the sign_icons "pop up" and moving your screen is because
+you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
+the space in the gutter.
+
+>
+  set signcolumn=yes
+<
+
+If you use lua.
+
+>
+  vim.opt.signcolumn = 'yes'
+<
 
 ==============================================================================
 Server Installer                                          *lsp-zero-installer*

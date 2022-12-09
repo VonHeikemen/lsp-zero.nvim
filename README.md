@@ -335,6 +335,26 @@ If you use lua.
 vim.opt.signcolumn = 'yes'
 ```
 
+Diagnostics can be configured using the function [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()). If you only want to override some settings lsp-zero provides, make sure you call `vim.diagnostic.config` after lsp-zero's setup.
+
+Here is an example that restores the built-in configuration for diagnostics.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+
+vim.diagnostic.config({
+  virtual_text = true,
+  signs = true,
+  update_in_insert = false,
+  underline = true,
+  severity_sort = false,
+  float = true,
+})
+```
+
 ## Language servers and mason.nvim
 
 Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim). 
