@@ -256,10 +256,19 @@ The default configuration declares the following keybindings.
   <Enter>: ~
       Confirms selection.
 
+  <Ctrl-y>: ~
+      Confirms selection.
+
   <Up>: ~
       Navigate to previous item on the list.
 
   <Down>: ~
+      Navigate to the next item on the list.
+
+  <Ctrl-p>: ~
+      Navigate to previous item on the list.
+
+  <Ctrl-n>: ~
       Navigate to the next item on the list.
 
   <Ctrl-u>: ~

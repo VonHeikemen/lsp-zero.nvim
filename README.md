@@ -257,9 +257,15 @@ Some details that you should know. The plugin responsable for autocompletion is 
 
 * `<Enter>`: Confirms selection.
 
+* `<Ctrl-y>`: Confirms selection.
+
 * `<Up>`: Navigate to previous item on the list.
 
 * `<Down>`: Navigate to the next item on the list.
+
+* `<Ctrl-p>`: Navigate to previous item on the list.
+
+* `<Ctrl-n>`: Navigate to the next item on the list.
 
 * `<Ctrl-u>`: Scroll up in the item's documentation.
 
