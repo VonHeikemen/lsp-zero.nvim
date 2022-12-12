@@ -844,18 +844,24 @@ Lua API                                                     *lsp-zero-lua-api*
       provide the `{opts}` table it'll merge it with the defaults, this
       way you can extend or change the values easily.
 
+      Here is an example that disables completion with tab and replace it
+      with `Ctrl + space`.
 >
       local lsp = require('lsp-zero')
       lsp.preset('recommended')
 
       local cmp = require('cmp')
-      local cmp_select = {behavior = cmp.SelectBehavior.Select}
+      local cmp_mappings = lsp.defaults.cmp_mappings({
+        ['<C-Space>'] = cmp.mapping.complete(),
+        ['<C-e>'] = cmp.mapping.abort(),
+      })
+
+      -- disable completion with tab
+      cmp_mappings['<Tab>'] = nil
+      cmp_mappings['<S-Tab>'] = nil
 
       lsp.setup_nvim_cmp({
-        mapping = lsp.defaults.cmp_mappings({
-          ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-          ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
-        })
+        mapping = cmp_mappings
       })
 
       lsp.setup()
