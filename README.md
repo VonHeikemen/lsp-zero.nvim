@@ -147,6 +147,8 @@ The `recommended` preset will enable automatic suggestions of language servers. 
 If you already know what language servers you want, you can use the function `.ensure_installed` to install them automatically. Here is an example.
 
 ```lua
+vim.opt.signcolumn = 'yes' -- Reserve space for diagnostic icons
+
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
@@ -280,6 +282,39 @@ Some details that you should know. The plugin responsable for autocompletion is 
 * `<Tab>`: Enables completion when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list.
 
 * `<S-Tab>`: When the completion menu is visible navigate to the previous item in the list.
+
+## Snippets
+
+[friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the plugin that provides the snippets. And [luasnip](https://github.com/L3MON4D3/LuaSnip/) is the "snippet engine", the thing that expands the snippet and allows you to navigate between snippet placeholders.
+
+* How to disable snippets?
+
+If you already have it all setup then uninstall `friendly-snippets`. That should be enough to make it disappear from the completion suggestions.
+
+If you really want them gone, exclude the snippet "source" from nvim-cmp.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup_nvim_cmp({
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp', keyword_length = 3},
+    {name = 'buffer', keyword_length = 3},
+  }
+})
+
+lsp.setup()
+```
+
+* Change to snippets with snipmate syntax
+
+Uninstall `friendly-snippets` if you have it. Use [onza/vim-snippets](https://github.com/honza/vim-snippets). Then add the luasnip loader somewhere in your config.
+
+```lua
+require('luasnip.loaders.from_snipmate').lazy_load()
+```
 
 ## LSP
 
