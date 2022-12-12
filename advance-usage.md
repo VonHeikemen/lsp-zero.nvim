@@ -274,17 +274,16 @@ lsp.setup()
 
 The option you want is `mapping`. The trickiest. Here you are going to find yourself in an all or nothing situation, if you choose to use it then **you** are in charge of all mappings, all the defaults will disappear. But don't worry, you can access those defaults with the function `lsp.defaults.cmp_mappings()`.
 
-Here is an example adding bindings for `<C-n>` and `<C-p>` to navigate the completion list.
+Here is an example that adds `<C-Space>` to trigger completion and makes `<C-e>` cancel the completion instead of toggling.
 
 ```lua
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
 local cmp = require('cmp')
-local cmp_select = {behavior = cmp.SelectBehavior.Select}
 local cmp_mappings = lsp.defaults.cmp_mappings({
-  ['<C-p>'] = cmp.mapping.select_prev_item(cmp_select),
-  ['<C-n>'] = cmp.mapping.select_next_item(cmp_select),
+  ['<C-Space>'] = cmp.mapping.complete(),
+  ['<C-e>'] = cmp.mapping.abort(),
 })
 
 lsp.setup_nvim_cmp({
