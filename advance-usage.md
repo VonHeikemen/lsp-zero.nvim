@@ -296,6 +296,49 @@ lsp.setup()
 
 Want to know how much fun you can have creating your own mappings? Check out the wiki section [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) and scroll down all the way where it says `Autocompletion`.
 
+### I just want to use vim default keybindings for autocomplete
+
+You can use the preset that comes with `nvim-cmp`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+local cmp = require('cmp')
+
+lsp.setup_nvim_cmp({
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  })
+})
+
+lsp.setup()
+```
+
+What about the navigating through snippets placeholder? That's not a part vim's default, I don't know what those should be. But here, I suggest these:
+
+```lua
+-- go to next placeholder in the snippet
+['<C-g>'] = cmp.mapping(function(fallback)
+  if luasnip.jumpable(1) then
+    luasnip.jump(1)
+  else
+    fallback()
+  end
+end, {'i', 's'}),
+
+-- go to previous placeholder in the snippet
+['<C-d>'] = cmp.mapping(function(fallback)
+  if luasnip.jumpable(-1) then
+    luasnip.jump(-1)
+  else
+    fallback()
+  end
+end, {'i', 's'}),
+```
+
 ### "Unmap" a default keybinding
 
 You can disable any default keymap by overriding the `mapping` property in `nvim-cmp`. Use `lsp.defaults.cmp_mappings()` to expose the default keybindings then "delete" the one you want. Let's make an example with `Tab`.
