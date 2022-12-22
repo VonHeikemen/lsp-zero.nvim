@@ -225,9 +225,15 @@ M.nvim_workspace = function(opts)
   local nvim_source = pcall(require, 'cmp_nvim_lua')
 
   if settings.cmp_capabilities and nvim_source then
-    local cmp_sources = require('lsp-zero.nvim-cmp-setup').sources()
-    table.insert(cmp_sources, {name = 'nvim_lua'})
-    require('cmp').setup.filetype('lua', {sources = cmp_sources})
+    server_opts.before_init = function()
+      local cmp_sources = require('cmp').get_config().sources
+      local names = vim.tbl_map(function(s) return s.name end, cmp_sources)
+
+      if not vim.tbl_contains(names, 'nvim_lua') then
+        table.insert(cmp_sources, {name = 'nvim_lua'})
+        require('cmp').setup.filetype('lua', {sources = cmp_sources})
+      end
+    end
   end
 
   M.configure('sumneko_lua', server_opts)
