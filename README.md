@@ -726,7 +726,7 @@ Returns the neovim specific settings for `sumneko_lua` language server.
 
 ## Intergrate with `null-ls`
 
-Null-ls can use the installed formatters from Mason in this way. 
+Format and connect null-ls to lsp-zero:
 
 ```lua
 local lsp = require('lsp-zero')
@@ -745,10 +745,9 @@ null_ls.setup({
 })
 ```
 
-> Make sure the `build_options` are below `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
+> Make sure the `build_options` is after `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
 
 In case you want to have standalone null-ls instance:
-```lua
 ```lua
 local lsp = require('lsp-zero')
 local null_ls = require('null-ls')
