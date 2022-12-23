@@ -724,6 +724,46 @@ cmp.setup(cmp_config)
 
 Returns the neovim specific settings for `sumneko_lua` language server.
 
+## Intergrate with `null-ls`
+
+Null-ls can use the installed formatters from Mason in this way. 
+
+```lua
+local lsp = require('lsp-zero')
+local null_ls = require('null-ls')
+
+lsp.preset('recommended')
+lsp.setup()
+
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = null_opts.on_attach,
+  sources = {
+    --- do whatever you need to do
+  }
+})
+```
+
+> Make sure the `build_options` are below `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
+
+In case you want to have standalone null-ls instance:
+```lua
+```lua
+local lsp = require('lsp-zero')
+local null_ls = require('null-ls')
+
+lsp.preset('recommended')
+lsp.setup()
+
+null_ls.setup({
+  -- any other configuration
+  sources = {
+    --- do whatever you need to do
+  }
+})
+```
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
