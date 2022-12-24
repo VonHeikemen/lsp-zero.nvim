@@ -416,3 +416,75 @@ cmp.setup(cmp_config)
 
 Finally, in case no one has told you this today... you should read `nvim-cmp`'s documentation. You are awesome. Have a nice day.
 
+
+## Intergrate with `null-ls`
+
+Reuse the Mason registered formatters and LSP server in null-ls, easiest way is the use of `jay-babu/mason-null-ls.nvim` package.
+
+```lua
+local lsp = require('lsp-zero')
+local null_ls = require('null-ls')
+
+lsp.preset('recommended')
+lsp.setup()
+
+-- see documentation of null-null-ls for more configuration options!
+local mason_nullls = require("mason-null-ls")
+mason_nullls.setup({
+  automatic_installation = true,
+  automatic_setup = true,
+})
+mason_nullls.setup_handlers({})
+```
+
+### Buffer formats twice
+
+Whenever you have the feeling the buffers gets formatted twice, this can happen because of the formatting capabilities of the LSP server and the installed formatter controlled by  null-ls.
+
+In this case you can disable the LSP server formatting capabilities:
+
+```lua
+lsp.configure("tsserver", {
+  on_init = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end
+})
+```
+
+or if you have a custom `lsp.on_attach`:
+
+```lua
+lsp.on_attach(function(client, bufnr)
+  -- Disable LSP server formatting, to prevent formatting twice. 
+  -- Once by the LSP server, second time by NULL-ls.
+  if client.name == "volar" or client.name == "tsserver" then
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end
+
+  -- your other configuration here
+end)
+```
+
+### Standalone null-ls instance
+
+When prefered to have a standalone instance of null-ls that doesn't uses the Mason installed formatters and LSP servers:
+
+```lua
+local lsp = require('lsp-zero')
+local null_ls = require('null-ls')
+
+lsp.preset('recommended')
+lsp.setup()
+
+null_ls.setup({
+  -- any other configuration
+  sources = {
+    --- do whatever you need to do
+  }
+})
+```
+
+> Make sure the `build_options` is after `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
+
