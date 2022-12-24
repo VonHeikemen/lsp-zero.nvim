@@ -481,6 +481,16 @@ lsp.setup()
 
 The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be the last function you call.
 
+### `.set_server_config({opts})`
+
+Sets a default configuration for all LSP servers. You can find more details about `{opts}` in the help page `:help lspconfig-setup`.
+
+```lua
+lsp.set_server_config({
+  single_file_support = false,
+})
+```
+
 ### `.configure({name}, {opts})`
 
 Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. You can find more details in the help page `:help lspconfig-setup`.

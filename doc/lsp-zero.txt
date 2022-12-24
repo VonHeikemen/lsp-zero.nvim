@@ -523,6 +523,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
   .preset({name}): ~
       It creates a combination of settings safe to use for specific cases.
+      Make sure is the first function you call after you require lsp-zero.
 
       {name} can be one of the following:
 
@@ -590,6 +591,18 @@ Lua API                                                     *lsp-zero-lua-api*
       The one that coordinates the call to other setup functions. Handles
       the configuration for `nvim-cmp` and the language servers during
       startup. It is meant to be the last function you call.
+
+                                                *lsp-zero.set_server_config()*
+
+  .set_server_config({opts}): ~
+      Sets a default configuration for all LSP servers. You can find more
+      details about `{opts}` in the help page |lspconfig-setup|.
+
+>
+      lsp.set_server_config({
+        single_file_support = false,
+      })
+<
 
                                                     *lsp-zero.setup_servers()*
 

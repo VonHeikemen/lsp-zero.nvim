@@ -185,6 +185,12 @@ M.on_attach = function(fn)
   end
 end
 
+M.set_server_config = function(opts)
+  if type(opts) == 'table' then
+    Server.default_config = opts
+  end
+end
+
 M.setup_nvim_cmp = function(opts)
   local settings = require('lsp-zero.settings')
 

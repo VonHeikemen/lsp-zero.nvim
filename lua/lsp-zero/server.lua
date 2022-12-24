@@ -1,4 +1,4 @@
-local M = {common_on_attach = function(arg) return arg end}
+local M = {common_on_attach = function(arg) return arg end, default_config = {}}
 local s = {}
 
 local state = {
@@ -25,17 +25,19 @@ end
 
 M.build_options = function(name, opts)
   opts = opts or {}
-  local custom_attach = opts.on_attach
   state.exclude[name] = true
 
   s.call_once()
+
+  opts = vim.tbl_deep_extend('force', {}, M.default_config, opts)
+  local custom_attach = opts.on_attach
 
   if opts.root_dir == true then
     opts.root_dir = function() return vim.fn.getcwd() end
   end
 
-  if opts.capabilities == nil and global_config.cmp_capabilities then
-    opts.capabilities = s.use_cmp()
+  if global_config.cmp_capabilities then
+    opts.capabilities = s.use_cmp(opts.capabilities)
   end
 
   opts.on_attach = function(...)
@@ -166,23 +168,31 @@ s.set_keymaps = function(bufnr)
   end
 end
 
-s.use_cmp = function()
-  if state.capabilities then return state.capabilities end
+s.use_cmp = function(current)
+  if state.capabilities == nil then
+    local ok, source = pcall(require, 'cmp_nvim_lsp')
+    local cmp_lsp = {}
 
-  local ok, source = pcall(require, 'cmp_nvim_lsp')
-  if not ok then
-    local msg = "Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
-    vim.notify(msg, vim.log.levels.WARN)
-    return {}
+    if ok then
+      cmp_lsp = source.default_capabilities()
+    else
+      local msg = "Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
+      vim.notify(msg, vim.log.levels.WARN)
+    end
+
+    state.capabilities = vim.tbl_deep_extend(
+      'force',
+      vim.lsp.protocol.make_client_capabilities(),
+      cmp_lsp,
+      M.default_config.capabilities or {}
+    )
   end
 
-  state.capabilities = vim.tbl_deep_extend(
-    'force',
-    vim.lsp.protocol.make_client_capabilities(),
-    source.default_capabilities()
-  )
+  if current == nil then
+    return state.capabilities
+  end
 
-  return state.capabilities
+  return vim.tbl_deep_extend('force', {}, state.capabilities, current)
 end
 
 s.autostart = function(lsp, autostart)
