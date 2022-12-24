@@ -19,8 +19,8 @@ the |lsp-zero.setup()| function.
 
 >
   local lsp = require('lsp-zero')
-
   lsp.preset('recommended')
+
   lsp.setup()
 <
 
@@ -29,8 +29,8 @@ If your config file is written in vimscript use |lua-heredoc|.
 >
   lua <<EOF
   local lsp = require('lsp-zero')
-
   lsp.preset('recommended')
+
   lsp.setup()
   EOF
 <
@@ -612,9 +612,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
 >
       local lsp_opts = {
-        flags = {
-          debounce_text_changes = 150,
-        }
+        single_file_support = false,
       }
 
       lsp.setup_servers({'html', 'cssls', opts = lsp_opts})
@@ -637,9 +635,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
 >
       lsp.configure('tsserver', {
-        flags = {
-          debounce_text_changes = 150,
-        },
+        single_file_support = false,
         on_attach = function(client, bufnr)
           print('hello tsserver')
         end
@@ -768,9 +764,7 @@ Lua API                                                     *lsp-zero-lua-api*
       lsp.preset('per-project')
 
       lsp.configure('pyright', {
-        flags = {
-          debounce_text_changes = 150,
-        }
+        single_file_support = false,
       })
 
       lsp.setup()
@@ -806,9 +800,7 @@ Lua API                                                     *lsp-zero-lua-api*
       local lsp = require('lsp-zero')
 
       local lsp_opts = {
-        flags = {
-          debounce_text_changes = 150,
-        }
+        single_file_support = false
       }
 
       lsp.use({'html', 'cssls'}, lsp_opts)
@@ -873,6 +865,9 @@ Lua API                                                     *lsp-zero-lua-api*
       cmp_mappings['<Tab>'] = nil
       cmp_mappings['<S-Tab>'] = nil
 
+      -- disable Enter to confirm
+      cmp_mappings['<CR>'] = nil
+
       lsp.setup_nvim_cmp({
         mapping = cmp_mappings
       })
@@ -892,6 +887,8 @@ Lua API                                                     *lsp-zero-lua-api*
       lsp.preset('lsp-compe')
 
       lsp.setup()
+
+      vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 
       local cmp = require('cmp')
       local cmp_config = lsp.defaults.cmp_config({
