@@ -6,8 +6,8 @@ Provided that you meet all the requirements for the installation of this plugin 
 
 ```lua
 local lsp = require('lsp-zero')
-
 lsp.preset('recommended')
+
 lsp.setup()
 ```
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
@@ -120,8 +120,8 @@ Inside your configuration file add this.
 
 ```lua
 local lsp = require('lsp-zero')
-
 lsp.preset('recommended')
+
 lsp.setup()
 ```
 
@@ -136,8 +136,8 @@ Note. If you are using `init.vim` you can wrap the code in `lua-heredoc`s.
 ```vim
 lua <<EOF
 local lsp = require('lsp-zero')
-
 lsp.preset('recommended')
+
 lsp.setup()
 EOF
 ```
@@ -449,7 +449,16 @@ Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim)
 
 ### `.preset({name})`
 
-It creates a combination of settings safe to use for specific cases.
+It creates a combination of settings safe to use for specific cases. Make sure is the first function you call after you require lsp-zero module.
+
+`{name}` can be one of the following:
+
+* recommended
+* lsp-compe
+* lsp-only
+* manual-setup
+* per-project
+* system-lsp
 
 ### `.set_preferences({opts})`
 
@@ -478,9 +487,7 @@ Useful when you need to pass some custom options to a specific language server. 
 
 ```lua
 lsp.configure('tsserver', {
-  flags = {
-    debounce_text_changes = 150,
-  },
+  single_file_support = false,
   on_attach = function(client, bufnr)
     print('hello tsserver')
   end
@@ -499,9 +506,7 @@ Used to configure the servers specified in `{list}`. If you provide the `opts` p
 
 ```lua
 local lsp_opts = {
-  flags = {
-    debounce_text_changes = 150,
-  }
+  single_file_support = false,
 }
 
 lsp.setup_servers({'html', 'cssls', opts = lsp_opts})
@@ -599,9 +604,7 @@ local lsp = require('lsp-zero')
 lsp.preset('per-project')
 
 lsp.configure('pyright', {
-  flags = {
-    debounce_text_changes = 150,
-  }
+  single_file_support = false
 })
 
 lsp.setup()
@@ -635,9 +638,7 @@ Options from `.configure()` will be merged with the ones on `.use()` and the ser
 local lsp = require('lsp-zero')
 
 local lsp_opts = {
-  flags = {
-    debounce_text_changes = 150,
-  }
+  single_file_support = false
 }
 
 lsp.use({'html', 'cssls'}, lsp_opts)
@@ -690,6 +691,9 @@ local cmp_mappings = lsp.defaults.cmp_mappings({
 -- disable completion with tab
 cmp_mappings['<Tab>'] = nil
 cmp_mappings['<S-Tab>'] = nil
+
+-- disable confirm with Enter key
+cmp_mappings['<CR>'] = nil
 
 lsp.setup_nvim_cmp({
   mapping = cmp_mappings
