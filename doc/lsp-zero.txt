@@ -716,11 +716,12 @@ Lua API                                                     *lsp-zero-lua-api*
                                                    *lsp-zero.setup_nvim_cmp()*
 
   .setup_nvim_cmp({opts}): ~
+
       {opts} allows you to override some of `nvim-cmp` defaults:
 
           completion: ~
               Configures the behavior of the completion menu. You can find
-              more details about its properities if you start typing the
+              more details about its properties if you start typing the
               command `:help cmp-config.completion`.
 
           sources: ~
@@ -746,6 +747,12 @@ Lua API                                                     *lsp-zero-lua-api*
               Sets the keybindings. See |cmp-mapping|.
 
       Some example config of these options are featured in |cmp-usage|.
+
+      If what you want is to extend the configuration of nvim-cmp, I suggest
+      you change the preset to `lsp-compe`. There is an example configuration
+      in the Advance usage page in the github repository.
+
+      https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough
 
                                                               *lsp-zero.use()*
 

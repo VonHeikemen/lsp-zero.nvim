@@ -585,9 +585,9 @@ lsp.nvim_workspace({
 
 ### `.setup_nvim_cmp({opts})`
 
-`{opts}` is table that will allow you to override some of `nvim-cmp` defaults:
+`{opts}` is a table that will allow you to override defaults configured by lsp-zero:
 
-* `completion`: Configures the behavior of the completion menu. You can find more details about its properities if you start typing the command `:help cmp-config.completion`.
+* `completion`: Configures the behavior of the completion menu. You can find more details about its properties if you start typing the command `:help cmp-config.completion`.
 
 * `sources`: List of configurations for "data sources". See `:help cmp-config.sources` to know more.
 
@@ -600,6 +600,8 @@ lsp.nvim_workspace({
 * `mapping`: Sets the keybindings. See `:help cmp-mapping`.
 
 Some example config of these options are featured in [nvim-cmp's readme](https://github.com/hrsh7th/nvim-cmp).
+
+If what you want is to extend the configuration of nvim-cmp, I suggest you change the preset to `lsp-compe`. There is an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) in the Advance usage page.
 
 ### `.use({server}, {opts})`
 
