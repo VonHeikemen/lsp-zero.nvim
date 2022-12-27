@@ -39,7 +39,7 @@ M.default_mappings = function()
     -- toggle completion
     ['<C-e>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
-        cmp.close()
+        cmp.abort()
       else
         cmp.complete()
       end
