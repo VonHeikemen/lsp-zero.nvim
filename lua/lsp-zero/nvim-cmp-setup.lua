@@ -177,6 +177,10 @@ M.call_setup = function(opts)
     config.formatting = merge(config.formatting, opts.formatting)
   end
 
+  if type(opts.sorting) == 'table' then
+    config.sorting = opts.sorting
+  end
+
   if opts.preselect ~= nil then
     config.preselect = opts.preselect
   end
