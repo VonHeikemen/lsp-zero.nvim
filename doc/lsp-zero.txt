@@ -748,6 +748,16 @@ Lua API                                                     *lsp-zero-lua-api*
           mapping: ~
               Sets the keybindings. See |cmp-mapping|.
 
+          select_behavior: ~
+              Configure behavior when selecting items from completion menu.
+              It can be set to the values `'insert'` or `'select'`. With the
+              value 'select' nothing happens when you move between items. With
+              the value 'insert' it'll put the text from the selection in the
+              buffer.
+
+              Is worth mention these values are available as "types" in the
+              `cmp` module: `require('cmp').SelectBehavior`.
+
       Some example config of these options are featured in |cmp-usage|.
 
       If what you want is to extend the configuration of nvim-cmp, I suggest

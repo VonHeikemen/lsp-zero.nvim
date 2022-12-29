@@ -603,6 +603,8 @@ lsp.nvim_workspace({
 
 * `mapping`: Sets the keybindings. See `:help cmp-mapping`.
 
+* `select_behavior`: Configure behavior when navigating between items in the completion menu. It can be set to the values `'insert'` or `'select'`. With the value 'select' nothing happens when you move between items. With the value 'insert' it'll put the text from the selection in the buffer. Is worth mention these values are available as "types" in the `cmp` module: `require('cmp').SelectBehavior`.
+
 Some example config of these options are featured in [nvim-cmp's readme](https://github.com/hrsh7th/nvim-cmp).
 
 If what you want is to extend the configuration of nvim-cmp, I suggest you change the preset to `lsp-compe`. There is an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) in the Advance usage page.

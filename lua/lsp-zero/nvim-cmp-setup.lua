@@ -136,6 +136,10 @@ M.call_setup = function(opts)
     return
   end
 
+  if type(opts.select_behavior) == 'string' then
+    select_opts = {behavior = opts.select_behavior}
+  end
+
   local config = M.cmp_config()
 
   if not ok_luasnip then
