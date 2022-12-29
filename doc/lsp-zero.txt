@@ -147,7 +147,8 @@ These are the available options.
   set_lsp_keymaps: ~
       Add keybindings to a buffer with a language server attached.
       This bindings will trigger actions like go to definition, go
-      to reference, etc.
+      to reference, etc. You can also specify list of keys you want to omit, 
+      see the example at the end of this section.
 
   configure_diagnostics: ~
       Uses the built-in function |vim.diagnostic.config()| to setup the
@@ -195,8 +196,8 @@ The code below describes the same features the `recommended` preset enables.
 It is possible to override the preferences of a preset if you use
 |lsp-zero.set_preferences()| right after |lsp-zero.preset()|.
 
-For example,  you could disable automatic suggestions for language servers
-even if you are using the `recommended` preset.
+You could disable the automatic suggestions for language servers, and also
+specify a list of lsp keymaps to omit during setup.
 
 >
   local lsp = require('lsp-zero')
@@ -204,6 +205,7 @@ even if you are using the `recommended` preset.
 
   lsp.set_preferences({
     suggest_lsp_servers = false
+    set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
   })
 <
 

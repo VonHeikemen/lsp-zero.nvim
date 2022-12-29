@@ -10,6 +10,7 @@ lsp.preset('recommended')
 
 lsp.setup()
 ```
+
 `.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
 
 If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
@@ -227,7 +228,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `setup_servers_on_start` when set to `true` all installed servers will be initialized on startup. When is set to the string `"per-project"` only the servers listed with the function `.use()` will be initialized. If the value is `false` servers will be initialized when you call `.configure()` or `.setup_servers()`.
 
-* `set_lsp_keymaps` add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc.
+* `set_lsp_keymaps` add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc. You can also specify list of keys you want to omit, see the [lua api section](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) for an example.
 
 * `configure_diagnostics` uses the built-in function `vim.diagnostic.config` to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
 
@@ -464,7 +465,9 @@ It creates a combination of settings safe to use for specific cases. Make sure i
 
 It gives the user control over the options available in the plugin.
 
-You can use it to override options from a preset. For example, you could disable the automatic suggestions for language servers even if you are using the `recommended` preset.
+You can use it to override options from a preset.
+
+You could disable the automatic suggestions for language servers, and also specify a list of lsp keymaps to omit during setup.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -472,6 +475,7 @@ lsp.preset('recommended')
 
 lsp.set_preferences({
   suggest_lsp_servers = false
+  set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
 })
 
 lsp.setup()

@@ -139,13 +139,25 @@ end
 s.set_keymaps = function(bufnr)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
+  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
+  local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
+  local omit = {}
+
+  if type(global_config.set_lsp_keymaps) == 'table' then
+    local keys = global_config.set_lsp_keymaps.omit or {}
+    for _, key in ipairs(keys) do
+      omit[key] = true
+    end
+  end
+
   local map = function(m, lhs, rhs)
+    if omit[lhs] then
+      return
+    end
+
     local opts = {noremap = true, silent = true}
     vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, opts)
   end
-
-  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
-  local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
 
   map('n', 'K', lsp 'buf.hover()')
   map('n', 'gd', lsp 'buf.definition()')
