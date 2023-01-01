@@ -4,12 +4,18 @@ local s = {}
 local ok_cmp, cmp = pcall(require, 'cmp')
 local ok_luasnip, luasnip = pcall(require, 'luasnip')
 local global_config = require('lsp-zero.settings')
+local select_opts = {}
+
+if not ok_cmp then
+  local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
+  vim.notify(msg, vim.log.levels.WARN)
+else
+  select_opts = {behavior = cmp.SelectBehavior.Select}
+end
 
 local merge = function(a, b)
   return vim.tbl_deep_extend('force', {}, a, b)
 end
-
-local select_opts = {behavior = cmp.SelectBehavior.Select}
 
 M.sources = function()
   return {
@@ -129,12 +135,6 @@ end
 
 M.call_setup = function(opts)
   opts = opts or {}
-
-  if not ok_cmp then
-    local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
-    vim.notify(msg, vim.log.levels.WARN)
-    return
-  end
 
   if type(opts.select_behavior) == 'string' then
     select_opts = {behavior = opts.select_behavior}
