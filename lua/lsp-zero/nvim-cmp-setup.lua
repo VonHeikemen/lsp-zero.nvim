@@ -134,6 +134,10 @@ M.cmp_config = function()
 end
 
 M.call_setup = function(opts)
+  if not ok_cmp then
+    return
+  end
+
   opts = opts or {}
 
   if type(opts.select_behavior) == 'string' then
