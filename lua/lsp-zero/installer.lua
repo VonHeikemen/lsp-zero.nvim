@@ -114,6 +114,17 @@ end
 
 s.mason.use = function(setup_server)
   s.mason.setup()
+
+  -- Setup installed servers directly
+  -- hopefully this will avoid weird behaviors 
+  -- which I think are caused by `.setup_handlers`
+  local servers = s.mason.get_servers()
+  for _, name in ipairs(servers) do
+    setup_server(name)
+  end
+
+  -- This will duplicate the call to `setup_server`
+  -- for now this is OK. `setup_server` will not configure a server twice
   require('mason-lspconfig').setup_handlers({setup_server})
 end
 
