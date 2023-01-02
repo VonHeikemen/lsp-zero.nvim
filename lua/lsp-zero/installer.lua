@@ -63,7 +63,7 @@ s.lsp.install = function(list)
 
   s.lsp.setup()
 
-  for _, name in pairs(list) do
+  for _, name in ipairs(list) do
     local ok, server = get_server(name)
     if ok and not server:is_installed() then
       installed = true
@@ -108,7 +108,7 @@ s.mason.install = function(list)
   require('mason-lspconfig.settings').set({ensure_installed = list})
 
   if global_config.suggest_lsp_servers then
-    for _, name in pairs(list) do
+    for _, name in ipairs(list) do
       require('lsp-zero.state').check_server(name)
     end
   end

@@ -225,7 +225,7 @@ M.setup_servers = function(list)
     opts = {root_dir = true}
   end
 
-  for _, server in pairs(list) do
+  for _, server in ipairs(list) do
     M.setup(server, opts)
   end
 end
