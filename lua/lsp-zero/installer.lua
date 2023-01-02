@@ -90,8 +90,24 @@ s.lsp.get_servers = function()
 end
 
 s.mason.setup = function()
-  require('mason').setup()
-  require('mason-lspconfig').setup()
+  local mason_file = vim.api.nvim_get_runtime_file('lua/mason/api/command.lua', 1)
+  if #mason_file == 1 and package.loaded['mason.api.command'] == nil then
+    -- Setup mason if user didn't
+    require('mason').setup()
+  elseif #mason_file == 0 then
+    -- If we are here `mason.api.command` no longer exists 
+    -- Setup mason and hope for the best
+    require('mason').setup()
+  end
+
+  -- Same deal here but with `mason-lspconfig`
+  local lsp_file = vim.api.nvim_get_runtime_file('lua/mason-lspconfig/api/command.lua', 1)
+  if #lsp_file == 1 and package.loaded['mason-lspconfig.api.command'] == nil then
+    require('mason-lspconfig').setup()
+  elseif #lsp_file == 0 then
+    require('mason-lspconfig').setup()
+  end
+
   M.fn.setup = id
   s.mason.setup = id
 end
@@ -105,7 +121,6 @@ s.mason.install = function(list)
   local global_config = require('lsp-zero.settings')
 
   s.mason.setup()
-  require('mason-lspconfig.settings').set({ensure_installed = list})
 
   if global_config.suggest_lsp_servers then
     for _, name in ipairs(list) do
@@ -113,6 +128,7 @@ s.mason.install = function(list)
     end
   end
 
+  require('mason-lspconfig.settings').set({ensure_installed = list})
   require('mason-lspconfig.ensure_installed')()
 end
 
