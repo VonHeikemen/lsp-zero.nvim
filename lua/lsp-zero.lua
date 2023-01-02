@@ -60,8 +60,6 @@ local run = function(args)
 
   local setup_server = function(name)
     local server_opts = args.server_opts[name] or {}
-    server_opts.autostart = true
-
     configure(name, server_opts)
   end
 
