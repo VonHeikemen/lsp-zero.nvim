@@ -870,10 +870,6 @@ Lua API                                                     *lsp-zero-lua-api*
       require('rust-tools').setup({server = rust_lsp})
 <
 
-      In case you are using the `recommended` preset (or any preset that
-      sets `setup_servers_on_start` to `true`) you need to call
-      `.build_options` before calling `.setup()`.
-
                                              *lsp-zero.defaults.cmp_sources()*
 
   .defaults.cmp_sources(): ~

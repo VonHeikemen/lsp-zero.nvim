@@ -698,8 +698,6 @@ local rust_lsp = lsp.build_options('rust_analyzer', {})
 require('rust-tools').setup({server = rust_lsp})
 ```
 
-In case you are using the `recommended` preset (or any preset that sets `setup_servers_on_start` to `true`) you need to call `.build_options` before calling `.setup()`.
-
 ### `.defaults.cmp_sources()`
 
 Returns the list of "sources" used in `nvim-cmp`.
