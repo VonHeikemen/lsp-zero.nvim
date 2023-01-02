@@ -284,7 +284,7 @@ M.defaults.cmp_config = function(opts)
     return vim.tbl_deep_extend('force', config, opts)
   end
 
-  return config 
+  return config
 end
 
 M.defaults.nvim_workspace = function()
