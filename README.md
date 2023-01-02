@@ -532,6 +532,19 @@ If the servers you want to call are installed globally use the option `force` to
 lsp.setup_servers({'dartls', 'vls', force = true})
 ```
 
+### `.skip_server_setup({name})`
+
+Disables one or more language server. It tells lsp-zero to skip the initialization of the language servers provided. Its only effective when `setup_servers_on_start` is set to `true`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.skip_server_setup({'eslint', 'angularls'})
+
+lsp.setup()
+```
+
 ### `.on_attach({callback})`
 
 Execute `{callback}` function every time a server is attached to a buffer.
@@ -676,11 +689,12 @@ For example, if you want to use `rust-tools`, this is how you'll do it.
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
-local rust_lsp = lsp.build_options('rust_analyzer', {})
+lsp.skip_server_setup({'rust_analyzer'})
 
 lsp.setup()
 
 -- Initialize rust_analyzer with rust-tools
+local rust_lsp = lsp.build_options('rust_analyzer', {})
 require('rust-tools').setup({server = rust_lsp})
 ```
 

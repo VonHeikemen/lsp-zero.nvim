@@ -177,6 +177,24 @@ M.configure = function(server_name, opts)
   Server.setup(server_name, opts)
 end
 
+M.skip_server_setup = function(list)
+  local settings = require('lsp-zero.settings')
+
+  if settings.setup_servers_on_start == false then
+    return
+  end
+
+  local arg_type = type(list)
+
+  if arg_type == 'string' then
+    return Server.skip_server(list)
+  end
+
+  for _, name in ipairs(list) do
+    Server.skip_server(name)
+  end
+end
+
 M.on_attach = function(fn)
   if type(fn) == 'function' then
     Server.common_on_attach = fn

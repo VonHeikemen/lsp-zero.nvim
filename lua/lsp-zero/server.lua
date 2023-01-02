@@ -25,7 +25,7 @@ end
 
 M.build_options = function(name, opts)
   opts = opts or {}
-  state.exclude[name] = true
+  M.skip_server(name)
 
   s.call_once()
 
@@ -230,6 +230,10 @@ M.setup_servers = function(list)
   for _, server in ipairs(list) do
     M.setup(server, opts)
   end
+end
+
+M.skip_server = function(name)
+  state.exclude[name] = true
 end
 
 M.ensure_installed = function(list)
