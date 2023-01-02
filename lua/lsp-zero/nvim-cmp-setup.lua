@@ -156,9 +156,12 @@ M.call_setup = function(opts)
 
   global_config.cmp_capabilities = true
 
-  vim.opt.completeopt:append('menu')
-  vim.opt.completeopt:append('menuone')
-  vim.opt.completeopt:append('noselect')
+  -- Apparently this can fail
+  pcall(function()
+    vim.opt.completeopt:append('menu')
+    vim.opt.completeopt:append('menuone')
+    vim.opt.completeopt:append('noselect')
+  end)
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
