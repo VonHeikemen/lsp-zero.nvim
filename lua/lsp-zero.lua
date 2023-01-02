@@ -32,6 +32,10 @@ local run = function(args)
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
 
+  if user_config.configure_diagnostics then
+    Server.diagnostics()
+  end
+
   local manual_setup = suggest == false and handle_setup == false
   local use_global = user_config.call_servers == 'global'
 

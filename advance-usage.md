@@ -83,28 +83,6 @@ end)
 lsp.setup()
 ```
 
-## Configure diagnostics
-
-Inside lsp-zero diagnostics are configured right before calling the first language server. In a common scenario where you use the `recommended` preset you can call [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()) after you setup lsp-zero.
-
-Here is an example that restores the default behavior of diagnostics.
-
-```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.setup()
-
-vim.diagnostic.config({
-  virtual_text = true,
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = false,
-  float = true,
-})
-```
-
 ## Setup LSP keybindings in vimscript
 
 The easiest way I can think of is using a global function. Somewhere in your config you declare a function with your keybindings.

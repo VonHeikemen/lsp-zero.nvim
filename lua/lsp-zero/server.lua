@@ -68,10 +68,6 @@ s.call_once = function()
   installer.choose()
   installer.fn.setup()
 
-  if global_config.configure_diagnostics then
-    s.diagnostics()
-  end
-
   state.map_ctrlk = vim.fn.mapcheck('<C-k>', 'n') == ''
 
   local fmt = string.format
@@ -103,7 +99,7 @@ s.on_attach = function(_, bufnr)
   command('LspZeroWorkspaceRemove', '', 'vim.lsp.buf.remove_workspace_folder()')
 end
 
-s.diagnostics = function()
+M.diagnostics = function()
   local sign = function(opts)
     vim.fn.sign_define(opts.name, {
       texthl = opts.name,
