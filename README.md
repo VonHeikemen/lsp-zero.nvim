@@ -455,7 +455,7 @@ Really. There is a good chance the only thing you want is the automatic setup of
 You'll need these plugins:
 
 * [mason.nvim](https://github.com/williamboman/mason.nvim)
-* [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
+* [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)
 * [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
 
 After you have installed all that you configure them in this order.
