@@ -519,6 +519,59 @@ Last step is to install mason.nvim and mason-lspconfig:
  - https://github.com/williamboman/mason-lspconfig.nvim
 
 ==============================================================================
+Migrating away from lsp-zero                           *lsp-zero-migrate-away*
+
+There is a good chance the only thing you want from lsp-zero is the automatic
+setup of LSP servers. Let me tell you how to configure that.
+
+You'll need these plugins:
+
+* https://github.com/williamboman/mason.nvim
+* https://github.com/williamboman/mason-lspconfig.nvim
+* https://github.com/neovim/nvim-lspconfig
+
+You need to configure them in this order.
+
+>
+  require('mason').setup()
+
+  require('mason-lspconfig').setup({
+    ensure_installed = {
+      'rust_analyzer',
+      'tsserver',
+    }
+  })
+
+  local lspconfig = require('lspconfig')
+  require('mason-lspconfig').setup_handlers({
+    function(server_name)
+      lspconfig[server_name].setup({
+        on_attach = lsp_attach,
+        capabilities = lsp_capabilities,
+      })
+    end,
+  })
+<
+
+Notice in this example I have automatic install of servers using the option
+`ensure_installed` in `mason-lspconfig`. You can delete that list of servers
+and add your own.
+
+To learn how to use the `on_attach` option you can read |lspconfig-keybindings|.
+
+For the `capabilities` option, if you want to keep using `nvim-cmp` you need
+the source for LSP `cmp-nvim-lsp`. Then you define the variable `lsp_capabilities`.
+
+>
+  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+<
+
+If you want to know how to recreate lsp-zero's autocomplete you can read
+this blogpost.
+
+https://vonheikemen.github.io/devlog/tools/setup-nvim-lspconfig-plus-nvim-cmp/#snippets
+
+==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
 
                                                            *lsp-zero.preset()*

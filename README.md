@@ -33,6 +33,8 @@ Featured in the video:
 
 This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
 
+Note: if you already have a working setup with `nvim-lspconfig` and all you want is automatic LSP setup read the section [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).
+
 ### Installing
 
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
@@ -445,6 +447,49 @@ Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim)
 ## Global command
 
 * `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
+
+## You might not need lsp-zero
+
+Really. There is a good chance the only thing you want is the automatic setup of LSP servers. Let me tell you how to configure that.
+
+You'll need these plugins:
+
+* [mason.nvim](https://github.com/williamboman/mason.nvim)
+* [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
+* [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
+
+After you have installed all that you configure them in this order.
+
+```lua
+require('mason').setup()
+
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    'rust_analyzer',
+    'tsserver',
+  }
+})
+
+local lspconfig = require('lspconfig')
+require('mason-lspconfig').setup_handlers({
+  function(server_name)
+    lspconfig[server_name].setup({
+      on_attach = lsp_attach,
+      capabilities = lsp_capabilities,
+    })
+  end,
+})
+```
+
+Notice in this example I have automatic install of servers using the option `ensure_installed` in `mason-lspconfig`. You can delete that list of servers and add your own.
+
+To learn how to use the `on_attach` option you can read the help page `:help lspconfig-keybindings`.
+
+For the `capabilities` option, if you are using `nvim-cmp` all you need to do is install the source for LSP [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). Then you define the variable `lsp_capabilities`.
+
+```lua
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+```
 
 ## Lua api
 
