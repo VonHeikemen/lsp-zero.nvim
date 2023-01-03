@@ -481,7 +481,21 @@ require('mason-lspconfig').setup_handlers({
 })
 ```
 
-Notice in this example I have automatic install of servers using the option `ensure_installed` in `mason-lspconfig`. You can delete that list of servers and add your own.
+In this example I have automatic install of servers using the option `ensure_installed` in `mason-lspconfig`. You can delete that list of servers and add your own.
+
+If you notice your LSP servers don't behave correctly, it might be because `.setup_handlers`. You can replace that function with a `for` loop.
+
+```lua
+local lspconfig = require('lspconfig')
+local get_servers = require('mason-lspconfig').get_installed_servers
+
+for _, server_name in ipairs(get_servers()) do
+  lspconfig[server_name].setup({
+    on_attach = lsp_attach,
+    capabilities = lsp_capabilities,
+  })
+end
+```
 
 To learn how to use the `on_attach` option you can read the help page `:help lspconfig-keybindings`.
 
