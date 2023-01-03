@@ -33,7 +33,7 @@ Featured in the video:
 
 This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
 
-Note: if you already have a working setup with `nvim-lspconfig` and all you want is automatic LSP setup read the section [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).
+Note: if you already have a working setup with `nvim-lspconfig` and all you want is automatic configuration of LSP servers read the section [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).
 
 ### Installing
 
@@ -465,6 +465,7 @@ require('mason').setup()
 
 require('mason-lspconfig').setup({
   ensure_installed = {
+    -- Replace these with whatever servers you want to install
     'rust_analyzer',
     'tsserver',
   }

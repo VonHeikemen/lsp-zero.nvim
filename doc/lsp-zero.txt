@@ -537,6 +537,7 @@ You need to configure them in this order.
 
   require('mason-lspconfig').setup({
     ensure_installed = {
+      -- Replace these with whatever servers you want to install
       'rust_analyzer',
       'tsserver',
     }
