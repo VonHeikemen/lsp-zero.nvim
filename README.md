@@ -77,10 +77,10 @@ use {
 
     -- Snippets
     {'L3MON4D3/LuaSnip'},
+    -- Snippet Collection (Optional)
+    {'rafamadriz/friendly-snippets'},
   }
 }
--- Adding a snippets collection (Not required)
-use('rafamadriz/friendly-snippets'),
 ```
 
 With `paq`:
@@ -103,7 +103,7 @@ With `paq`:
 
 -- Snippets
 {'L3MON4D3/LuaSnip'};
--- Adding a snippets collection (Not required)
+-- Snippet Collection (Optional)
 {'rafamadriz/friendly-snippets'};
 ```
 
@@ -125,7 +125,7 @@ Plug 'hrsh7th/cmp-nvim-lua'
 
 "  Snippets
 Plug 'L3MON4D3/LuaSnip'
-" Adding a snippets collection (Not required)
+" Snippet collection (Optional)
 Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
