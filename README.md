@@ -1,6 +1,6 @@
 # LSP Zero
 
-The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion plugin) and the LSP client working together. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion engine) and the LSP client working together nicely. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
 
 Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
 
@@ -11,17 +11,11 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-These three lines of code will create [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim#default-keybindings-1), configure [diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim#diagnostics), setup [autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim#autocompletion) and enable automatic setup of LSP servers. If you are curious to know the configuration code behind this, check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
+`.preset()` will indicate what set of options and features you want enabled. And `.setup()` will be the one doing the heavy lifting. Other forms of customization are available, of course, they are detailed in the [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section and the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page.
 
-If I still have your attention, here's a list of sections in the documentation you might find interesting:
+If you want to know all the things this preset does for you check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
 
-* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets)
-* [Quickstart](https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient)
-* [Lua Api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api)
-* [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md)
-* [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero)
-
-Have any question? Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions).
+If you have any question about configuration, usage or a feature, feel free to ask in the [discussion page](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/).
 
 ## Demo
 
@@ -164,37 +158,20 @@ EOF
 
 The `recommended` preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
 
-If you already know what language servers you want, you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim#ensure_installedlist) to install them automatically.
-
-Before you go, allow me to showcase a configuration example a bit more complex.
+If you already know what language servers you want, you can use the function `.ensure_installed` to install them automatically. Here is an example.
 
 ```lua
--- Reserve space for diagnostic icons
-vim.opt.signcolumn = 'yes'
+vim.opt.signcolumn = 'yes' -- Reserve space for diagnostic icons
 
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
--- Install these servers
 lsp.ensure_installed({
   'tsserver',
   'eslint',
   'sumneko_lua',
 })
 
--- Pass arguments to a language server
-lsp.configure('tsserver', {
-  on_attach = function(client, bufnr)
-    print('hello tsserver')
-  end,
-  settings = {
-    completions = {
-      completeFunctionCalls = true
-    }
-  }
-})
-
--- Configure lua language server for neovim
 lsp.nvim_workspace()
 
 lsp.setup()
@@ -355,24 +332,9 @@ require('luasnip.loaders.from_snipmate').lazy_load()
 
 ## LSP
 
-Language servers are configured and initialized using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
-
-If you ever wondered "What does lsp-zero do?" This is the answer:
-
-```lua
-require('lspconfig').tsserver.setup({
-  on_attach = lsp_attach
-  capabilities = lsp_capabilities
-})
-```
-
-In this example I'm using `tsserver` but it could be any LSP server.
-
-What happens is that lsp-zero uses `lspconfig`'s setup function to initialize the LSP server. Then uses the `on_attach` option to create the keybindings and commands. Finally, it passes the "client capabilities" to the LSP server, this is the integration between the LSP client and the autocompletion plugin.
+When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these are bound to built-in functions, so you can get more details using the `:help` command.
 
 ### Default keybindings
-
-When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these are bound to built-in functions, so you can get more details using the `:help` command.
 
 * `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
 
@@ -410,27 +372,7 @@ In addition to the lsp keymap you also have access to these keybindings when a s
 * `[d`: Move to the previous diagnostic in the current buffer. See [:help vim.diagnostic.goto_prev()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_prev()).
 * `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
-To configure the UI for diagnostics lsp-zero uses [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()) with the following arguments.
-
-```lua
-{
-  virtual_text = false,
-  signs = true,
-  update_in_insert = false,
-  underline = true,
-  severity_sort = true,
-  float = {
-    focusable = false,
-    style = 'minimal',
-    border = 'rounded',
-    source = 'always',
-    header = '',
-    prefix = '',
-  },
-}
-```
-
-Now, if you notice the sign_icons "pop up" and moving your screen is because you have `signcolumn` set to `auto`. I recommend setting it to "yes" to preserve the space in the gutter.
+If you notice the sign_icons "pop up" and moving your screen is because you have `signcolumn` set to `auto`. I recommend setting to "yes" to preserve the space in the gutter.
 
 ```vim
 set signcolumn=yes
@@ -442,7 +384,7 @@ If you use lua.
 vim.opt.signcolumn = 'yes'
 ```
 
-If you want to override some settings lsp-zero provides make sure you call `vim.diagnostic.config` after lsp-zero's setup.
+Diagnostics can be configured using the function [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()). If you only want to override some settings lsp-zero provides, make sure you call `vim.diagnostic.config` after lsp-zero's setup.
 
 Here is an example that restores the built-in configuration for diagnostics.
 
@@ -513,6 +455,10 @@ Next, remove nvim-lsp-installer from neovim. Use whatever method your plugin man
 
 Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim).
 
+## Global command
+
+* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
+
 ## You might not need lsp-zero
 
 Really. There is a good chance the only thing you want is the automatic setup of LSP servers. Let me tell you how to configure that.
@@ -570,10 +516,6 @@ For the `capabilities` option, if you are using `nvim-cmp` all you need to do is
 ```lua
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 ```
-
-## Global command
-
-* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
 
 ## Lua api
 
