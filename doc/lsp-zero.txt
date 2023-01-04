@@ -7,8 +7,8 @@ A starting point to setup some lsp related features in neovim.
 Introduction                                                  *lsp-zero-intro*
 
 The purpose of this plugin is to bundle all the "boilerplate code" needed
-to have |nvim-cmp| (a popular completion engine) and the native |LSP| client
-working together nicely. Additionally, with the help of |mason.nvim|,
+to have |nvim-cmp| (a popular autocompletion plugin) and the |LSP| client
+working together. Additionally, with the help of |mason.nvim|,
 it can let you install language servers from inside neovim.
 
 ==============================================================================
@@ -35,9 +35,12 @@ If your config file is written in vimscript use |lua-heredoc|.
   EOF
 <
 
-The `recommended` preset will enable automatic suggestions of LSP servers.
-Any time you open a filetype for the first time it'll try to ask if you want
-to install a language server that supports it.
+These three lines of code will create keybindings linked to lsp actions,
+configure diagnostics, setup autocompletion and enable automatic setup
+of LSP servers. If you are curious to know the configuration code
+behind this, check out the Under the hood section in the wiki:
+
+https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood 
 
 If you already know what language servers you want, you can use the function
 |lsp-zero.ensure_installed()| to install them automatically.
@@ -325,11 +328,29 @@ Then add the luasnip loader somewhere in your config.
 ==============================================================================
 LSP                                                      *lsp-zero-lsp-config*
 
+Language servers are configured and initialized using |nvim-lspconfig|.
+
+If you ever wondered "What does lsp-zero do?" This is the answer:
+
+>
+  require('lspconfig').tsserver.setup({
+    on_attach = lsp_attach
+    capabilities = lsp_capabilities
+  })
+<
+
+In this example I'm using `tsserver` but it could be any LSP server.
+
+What happens is that lsp-zero uses `lspconfig`'s setup function to initialize
+the LSP server. Then uses the `on_attach` option to create the keybindings
+and commands. Finally, it passes the "client capabilities" to the LSP server,
+this is the integration between the LSP client and the autocompletion plugin.
+
+                                                        *lsp-zero-keybindings*
+
 When a language server gets attached to a buffer you gain access to some
 keybindings and commands. All of these are bound to a built-in function
 so you can get more details using the `:help` command.
-
-                                                        *lsp-zero-keybindings*
 
   K: ~
       Displays hover information about the symbol under the cursor in a
@@ -412,9 +433,29 @@ so you can get more details using the `:help` command.
 ==============================================================================
 Diagnostics config                                       *lsp-zero-diagnostic*
 
-Diagnostics can be configured using the function |vim.diagnostic.config()|.
-If you only want to override some settings lsp-zero provides, make sure you
-call `vim.diagnostic.config` after lsp-zero's setup.
+To configure the UI for diagnostics lsp-zero uses |vim.diagnostic.config()|
+with the following arguments.
+
+>
+  {
+    virtual_text = false,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = true,
+    float = {
+      focusable = false,
+      style = 'minimal',
+      border = 'rounded',
+      source = 'always',
+      header = '',
+      prefix = '',
+    },
+  }
+<
+
+If you want to override settings lsp-zero provides make sure you call
+|vim.diagnostic.config()| after lsp-zero's setup.
 
 Here is an example that restores the built-in configuration for diagnostics.
 
@@ -434,7 +475,7 @@ Here is an example that restores the built-in configuration for diagnostics.
   })
 <
 
-If you notice the sign_icons "pop up" and moving your screen is because
+Now, if you notice the sign_icons "pop up" and moving your screen is because
 you have `signcolumn` set to "auto". I recommend setting to "yes" to preserve
 the space in the gutter.
 
