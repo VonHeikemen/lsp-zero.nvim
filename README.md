@@ -35,6 +35,17 @@ Featured in the video:
 * Showing diagnostic message in a floating window.
 * Code actions.
 
+## How to get the most out of this plugin
+
+This plugin is designed to provide an opinionated and useable set of defaults for working with LSP and Autocompletion in Neovim. A few things should be considered before you use it in your own config
+
+* To get the best experience, it is recommended to read through this page from top to bottom and to understand the options available to you. 
+* Many things that users often try to customize outside of this plugin are handled through the plugin functionality, and the "doubling up" of configuration can cause issues and loss of functionality. If you are using this plugin and want to customize anything, it is recommended to follow the instructions below and in the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page. 
+* This plugin is designed to handle the `lspconfig` package for you, to do things like set up servers for LSP actions, diagnostics, intellisense, etc. Manually calling the `lspconfig` package in another part of your configuration will likely result in a broken configuration. If the Advanced Usage section doesn't have a solution for you and you really need to work with `lspconfig` independently, [you might not need LSP-Zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).  
+* This plugin also handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. Some things you might be expecting might not be present as a result. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.  
+* If you want to set up completion yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to disable that portion of the plugin and assure your own setup does not conflict with the plugin
+* Snippet functionality is included by default via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install collections of snippets from other sources. See the optional installation config in the [Installing](https://github.com/VonHeikemen/lsp-zero.nvim#installing) section. 
+
 ## Quickstart (for the impatient)
 
 This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
@@ -66,6 +77,7 @@ use {
 
     -- Snippets
     {'L3MON4D3/LuaSnip'},
+    -- Snippet Collection (Optional)
     {'rafamadriz/friendly-snippets'},
   }
 }
@@ -91,6 +103,7 @@ With `paq`:
 
 -- Snippets
 {'L3MON4D3/LuaSnip'};
+-- Snippet Collection (Optional)
 {'rafamadriz/friendly-snippets'};
 ```
 
@@ -112,6 +125,7 @@ Plug 'hrsh7th/cmp-nvim-lua'
 
 "  Snippets
 Plug 'L3MON4D3/LuaSnip'
+" Snippet collection (Optional)
 Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
