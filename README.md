@@ -15,11 +15,11 @@ These three lines of code will create [keybindings linked to lsp actions](https:
 
 If I still have your attention, here's a list of sections in the documentation you might find interesting:
 
-* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim/edit/main/README.md#available-presets)
-* [Quickstart](https://github.com/VonHeikemen/lsp-zero.nvim/edit/main/README.md#quickstart-for-the-impatient)
-* [Lua Api](https://github.com/VonHeikemen/lsp-zero.nvim/edit/main/README.md#lua-api)
+* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets)
+* [Quickstart](https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient)
+* [Lua Api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api)
 * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md)
-* [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/edit/main/README.md#you-might-not-need-lsp-zero)
+* [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero)
 
 Have any question? Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions).
 
