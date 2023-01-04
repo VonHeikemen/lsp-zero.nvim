@@ -31,14 +31,14 @@ Featured in the video:
 
 ## How to get the most out of this plugin
 
-This plugin is designed to provide an opinionated and useable set of defaults for working with LSP and Completion in Neovim. A few things should be considered before you use it in your own config
+This plugin is designed to provide an opinionated and useable set of defaults for working with LSP and Autocompletion in Neovim. A few things should be considered before you use it in your own config
 
 * To get the best experience, it is recommended to read through this page from top to bottom and to understand the options available to you. 
 * Many things that users often try to customize outside of this plugin are handled through the plugin functionality, and the "doubling up" of configuration can cause issues and loss of functionality. If you are using this plugin and want to customize anything, it is recommended to follow the instructions below and in the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page. 
 * Any setup code used outside the built in configuration options and related to LSP or Completion may result in undesired behavior. 
 * This plugin also handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. Some things you might be expecting might not be present as a result. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.  
 * If you want to set up completion yourself, you still can. See the [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets) section for instructions on how to disable that portion of the plugin and assure your own setup does not conflict with the plugin
-* Snippet functionality is included by default via [Luasnip](https://github.com/L3MON4D3/LuaSnip) and a base collection of snippets are included for a variety of languages, but you can also add your own or add collections from other sources by following the Luasnip docs. 
+* Snippet functionality is included by default via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install collections of snippets from other sources. See the optional installation config in the [Installing](https://github.com/VonHeikemen/lsp-zero.nvim#installing) section. 
 
 ## Quickstart (for the impatient)
 
@@ -71,9 +71,10 @@ use {
 
     -- Snippets
     {'L3MON4D3/LuaSnip'},
-    {'rafamadriz/friendly-snippets'},
   }
 }
+-- Adding a snippets collection (Not required)
+use('rafamadriz/friendly-snippets'),
 ```
 
 With `paq`:
@@ -96,6 +97,7 @@ With `paq`:
 
 -- Snippets
 {'L3MON4D3/LuaSnip'};
+-- Adding a snippets collection (Not required)
 {'rafamadriz/friendly-snippets'};
 ```
 
@@ -117,6 +119,7 @@ Plug 'hrsh7th/cmp-nvim-lua'
 
 "  Snippets
 Plug 'L3MON4D3/LuaSnip'
+" Adding a snippets collection (Not required)
 Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
