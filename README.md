@@ -15,8 +15,8 @@ These three lines of code will create [keybindings linked to lsp actions](https:
 
 If I still have your attention, here's a list of sections in the documentation you might find interesting:
 
-* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets)
 * [Quickstart](https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient)
+* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets)
 * [Lua Api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api)
 * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md)
 * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero)
@@ -39,12 +39,12 @@ Featured in the video:
 
 This plugin is designed to provide an opinionated set of defaults for working with LSP servers and Autocompletion in Neovim. A few things should be considered before you use it in your own config.
 
-* To get the best experience, it is recommended to read through this page from top to bottom and to understand the options available to you. 
-* Trying to setup a plugin that is already used inside lsp-zero can cause issues and loss of functionality. If you want to customize lsp-zero please  visit the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions for common scenarios. You can also read about the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) to get details about the functions available for configuration. 
-* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` module in another part of your configuration will likely result in a broken configuration. If the Advanced Usage section doesn't have a solution for you and you really need to work with `lspconfig`, [you might not need LSP-Zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).  
-* This plugin also handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. Some things you expect might not be present as a result. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.  
-* If you want to set up completion yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to disable that portion of the plugin and assure your own setup does not conflict with lsp-zero.
-* Snippet functionality is included by default via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install a collection of snippets. The snippet collection [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the one recommended in the Install section, but do note it is optional.
+* To get the best experience, it is recommended to read through this page from top to bottom and to understand the options available to you.
+* Trying to configure a plugin that is already used inside lsp-zero can cause issues and loss of functionality. If you want to customize lsp-zero please  visit the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions for common scenarios. You can also read about the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) to get details about the functions available for configuration.
+* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` module in another part of your configuration will likely result in a broken configuration.
+* lsp-zero handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. Some things you expect might not be present as a result. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.
+* If you want to set up `nvim-cmp` yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to assure your own configuration does not conflict with lsp-zero.
+* Snippet functionality is provided via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install a collection of snippets. The snippet collection [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the one recommended in the Install section, but do note it is optional.
 
 ## Quickstart (for the impatient)
 
@@ -467,7 +467,7 @@ vim.diagnostic.config({
 
 ## Language servers and mason.nvim
 
-Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim). 
+Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim).
 
 > With mason.nvim you can also install formatters and debuggers, but `lsp-zero` will only configure LSP servers.
 
