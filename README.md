@@ -35,17 +35,6 @@ Featured in the video:
 * Showing diagnostic message in a floating window.
 * Code actions.
 
-## How to get the most out of this plugin
-
-This plugin is designed to provide an opinionated set of defaults for working with LSP servers and Autocompletion in Neovim. A few things should be considered before you use it in your own config.
-
-* To get the best experience, it is recommended to read through this page from top to bottom and to understand the options available to you.
-* Trying to configure a plugin that is already used inside lsp-zero can cause issues and loss of functionality. If you want to customize lsp-zero please  visit the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions for common scenarios. You can also read about the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) to get details about the functions available for configuration.
-* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` module in another part of your configuration will likely result in a broken configuration.
-* lsp-zero handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. Some things you expect might not be present as a result. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.
-* If you want to set up `nvim-cmp` yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to assure your own configuration does not conflict with lsp-zero.
-* Snippet functionality is provided via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install a collection of snippets. The snippet collection [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the one recommended in the Install section, but do note it is optional.
-
 ## Quickstart (for the impatient)
 
 This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
@@ -202,6 +191,16 @@ lsp.nvim_workspace()
 
 lsp.setup()
 ```
+
+## How to get the most out of this plugin
+
+This plugin is designed to provide an opinionated set of defaults for working with LSP servers and Autocompletion in Neovim. A few things should be considered before you use it in your own config.
+
+* Trying to configure a plugin that is already used inside lsp-zero can cause issues and loss of functionality. If you want to customize lsp-zero please  visit the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions for common scenarios. You can also read about the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) to get details about the functions available for configuration.
+* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` module in another part of your configuration will likely result in a broken configuration.
+* lsp-zero handles many layers of abstraction in an effort to give a broad range of users the best possible experience out of the box. If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.
+* If you want to set up `nvim-cmp` yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to assure your own configuration does not conflict with lsp-zero.
+* Snippet functionality is provided via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install a collection of snippets. The snippet collection [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the one recommended in the Install section, but do note it is optional.
 
 ## Available presets
 
