@@ -133,7 +133,13 @@ M.set_preferences = function(opts)
     opts[1] = 'custom'
   end
 
-  local new_settings = vim.tbl_extend('force', settings, opts)
+  local new_settings = vim.tbl_deep_extend('force', settings, opts)
+
+  if type(opts.sign_icons) ~= 'table'
+    or vim.tbl_isempty(opts.sign_icons)
+  then
+    new_settings.sign_icons = {}
+  end
 
   for key, _ in pairs(settings) do
     settings[key] = new_settings[key]

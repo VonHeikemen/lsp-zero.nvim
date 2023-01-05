@@ -101,6 +101,10 @@ end
 
 M.diagnostics = function()
   local sign = function(opts)
+    if type(opts.text) ~= 'string' then
+      return
+    end
+
     vim.fn.sign_define(opts.name, {
       texthl = opts.name,
       text = opts.text,
@@ -110,10 +114,12 @@ M.diagnostics = function()
 
   local icon = global_config.sign_icons
 
-  sign({name = 'DiagnosticSignError', text = icon.error})
-  sign({name = 'DiagnosticSignWarn', text = icon.warn})
-  sign({name = 'DiagnosticSignHint', text = icon.hint})
-  sign({name = 'DiagnosticSignInfo', text = icon.info})
+  if vim.tbl_isempty(icon) == false then
+    sign({name = 'DiagnosticSignError', text = icon.error})
+    sign({name = 'DiagnosticSignWarn', text = icon.warn})
+    sign({name = 'DiagnosticSignHint', text = icon.hint})
+    sign({name = 'DiagnosticSignInfo', text = icon.info})
+  end
 
   vim.diagnostic.config({
     virtual_text = false,
