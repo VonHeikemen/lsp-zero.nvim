@@ -21,7 +21,7 @@ If I still have your attention, here's a list of sections in the documentation y
 * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md)
 * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero)
 
-Have any question? Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions).
+Have any question? Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions). Or join [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
 ## Demo
 
