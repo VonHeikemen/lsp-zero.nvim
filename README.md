@@ -2,32 +2,19 @@
 
 The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion plugin) and the LSP client working together. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
 
-Provided that you meet all the requirements for the installation of this plugin and the language servers, the following piece of code should be enough to get started.
+## How to get started
 
-```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+If you are new to neovim go to the section [Resources for new users](https://github.com/VonHeikemen/lsp-zero.nvim#resources-for-new-users).
 
-lsp.setup()
-```
+If you know how to configure neovim go to [Quickstart (for the impatient)](https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient).
 
-These three lines of code will create [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim#default-keybindings-1), configure [diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim#diagnostics), setup [autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim#autocompletion) and enable automatic setup of LSP servers. If you are curious to know the configuration code behind this, check out the [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section in the wiki.
-
-If I still have your attention, here's a list of sections in the documentation you might find interesting:
-
-* [Quickstart](https://github.com/VonHeikemen/lsp-zero.nvim#quickstart-for-the-impatient)
-* [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets)
-* [Lua Api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api)
-* [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md)
-* [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero)
-
-Have any question? Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions). Or join [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
+Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).
 
 ## Demo
 
 https://user-images.githubusercontent.com/20980671/155446244-14ac3b82-44fd-4011-b25a-e4934db954dc.mp4
 
-Featured in the video:
+Showed in the video:
 * Fully functional completion engine (`nvim-cmp`).
 * Completions provided by the language server (`sumneko_lua`), as well as other sources.
 * Snippet expansion and navigation between placeholders.
@@ -35,11 +22,66 @@ Featured in the video:
 * Showing diagnostic message in a floating window.
 * Code actions.
 
+## Features
+
+* Create [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim#default-keybindings-1).
+* Configure [diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim#diagnostics).
+* Setup [autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim#autocompletion).
+* Enable automatic setup of LSP servers.
+
+## Resources for new users
+
+### Step by Step tutorial
+
+The following tutorial will teach you how to create a minimal config from scratch. You'll learn how to use a plugin manager and setup lsp-zero.
+
+* [Getting started with neovim's LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3#starting-from-scratch)
+
+### Template configuration
+
+If you haven't created a configuration file (`init.lua`) for neovim, here's a minimal working config. It has a plugin manager, a colorscheme and lsp-zero all setup.
+
+* [nvim-starter - lsp-zero](https://github.com/VonHeikemen/nvim-starter/tree/xx-lsp-zero)
+
+Do not clone the repo, just copy the content of `init.lua`.
+
+### I installed lsp-zero, how do I configure it?
+
+Check out the [Available Presets](https://github.com/VonHeikemen/lsp-zero.nvim#available-presets). Maybe your use case is covered by one the presets. If not, go to [Choose your features](https://github.com/VonHeikemen/lsp-zero.nvim#choose-your-features).
+
+Read the [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions to common questions.
+
+Browse the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api). Those are the functions you can use to configure lsp-zero.
+
+If you have any question about a feature or configuration feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
+
+### But my config file is init.vim, not init.lua
+
+In Neovim there is a thing called `lua-heredoc` it will allow you to execute lua code in your `init.vim`. This is the syntax:
+
+```lua
+lua <<EOF
+print('this is an example code')
+print('written in lua')
+EOF
+```
+
+The configuration code for lsp-zero should be place between `lua <<EOF ... EOF`.
+
 ## Quickstart (for the impatient)
 
-This section assumes you have chosen the `recommended` preset. It also assumes you don't have any other completion engine installed in your current neovim config.
+This section assumes you want enable every single feature lsp-zero offers. The result will be a very opinionated setup.
 
-Note: if you already have a working setup with `nvim-lspconfig` and all you want is automatic configuration of LSP servers read the section [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim#you-might-not-need-lsp-zero).
+If you know your way around neovim and how to configure it, take a look at this examples:
+
+* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Lua-template-configuration)
+* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Vimscript-template-configuration)
+
+### Requirements for language servers
+
+I suggest you read the [requirements of mason.nvim](https://github.com/williamboman/mason.nvim#requirements).
+
+Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
 ### Installing
 
@@ -120,15 +162,9 @@ Plug 'rafamadriz/friendly-snippets'
 Plug 'VonHeikemen/lsp-zero.nvim'
 ```
 
-### Requirements for language servers
-
-I would suggest you make a quick read in to the [requirements section of mason.nvim](https://github.com/williamboman/mason.nvim#requirements).
-
-Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
-
 ### Usage
 
-Inside your configuration file add this.
+Inside your configuration file add this piece of lua code.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -137,15 +173,9 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-If you wish to add support for your config written in lua, add this line above `lsp.setup()`.
+Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
-lsp.nvim_workspace()
-```
-
-Note. If you are using `init.vim` you can wrap the code in `lua-heredoc`s.
-
-```vim
 lua <<EOF
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
@@ -517,7 +547,7 @@ Last step is to install [mason.nvim](https://github.com/williamboman/mason.nvim)
 
 ## You might not need lsp-zero
 
-Really. There is a good chance the only thing you want is the automatic setup of LSP servers. Let me tell you how to configure that.
+Really. Out of [all the features](https://github.com/VonHeikemen/lsp-zero.nvim#features) this plugin offers there is a good chance the only thing you want is the automatic setup of LSP servers. Let me tell you how to configure that.
 
 You'll need these plugins:
 
