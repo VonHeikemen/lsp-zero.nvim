@@ -43,7 +43,7 @@ If you haven't created a configuration file (`init.lua`) for neovim, here's a mi
 
 * [nvim-starter - lsp-zero](https://github.com/VonHeikemen/nvim-starter/tree/xx-lsp-zero)
 
-Do not clone the repo, just copy the content of `init.lua`.
+Do not clone the repo `nvim-starter`, just follow the instructions on the readme.
 
 ### I installed lsp-zero, how do I configure it?
 
