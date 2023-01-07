@@ -141,9 +141,9 @@ M.set_preferences = function(opts)
 
   local new_settings = vim.tbl_deep_extend('force', settings, opts)
 
-  if type(opts.sign_icons) ~= 'table'
-    or vim.tbl_isempty(opts.sign_icons)
-  then
+  if type(opts.sign_icons) == 'table' and vim.tbl_isempty(opts.sign_icons) then
+    new_settings.sign_icons = {}
+  elseif opts.sign_icons == false then
     new_settings.sign_icons = {}
   end
 
