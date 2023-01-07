@@ -284,6 +284,10 @@ M.set_sign_icons = function(opts)
   Server.set_sign_icons(icon)
 end
 
+M.extend_lspconfig = function(opts)
+  return Server.extend_lspconfig(opts)
+end
+
 M.defaults = {}
 
 M.defaults.diagnostics = function(opts)

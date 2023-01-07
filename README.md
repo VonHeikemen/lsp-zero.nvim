@@ -934,6 +934,57 @@ cmp.setup(cmp_config)
 
 Returns the neovim specific settings for `sumneko_lua` language server.
 
+### `.extend_lspconfig({opts})`
+
+> (Experimental) There shouldn't be any bugs in the implementation, but one can never know. Also, the api may change depending on user feedback.
+
+The purpose of this function is to allow you to interact with `lspconfig` directly and still enjoy all the keybindings and commands lsp-zero offers.
+
+It "extends" the default configuration in `lspconfig`, adding two options to it: `capabilities` and `on_attach`.
+
+Note: don't use it along side `.setup()`. Its meant to be independent of any settings provided by presets.
+
+This is the intended usage:
+
+```lua
+require('mason').setup()
+require('mason-lspconfig').setup()
+require('lsp-zero').extend_lspconfig()
+
+require('lspconfig').tsserver.setup({})
+```
+
+Notice here it can coexists with other plugins. Allowing you to have full control of your configuration.
+
+`{opts}` table supports the following properties:
+
+* `set_lsp_keymaps`: When set to `true` (the default) it creates [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim#default-keybindings-1). You can also provide a list of keys you want to omit, lsp-zero will not bind it to anything (see example below). When set to `false` all keybindings are disabled.
+
+* `capabilities`: These are the "client capabilities" a language server expects. This argument will be merge nvim-cmp's default capabilities if you have it installed.
+
+* `on_attach`: This must be a function. Think of it as "global" `on_attach` so you don't have to keep passing a function to each server's setup function.
+
+Here's an example that showcase each option.
+
+```lua
+-- There is no need to copy any of this
+
+require('lsp-zero').extend_lspconfig({
+  set_lsp_keymaps = {omit = {'<C-k>', 'gl'}},
+  on_attach = function(client, bufnr)
+    print('hello there')
+  end,
+  capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true
+      }
+    }
+  }
+})
+```
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).

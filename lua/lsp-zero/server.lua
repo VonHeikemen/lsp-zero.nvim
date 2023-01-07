@@ -71,22 +71,86 @@ s.call_once = function()
 
   state.map_ctrlk = vim.fn.mapcheck('<C-k>', 'n') == ''
 
-  local fmt = string.format
-  local command = function(name, str)
-    vim.cmd(fmt('command! %s lua %s', name, str))
-  end
-
-  command('LspZeroWorkspaceAdd', 'vim.lsp.buf.add_workspace_folder()')
-  command('LspZeroWorkspaceList', 'vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))')
+  s.set_global_commands()
 
   s.call_once = function() end
 end
 
-s.on_attach = function(_, bufnr)
-  if global_config.set_lsp_keymaps then
-    s.set_keymaps(bufnr)
+M.extend_lspconfig = function(opts)
+  local defaults_opts = {
+    set_lsp_keymaps = true,
+    capabilities = {},
+    on_attach = nil,
+  }
+
+  local ok, lspconfig = pcall(require, 'lspconfig')
+
+  if not ok then
+    local msg = "[lsp-zero] Could not find the module lspconfig. Please make sure 'nvim-lspconfig' is installed."
+    vim.notify(msg, vim.log.levels.ERROR)
+    return
   end
 
+  opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
+
+  local lsp_defaults = lspconfig.util.default_config
+
+  -- Set client capabilities
+  local ok_cmp = pcall(require, 'cmp')
+  local ok_lsp_source, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+  local cmp_default_capabilities = {}
+
+  if ok_lsp_source then
+     cmp_default_capabilities = cmp_lsp.default_capabilities()
+  end
+
+  if ok_cmp then
+    lsp_defaults.capabilities = vim.tbl_deep_extend(
+      'force',
+      lsp_defaults.capabilities,
+      cmp_default_capabilities,
+      opts.capabilities or {}
+    )
+  end
+
+  -- Set on_attach hook
+  local util = lspconfig.util
+  local lsp_attach = function(client, bufnr)
+    if opts.set_lsp_keymaps then
+      s.set_keymaps(bufnr, {
+        set_lsp_keymaps = opts.set_lsp_keymaps,
+        configure_diagnostics = true,
+        map_ctrlk = true,
+      })
+    end
+
+    s.set_buf_commands()
+
+    if opts.on_attach then
+      opts.on_attach(client, bufnr)
+    end
+  end
+
+  util.on_setup = util.add_hook_after(util.on_setup, function(config)
+    config.on_attach = util.add_hook_before(config.on_attach, lsp_attach)
+  end)
+
+  s.set_global_commands()
+end
+
+s.on_attach = function(_, bufnr)
+  if global_config.set_lsp_keymaps then
+    s.set_keymaps(bufnr, {
+      set_lsp_keymaps = global_config.set_lsp_keymaps,
+      configure_diagnostics = global_config.configure_diagnostics,
+      map_ctrlk = state.map_ctrlk,
+    })
+  end
+
+  s.set_buf_commands()
+end
+
+s.set_buf_commands = function()
   local fmt = string.format
   local command = function(name, attr, str)
     vim.cmd(fmt('command! -buffer %s %s lua %s', attr, name, str))
@@ -98,6 +162,16 @@ s.on_attach = function(_, bufnr)
     "require('lsp-zero.server').format_cmd(<line1>, <line2>, <count>, '<bang>' == '!')"
   )
   command('LspZeroWorkspaceRemove', '', 'vim.lsp.buf.remove_workspace_folder()')
+end
+
+s.set_global_commands = function()
+  local fmt = string.format
+  local command = function(name, str)
+    vim.cmd(fmt('command! %s lua %s', name, str))
+  end
+
+  command('LspZeroWorkspaceAdd', 'vim.lsp.buf.add_workspace_folder()')
+  command('LspZeroWorkspaceList', 'vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))')
 end
 
 M.diagnostics_config = function()
@@ -118,7 +192,7 @@ M.diagnostics_config = function()
   }
 end
 
-M.setup_diagnostics = function(opts)
+M.setup_diagnostics = function()
   local icon = global_config.sign_icons
 
   if vim.tbl_isempty(icon) == false then
@@ -147,15 +221,15 @@ M.set_sign_icons = function(icon)
   sign({name = 'DiagnosticSignInfo', text = icon.info})
 end
 
-s.set_keymaps = function(bufnr)
+s.set_keymaps = function(bufnr, opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
   local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
   local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
   local omit = {}
 
-  if type(global_config.set_lsp_keymaps) == 'table' then
-    local keys = global_config.set_lsp_keymaps.omit or {}
+  if type(opts.set_lsp_keymaps) == 'table' then
+    local keys = opts.set_lsp_keymaps.omit or {}
     for _, key in ipairs(keys) do
       omit[key] = true
     end
@@ -166,8 +240,8 @@ s.set_keymaps = function(bufnr)
       return
     end
 
-    local opts = {noremap = true, silent = true}
-    vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, opts)
+    local key_opts = {noremap = true, silent = true}
+    vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, key_opts)
   end
 
   map('n', 'K', lsp 'buf.hover()')
@@ -180,11 +254,11 @@ s.set_keymaps = function(bufnr)
   map('n', '<F4>', lsp 'buf.code_action()')
   map('x', '<F4>', lsp 'buf.range_code_action()')
 
-  if state.map_ctrlk then
+  if opts.map_ctrlk then
     map('n', '<C-k>', lsp 'buf.signature_help()')
   end
 
-  if global_config.configure_diagnostics then
+  if opts.configure_diagnostics then
     map('n', 'gl', diagnostic 'open_float()')
     map('n', '[d', diagnostic 'goto_prev()')
     map('n', ']d', diagnostic 'goto_next()')
@@ -199,7 +273,7 @@ s.use_cmp = function(current)
     if ok then
       cmp_lsp = source.default_capabilities()
     else
-      local msg = "Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
+      local msg = "[lsp-zero] Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
       vim.notify(msg, vim.log.levels.WARN)
     end
 
@@ -266,7 +340,7 @@ M.format_cmd = function(line1, line2, count, bang)
 
   if bang then
     if has_range then
-      local msg = "Synchronous formatting doesn't support ranges"
+      local msg = "[lsp-zero] Synchronous formatting doesn't support ranges"
       vim.notify(msg, vim.log.levels.ERROR)
       return
     end
