@@ -131,6 +131,23 @@ lsp.configure('dartls', {
 lsp.setup()
 ```
 
+## Configure errors messages
+
+You are looking for "diagnostics". If you want to configure them use the function [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()), and make sure to call it after lsp-zero's setup function.
+
+Here is an example that enables virtual text.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+
+vim.diagnostic.config({
+  virtual_text = true,
+})
+```
+
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
