@@ -980,6 +980,26 @@ Lua API                                                     *lsp-zero-lua-api*
       require('rust-tools').setup({server = rust_lsp})
 <
 
+                                                   *lsp-zero.set_sign_icons()*
+
+  .set_sign_icons({opts})
+      Defines the sign icons that appear in the gutter. If `{opts}` is
+      not provided the default icons will be used.
+
+      {opts} table supports these properties:
+
+          error: ~
+              Text for the error signs.
+
+          warn: ~
+              Text for the warning signs.
+
+          hint: ~
+              Text for the hint signs.
+
+          info: ~
+              Text for the information signs.
+
                                              *lsp-zero.defaults.diagnostics()*
 
   .defaults.diagnostics({opts}): ~

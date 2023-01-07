@@ -859,6 +859,17 @@ local rust_lsp = lsp.build_options('rust_analyzer', {})
 require('rust-tools').setup({server = rust_lsp})
 ```
 
+### `.set_sign_icons({opts})`
+
+Defines the sign icons that appear in the gutter. If `{opts}` is not provided the default icons will be used.
+
+`{opts}` table supports these properties:
+
+* `error`: Text for the error signs.
+* `warn`: Text for the warning signs.
+* `hint`: Text for the hint signs.
+* `info`: Text for the information signs.
+
 ### `.defaults.diagnostics({opts})`
 
 Returns the configuration for diagnostics. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.

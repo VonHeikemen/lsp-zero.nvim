@@ -119,6 +119,16 @@ M.diagnostics_config = function()
 end
 
 M.setup_diagnostics = function(opts)
+  local icon = global_config.sign_icons
+
+  if vim.tbl_isempty(icon) == false then
+    M.set_sign_icons(icon)
+  end
+
+  vim.diagnostic.config(M.diagnostics_config())
+end
+
+M.set_sign_icons = function(icon)
   local sign = function(opts)
     if type(opts.text) ~= 'string' then
       return
@@ -131,16 +141,10 @@ M.setup_diagnostics = function(opts)
     })
   end
 
-  local icon = global_config.sign_icons
-
-  if vim.tbl_isempty(icon) == false then
-    sign({name = 'DiagnosticSignError', text = icon.error})
-    sign({name = 'DiagnosticSignWarn', text = icon.warn})
-    sign({name = 'DiagnosticSignHint', text = icon.hint})
-    sign({name = 'DiagnosticSignInfo', text = icon.info})
-  end
-
-  vim.diagnostic.config(M.diagnostics_config())
+  sign({name = 'DiagnosticSignError', text = icon.error})
+  sign({name = 'DiagnosticSignWarn', text = icon.warn})
+  sign({name = 'DiagnosticSignHint', text = icon.hint})
+  sign({name = 'DiagnosticSignInfo', text = icon.info})
 end
 
 s.set_keymaps = function(bufnr)

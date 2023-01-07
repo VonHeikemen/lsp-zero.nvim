@@ -277,6 +277,13 @@ M.nvim_workspace = function(opts)
   M.configure('sumneko_lua', server_opts)
 end
 
+M.set_sign_icons = function(opts)
+  local defaults = require('lsp-zero.presets').defaults().sign_icons
+  local icon = vim.tbl_deep_extend('force', defaults, opts or {})
+
+  Server.set_sign_icons(icon)
+end
+
 M.defaults = {}
 
 M.defaults.diagnostics = function(opts)
