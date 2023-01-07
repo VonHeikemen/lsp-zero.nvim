@@ -1,6 +1,6 @@
 # LSP Zero
 
-The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion plugin) and the LSP client working together. Additionally, with the help of [mason.nvim](https://github.com/williamboman/mason.nvim), it can let you install language servers from inside neovim.
+The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) working together. And if you opt in, it can use [mason.nvim](https://github.com/williamboman/mason.nvim) to let you install language servers from inside neovim.
 
 ## How to get started
 
