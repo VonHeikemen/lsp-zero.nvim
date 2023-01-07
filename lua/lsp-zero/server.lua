@@ -25,6 +25,7 @@ end
 
 M.build_options = function(name, opts)
   opts = opts or {}
+
   M.skip_server(name)
 
   s.call_once()

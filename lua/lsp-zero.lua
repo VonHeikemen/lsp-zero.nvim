@@ -39,7 +39,15 @@ local run = function(args)
   local manual_setup = suggest == false and handle_setup == false
   local use_global = user_config.call_servers == 'global'
 
-  if manual_setup or use_global then
+  if use_global then
+    return
+  end
+
+  local installer = require('lsp-zero.installer')
+  installer.choose()
+  installer.fn.setup()
+
+  if manual_setup then
     return
   end
 
@@ -67,8 +75,6 @@ local run = function(args)
     configure(name, server_opts)
   end
 
-  local installer = require('lsp-zero.installer')
-  installer.choose()
   installer.fn.use(setup_server)
 
   if #internal.install_servers > 0 then
