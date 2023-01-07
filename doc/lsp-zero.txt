@@ -980,6 +980,13 @@ Lua API                                                     *lsp-zero-lua-api*
       require('rust-tools').setup({server = rust_lsp})
 <
 
+                                             *lsp-zero.defaults.diagnostics()*
+
+  .defaults.diagnostics({opts}): ~
+      Returns the configuration for diagnostics. If you provide the `{opts}`
+      table it'll merge it with the defaults, this way you can extend
+      or change the values easily.
+
                                              *lsp-zero.defaults.cmp_sources()*
 
   .defaults.cmp_sources(): ~
@@ -987,7 +994,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
                                             *lsp-zero.defaults.cmp_mappings()*
 
-  .defaults.cmp_mappings(): ~
+  .defaults.cmp_mappings({opts}): ~
       Returns a table with the default keybindings for `nvim-cmp`. If you
       provide the `{opts}` table it'll merge it with the defaults, this
       way you can extend or change the values easily.
@@ -1020,7 +1027,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
                                               *lsp-zero.defaults.cmp_config()*
 
-  .defaults.cmp_config(): ~
+  .defaults.cmp_config({opts}): ~
       Returns the entire configuration table for `nvim-cmp`. If you provide
       the `{opts}` table it'll merge it with the defaults, this way you can
       extend or change the values easily.

@@ -859,6 +859,10 @@ local rust_lsp = lsp.build_options('rust_analyzer', {})
 require('rust-tools').setup({server = rust_lsp})
 ```
 
+### `.defaults.diagnostics({opts})`
+
+Returns the configuration for diagnostics. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+
 ### `.defaults.cmp_sources()`
 
 Returns the list of "sources" used in `nvim-cmp`.

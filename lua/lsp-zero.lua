@@ -33,7 +33,7 @@ local run = function(args)
   end
 
   if user_config.configure_diagnostics then
-    Server.diagnostics()
+    Server.setup_diagnostics()
   end
 
   local manual_setup = suggest == false and handle_setup == false
@@ -278,6 +278,16 @@ M.nvim_workspace = function(opts)
 end
 
 M.defaults = {}
+
+M.defaults.diagnostics = function(opts)
+  local config = Server.diagnostics_config()
+
+  if type(opts) == 'table' then
+    return vim.tbl_deep_extend('force', config, opts)
+  end
+
+  return config
+end
 
 M.defaults.cmp_mappings = function(opts)
   local mappings = require('lsp-zero.nvim-cmp-setup').default_mappings()

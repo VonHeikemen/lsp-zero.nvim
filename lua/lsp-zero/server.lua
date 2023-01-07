@@ -100,7 +100,25 @@ s.on_attach = function(_, bufnr)
   command('LspZeroWorkspaceRemove', '', 'vim.lsp.buf.remove_workspace_folder()')
 end
 
-M.diagnostics = function()
+M.diagnostics_config = function()
+  return {
+    virtual_text = false,
+    signs = true,
+    update_in_insert = false,
+    underline = true,
+    severity_sort = true,
+    float = {
+      focusable = false,
+      style = 'minimal',
+      border = 'rounded',
+      source = 'always',
+      header = '',
+      prefix = '',
+    },
+  }
+end
+
+M.setup_diagnostics = function(opts)
   local sign = function(opts)
     if type(opts.text) ~= 'string' then
       return
@@ -122,21 +140,7 @@ M.diagnostics = function()
     sign({name = 'DiagnosticSignInfo', text = icon.info})
   end
 
-  vim.diagnostic.config({
-    virtual_text = false,
-    signs = true,
-    update_in_insert = false,
-    underline = true,
-    severity_sort = true,
-    float = {
-      focusable = false,
-      style = 'minimal',
-      border = 'rounded',
-      source = 'always',
-      header = '',
-      prefix = '',
-    },
-  })
+  vim.diagnostic.config(M.diagnostics_config())
 end
 
 s.set_keymaps = function(bufnr)
