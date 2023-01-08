@@ -392,6 +392,12 @@ Language servers are configured and initialized using [nvim-lspconfig](https://g
 If you ever wondered "What does lsp-zero do?" This is the answer:
 
 ```lua
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_attach = function(client, bufnr)
+  vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
+  -- More keybindings and commands....
+end
+
 require('lspconfig').tsserver.setup({
   on_attach = lsp_attach
   capabilities = lsp_capabilities
@@ -602,6 +608,8 @@ For the `capabilities` option, if you are using `nvim-cmp` all you need to do is
 ```lua
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 ```
+
+See the example snippet in the [LSP](https://github.com/VonHeikemen/lsp-zero.nvim#lsp) section.
 
 ## Global command
 

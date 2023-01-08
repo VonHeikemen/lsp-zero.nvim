@@ -333,6 +333,12 @@ Language servers are configured and initialized using |nvim-lspconfig|.
 If you ever wondered "What does lsp-zero do?" This is the answer:
 
 >
+  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+  local lsp_attach = function(client, bufnr)
+    vim.keymap.set('n', 'K', vim.lsp.buf.hover, {buffer = bufnr})
+    -- More keybindings and commands....
+  end
+
   require('lspconfig').tsserver.setup({
     on_attach = lsp_attach
     capabilities = lsp_capabilities
@@ -622,6 +628,8 @@ the source for LSP `cmp-nvim-lsp`. Then you define the variable `lsp_capabilitie
 >
   local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 <
+
+See the example snippet in the section |lsp-zero-lsp-config|.
 
 If you want to know how to recreate lsp-zero's autocomplete you can read
 this blogpost.
