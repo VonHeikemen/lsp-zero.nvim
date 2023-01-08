@@ -79,25 +79,21 @@ M.extend_lspconfig = function(opts)
 
   opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
 
-  local lsp_defaults = lspconfig.util.default_config
-
   -- Set client capabilities
   local ok_cmp = pcall(require, 'cmp')
   local ok_lsp_source, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
   local cmp_default_capabilities = {}
 
-  if ok_lsp_source then
+  if ok_cmp and ok_lsp_source then
      cmp_default_capabilities = cmp_lsp.default_capabilities()
   end
 
-  if ok_cmp then
-    lsp_defaults.capabilities = vim.tbl_deep_extend(
-      'force',
-      lsp_defaults.capabilities,
-      cmp_default_capabilities,
-      opts.capabilities or {}
-    )
-  end
+  lspconfig.util.default_config.capabilities = vim.tbl_deep_extend(
+    'force',
+    lspconfig.util.default_config.capabilities,
+    cmp_default_capabilities,
+    opts.capabilities or {}
+  )
 
   -- Set on_attach hook
   local util = lspconfig.util
