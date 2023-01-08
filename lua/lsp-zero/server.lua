@@ -51,20 +51,6 @@ M.build_options = function(name, opts)
 end
 
 s.call_once = function()
-  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-    vim.lsp.handlers.hover,
-    {
-      border = 'rounded',
-    }
-  )
-
-  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-    vim.lsp.handlers.signature_help,
-    {
-      border = 'rounded',
-    }
-  )
-
   local installer = require('lsp-zero.installer')
   installer.choose()
   installer.fn.setup()
@@ -200,6 +186,18 @@ M.setup_diagnostics = function()
   end
 
   vim.diagnostic.config(M.diagnostics_config())
+end
+
+M.setup_handlers = function()
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+    vim.lsp.handlers.hover,
+    {border = 'rounded'}
+  )
+
+  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+    vim.lsp.handlers.signature_help,
+    {border = 'rounded'}
+  )
 end
 
 M.set_sign_icons = function(icon)

@@ -28,6 +28,8 @@ local run = function(args)
 
   require('lsp-zero.snippets')
 
+  Server.setup_handlers()
+
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
   end
