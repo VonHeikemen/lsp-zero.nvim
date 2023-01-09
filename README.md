@@ -80,7 +80,7 @@ The configuration code for lsp-zero should be place between `lua <<EOF ... EOF`.
 
 ## Quickstart (for the impatient)
 
-This section assumes you want enable every single feature lsp-zero offers. The result will be a very opinionated setup.
+This section assumes you want enable every single feature lsp-zero offers, this includes the integration with `mason.nvim`. The result will be a very opinionated setup.
 
 If you know your way around neovim and how to configure it, take a look at this examples:
 
@@ -182,6 +182,8 @@ lsp.preset('recommended')
 
 lsp.setup()
 ```
+
+If you are very much against using `mason.nvim` change the preset to `system-lsp`.
 
 Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
@@ -528,6 +530,18 @@ lsp.preset('recommended')
 
 lsp.setup()
 ```
+
+### Opt-out of mason.nvim
+
+If you are using the `recommended` preset then change it to `system-lsp`. Else, call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) and use these settings:
+
+```lua
+suggest_lsp_servers = false
+setup_servers_on_start = false
+call_servers = 'global'
+```
+
+Then you need to specify which language server you want to setup, for this use [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts).
 
 ### Migrate from nvim-lsp-installer to mason.nvim
 

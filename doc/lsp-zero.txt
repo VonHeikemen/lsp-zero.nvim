@@ -534,6 +534,19 @@ calling the `lsp-zero` module.
   lsp.setup()
 <
 
+Opt-out of mason.nvim                             *lsp-zero-installer-opt-out*
+
+If you are using the `recommended` preset then change it to `system-lsp`.
+Else, call |lsp-zero.set_preferences()| and use these settings:
+
+>
+  suggest_lsp_servers = false
+  setup_servers_on_start = false
+  call_servers = 'global'
+<
+
+Then you need to specify which language server you want to setup, for this
+use |lsp-zero.setup_servers()| or |lsp-zero.configure()|.
 
 Migrate from nvim-lsp-installer                   *lsp-zero-installer-migrate*
 
