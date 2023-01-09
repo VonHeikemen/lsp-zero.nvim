@@ -99,7 +99,7 @@ https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#configur
       single_file_support = false,
       on_attach = function(client, bufnr)
         print("I'm doing web dev")
-      endk
+      end
     }
   })
 

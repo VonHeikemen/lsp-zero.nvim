@@ -76,7 +76,7 @@ lsp.setup_servers({
     single_file_support = false,
     on_attach = function(client, bufnr)
       print("I'm doing web dev")
-    endk
+    end
   }
 })
 
