@@ -767,12 +767,17 @@ Lua API                                                     *lsp-zero-lua-api*
       setup function. You can find more in |lspconfig-setup|.
 
 >
+      local lsp = require('lsp-zero')
+      lsp.preset('recommended')
+
       lsp.configure('tsserver', {
         single_file_support = false,
         on_attach = function(client, bufnr)
           print('hello tsserver')
         end
       })
+
+      lsp.setup()
 <
 
     If you have a server installed globally you can use the option

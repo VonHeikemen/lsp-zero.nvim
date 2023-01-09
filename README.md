@@ -689,12 +689,17 @@ lsp.set_server_config({
 Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. You can find more details in the help page `:help lspconfig-setup`.
 
 ```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
 lsp.configure('tsserver', {
   single_file_support = false,
   on_attach = function(client, bufnr)
     print('hello tsserver')
   end
 })
+
+lsp.setup()
 ```
 
 If you have a server installed globally you can use the option `force_setup` to skip any internal check.
