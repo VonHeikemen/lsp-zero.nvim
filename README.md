@@ -180,6 +180,9 @@ Inside your configuration file add this piece of lua code.
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
+-- To learn how to configure a language server
+-- see :help lsp-zero.configure()
+
 lsp.setup()
 ```
 
@@ -191,6 +194,9 @@ Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 lua <<EOF
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
+
+-- To learn how to configure a language server
+-- see :help lsp-zero.configure()
 
 lsp.setup()
 EOF
