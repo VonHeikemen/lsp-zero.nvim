@@ -26,61 +26,76 @@ If you have any questions you can stop by the [discussions](https://github.com/V
 
 ## Configuring language servers
 
-To pass custom options to a server you have the functions `.configure()` and `setup_servers()`. You can install servers at startup with `.ensure_installed()`. Finally, you can use `.on_attach()` to define a callback that will be executed when a language server is attached to a buffer.
-
-Here's an example config.
+Here's an example configuration showing the functions you have available to configure and install LSP servers.
 
 ```lua
-local lsp = require('lsp-zero')
+-- reserve space for diagnostic icons
+vim.opt.signcolumn = 'yes'
 
--- use recommended settings
+local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
--- make sure these servers are installed
+-- make sure this servers are installed
+-- see :help lsp-zero.ensure_installed()
 lsp.ensure_installed({
-  'html',
-  'cssls',
-  'angularls',
-  'tsserver'
+  'rust_analyzer',
+  'tsserver',
+  'eslint',
+  'sumneko_lua',
 })
 
--- share options between serveral servers
-local lsp_opts = {
-  flags = {
-    debounce_text_changes = 150,
-  }
-}
-
-lsp.setup_servers({
-  'html',
-  'cssls',
-  opts = lsp_opts
-})
-
--- configure an individual server
-lsp.configure('tsserver', {
-  flags = {
-    debounce_text_changes = 150,
-  },
-  on_attach = function(client, bufnr)
-    print('hello tsserver')
-  end
-})
+-- don't initialize this language server
+-- we will use rust-tools to setup rust_analyzer
+lsp.skip_server_setup({'rust_analyzer'})
 
 -- the function below will be executed whenever
 -- a language server is attached to a buffer
 lsp.on_attach(function(client, bufnr)
-  local noremap = {buffer = bufnr, remap = false}
-  local bind = vim.keymap.set
-
-  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
-  bind('n', 'Q', function() print('Hello') end, {buffer = bufnr, desc = 'Say hello'})
-  -- more code  ...
+  print('Greetings from on_attach')
 end)
 
--- setup must be the last function
--- this one does all the things
+-- pass arguments to a language server
+-- see :help lsp-zero.configure()
+lsp.configure('tsserver', {
+  on_attach = function(client, bufnr)
+    print('hello tsserver')
+  end,
+  settings = {
+    completions = {
+      completeFunctionCalls = true
+    }
+  }
+})
+
+-- share configuration between multiple servers
+-- see :help lsp-zero.setup_servers()
+lsp.setup_servers({
+  'eslint',
+  'angularls',
+  opts = {
+    single_file_support = false,
+    on_attach = function(client, bufnr)
+      print("I'm doing web dev")
+    endk
+  }
+})
+
+-- configure lua language server for neovim
+-- see :help lsp-zero.nvim_workspace()
+lsp.nvim_workspace()
+
 lsp.setup()
+
+-- initialize rust_analyzer with rust-tools
+-- see :help lsp-zero.build_options()
+local rust_lsp = lsp.build_options('rust_analyzer', {
+  single_file_support = false,
+  on_attach = function(client, bufnr)
+    print('hello rust-tools')
+  end
+})
+
+require('rust-tools').setup({server = rust_lsp})
 ```
 
 ## Setup LSP keybindings in vimscript

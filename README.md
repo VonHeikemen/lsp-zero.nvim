@@ -177,11 +177,10 @@ Plug 'VonHeikemen/lsp-zero.nvim'
 Inside your configuration file add this piece of lua code.
 
 ```lua
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
-
--- To learn how to configure a language server
--- see :help lsp-zero.configure()
 
 lsp.setup()
 ```
@@ -192,11 +191,10 @@ Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
 lua <<EOF
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
-
--- To learn how to configure a language server
--- see :help lsp-zero.configure()
 
 lsp.setup()
 EOF
