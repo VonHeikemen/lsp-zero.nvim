@@ -578,6 +578,7 @@ You'll need these plugins:
 * [mason.nvim](https://github.com/williamboman/mason.nvim)
 * [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)
 * [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
+* (optional) [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) 
 
 After you have installed all that you configure them in this order.
 

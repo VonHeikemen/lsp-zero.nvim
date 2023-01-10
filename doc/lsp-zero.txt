@@ -646,6 +646,7 @@ You'll need these plugins:
 * https://github.com/williamboman/mason.nvim
 * https://github.com/williamboman/mason-lspconfig.nvim
 * https://github.com/neovim/nvim-lspconfig
+* (optional) https://github.com/hrsh7th/cmp-nvim-lsp
 
 You need to configure them in this order.
 
