@@ -701,12 +701,6 @@ To learn how to use the `on_attach` option you can read |lspconfig-keybindings|.
 For the `capabilities` option, if you want to keep using `nvim-cmp` you need
 the source for LSP `cmp-nvim-lsp`. Then you define the variable `lsp_capabilities`.
 
->
-  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-<
-
-See the example snippet in the section |lsp-zero-lsp-config|.
-
 If you want to know how to recreate lsp-zero's autocomplete you can read
 this blogpost.
 

@@ -200,9 +200,13 @@ lsp.setup()
 EOF
 ```
 
+To configure the lua language server specifically for neovim use the function [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim#nvim_workspaceopts). Add before the call to `.setup()`. See the example in [API showcase](https://github.com/VonHeikemen/lsp-zero.nvim#api-showcase).
+
 The `recommended` preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
 
-If you already know what language servers you want, you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim#ensure_installedlist) to install them automatically.
+If you already know what language servers you want, you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim#ensure_installedlist) to install them automatically. See the example in [API showcase](https://github.com/VonHeikemen/lsp-zero.nvim#api-showcase)
+
+### API showcase
 
 Before you go, allow me to showcase a configuration example a bit more complex.
 
@@ -240,7 +244,7 @@ lsp.setup()
 
 ## Available presets
 
-Presets are a combinations of options that determine how `.setup()` will behave, they can enable or disable features.
+Presets are a combinations of options that determine how [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim#setup) will behave, they can enable or disable features.
 
 ### recommended
 
@@ -262,19 +266,19 @@ Is the same as the `recommended` without any support for `nvim-cmp`.
 
 ### manual-setup
 
-Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. The user will need to call the functions `.setup_servers()` or `.configure()` in order to initialize the language servers (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
+Is the same as `recommended`, but without automatic setup for language servers. Suggestions for language server will be disabled. The user will need to call the functions [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) in order to initialize the language servers (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
 ### per-project
 
-Very similar to `manual-setup`. Automatic setup for language servers and suggestions are disabled. The user can setup default options for each server using `.setup_servers()` or `.configure()`. In order to initialize the server the user will need to call the `.use()` function. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
+Very similar to `manual-setup`. Automatic setup for language servers and suggestions are disabled. The user can setup default options for each server using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts). In order to initialize the server the user will need to call the [.use()](https://github.com/VonHeikemen/lsp-zero.nvim#useserver-opts) function. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
 ### system-lsp
 
-Is the same as `manual-setup`, automatic setup for language servers and suggestions are going to be disabled. It is designed to call language servers installed "globally" on the system. The user will need to call `.configure()` or `.setup_servers()` in order to initialize the language servers. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
+Is the same as `manual-setup`, automatic setup for language servers and suggestions are going to be disabled. It is designed to call language servers installed "globally" on the system. The user will need to call [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) in order to initialize the language servers. (See [Lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) section for more details in these functions).
 
 ## Choose your features
 
-For this I would recommend deleting the `.preset()` call,  use `.set_preferences()` instead. This function takes a "table" of options, they describe the features this plugin offers.
+For this I would recommend deleting the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim#presetname) call,  use [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) instead. This function takes a "table" of options, they describe the features this plugin offers.
 
 These are the options the `recommended` preset uses.
 
@@ -298,21 +302,21 @@ lsp.set_preferences({
 
 If you want to disable a feature replace `true` with `false`.
 
-* `suggest_lsp_servers` enables the suggestions of lsp servers when you enter a filetype for the first time.
+* `suggest_lsp_servers`: enables the suggestions of lsp servers when you enter a filetype for the first time.
 
-* `setup_servers_on_start` when set to `true` all installed servers will be initialized on startup. When is set to the string `"per-project"` only the servers listed with the function `.use()` will be initialized. If the value is `false` servers will be initialized when you call `.configure()` or `.setup_servers()`.
+* `setup_servers_on_start`: when set to `true` all installed servers will be initialized on startup. When is set to the string `"per-project"` only the servers listed with the function [.use()](https://github.com/VonHeikemen/lsp-zero.nvim#useserver-opts) will be initialized. If the value is `false` servers will be initialized when you call [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) or [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#set_server_configopts).
 
-* `set_lsp_keymaps` add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc. You can also specify list of keys you want to omit, see the [lua api section](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) for an example.
+* `set_lsp_keymaps`: add keybindings to a buffer with a language server attached. This bindings will trigger actions like go to definition, go to reference, etc. You can also specify list of keys you want to omit, see the [lua api section](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) for an example.
 
-* `configure_diagnostics` uses the built-in function `vim.diagnostic.config` to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
+* `configure_diagnostics`: uses the built-in function [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()) to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
 
-* `cmp_capabilities` tell the language servers what capabilities `nvim-cmp` supports.
+* `cmp_capabilities`: tell the language servers what capabilities nvim-cmp supports.
 
-* `manage_nvim_cmp` use the default setup for `nvim-cmp`. It configures keybindings and completion sources for `nvim-cmp`.
+* `manage_nvim_cmp`: use the default setup for nvim-cmp. It configures keybindings and completion sources for nvim-cmp.
 
-* `call_servers` if set to `'local'` it'll try to setup one of the supported installers. If set to `'global'` it will only try to use language servers available globally.
+* `call_servers`: if set to `'local'` it'll try to setup one of the supported installers. If set to `'global'` it will only try to use language servers available globally.
 
-* `sign_icons` they are shown in the "gutter" on the line diagnostics messages are located.
+* `sign_icons`: they are shown in the "gutter" on the line diagnostics messages are located.
 
 ## Autocompletion
 
@@ -578,7 +582,7 @@ You'll need these plugins:
 * [mason.nvim](https://github.com/williamboman/mason.nvim)
 * [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)
 * [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
-* (optional) [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) 
+* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (optional)
 
 After you have installed all that you configure them in this order.
 
@@ -627,17 +631,9 @@ end
 
 To learn how to use the `on_attach` option you can read the help page `:help lspconfig-keybindings`.
 
-For the `capabilities` option, if you are using `nvim-cmp` all you need to do is install the source for LSP [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). Then you define the variable `lsp_capabilities`.
-
-```lua
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-```
-
-See the example snippet in the [LSP](https://github.com/VonHeikemen/lsp-zero.nvim#lsp) section.
-
 ## Global command
 
-* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function `.use()` under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
+* `LspZeroSetupServers`: It takes a space separated list of servers and configures them. It calls the function [.use()](https://github.com/VonHeikemen/lsp-zero.nvim#useserver-opts) under the hood. If the `bang` is provided the root dir of the language server will be the same as neovim. It is recommended that you use only if you decide to handle server setup manually.
 
 ## Lua api
 
@@ -714,7 +710,7 @@ lsp.configure('dartls', {force_setup = true})
 
 ### `.setup_servers({list})`
 
-Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers. Under the hood it calls `.configure()` for each server on `{list}`.
+Used to configure the servers specified in `{list}`. If you provide the `opts` property it will send those options to all language servers. Under the hood it calls [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) for each server on `{list}`.
 
 ```lua
 local lsp_opts = {
@@ -824,7 +820,7 @@ If what you want is to extend the configuration of nvim-cmp, I suggest you chang
 
 For when you want full control of the servers you want to use in particular project. It is meant to be called in project local config.
 
-Ideally, you would setup some default values for your servers in your neovim config using `.setup_servers()` or `.configure()`. Example.
+Ideally, you would setup some default values for your servers in your neovim config using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#set_server_configopts) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts). Example.
 
 ```lua
 -- init.lua
@@ -857,7 +853,7 @@ lsp.use('pyright', {
 })
 ```
 
-Options from `.configure()` will be merged with the ones on `.use()` and the server will be initialized.
+Options from [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) will be merged with the ones on `.use()` and the server will be initialized.
 
 `.use()` can also take a list of servers. All the servers on the list will share the same options.
 
@@ -979,7 +975,7 @@ The purpose of this function is to allow you to interact with `lspconfig` direct
 
 It "extends" the default configuration in `lspconfig`, adding two options to it: `capabilities` and `on_attach`.
 
-Note: don't use it along side `.setup()`. Its meant to be independent of any settings provided by presets.
+Note: don't use it along side [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim#setup). Its meant to be independent of any settings provided by presets.
 
 This is the intended usage:
 
