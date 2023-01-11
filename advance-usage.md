@@ -424,34 +424,79 @@ local cmp_config = lsp.defaults.cmp_config({
 cmp.setup(cmp_config)
 ```
 
-Finally, in case no one has told you this today... you should read `nvim-cmp`'s documentation. You are awesome. Have a nice day.
-
+Finally, in case no one has told you this today... you should read `nvim-cmp`'s documentation. You are awesome.
 
 ## Intergrate with `null-ls`
 
-Reuse the Mason registered formatters and LSP server in null-ls, easiest way is the use of `jay-babu/mason-null-ls.nvim` package.
+### Standalone null-ls instance
+
+`null-ls` isn't a real language server, if you want "integrate it" with lsp-zero all you need to do is call their setup function after `lsp-zero`'s config.
+
+The only option that makes sense to share with `null-ls` is the `on_attach` function. Here is an example on how to do it.
 
 ```lua
 local lsp = require('lsp-zero')
-local null_ls = require('null-ls')
-
 lsp.preset('recommended')
+
 lsp.setup()
 
--- see documentation of null-null-ls for more configuration options!
-local mason_nullls = require("mason-null-ls")
-mason_nullls.setup({
-  automatic_installation = true,
-  automatic_setup = true,
+local null_ls = require('null-ls')
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    null_opts.on_attach(client, bufnr)
+    ---
+    -- you can add other stuff here....
+    ---
+  end,
+  sources = {
+    --- configure sources
+  }
 })
-mason_nullls.setup_handlers({})
+```
+
+> Make sure the `build_options` is after `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
+
+### Adding mason-null-ls.nvim
+
+With [mason-null-ls.nvim](https://github.com/jay-babu/mason-null-ls.nvim) you can configure the tools compatible with `null-ls` after they are installed with `mason.nvim`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+
+local null_ls = require('null-ls')
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    null_opts.on_attach(client, bufnr)
+    ---
+    -- you can add other stuff here....
+    ---
+  end,
+  sources = {
+    -- configure all your sources
+  }
+})
+
+-- See mason-null-ls.nvim's documentation for more details:
+-- https://github.com/jay-babu/mason-null-ls.nvim#setup
+require('mason-null-ls').setup({
+  ensure_installed = nil,
+  automatic_installation = true,
+  automatic_setup = false,
+})
 ```
 
 ### Buffer formats twice
 
-Whenever you have the feeling the buffers gets formatted twice, this can happen because of the formatting capabilities of the LSP server and the installed formatter controlled by  null-ls.
+This can happen because the built-in function for formatting ([vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format())) uses every server with "formatting capabilities" enabled.
 
-In this case you can disable the LSP server formatting capabilities:
+You can disable an LSP server formatting capabilities like this:
 
 ```lua
 lsp.configure("tsserver", {
@@ -462,7 +507,7 @@ lsp.configure("tsserver", {
 })
 ```
 
-or if you have a custom `lsp.on_attach`:
+Or if you have a custom `lsp.on_attach`:
 
 ```lua
 lsp.on_attach(function(client, bufnr)
@@ -476,25 +521,4 @@ lsp.on_attach(function(client, bufnr)
   -- your other configuration here
 end)
 ```
-
-### Standalone null-ls instance
-
-When prefered to have a standalone instance of null-ls that doesn't uses the Mason installed formatters and LSP servers:
-
-```lua
-local lsp = require('lsp-zero')
-local null_ls = require('null-ls')
-
-lsp.preset('recommended')
-lsp.setup()
-
-null_ls.setup({
-  -- any other configuration
-  sources = {
-    --- do whatever you need to do
-  }
-})
-```
-
-> Make sure the `build_options` is after `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
 
