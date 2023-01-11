@@ -460,7 +460,7 @@ null_ls.setup({
 
 ### Adding mason-null-ls.nvim
 
-With [mason-null-ls.nvim](https://github.com/jay-babu/mason-null-ls.nvim) you can configure the tools compatible with `null-ls` after they are installed with `mason.nvim`.
+With [mason-null-ls.nvim](https://github.com/jay-babu/mason-null-ls.nvim) you can install the tools you have configured in your `null-ls` sources using `mason.nvim`.
 
 ```lua
 local lsp = require('lsp-zero')
