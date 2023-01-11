@@ -4,6 +4,7 @@ local preset = require('lsp-zero.presets')
 local Server = require('lsp-zero.server')
 
 local internal = {
+  setup_status = 'pending',
   cmp_opts = {},
   servers = {},
   install_servers = {},
@@ -21,6 +22,14 @@ local safe_call = function(fn, ...)
 end
 
 local run = function(args)
+  if internal.setup_status == 'lspconfig_extended' then
+    local msg = "[lsp-zero] You can't use .setup() after .extend_lspconfig()"
+    vim.notify(msg, vim.log.levels.ERROR)
+    return
+  end
+
+  internal.setup_status = 'complete'
+
   local user_config = args.settings
   local configure = Server.setup
   local suggest = user_config.suggest_lsp_servers
@@ -287,6 +296,18 @@ M.set_sign_icons = function(opts)
 end
 
 M.extend_lspconfig = function(opts)
+  if internal.setup_status == 'complete' then
+    local msg = "[lsp-zero] You can't use .extend_lspconfig() after .setup()"
+    vim.notify(msg, vim.log.levels.WARN)
+    return
+  end
+
+  if internal.setup_status == 'lspconfig_extended' then
+    return
+  end
+
+  internal.setup_status = 'lspconfig_extended'
+
   return Server.extend_lspconfig(opts)
 end
 
