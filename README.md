@@ -19,7 +19,7 @@ Showed in the video:
 * Completions provided by the language server (`sumneko_lua`), as well as other sources.
 * Snippet expansion and navigation between placeholders.
 * Diagnostic icon showing in the gutter.
-* Showing diagnostic message in a floating window.
+* Pressing `gl` on the line with a diagnostic shows the full message in a floating window.
 * Code actions.
 
 ## Features
