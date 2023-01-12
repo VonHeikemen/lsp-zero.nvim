@@ -34,7 +34,7 @@ Showed in the video:
 This plugin is designed to provide an opinionated set of defaults for working with LSP servers and Autocompletion in Neovim. A few things should be considered before you use it in your own config.
 
 * Trying to configure a plugin that is already used inside lsp-zero can cause issues and loss of functionality. If you want to customize lsp-zero please  visit the [Advance usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md) page, in there you'll find solutions for common scenarios. You can also read about the [lua api](https://github.com/VonHeikemen/lsp-zero.nvim#lua-api) to get details about the functions available for configuration.
-* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` module in another part of your configuration will likely result in a broken configuration.
+* lsp-zero uses [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) to configure the language servers. Manually calling the `lspconfig` while using the `recommended` preset will likely result in a broken configuration.
 * If you feel something is missing, search the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) to see if it has already been discussed, and open a new discussion if not.
 * If you want to set up `nvim-cmp` yourself, you still can. See the [Advanced Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#the-current-api-is-not-enough) section for instructions on how to assure your own configuration does not conflict with lsp-zero.
 * Snippet functionality is provided via [Luasnip](https://github.com/L3MON4D3/LuaSnip). You can use Luasnip to write snippets yourself, or install a collection of snippets. The snippet collection [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the one recommended in the Install section, but do note it is optional.
@@ -217,8 +217,8 @@ vim.opt.signcolumn = 'yes'
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
--- Install these servers
 lsp.ensure_installed({
+  -- Replace these with whatever servers you want to install
   'tsserver',
   'eslint',
   'sumneko_lua',
@@ -248,21 +248,21 @@ Presets are a combinations of options that determine how [.setup()](https://gith
 
 ### recommended
 
-* Setup every language server installed with `mason.nvim` at startup.
+* Setup every language server installed with mason.nvim at startup.
 * Suggest to install a language server when you encounter a new filetype.
-* Setup `nvim-cmp` with some default completion sources, this includes support for LSP based completion.
-* Setup some default keybindings for `nvim-cmp`.
+* Setup nvim-cmp with some default completion sources, this includes support for LSP based completion.
+* Setup some default keybindings for nvim-cmp.
 * Show diagnostic info with "nice" icons.
 * Diagnostic messages are shown in a floating window.
 * Setup some keybindings related to LSP actions, things like go to definition or rename variable.
 
 ### lsp-compe
 
-Is the same as the `recommended` except that it assumes you want full control over the configuration for `nvim-cmp`. It'll provide the `capabilities` config to the languages server but the rest of the config is controlled by the user.
+Is the same as the `recommended` except that it assumes you want full control over the configuration for nvim-cmp. It'll provide the "client capabilities" config to the languages server but the rest of the config is controlled by the user.
 
 ### lsp-only
 
-Is the same as the `recommended` without any support for `nvim-cmp`.
+Is the same as the `recommended` without any support for nvim-cmp.
 
 ### manual-setup
 
