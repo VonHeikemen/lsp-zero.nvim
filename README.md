@@ -314,7 +314,7 @@ If you want to disable a feature replace `true` with `false`.
 
 * `manage_nvim_cmp`: use the default setup for nvim-cmp. It configures keybindings and completion sources for nvim-cmp.
 
-* `call_servers`: if set to `'local'` it'll try to setup one of the supported installers. If set to `'global'` it will only try to use language servers available globally.
+* `call_servers`: if set to `'local'` it'll try to initialize servers that where installed using mason.nvim. If set to `'global'` all language servers you list using [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim#configurename-opts) or [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#set_server_configopts) are assumed to be installed (a warning message will show up if they aren't).
 
 * `sign_icons`: they are shown in the "gutter" on the line diagnostics messages are located.
 

@@ -181,9 +181,10 @@ end
 M.setup_servers = function(list)
   local settings = require('lsp-zero.settings')
   local delay_setup = not list.force
+  local use_local = settings.call_servers  == 'local'
   list.force = nil
 
-  if settings.setup_servers_on_start and delay_setup then
+  if delay_setup and use_local and settings.setup_servers_on_start then
     return internal.fn.setup_servers(list)
   end
 
@@ -195,9 +196,10 @@ M.configure = function(server_name, opts)
 
   local settings = require('lsp-zero.settings')
   local delay_setup = not opts.force_setup
+  local use_local = settings.call_servers  == 'local'
   opts.force_setup = nil
 
-  if settings.setup_servers_on_start and delay_setup then
+  if delay_setup and use_local and settings.setup_servers_on_start then
     return internal.fn.configure(server_name, opts)
   end
 
