@@ -409,7 +409,7 @@ local lsp_attach = function(client, bufnr)
 end
 
 require('lspconfig').tsserver.setup({
-  on_attach = lsp_attach
+  on_attach = lsp_attach,
   capabilities = lsp_capabilities
 })
 ```

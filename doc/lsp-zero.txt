@@ -399,7 +399,7 @@ If you ever wondered "What does lsp-zero do?" This is the answer:
   end
 
   require('lspconfig').tsserver.setup({
-    on_attach = lsp_attach
+    on_attach = lsp_attach,
     capabilities = lsp_capabilities
   })
 <
