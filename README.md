@@ -185,7 +185,7 @@ lsp.preset('recommended')
 lsp.setup()
 ```
 
-If you are very much against using `mason.nvim` change the preset to `system-lsp`.
+If you are very much against using `mason.nvim` change the preset to `system-lsp`. Then list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist).
 
 Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
