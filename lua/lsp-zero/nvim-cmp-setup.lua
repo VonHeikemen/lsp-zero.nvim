@@ -181,7 +181,7 @@ M.call_setup = function(opts)
   end
 
   if type(opts.completion) == 'table' then
-    config.completion = merge(config.completion, opts.completion)
+    config.window.completion = opts.completion
   end
 
   if type(opts.formatting) == 'table' then
