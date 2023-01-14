@@ -163,6 +163,34 @@ vim.diagnostic.config({
 })
 ```
 
+## Buffer formats twice
+
+This can happen because the built-in function for formatting ([vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format())) uses every server with "formatting capabilities" enabled.
+
+You can disable an LSP server formatting capabilities like this:
+
+```lua
+lsp.configure("tsserver", {
+  on_init = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end
+})
+```
+
+Or if you have a custom `lsp.on_attach`:
+
+```lua
+lsp.on_attach(function(client, bufnr)
+  -- Disable LSP server formatting, to prevent formatting twice. 
+  -- Once by the LSP server, second time by NULL-ls.
+  if client.name == "volar" or client.name == "tsserver" then
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
+  end
+end)
+```
+
 ## Customizing nvim-cmp
 
 Using `setup_nvim_cmp` will allow you to override some options of `nvim-cmp`. Here's a few useful things you can do.
@@ -458,9 +486,54 @@ null_ls.setup({
 
 > Make sure the `build_options` is after `lsp.setup()`. see [#60](https://github.com/VonHeikemen/lsp-zero.nvim/issues/60#issuecomment-1363800412)
 
+### Format buffer using only null-ls
+
+The solution I propose here is to use the `on_attach` function to create a command called `NullFormat`. This new command will have all the arguments necessary to send a formatting request specifically to `null-ls`. You could then create a keymap bound to the `NullFormat` command.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+
+local null_ls = require('null-ls')
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    null_opts.on_attach(client, bufnr)
+
+    local format_cmd = function(input)
+      vim.lsp.buf.format({
+        id = client.id,
+        timeout_ms = 5000,
+        async = input.bang,
+      })
+    end
+
+    local bufcmd = vim.api.nvim_buf_create_user_command
+    bufcmd(bufnr, 'NullFormat', format_cmd, {
+      bang = true,
+      range = true,
+      desc = 'Format using null-ls'
+    })
+  end,
+  sources = {
+    --- Replace these with the tools you have installed
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.prettier,
+  }
+})
+
+```
+
 ### Adding mason-null-ls.nvim
 
-With [mason-null-ls.nvim](https://github.com/jay-babu/mason-null-ls.nvim) you can install the tools you have configured in your `null-ls` sources using `mason.nvim`.
+[mason-null-ls.nvim](https://github.com/jay-babu/mason-null-ls.nvim) can help you install tools compatible with `null-ls`.
+
+### Automatic Install
+
+Ensure the tools you have listed in the `sources` option are installed automatically.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -479,7 +552,10 @@ null_ls.setup({
     ---
   end,
   sources = {
-    -- configure all your sources
+    -- Replace these with the tools you want to install
+    null_lsp.builtins.formatting.prettier
+    null_ls.builtins.diagnostics.eslint,
+    null_ls.builtins.formatting.stylua,
   }
 })
 
@@ -492,33 +568,37 @@ require('mason-null-ls').setup({
 })
 ```
 
-### Buffer formats twice
+### Automatic setup
 
-This can happen because the built-in function for formatting ([vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format())) uses every server with "formatting capabilities" enabled.
-
-You can disable an LSP server formatting capabilities like this:
+Make `null-ls` aware of the tools you installed using `mason.nvim`, and configure them automatically.
 
 ```lua
-lsp.configure("tsserver", {
-  on_init = function(client)
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentFormattingRangeProvider = false
-  end
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.setup()
+
+local null_ls = require('null-ls')
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    null_opts.on_attach(client, bufnr)
+  end,
+  sources = {
+    -- You can add tools not supported by mason.nvim
+  }
 })
-```
 
-Or if you have a custom `lsp.on_attach`:
+-- See mason-null-ls.nvim's documentation for more details:
+-- https://github.com/jay-babu/mason-null-ls.nvim#setup
+require('mason-null-ls').setup({
+  ensure_installed = nil,
+  automatic_installation = false, -- You can still set this to `true`
+  automatic_setup = true,
+})
 
-```lua
-lsp.on_attach(function(client, bufnr)
-  -- Disable LSP server formatting, to prevent formatting twice. 
-  -- Once by the LSP server, second time by NULL-ls.
-  if client.name == "volar" or client.name == "tsserver" then
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentFormattingRangeProvider = false
-  end
-
-  -- your other configuration here
-end)
+-- Required when `automatic_setup` is true
+require('mason-null-ls').setup_handlers()
 ```
 
