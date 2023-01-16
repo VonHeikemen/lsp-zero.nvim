@@ -3,7 +3,6 @@ local s = {}
 
 local ok_cmp, cmp = pcall(require, 'cmp')
 local ok_luasnip, luasnip = pcall(require, 'luasnip')
-local global_config = require('lsp-zero.settings')
 local select_opts = {behavior = 'select'}
 
 if ok_cmp then
@@ -15,16 +14,26 @@ local merge = function(a, b)
 end
 
 M.sources = function()
-  return {
-    {name = 'path'},
-    {name = 'nvim_lsp', keyword_length = 3},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
-  }
+  local result = {}
+  local register = function(mod, value)
+    local pattern = string.format('lua/%s*', mod)
+    local path = vim.api.nvim_get_runtime_file(pattern, 0)
+
+    if #path > 0 then
+      table.insert(result, value)
+    end
+  end
+
+  register('cmp_path', {name = 'path'})
+  register('cmp_nvim_lsp', {name = 'nvim_lsp', keyword_length = 3})
+  register('cmp_buffer', {name = 'buffer', keyword_length = 3})
+  register('cmp_luasnip', {name = 'luasnip', keyword_length = 2})
+
+  return result
 end
 
 M.default_mappings = function()
-  return {
+  local result = {
     -- confirm selection
     ['<CR>'] = cmp.mapping.confirm({select = false}),
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
@@ -47,24 +56,6 @@ M.default_mappings = function()
         cmp.complete()
       end
     end),
-
-    -- go to next placeholder in the snippet
-    ['<C-d>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(1) then
-        luasnip.jump(1)
-      else
-        fallback()
-      end
-    end, {'i', 's'}),
-
-    -- go to previous placeholder in the snippet
-    ['<C-b>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, {'i', 's'}),
 
     -- when menu is visible, navigate to next item
     -- when line is empty, insert a tab character
@@ -89,20 +80,37 @@ M.default_mappings = function()
       end
     end, {'i', 's'}),
   }
+
+  if ok_luasnip then
+    -- go to next placeholder in the snippet
+    result['<C-d>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(1) then
+        luasnip.jump(1)
+      else
+        fallback()
+      end
+    end, {'i', 's'})
+
+    -- go to previous placeholder in the snippet
+    result['<C-b>'] = cmp.mapping(function(fallback)
+      if luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, {'i', 's'})
+  end
+
+  return result
 end
 
 M.cmp_config = function()
-  return {
+  local result = {
     sources = M.sources(),
     preselect = cmp.PreselectMode.Item,
     mapping = M.default_mappings(),
     completion = {
       completeopt = 'menu,menuone,noinsert'
-    },
-    snippet = {
-      expand = function(args)
-        luasnip.lsp_expand(args.body)
-      end,
     },
     window = {
       documentation = merge(
@@ -128,10 +136,22 @@ M.cmp_config = function()
       end,
     }
   }
+
+  if ok_luasnip then
+    result.snippet = {
+      expand = function(args)
+        luasnip.lsp_expand(args.body)
+      end,
+    }
+  end
+
+  return result
 end
 
 M.call_setup = function(opts)
   if not ok_cmp then
+    local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
+    vim.notify(msg, vim.log.levels.WARN)
     return
   end
 
@@ -142,16 +162,6 @@ M.call_setup = function(opts)
   end
 
   local config = M.cmp_config()
-
-  if not ok_luasnip then
-    config.snippet = nil
-    if global_config[1] == 'recommended' then
-      local msg = "[lsp-zero] Could not find luasnip. Snippet expansion will not work if luasnip is not installed."
-      vim.notify(msg, vim.log.levels.WARN)
-    end
-  end
-
-  global_config.cmp_capabilities = true
 
   -- Apparently this can fail
   pcall(function()

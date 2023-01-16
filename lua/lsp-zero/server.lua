@@ -31,16 +31,14 @@ M.build_options = function(name, opts)
   s.call_once()
 
   opts = vim.tbl_deep_extend('force', {}, M.default_config, opts)
-  local custom_attach = opts.on_attach
 
   if opts.root_dir == true then
     opts.root_dir = function() return vim.fn.getcwd() end
   end
 
-  if global_config.cmp_capabilities then
-    opts.capabilities = s.use_cmp(opts.capabilities)
-  end
+  opts.capabilities = s.set_capabilities(opts.capabilities)
 
+  local custom_attach = opts.on_attach
   opts.on_attach = function(...)
     s.on_attach(...)
     if M.common_on_attach then M.common_on_attach(...) end
@@ -259,16 +257,19 @@ s.set_keymaps = function(bufnr, opts)
   end
 end
 
-s.use_cmp = function(current)
+s.set_capabilities = function(current)
   if state.capabilities == nil then
-    local ok, source = pcall(require, 'cmp_nvim_lsp')
     local cmp_lsp = {}
 
-    if ok then
-      cmp_lsp = source.default_capabilities()
-    else
-      local msg = "[lsp-zero] Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
-      vim.notify(msg, vim.log.levels.WARN)
+    if global_config.cmp_capabilities then
+      local ok, source = pcall(require, 'cmp_nvim_lsp')
+
+      if ok then
+        cmp_lsp = source.default_capabilities()
+      else
+        local msg = "[lsp-zero] Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
+        vim.notify(msg, vim.log.levels.WARN)
+      end
     end
 
     state.capabilities = vim.tbl_deep_extend(

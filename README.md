@@ -110,13 +110,14 @@ use {
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},
-    {'hrsh7th/cmp-buffer'},
-    {'hrsh7th/cmp-path'},
-    {'saadparwaiz1/cmp_luasnip'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'hrsh7th/cmp-nvim-lua'},
+    -- Completion Sources
+    {'hrsh7th/cmp-nvim-lsp'},     -- Required
+    {'hrsh7th/cmp-buffer'},       -- Optional
+    {'hrsh7th/cmp-path'},         -- Optional
+    {'saadparwaiz1/cmp_luasnip'}, -- Optional
+    {'hrsh7th/cmp-nvim-lua'},     -- Optional
 
-    -- Snippets
+    -- Snippet Engine
     {'L3MON4D3/LuaSnip'},
     -- Snippet Collection (Optional)
     {'rafamadriz/friendly-snippets'},
@@ -134,15 +135,16 @@ With `paq`:
 {'williamboman/mason.nvim'};
 {'williamboman/mason-lspconfig.nvim'};
 
--- Autocompletion
+-- Autocompletion Engine
 {'hrsh7th/nvim-cmp'};
-{'hrsh7th/cmp-buffer'};
-{'hrsh7th/cmp-path'};
-{'saadparwaiz1/cmp_luasnip'};
-{'hrsh7th/cmp-nvim-lsp'};
-{'hrsh7th/cmp-nvim-lua'};
+-- Completion Sources
+{'hrsh7th/cmp-nvim-lsp'};     -- Required
+{'hrsh7th/cmp-buffer'};       -- Optional
+{'hrsh7th/cmp-path'};         -- Optional
+{'saadparwaiz1/cmp_luasnip'}; -- Optional
+{'hrsh7th/cmp-nvim-lua'};     -- Optional
 
--- Snippets
+-- Snippet Engine
 {'L3MON4D3/LuaSnip'};
 -- Snippet Collection (Optional)
 {'rafamadriz/friendly-snippets'};
@@ -156,17 +158,18 @@ Plug 'neovim/nvim-lspconfig'
 Plug 'williamboman/mason.nvim'
 Plug 'williamboman/mason-lspconfig.nvim'
 
-" Autocompletion
+" Autocompletion Engine
 Plug 'hrsh7th/nvim-cmp'
-Plug 'hrsh7th/cmp-buffer'
-Plug 'hrsh7th/cmp-path'
-Plug 'saadparwaiz1/cmp_luasnip'
-Plug 'hrsh7th/cmp-nvim-lsp'
-Plug 'hrsh7th/cmp-nvim-lua'
+" Completion Sources
+Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+Plug 'hrsh7th/cmp-buffer'       " Optional
+Plug 'hrsh7th/cmp-path'         " Optional
+Plug 'saadparwaiz1/cmp_luasnip' " Optional
+Plug 'hrsh7th/cmp-nvim-lua'     " Optional
 
-"  Snippets
+"  Snippet Engine
 Plug 'L3MON4D3/LuaSnip'
-" Snippet collection (Optional)
+-- Snippet Collection (Optional)
 Plug 'rafamadriz/friendly-snippets'
 
 Plug 'VonHeikemen/lsp-zero.nvim'
@@ -322,7 +325,7 @@ If you want to disable a feature replace `true` with `false`.
 
 ### About nvim-cmp
 
-Some details that you should know. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. `lsp-zero` depends on the following sources:
+Some details that you should know. The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). `nvim-cmp` has a concept of "sources", these provide the actual data displayed in neovim. `lsp-zero` will configure the following sources if they are installed:
 
 * [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
 
@@ -366,26 +369,11 @@ Some details that you should know. The plugin responsable for autocompletion is 
 
 [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) is the plugin that provides the snippets. And [luasnip](https://github.com/L3MON4D3/LuaSnip/) is the "snippet engine", the thing that expands the snippet and allows you to navigate between snippet placeholders.
 
+Both `friendly-snippets` and `luasnip` are optional. But `nvim-cmp` will give you a warning if you don't setup a snippet engine. If you don't use luasnip then configure a different snippet engine.
+
 * How to disable snippets?
 
-If you already have it all setup then uninstall `friendly-snippets`. That should be enough to make it disappear from the completion suggestions.
-
-If you really want them gone, exclude the snippet "source" from nvim-cmp.
-
-```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.setup_nvim_cmp({
-  sources = {
-    {name = 'path'},
-    {name = 'nvim_lsp', keyword_length = 3},
-    {name = 'buffer', keyword_length = 3},
-  }
-})
-
-lsp.setup()
-```
+If you already have it all setup then uninstall `friendly-snippets` and also `cmp_luasnip`. 
 
 * Change to snippets with snipmate syntax
 
