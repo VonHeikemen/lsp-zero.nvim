@@ -40,7 +40,14 @@ local run = function(args)
   Server.setup_handlers()
 
   if user_config.manage_nvim_cmp then
-    require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
+    local ok_cmp = pcall(require, 'cmp')
+
+    if not ok_cmp then
+      local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
+      vim.notify(msg, vim.log.levels.WARN)
+    else
+      require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
+    end
   end
 
   if user_config.configure_diagnostics then

@@ -6,10 +6,7 @@ local ok_luasnip, luasnip = pcall(require, 'luasnip')
 local global_config = require('lsp-zero.settings')
 local select_opts = {behavior = 'select'}
 
-if not ok_cmp then
-  local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
-  vim.notify(msg, vim.log.levels.WARN)
-else
+if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
 end
 
