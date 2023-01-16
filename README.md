@@ -80,7 +80,7 @@ The configuration code for lsp-zero should be place between `lua <<EOF ... EOF`.
 
 ## Quickstart (for the impatient)
 
-This section assumes you want enable every single feature lsp-zero offers, this includes the integration with `mason.nvim`. The result will be a very opinionated setup.
+This section assumes you want enable every single feature lsp-zero offers. Optional and required plugins will be marked with a comment.
 
 If you know your way around neovim and how to configure it, take a look at this examples:
 
@@ -104,23 +104,21 @@ use {
   'VonHeikemen/lsp-zero.nvim',
   requires = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},
-    {'williamboman/mason.nvim'},
-    {'williamboman/mason-lspconfig.nvim'},
+    {'neovim/nvim-lspconfig'},             -- Required
+    {'williamboman/mason.nvim'},           -- Optional
+    {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
     -- Autocompletion
-    {'hrsh7th/nvim-cmp'},
-    -- Completion Sources
+    {'hrsh7th/nvim-cmp'},         -- Required
     {'hrsh7th/cmp-nvim-lsp'},     -- Required
     {'hrsh7th/cmp-buffer'},       -- Optional
     {'hrsh7th/cmp-path'},         -- Optional
     {'saadparwaiz1/cmp_luasnip'}, -- Optional
     {'hrsh7th/cmp-nvim-lua'},     -- Optional
 
-    -- Snippet Engine
-    {'L3MON4D3/LuaSnip'},
-    -- Snippet Collection (Optional)
-    {'rafamadriz/friendly-snippets'},
+    -- Snippets
+    {'L3MON4D3/LuaSnip'},             -- Required
+    {'rafamadriz/friendly-snippets'}, -- Optional
   }
 }
 ```
@@ -131,46 +129,42 @@ With `paq`:
 {'VonHeikemen/lsp-zero.nvim'};
 
 -- LSP Support
-{'neovim/nvim-lspconfig'};
-{'williamboman/mason.nvim'};
-{'williamboman/mason-lspconfig.nvim'};
+{'neovim/nvim-lspconfig'};             -- Required
+{'williamboman/mason.nvim'};           -- Optional
+{'williamboman/mason-lspconfig.nvim'}; -- Optional
 
 -- Autocompletion Engine
-{'hrsh7th/nvim-cmp'};
--- Completion Sources
+{'hrsh7th/nvim-cmp'};         -- Required
 {'hrsh7th/cmp-nvim-lsp'};     -- Required
 {'hrsh7th/cmp-buffer'};       -- Optional
 {'hrsh7th/cmp-path'};         -- Optional
 {'saadparwaiz1/cmp_luasnip'}; -- Optional
 {'hrsh7th/cmp-nvim-lua'};     -- Optional
 
--- Snippet Engine
-{'L3MON4D3/LuaSnip'};
--- Snippet Collection (Optional)
-{'rafamadriz/friendly-snippets'};
+-- Snippets
+{'L3MON4D3/LuaSnip'};             -- Required
+{'rafamadriz/friendly-snippets'}; -- Optional
 ```
 
 With `vim-plug`:
 
 ```vim
 " LSP Support
-Plug 'neovim/nvim-lspconfig'
-Plug 'williamboman/mason.nvim'
-Plug 'williamboman/mason-lspconfig.nvim'
+Plug 'neovim/nvim-lspconfig'             " Required
+Plug 'williamboman/mason.nvim'           " Optional
+Plug 'williamboman/mason-lspconfig.nvim' " Optional
 
 " Autocompletion Engine
-Plug 'hrsh7th/nvim-cmp'
-" Completion Sources
+Plug 'hrsh7th/nvim-cmp'         " Required
 Plug 'hrsh7th/cmp-nvim-lsp'     " Required
 Plug 'hrsh7th/cmp-buffer'       " Optional
 Plug 'hrsh7th/cmp-path'         " Optional
 Plug 'saadparwaiz1/cmp_luasnip' " Optional
 Plug 'hrsh7th/cmp-nvim-lua'     " Optional
 
-"  Snippet Engine
-Plug 'L3MON4D3/LuaSnip'
--- Snippet Collection (Optional)
-Plug 'rafamadriz/friendly-snippets'
+"  Snippets
+Plug 'L3MON4D3/LuaSnip'             " Required
+Plug 'rafamadriz/friendly-snippets' " Optional
 
 Plug 'VonHeikemen/lsp-zero.nvim'
 ```
@@ -185,10 +179,29 @@ Inside your configuration file add this piece of lua code.
 local lsp = require('lsp-zero')
 lsp.preset('recommended')
 
+-- (Optional) Configure lua language server for neovim
+lsp.nvim_workspace()
+
 lsp.setup()
 ```
 
-If you are very much against using `mason.nvim` change the preset to `system-lsp`. Then list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist).
+If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim#setup_serverslist).
+
+```lua
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+-- When you don't have mason.nvim installed
+-- You'll need to list the servers installed in your system
+lsp.setup_servers({'tsserver', 'eslint'})
+
+-- (Optional) Configure lua language server for neovim
+lsp.nvim_workspace()
+
+lsp.setup()
+```
 
 Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
@@ -202,8 +215,6 @@ lsp.preset('recommended')
 lsp.setup()
 EOF
 ```
-
-To configure the lua language server specifically for neovim use the function [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim#nvim_workspaceopts). Add before the call to `.setup()`. See the example in [API showcase](https://github.com/VonHeikemen/lsp-zero.nvim#api-showcase).
 
 The `recommended` preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
 
@@ -529,7 +540,7 @@ lsp.setup()
 
 ### Opt-out of mason.nvim
 
-If you are using the `recommended` preset then change it to `system-lsp`. Else, call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) and use these settings:
+Really all you need is to uninstall `mason.nvim` and `mason-lspconfig`. But the correct way to opt-out if you are using the `recommended` preset is to change it to `system-lsp`. Or call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim#set_preferencesopts) and use these settings:
 
 ```lua
 suggest_lsp_servers = false
@@ -956,8 +967,6 @@ cmp.setup(cmp_config)
 Returns the neovim specific settings for `sumneko_lua` language server.
 
 ### `.extend_lspconfig({opts})`
-
-> (Experimental) There shouldn't be any bugs in the implementation, but one can never know. Also, the api may change depending on user feedback.
 
 The purpose of this function is to allow you to interact with `lspconfig` directly and still enjoy all the keybindings and commands lsp-zero offers.
 

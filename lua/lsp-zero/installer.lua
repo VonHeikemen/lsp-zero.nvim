@@ -3,23 +3,28 @@ local s = {mason = {}, lsp = {}}
 local valid = {mason = true,  ['lsp-installer'] = true}
 local id = function(arg) return arg end
 
+M.enabled = false
+
 M.choose = function()
   local global_config = require('lsp-zero.settings')
   local method = global_config.call_servers
 
   if method == 'local' and pcall(require, 'mason') then
+    M.enabled = true
     method = 'mason'
     M.fn = s.mason
 
     if pcall(require, 'mason-lspconfig') == false then
       local msg = "[lsp-zero] Couldn't find module 'mason-lspconfig'"
       vim.notify(msg, vim.log.levels.ERROR)
+      M.enabled = false
       method = ''
     end
   end
 
   local lsp_installer = pcall(require, 'nvim-lsp-installer')
   if method == 'local' and lsp_installer then
+    M.enabled = true
     method = 'lsp-installer'
     M.fn = s.lsp
   end
@@ -28,12 +33,18 @@ M.choose = function()
     if pcall(require, 'nvim-lsp-installer') then
       local msg = "[lsp-zero] Module 'nvim-lsp-installer' was found.\nPlease remove it and restart neovim."
       vim.notify(msg, vim.log.levels.ERROR)
-      method = ''
+      M.fn = s.id
     end
   end
 
   if valid[method] == nil then
     M.fn = s.id
+  end
+
+  if M.enabled == false then
+    method = 'global'
+    global_config.suggest_lsp_servers = false
+    global_config.setup_servers_on_start = false
   end
 
   global_config.call_servers = method

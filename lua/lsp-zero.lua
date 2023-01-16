@@ -184,6 +184,12 @@ M.setup_servers = function(list)
   local use_local = settings.call_servers  == 'local'
   list.force = nil
 
+  if use_local then
+    local installer = require('lsp-zero.installer')
+    installer.choose()
+    use_local = installer.enabled
+  end
+
   if delay_setup and use_local and settings.setup_servers_on_start then
     return internal.fn.setup_servers(list)
   end
@@ -198,6 +204,12 @@ M.configure = function(server_name, opts)
   local delay_setup = not opts.force_setup
   local use_local = settings.call_servers  == 'local'
   opts.force_setup = nil
+
+  if use_local then
+    local installer = require('lsp-zero.installer')
+    installer.choose()
+    use_local = installer.enabled
+  end
 
   if delay_setup and use_local and settings.setup_servers_on_start then
     return internal.fn.configure(server_name, opts)
@@ -382,6 +394,9 @@ M.defaults.nvim_workspace = function()
 end
 
 M.suggest_server = function()
+  local installer = require('lsp-zero.installer')
+  installer.choose()
+
   local settings = require('lsp-zero.settings')
   local use_global = settings.call_servers == 'global'
   local ft = vim.bo.filetype
@@ -401,9 +416,6 @@ M.suggest_server = function()
   state.save_filetype(ft)
 
   local util = require('lsp-zero.utils')
-  local installer = require('lsp-zero.installer')
-
-  installer.choose()
 
   local is_there = util.should_suggest_server(
     ft,

@@ -581,8 +581,10 @@ calling the `lsp-zero` module.
 
 Opt-out of mason.nvim                             *lsp-zero-installer-opt-out*
 
-If you are using the `recommended` preset then change it to `system-lsp`.
-Else, call |lsp-zero.set_preferences()| and use these settings:
+Really all you need is to uninstall `mason.nvim` and `mason-lspconfig`.
+But the correct way to opt-out if you are using the `recommended` preset
+is to change it to `system-lsp`. Or call |lsp-zero.set_preferences()|
+and use these settings:
 
 >
   suggest_lsp_servers = false
@@ -1149,10 +1151,6 @@ Lua API                                                     *lsp-zero-lua-api*
                                                  *lsp-zero.extend_lspconfig()*
 
   .extend_lspconfig({opts}): ~
-      (Experimental) There shouldn't be any bugs in the implementation,
-      but one can never know. Also, the api may change depending
-      on user feedback.
-
       The purpose of this function is to allow you to interact with
       `lspconfig` directly and still enjoy all the keybindings and
       commands lsp-zero offers.
