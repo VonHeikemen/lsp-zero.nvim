@@ -2,6 +2,10 @@
 
 The purpose of this plugin is to bundle all the "boilerplate code" necessary to have [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (a popular autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) working together. And if you opt in, it can use [mason.nvim](https://github.com/williamboman/mason.nvim) to let you install language servers from inside neovim.
 
+## Announcement
+
+The branch [v1.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x) has been created. `lsp-zero` is oficially 1.0. I advise you use your favorite plugin manager to track the `v1.x` branch. The code there will remain compatible with neovim v0.5. The next branch `v2.x` will require neovim v0.8 and probably will move to a less opinionated model (which is [already possible with v1](https://dev.to/vonheikemen/make-lsp-zeronvim-coexists-with-other-plugins-instead-of-controlling-them-2i80)). I have [some ideas already](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/130), would love to know what you think.
+
 ## How to get started
 
 If you are new to neovim go to the section [Resources for new users](https://github.com/VonHeikemen/lsp-zero.nvim#resources-for-new-users).
@@ -102,6 +106,7 @@ With `packer`:
 ```lua
 use {
   'VonHeikemen/lsp-zero.nvim',
+  branch = 'v1.x',
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
@@ -126,7 +131,7 @@ use {
 With `paq`:
 
 ```lua
-{'VonHeikemen/lsp-zero.nvim'};
+{'VonHeikemen/lsp-zero.nvim', branch = 'v1.x'};
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};             -- Required
@@ -166,7 +171,7 @@ Plug 'hrsh7th/cmp-nvim-lua'     " Optional
 Plug 'L3MON4D3/LuaSnip'             " Required
 Plug 'rafamadriz/friendly-snippets' " Optional
 
-Plug 'VonHeikemen/lsp-zero.nvim'
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 ```
 
 ### Usage
