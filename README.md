@@ -102,6 +102,7 @@ With `packer`:
 ```lua
 use {
   'VonHeikemen/lsp-zero.nvim',
+  branch = 'v1.x',
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
@@ -126,7 +127,7 @@ use {
 With `paq`:
 
 ```lua
-{'VonHeikemen/lsp-zero.nvim'};
+{'VonHeikemen/lsp-zero.nvim', branch = 'v1.x'};
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};             -- Required
@@ -166,7 +167,7 @@ Plug 'hrsh7th/cmp-nvim-lua'     " Optional
 Plug 'L3MON4D3/LuaSnip'             " Required
 Plug 'rafamadriz/friendly-snippets' " Optional
 
-Plug 'VonHeikemen/lsp-zero.nvim'
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 ```
 
 ### Usage
