@@ -122,7 +122,7 @@ M.use = function(servers, lsp_opts, force)
     servers = {servers}
   end
 
-  for _, name in pairs(servers) do
+  for _, name in ipairs(servers) do
     local opts = vim.tbl_deep_extend(
       'force',
       {},
