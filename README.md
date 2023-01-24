@@ -174,6 +174,31 @@ Plug 'rafamadriz/friendly-snippets' " Optional
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 ```
 
+With `lazy.nvim`:
+
+```lua
+{
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'v1.x',
+    dependencies = {
+        -- LSP Support
+        'neovim/nvim-lspconfig',             -- required
+        'williamboman/mason-lspconfig.nvim', -- optional
+        'williamboman/mason.nvim',           -- optional
+        -- Autocompletion
+        'hrsh7th/cmp-buffer',                -- required
+        'hrsh7th/cmp-nvim-lsp',              -- required
+        'hrsh7th/cmp-nvim-lua',              -- optional
+        'hrsh7th/cmp-path',                  -- optional
+        'hrsh7th/nvim-cmp',                  -- optional
+        'saadparwaiz1/cmp_luasnip',          -- optional
+        -- Snippets
+        'L3MON4D3/LuaSnip',                  -- required
+        'rafamadriz/friendly-snippets',      -- optional
+    },
+}
+```
+
 ### Usage
 
 Inside your configuration file add this piece of lua code.
@@ -389,7 +414,7 @@ Both `friendly-snippets` and `luasnip` are optional. But `nvim-cmp` will give yo
 
 * How to disable snippets?
 
-If you already have it all setup then uninstall `friendly-snippets` and also `cmp_luasnip`. 
+If you already have it all setup then uninstall `friendly-snippets` and also `cmp_luasnip`.
 
 * Change to snippets with snipmate syntax
 
