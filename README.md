@@ -42,8 +42,8 @@ This section assumes you want enable every single feature lsp-zero offers. Optio
 
 If you know your way around neovim and how to configure it, take a look at this examples:
 
-* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Lua-template-configuration)
-* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Vimscript-template-configuration)
+* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/configuration-templates.md#lua-template)
+* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/configuration-templates.md#vimscript-template)
 
 ## Requirements for language servers
 
