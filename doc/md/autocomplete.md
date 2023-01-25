@@ -50,6 +50,8 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 The easiest way to modify the keybindings is using the `mapping` option of [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_nvim_cmpopts).
 
+You can get more details about the `mapping` option using the command `:help cmp-mapping`. You can also browse [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section of lsp-zero's wiki.
+
 ### Start from scratch
 
 If you want to start with neovim's default and then add your own, use nvim-cmp's preset. Like this:
