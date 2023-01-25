@@ -61,6 +61,49 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 * `LspZeroWorkspaceList`: List workspace folders. See [:help vim.lsp.buf.list_workspace_folders()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.list_workspace_folders()).
 
+## Configure language servers
+
+To pass arguments to language servers use the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts). You'll need to call it before [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup). 
+
+Here is an example that adds a few options to `tsserver`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.configure('tsserver', {
+  on_attach = function(client, bufnr)
+    print('hello tsserver')
+  end,
+  settings = {
+    completions = {
+      completeFunctionCalls = true
+    }
+  }
+})
+
+lsp.setup()
+```
+
+This ".configure()" function uses [lspconfig](https://github.com/neovim/nvim-lspconfig/) under the hood. So the call to `.configure()` is very close to this.
+
+```lua
+---- **Do not** use the module `lspconfig` after using lsp-zero.
+
+require('lspconfig')['tsserver'].setup({
+  on_attach = function(client, bufnr)
+    print('hello tsserver')
+  end,
+  settings = {
+    completions = {
+      completeFunctionCalls = true
+    }
+  }
+})
+```
+
+I'm telling you this because I want you to know you can "translate" any config that uses `lspconfig` to lsp-zero.
+
 ## Diagnostics
 
 ### Default settings
