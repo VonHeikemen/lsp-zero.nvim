@@ -81,6 +81,25 @@ lsp.set_preferences({
 lsp.setup()
 ```
 
+### Create new keybindings
+
+Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) function, and then just neovim's built-in create the keybindings.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.on_attach(function(client, bufnr)
+  local opts = {buffer = bufnr}
+  local bind = vim.keymap.set
+
+  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  -- more keybindings...
+end)
+
+lsp.setup()
+```
+
 ## Commands
 
 * `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be synchronous (ex: LspZeroFormat!). See [:help vim.lsp.buf.formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting()), [:help vim.lsp.buf.range_formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.range_formatting()), [:help vim.lsp.buf.formatting_sync()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting_sync()).
