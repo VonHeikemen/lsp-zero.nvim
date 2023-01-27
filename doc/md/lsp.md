@@ -88,7 +88,7 @@ lsp.setup()
 This ".configure()" function uses [lspconfig](https://github.com/neovim/nvim-lspconfig/) under the hood. So the call to `.configure()` is very close to this.
 
 ```lua
----- **Do not** use the module `lspconfig` after using lsp-zero.
+--- **Do not** use the module `lspconfig` after using lsp-zero.
 
 require('lspconfig')['tsserver'].setup({
   on_attach = function(client, bufnr)
@@ -103,6 +103,19 @@ require('lspconfig')['tsserver'].setup({
 ```
 
 I'm telling you this because I want you to know you can "translate" any config that uses `lspconfig` to lsp-zero.
+
+### Disable a language server
+
+Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.skip_server_setup({'eslint'})
+
+lsp.setup()
+```
 
 ## Diagnostics
 
