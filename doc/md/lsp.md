@@ -51,6 +51,36 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 * `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
+### Disable default keybindings
+
+Call the function [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_preferencesopts) right after you set the preset, then change the option `set_lsp_keymaps`.
+
+To disable all default keybindings change `set_lsp_keymaps` to `false`.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.set_preferences({
+  set_lsp_keymaps = false,
+})
+
+lsp.setup()
+```
+
+If you just want to disable a few of them use the `omit` option.
+
+```lua
+local lsp = require('lsp-zero')
+lsp.preset('recommended')
+
+lsp.set_preferences({
+  set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
+})
+
+lsp.setup()
+```
+
 ## Commands
 
 * `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be synchronous (ex: LspZeroFormat!). See [:help vim.lsp.buf.formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting()), [:help vim.lsp.buf.range_formatting()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.range_formatting()), [:help vim.lsp.buf.formatting_sync()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.formatting_sync()).
