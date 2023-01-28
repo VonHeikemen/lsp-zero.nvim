@@ -83,7 +83,7 @@ lsp.setup()
 
 ### Create new keybindings
 
-Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) function, and then just neovim's built-in create the keybindings.
+Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
 
 ```lua
 local lsp = require('lsp-zero')
