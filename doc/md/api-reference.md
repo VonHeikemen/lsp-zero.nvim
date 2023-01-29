@@ -191,7 +191,7 @@ lsp.nvim_workspace({
 
 Some example config of these options are featured in [nvim-cmp's readme](https://github.com/hrsh7th/nvim-cmp).
 
-If what you want is to extend the configuration of nvim-cmp, I suggest you change the preset to `lsp-compe`. There is an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/advance-usage.md#the-current-api-is-not-enough) in the Advance usage page.
+If what you want is to extend the configuration of nvim-cmp, I suggest you change the preset to `lsp-compe`. There is an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#the-current-api-is-not-enough) in the Advance usage page.
 
 ### `.use({server}, {opts})`
 
@@ -365,7 +365,7 @@ Notice here it can coexists with other plugins. Allowing you to have full contro
 
 `{opts}` table supports the following properties:
 
-* `set_lsp_keymaps`: When set to `true` (the default) it creates [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#default-keybindings). You can also provide a list of keys you want to omit, lsp-zero will not bind it to anything (see example below). When set to `false` all keybindings are disabled.
+* `set_lsp_keymaps`: When set to `true` (the default) it creates [keybindings linked to lsp actions](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#default-keybindings). You can also provide a list of keys you want to omit, lsp-zero will not bind it to anything (see example below). When set to `false` all keybindings are disabled.
 
 * `capabilities`: These are the "client capabilities" a language server expects. This argument will be merge nvim-cmp's default capabilities if you have it installed.
 

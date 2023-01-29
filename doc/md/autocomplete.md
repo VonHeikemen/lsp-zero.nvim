@@ -48,7 +48,7 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 ## Override keybindings
 
-The easiest way to modify the keybindings is using the `mapping` option of [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_nvim_cmpopts).
+The easiest way to modify the keybindings is using the `mapping` option of [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts).
 
 You can get more details about the `mapping` option using the command `:help cmp-mapping`. You can also browse [Under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/wiki/Under-the-hood) section of lsp-zero's wiki.
 
@@ -94,7 +94,7 @@ lsp.setup()
 
 ### Disable a mapping
 
-Just like before we are going to use [lsp.defaults.cmp_mappings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts), but now to disable the mapping we use `vim.NIL`.
+Just like before we are going to use [lsp.defaults.cmp_mappings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts), but now to disable the mapping we use `vim.NIL`.
 
 Here is an example that disables `tab` to autocomplete, and also disables `Enter` to confirm.
 

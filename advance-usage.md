@@ -20,7 +20,7 @@ lsp.set_preferences({
 
 ## Yes, you can override the settings of a preset
 
-Be careful though. If you are going to override a preset do it right after calling [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#presetname).
+Be careful though. If you are going to override a preset do it right after calling [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname).
 
 If you have any questions you can stop by the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) page.
 
@@ -130,7 +130,7 @@ lsp.setup()
 
 ## Can I use that one language server I have installed globally?
 
-Yes, call the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts) and set the option `force_setup` to `true`.
+Yes, call the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) and set the option `force_setup` to `true`.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -193,7 +193,7 @@ end)
 
 ## Customizing nvim-cmp
 
-Using [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_nvim_cmpopts) will allow you to override some options of nvim-cmp. Here's a few useful things you can do.
+Using [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will allow you to override some options of nvim-cmp. Here's a few useful things you can do.
 
 ### Don't preselect first match
 
@@ -310,7 +310,7 @@ lsp.setup()
 
 ### Changing the keybindings
 
-The option you want is `mapping`. The trickiest. Here you are going to find yourself in an all or nothing situation, if you choose to use it then **you** are in charge of all mappings, all the defaults will disappear. But don't worry, you can access those defaults with the function [lsp.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts).
+The option you want is `mapping`. The trickiest. Here you are going to find yourself in an all or nothing situation, if you choose to use it then **you** are in charge of all mappings, all the defaults will disappear. But don't worry, you can access those defaults with the function [lsp.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts).
 
 Here is an example that adds `<C-Space>` to trigger completion and makes `<C-e>` cancel the completion instead of toggling.
 
@@ -377,7 +377,7 @@ end, {'i', 's'}),
 
 ### "Unmap" a default keybinding
 
-You can disable any default keymap by overriding the `mapping` property in `nvim-cmp`. Use [lsp.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to expose the default keybindings then "delete" the one you want. Let's make an example with `Tab`.
+You can disable any default keymap by overriding the `mapping` property in `nvim-cmp`. Use [lsp.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts) to expose the default keybindings then "delete" the one you want. Let's make an example with `Tab`.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -398,7 +398,7 @@ lsp.setup()
 
 ### Adding a source
 
-You can extend the sources by overriding the `sources` property. Use [lsp.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_sources) to expose the default sources and then insert the new source.
+You can extend the sources by overriding the `sources` property. Use [lsp.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_sources) to expose the default sources and then insert the new source.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -432,7 +432,7 @@ lsp.setup()
 
 ### The current api is not enough?
 
-Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to extend or change the default configuration table.
+Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts) to extend or change the default configuration table.
 
 ```lua
 local lsp = require('lsp-zero')

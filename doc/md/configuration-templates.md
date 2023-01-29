@@ -14,7 +14,7 @@ require('packer').startup(function(use)
   -- LSP
   use {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v1.x',
+    branch = 'dev-v2',
     requires = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required
@@ -79,7 +79,7 @@ call plug#begin()
   Plug 'rafamadriz/friendly-snippets' " Optional
 
   " LSP Setup
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 call plug#end()
 
 set signcolumn=yes

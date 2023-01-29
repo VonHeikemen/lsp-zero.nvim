@@ -9,11 +9,63 @@ if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
 end
 
-local merge = function(a, b)
-  return vim.tbl_deep_extend('force', {}, a, b)
+function M.apply(opts)
+  if not ok_cmp then
+    local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
+    vim.notify(msg, vim.log.levels.WARN)
+    return
+  end
+
+  opts = opts or {}
+
+  if type(opts.select_behavior) == 'string' then
+    select_opts = {behavior = opts.select_behavior}
+  end
+
+  local config = M.cmp_config()
+
+  -- Apparently this can fail
+  pcall(function()
+    if vim.o.completeopt == 'menu,preview' then
+      vim.opt.completeopt:append('menu')
+      vim.opt.completeopt:append('menuone')
+      vim.opt.completeopt:append('noselect')
+    end
+  end)
+
+  if type(opts.sources) == 'table' then
+    config.sources = opts.sources
+  end
+
+  if type(opts.mapping) == 'table' then
+    config.mapping = opts.mapping
+  end
+
+  if type(opts.documentation) == 'table' then
+    config.window.documentation = s.merge(
+      config.window.documentation,
+      opts.documentation
+    )
+  elseif opts.documentation == false then
+    config.window.documentation = cmp.config.disable
+  end
+
+  if type(opts.completion) == 'table' then
+    config.completion = s.merge(config.completion, opts.completion)
+  end
+
+  if type(opts.formatting) == 'table' then
+    config.formatting = s.merge(config.formatting, opts.formatting)
+  end
+
+  if opts.preselect ~= nil then
+    config.preselect = opts.preselect
+  end
+
+  cmp.setup(config)
 end
 
-M.sources = function()
+function M.sources()
   local result = {}
   local register = function(mod, value)
     local pattern = string.format('lua/%s*', mod)
@@ -32,7 +84,7 @@ M.sources = function()
   return result
 end
 
-M.default_mappings = function()
+function M.default_mappings()
   local result = {
     -- confirm selection
     ['<CR>'] = cmp.mapping.confirm({select = false}),
@@ -113,7 +165,7 @@ M.cmp_config = function()
       completeopt = 'menu,menuone,noinsert'
     },
     window = {
-      documentation = merge(
+      documentation = s.merge(
         cmp.config.window.bordered(),
         {
           max_height = 15,
@@ -148,61 +200,11 @@ M.cmp_config = function()
   return result
 end
 
-M.call_setup = function(opts)
-  if not ok_cmp then
-    local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
-    vim.notify(msg, vim.log.levels.WARN)
-    return
-  end
-
-  opts = opts or {}
-
-  if type(opts.select_behavior) == 'string' then
-    select_opts = {behavior = opts.select_behavior}
-  end
-
-  local config = M.cmp_config()
-
-  -- Apparently this can fail
-  pcall(function()
-    vim.opt.completeopt:append('menu')
-    vim.opt.completeopt:append('menuone')
-    vim.opt.completeopt:append('noselect')
-  end)
-
-  if type(opts.sources) == 'table' then
-    config.sources = opts.sources
-  end
-
-  if type(opts.mapping) == 'table' then
-    config.mapping = opts.mapping
-  end
-
-  if type(opts.documentation) == 'table' then
-    config.window.documentation = merge(
-      config.window.documentation,
-      opts.documentation
-    )
-  elseif opts.documentation == false then
-    config.window.documentation = cmp.config.disable
-  end
-
-  if type(opts.completion) == 'table' then
-    config.completion = merge(config.completion, opts.completion)
-  end
-
-  if type(opts.formatting) == 'table' then
-    config.formatting = merge(config.formatting, opts.formatting)
-  end
-
-  if opts.preselect ~= nil then
-    config.preselect = opts.preselect
-  end
-
-  cmp.setup(config)
+function s.merge(a, b)
+  return vim.tbl_deep_extend('force', {}, a, b)
 end
 
-s.check_back_space = function()
+function s.check_back_space()
   local col = vim.fn.col('.') - 1
   if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
     return true

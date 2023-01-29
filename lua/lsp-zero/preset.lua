@@ -1,37 +1,35 @@
 local preset = {}
-local icons = {}
-
-icons.sign = function()
-  return {
-    error = '✘',
-    warn = '▲',
-    hint = '⚑',
-    info = ''
-  }
-end
 
 preset.defaults = function()
   return {
     'defaults',
-    set_lsp_keymaps = true,
-    configure_diagnostics = true,
+    set_lsp_keymaps = false,
+    configure_diagnostics = false,
     call_servers = 'global',
-    suggest_lsp_servers = false,
     setup_servers_on_start = false,
-    cmp_capabilities = false,
     manage_nvim_cmp = false,
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
-    sign_icons = icons.sign(),
   }
+end
+
+preset.minimal = function()
+  local opts = preset.defaults()
+
+  opts[1] = 'minimal'
+  opts.configure_diagnostics = true
+  opts.setup_servers_on_start = true
+  opts.call_servers = 'local'
+
+  return opts
 end
 
 preset.recommended = function()
   local opts = preset.defaults()
 
   opts[1] = 'recommended'
-  opts.suggest_lsp_servers = true
+  opts.set_lsp_keymaps = true
+  opts.configure_diagnostics = true
   opts.setup_servers_on_start = true
-  opts.cmp_capabilities = true
   opts.manage_nvim_cmp = true
   opts.call_servers = 'local'
 

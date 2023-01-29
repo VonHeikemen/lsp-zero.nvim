@@ -6,37 +6,37 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-The branch [v1.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x) has been created. `lsp-zero` is oficially 1.0. I advise you use your favorite plugin manager to track the `v1.x` branch. The code there will remain compatible with neovim v0.5. The next branch `v2.x` will require neovim v0.8 and probably will move to a less opinionated model (which is [already possible with v1](https://dev.to/vonheikemen/make-lsp-zeronvim-coexists-with-other-plugins-instead-of-controlling-them-2i80)). I have [some ideas already](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/130), would love to know what you think.
+This is the development branch for version 2 of lsp-zero.
 
 ## How to get started
 
-If you are new to neovim go to the section [Resources for new users](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#resources-for-new-users).
+If you are new to neovim go to the section [Resources for new users](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/getting-started.md#resources-for-new-users).
 
 If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
 
-Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero).
+Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#you-might-not-need-lsp-zero).
 
 ## Documentation
 
 * LSP
-  * [Introduction to nvim-lspconfig](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#introduction)
-  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#default-keybindings)
-  * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#commands)
-  * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#configure-language-servers) 
-  * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#disable-a-language-server) 
-  * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#diagnostics) (A.K.A. error messages and warnings)
-  * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#language-servers-and-masonnvim)
-  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#you-might-not-need-lsp-zero).
+  * [Introduction to nvim-lspconfig](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#introduction)
+  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#default-keybindings)
+  * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#commands)
+  * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#configure-language-servers) 
+  * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#disable-a-language-server) 
+  * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#diagnostics) (A.K.A. error messages and warnings)
+  * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#language-servers-and-masonnvim)
+  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#you-might-not-need-lsp-zero).
 
 * Autocompletion
-  * [About nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#about-nvim-cmp)
-  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#default-keybindings)
-  * [Override keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#override-keybindings)
-  * [Snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#snippets)
+  * [About nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#about-nvim-cmp)
+  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#default-keybindings)
+  * [Override keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#override-keybindings)
+  * [Snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#snippets)
 
 * How to customize lsp-zero
-  * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/advance-usage.md)
-  * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md) (Available functions)
+  * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md)
+  * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md) (Available functions)
 
 ## Quickstart (for the impatient)
 
@@ -44,8 +44,8 @@ This section assumes you want enable every single feature lsp-zero offers. Optio
 
 If you know your way around neovim and how to configure it, take a look at this examples:
 
-* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/configuration-templates.md#lua-template)
-* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/configuration-templates.md#vimscript-template)
+* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/configuration-templates.md#lua-template)
+* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/configuration-templates.md#vimscript-template)
 
 ## Requirements for language servers
 
@@ -62,7 +62,7 @@ With `packer.nvim`:
 ```lua
 use {
   'VonHeikemen/lsp-zero.nvim',
-  branch = 'v1.x',
+  branch = 'dev-v2',
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
@@ -89,7 +89,7 @@ With `lazy.nvim`:
 ```lua
 {
   'VonHeikemen/lsp-zero.nvim',
-  branch = 'v1.x',
+  branch = 'dev-v2',
   dependencies = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
@@ -114,7 +114,7 @@ With `lazy.nvim`:
 With `paq`:
 
 ```lua
-{'VonHeikemen/lsp-zero.nvim', branch = 'v1.x'};
+{'VonHeikemen/lsp-zero.nvim', branch = 'dev-v2'};
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};             -- Required
@@ -154,7 +154,7 @@ Plug 'hrsh7th/cmp-nvim-lua'     " Optional
 Plug 'L3MON4D3/LuaSnip'             " Required
 Plug 'rafamadriz/friendly-snippets' " Optional
 
-Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 ```
 
 ## Usage
@@ -164,8 +164,10 @@ Inside your configuration file add this piece of lua code.
 ```lua
 -- Learn the keybindings, see :help lsp-zero-keybindings
 -- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'mason-lsp',
+  set_lsp_keymaps = true,
+})
 
 -- (Optional) Configure lua language server for neovim
 lsp.nvim_workspace()
@@ -178,8 +180,10 @@ If you don't install `mason.nvim` then you'll need to list the LSP servers you h
 ```lua
 -- Learn the keybindings, see :help lsp-zero-keybindings
 -- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'system-lsp',
+  set_lsp_keymaps = true,
+})
 
 -- When you don't have mason.nvim installed
 -- You'll need to list the servers installed in your system
@@ -191,22 +195,14 @@ lsp.nvim_workspace()
 lsp.setup()
 ```
 
-Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
+When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
 lua <<EOF
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.setup()
+print('this an example code')
+print('written in lua')
 EOF
 ```
-
-The [recommended](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#recommended) preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
-
-If you already know what language servers you want, you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#ensure_installedlist) to install them automatically.
 
 ## FAQ
 
@@ -216,29 +212,13 @@ If you press `gl` on a line with errors (or warnings) a popup window will show u
 
 ### How do I get rid warnings in my neovim lua config?
 
-lsp-zero has a function that will configure the lua language server for you: [nvim_workspace](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#nvim_workspaceopts)
-
-### How do I stop icons from moving my screen?
-
-That's neovim's default behavior. Modify the option `signcolumn`, set it to "yes".
-
-If you use lua.
-
-```lua
-vim.opt.signcolumn = 'yes'
-```
-
-If you use vimscript.
-
-```vim
-set signcolumn=yes
-```
+lsp-zero has a function that will configure the lua language server for you: [nvim_workspace](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts)
 
 ### The function .setup_nvim_cmp is not taking any effect, what do I do?
 
-nvim-cmp is tricky. First check [Advance usage - customize nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/advance-usage.md#customizing-nvim-cmp), the solution you want might be there.
+nvim-cmp is tricky. First check [Advance usage - customize nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#customizing-nvim-cmp), the solution you want might be there.
 
-If the settings you want to modify are not supported by [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#setup_nvim_cmpopts) then follow this example: [The current api is not enough?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/advance-usage.md#the-current-api-is-not-enough)
+If the settings you want to modify are not supported by [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#setup_nvim_cmpopts) then follow this example: [The current api is not enough?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#the-current-api-is-not-enough)
 
 ### How about adding an option to setup_nv..?
 

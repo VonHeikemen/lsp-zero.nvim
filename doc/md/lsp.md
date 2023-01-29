@@ -53,7 +53,7 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 ### Disable default keybindings
 
-Call the function [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_preferencesopts) right after you set the preset, then change the option `set_lsp_keymaps`.
+Call the function [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) right after you set the preset, then change the option `set_lsp_keymaps`.
 
 To disable all default keybindings change `set_lsp_keymaps` to `false`.
 
@@ -83,7 +83,7 @@ lsp.setup()
 
 ### Create new keybindings
 
-Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
+Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -112,7 +112,7 @@ lsp.setup()
 
 ## Configure language servers
 
-To pass arguments to language servers use the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts). You'll need to call it before [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup). 
+To pass arguments to language servers use the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts). You'll need to call it before [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup). 
 
 Here is an example that adds a few options to `tsserver`.
 
@@ -155,7 +155,7 @@ I'm telling you this because I want you to know you can "translate" any config t
 
 ### Disable a language server
 
-Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
+Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -243,7 +243,7 @@ lsp.setup()
 
 ### Opt-out of mason.nvim
 
-Really all you need is to do is uninstall `mason.nvim` and `mason-lspconfig`. But the correct way to opt-out if you are using the [recommended](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#recommended) preset is to change it to [system-lsp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#system-lsp). Or call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#lua-api#set_preferencesopts) and use these settings:
+Really all you need is to do is uninstall `mason.nvim` and `mason-lspconfig`. But the correct way to opt-out if you are using the [recommended](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/getting-started.md#recommended) preset is to change it to [system-lsp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/getting-started.md#system-lsp). Or call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#lua-api#set_preferencesopts) and use these settings:
 
 ```lua
 suggest_lsp_servers = false
@@ -251,7 +251,7 @@ setup_servers_on_start = false
 call_servers = 'global'
 ```
 
-Then you need to specify which language server you want to setup, for this use [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#lua-api#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#lua-api#configurename-opts).
+Then you need to specify which language server you want to setup, for this use [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#lua-api#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#lua-api#configurename-opts).
 
 ### Migrate from nvim-lsp-installer to mason.nvim
 
