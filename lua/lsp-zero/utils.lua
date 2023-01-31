@@ -2,46 +2,41 @@ local M = {}
 local uv = vim.loop
 
 M.get_supported_filetypes = function(name)
-  local exceptions = {
-    awk_ls = {'awk'},
-    vdmj = {'vdmsl', 'vdmpp', 'vdmrt'},
-  }
-
-  if exceptions[name] then
-    return exceptions[name]
-  end
-
-  local mod = 'lspconfig.server_configurations.%s'
-  local server = require(mod:format(name))
-
-  return server.default_config.filetypes or {}
+  local fts = require('lsp-zero.lsp-filetypes')
+  return fts[name] or {}
 end
 
 M.should_suggest_server = function(current_filetype, servers)
   for _, s in pairs(servers) do
     local fts = M.get_supported_filetypes(s)
 
-    for _, ft in pairs(fts) do
-      if current_filetype == ft then
-        return true
-      end
+    if fts[current_filetype] then
+      return true
     end
   end
 
   return false
 end
 
-M.available_servers = function()
-  local lsp_paths = vim.api.nvim_get_runtime_file(
-    'lua/lspconfig/server_configurations/*',
-    1
-  )
+M.build_filetype_map = function()
+  local configs = 'lua/lspconfig/server_configurations/*'
+  local paths = vim.api.nvim_get_runtime_file(configs, 1)
+  local lsp_filetypes = {}
 
-  if #lsp_paths == 0 then
-    return {}
+  for _, path in ipairs(paths) do
+    local name = vim.fn.fnamemodify(path, ':t:r')
+    local server = require(string.format('lspconfig.server_configurations.%s', name))
+    local supported = server.default_config.filetypes or {}
+    lsp_filetypes[name] = {}
+
+    for _, ft in ipairs(supported) do
+      lsp_filetypes[name][ft] = true
+    end
   end
 
-  return vim.tbl_map(function(p) return vim.fn.fnamemodify(p, ':t:r') end, lsp_paths)
+  vim.cmd('redir > /tmp/lsp_ft.lua')
+  print(vim.inspect(lsp_filetypes))
+  vim.cmd('redir END')
 end
 
 M.write_file = function(path, contents)

@@ -409,10 +409,14 @@ M.suggest_server = function()
   local state = require('lsp-zero.state')
   local current_state = state.get()
 
-  if not current_state.ok then return end
+  if not current_state.ok then
+    return
+  end
 
   local visited = current_state.filetypes[ft]
-  if visited then return end
+  if visited then
+    return
+  end
 
   state.save_filetype(ft)
 
@@ -423,14 +427,18 @@ M.suggest_server = function()
     installer.fn.get_servers()
   )
 
-  if is_there then return end
+  if is_there then
+    return
+  end
 
   local server_available = util.should_suggest_server(
     ft,
-    util.available_servers()
+    installer.fn.get_available()
   )
 
-  if not server_available then return end
+  if not server_available then
+    return
+  end
 
   local answer = vim.fn.confirm(
     'Would you like to install a language server for this filetype?',

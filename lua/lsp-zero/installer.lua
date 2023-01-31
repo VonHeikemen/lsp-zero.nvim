@@ -97,7 +97,11 @@ end
 
 s.lsp.get_servers = function()
   local servers = require('nvim-lsp-installer').get_installed_servers()
-  return vim.tbl_map(function(s) return s.name end, servers)
+  return vim.tbl_map(function(i) return i.name end, servers)
+end
+
+s.lsp.get_available = function()
+  return require('nvim-lsp-installer.servers').get_available_server_names()
 end
 
 s.mason.setup = function()
@@ -157,6 +161,10 @@ end
 s.mason.get_servers = function()
   local mason_lsp = require('mason-lspconfig')
   return mason_lsp.get_installed_servers()
+end
+
+s.mason.get_available = function()
+  return require('mason-lspconfig').get_available_servers()
 end
 
 s.id = {

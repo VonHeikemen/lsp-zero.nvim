@@ -63,8 +63,10 @@ M.sync = function()
     local fts = supported_filetypes(name)
     new_state.previously_installed_servers[name] = true
 
-    for _, ft in ipairs(fts) do
-      new_state.filetypes[ft] = true
+    for ft, _ in pairs(fts) do
+      if type(ft) == 'string' then
+        new_state.filetypes[ft] = true
+      end
     end
   end
 
@@ -99,8 +101,10 @@ M.check_server = function(name)
   local fts = supported_filetypes(name)
   state.previously_installed_servers[name] = true
 
-  for _, ft in ipairs(fts) do
-    state.filetypes[ft] = true
+  for ft, _ in pairs(fts) do
+    if type(ft) == 'string' then
+      state.filetypes[ft] = true
+    end
   end
 
   util.write_file(settings.state_file, json_encode(state))
