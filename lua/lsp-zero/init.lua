@@ -42,7 +42,7 @@ function M.preset(opts)
     if type(opts.name) == 'string' then
       s.args.preset = opts.name
     else
-      s.args.preset = 'default'
+      s.args.preset = 'defaults'
     end
 
     s.args.preset_overrides = opts
