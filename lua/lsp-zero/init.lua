@@ -107,6 +107,7 @@ end
 function M.build_options(_, opts)
   local defaults = {
     capabilities = Server.client_capabilities()
+    on_attach = function() end,
   }
 
   return vim.tbl_deep_extend('force', defaults, opts or {})
