@@ -53,6 +53,10 @@ function s.setup_ui(opts)
     vim.lsp.handlers.signature_help,
     {border = opts.border}
   )
+
+  vim.diagnostic.config({
+    float = {border = opts.border}
+  })
 end
 
 function s.settings(name, opts)

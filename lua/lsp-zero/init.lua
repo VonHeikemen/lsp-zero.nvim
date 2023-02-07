@@ -15,7 +15,12 @@ local s = {
 local Server = require('lsp-zero.server')
 
 if vim.fn.has('nvim-0.8') == 1 then
+  Server.track_servers()
   Server.extend_lspconfig()
+else
+  local msg = '[lsp-zero] You need Neovim v0.8 or greater to use lsp-zero v2.\n'
+    .. 'Use the v1.x branch if you need compatibility with Neovim v0.7 or lower.'
+  vim.notify(msg, vim.log.levels.WARN)
 end
 
 function M.setup()
@@ -33,8 +38,13 @@ function M.preset(opts)
     s.args.preset = opts
   end
 
-  if type(opts) == 'table' and type(opts.name) == 'string' then
-    s.args.preset = opts.name
+  if type(opts) == 'table' then
+    if type(opts.name) == 'string' then
+      s.args.preset = opts.name
+    else
+      s.args.preset = 'default'
+    end
+
     s.args.preset_overrides = opts
   end
 
@@ -142,10 +152,6 @@ function M.nvim_workspace(opts)
     server_opts.root_dir = opts.root_dir
   end
 
-  if opts.force_setup == true then
-    server_opts.force_setup = true
-  end
-
   local nvim_source = pcall(require, 'cmp_nvim_lua')
 
   if nvim_source then
@@ -195,9 +201,16 @@ function M.extend_lspconfig(opts)
   opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
 
   Server.user_settings({enable_keymaps = opts.set_lsp_keymaps})
+
   M.on_attach(opts.on_attach)
 
-  Server.extend_lspconfig()
+  if type(opts.capabilities) == 'table' then
+    Server.set_default_capabilities(opts.capabilities)
+  end
+end
+
+function M.default_keymaps(bufnr)
+  Server.default_keymaps(bufnr or 0)
 end
 
 function M.defaults.diagnostics(opts)

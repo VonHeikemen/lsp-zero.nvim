@@ -157,44 +157,6 @@ Plug 'rafamadriz/friendly-snippets' " Optional
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 ```
 
-## Usage
-
-Inside your configuration file add this piece of lua code.
-
-```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero').preset({
-  name = 'mason-lsp',
-  set_lsp_keymaps = true,
-})
-
--- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
-
-lsp.setup()
-```
-
-If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
-
-```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero').preset({
-  name = 'system-lsp',
-  set_lsp_keymaps = true,
-})
-
--- When you don't have mason.nvim installed
--- You'll need to list the servers installed in your system
-lsp.setup_servers({'tsserver', 'eslint'})
-
--- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
-
-lsp.setup()
-```
-
 When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
@@ -203,6 +165,72 @@ print('this an example code')
 print('written in lua')
 EOF
 ```
+
+## Usage
+
+Inside your configuration file add this piece of lua code.
+
+```lua
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
+local lsp_zero = require('lsp-zero').preset({
+  name = 'recommended',
+  suggest_lsp_servers = true,
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+})
+
+-- (Optional) Configure lua language server for neovim
+lsp_zero.nvim_workspace()
+
+lsp_zero.setup()
+```
+
+If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
+
+```lua
+-- Learn the keybindings, see :help lsp-zero-keybindings
+-- Learn to configure LSP servers, see :help lsp-zero-api-showcase
+local lsp_zero = require('lsp-zero').preset({
+  name = 'recommended',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+})
+
+-- When you don't have mason.nvim installed
+-- You'll need to list the servers installed in your system
+lsp_zero.setup_servers({'tsserver', 'eslint'})
+
+-- (Optional) Configure lua language server for neovim
+lsp_zero.nvim_workspace()
+
+lsp_zero.setup()
+```
+
+## Deprecation notice
+
+Settings and functions that will change in the `v3.x` branch.
+
+### Preset settings
+
+* `set_lsp_keymaps` will be removed. The default keymaps will be opt-in in the future. The [.default_keymaps()](#) function will be only way to set them.
+* `suggest_lsp_servers` will be removed. The suggestions will still be available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they will have to be triggered manually using the command `:LspInstall`.
+* `cmp_capabilities` will be removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
+* `manage_nvim_cmp` will be removed. I recommend using [.extend_cmp](#) then call the setup function for nvim-cmp.
+
+### Functions
+
+* [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [,preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
+* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor [.extend_cmp](#).
+* [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.
+* [.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts) will be removed. In the future only the defaults that align with Neovim's behavior will be configured. lsp-zero default functions for nvim-cmp will have to be added manually by the user.
+
+## Breaking changes
+
+* `sign_icons` was removed. If you want the icons you can configure them using [.set_sign_icons()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_sign_iconsopts).
+* `force_setup` option of [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. lsp-zero will configure the server even if is not installed.
+* `force` option of [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. lsp-zero will configure all the servers listed even if they are not installed.
+* The preset `per-project` was removed in favor of the function [.store_config()](#).
 
 ## FAQ
 

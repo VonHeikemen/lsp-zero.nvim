@@ -22,7 +22,7 @@ function M.extend_lspconfig(opts)
   local util = lspconfig.util
 
   -- Set client capabilities
-  util.default_config.capabilities = s.set_capabilities(opts.capabilities)
+  M.set_default_capabilities(opts.capabilities)
 
   -- Set on_attach hook
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
@@ -44,10 +44,6 @@ function M.extend_lspconfig(opts)
       end
     end
   })
-
-  util.on_setup = util.add_hook_after(util.on_setup, function(config)
-    s.skip_server(config.name)
-  end)
 end
 
 function M.setup(name, opts, autostart)
@@ -108,6 +104,18 @@ function M.ensure_installed(list)
   require('mason-lspconfig.ensure_installed')()
 end
 
+function M.track_servers()
+  local util = require('lspconfig').util
+  util.on_setup = util.add_hook_after(util.on_setup, function(config)
+    s.skip_server(config.name)
+  end)
+end
+
+function M.set_default_capabilities(opts)
+  local defaults = require('lspconfig').util.default_config
+  defaults.capabilities = s.set_capabilities(opts)
+end
+
 function M.set_global_commands()
   local command = vim.api.nvim_create_user_command
 
@@ -121,10 +129,7 @@ function M.set_global_commands()
 end
 
 function M.diagnostics_config()
-  return {
-    severity_sort = true,
-    float = {border = 'rounded'},
-  }
+  return {severity_sort = true}
 end
 
 function M.default_keymaps(bufnr)
