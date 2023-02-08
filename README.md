@@ -90,6 +90,8 @@ With `lazy.nvim`:
 {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'v1.x',
+  lazy = false,
+  priority = 1000, -- set to highest priority, forcing to load it first
   dependencies = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
