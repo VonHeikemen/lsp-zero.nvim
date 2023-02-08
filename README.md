@@ -174,7 +174,7 @@ Inside your configuration file add this piece of lua code.
 -- Learn the keybindings, see :help lsp-zero-keybindings
 -- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp_zero = require('lsp-zero').preset({
-  name = 'recommended',
+  name = 'minimal',
   suggest_lsp_servers = true,
   set_lsp_keymaps = true,
   manage_nvim_cmp = true,
@@ -192,7 +192,7 @@ If you don't install `mason.nvim` then you'll need to list the LSP servers you h
 -- Learn the keybindings, see :help lsp-zero-keybindings
 -- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp_zero = require('lsp-zero').preset({
-  name = 'recommended',
+  name = 'minimal',
   set_lsp_keymaps = true,
   manage_nvim_cmp = true,
 })
