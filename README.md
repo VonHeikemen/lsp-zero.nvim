@@ -210,32 +210,33 @@ lsp_zero.setup()
 ## Breaking changes
 
 * `sign_icons` was removed. If you want the icons you can configure them using [.set_sign_icons()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_sign_iconsopts).
-* `force_setup` option of [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. lsp-zero will configure the server even if is not installed.
-* `force` option of [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. lsp-zero will configure all the servers listed even if they are not installed.
-* The preset `per-project` was removed in favor of the function [.store_config()](#).
+* `force_setup` option of [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) was removed. lsp-zero will configure the server even if is not installed.
+* `force` option of [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) was removed. lsp-zero will configure all the servers listed even if they are not installed.
+* The preset `per-project` was removed in favor of the function [.store_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#store_configname-opts).
 
-## Deprecation/changes notice
+## Changes/Deprecation notice
 
 Settings and functions that will change in the `v3.x` branch. If you are using the `main` branch and want to avoid breaking changes use the `dev-v2` branch.
 
 ### Preset settings
 
-* `set_lsp_keymaps` will be removed. The default keymaps will be opt-in in the future. The [.default_keymaps()](#) function will be only way to set them.
+* `set_lsp_keymaps` will be removed. The default keymaps will be opt-in in the future. The [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#default_keymapsbufnr) function will be only way to set them.
 * `suggest_lsp_servers` will be removed. The suggestions will still be available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they will have to be triggered manually using the command `:LspInstall`.
 * `cmp_capabilities` will be removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
-* `manage_nvim_cmp` will be removed. I recommend using [.extend_cmp](#) then call the setup function for nvim-cmp.
+* `manage_nvim_cmp` will be removed. I recommend using [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts) then call the setup function for nvim-cmp.
 
 ### Functions
 
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [.preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
-* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor [.extend_cmp](#).
+* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts).
 * [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_server_configopts) will be removed. There is no way I can enforce the settings unless lsp-zero controls everything... which is something I don't want to do anymore.
 * [,configure](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. To pass options to an LSP server the user will need to call `lspconfig`.
-* [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
-* [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will return the arguments for the lua language server, the user will need to call the server manually.
+* [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
+* [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will return the arguments for the lua language server, the user will need to call the server manually.
 * [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.
 * [.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_sources) will be removed. Sources for nvim-cmp will be handled by the user.
 * [.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts) will be removed. In the future only the defaults that align with Neovim's behavior will be configured. lsp-zero default functions for nvim-cmp will have to be added manually by the user.
+* [,defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsnvim_workspace) will be replaced by [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts).
 
 ## FAQ
 

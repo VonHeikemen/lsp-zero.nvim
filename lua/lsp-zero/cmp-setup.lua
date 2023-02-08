@@ -4,6 +4,7 @@ local s = {}
 local ok_cmp, cmp = pcall(require, 'cmp')
 local ok_luasnip, luasnip = pcall(require, 'luasnip')
 local select_opts = {behavior = 'select'}
+local setup_complete = false
 
 if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
@@ -23,6 +24,8 @@ function M.apply(opts)
   end
 
   local config = M.cmp_config()
+  config.sources = M.sources()
+  config.mapping = M.default_mappings()
 
   -- Apparently this can fail
   pcall(function()
@@ -61,6 +64,8 @@ function M.apply(opts)
   if opts.preselect ~= nil then
     config.preselect = opts.preselect
   end
+
+  setup_complete = true
 
   cmp.setup(config)
 end
@@ -158,9 +163,7 @@ end
 
 M.cmp_config = function()
   local result = {
-    sources = M.sources(),
     preselect = cmp.PreselectMode.Item,
-    mapping = M.default_mappings(),
     completion = {
       completeopt = 'menu,menuone,noinsert'
     },
@@ -198,6 +201,57 @@ M.cmp_config = function()
   end
 
   return result
+end
+
+function M.extend_cmp(opts)
+  if setup_complete then
+    return false
+  end
+
+  local ok, cmp = pcall(require, 'cmp')
+  if not ok then
+    local msg = "[lsp-zero] Could not find 'cmp' module."
+    vim.notify(msg, vim.log.levels.ERROR)
+    return false
+  end
+
+  local defaults = {
+    formatting = true,
+    documentation = true,
+    snippet = true,
+  }
+
+  setup_complete = true
+
+  opts = vim.tbl_deep_extend('force', defaults, opts or {})
+  local config = M.cmp_config()
+  config.completion = nil
+  config.preselect = nil
+
+  if opts.formatting == false then
+    config.formatting = nil
+  end
+
+  if opts.documentation == false then
+    config.window.documentation = nil
+  end
+
+  if opts.snippet == false then
+    config.snippet = nil
+  end
+
+  -- Apparently this can fail
+  pcall(function()
+    if vim.o.completeopt == 'menu,preview' then
+      vim.opt.completeopt:append('menu')
+      vim.opt.completeopt:append('menuone')
+      vim.opt.completeopt:append('noselect')
+    end
+  end)
+
+  cmp.setup(config)
+
+  return true
 end
 
 function s.merge(a, b)

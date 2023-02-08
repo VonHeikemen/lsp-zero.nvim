@@ -47,6 +47,22 @@ lsp.set_preferences({
 lsp.setup()
 ```
 
+### `.default_keymaps({bufnr})`
+
+Creates the [default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#default-keybindings) for lsp actions. Takes a buffer number as an argument. If `bufnr` is omitted the keybindings will be local to the current buffer.
+
+There is no reason to call this function if you are using a preset. But if you wanted to use lsp-zero without a preset, this is how.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps(bufnr)
+end)
+
+require('lspconfig').tsserver.setup({})
+```
+
 ### `.setup()`
 
 The one that coordinates the call to other setup functions. Handles the configuration for `nvim-cmp` and the language servers during startup. It is meant to be the last function you call.
@@ -193,11 +209,15 @@ Some example config of these options are featured in [nvim-cmp's readme](https:/
 
 If what you want is to extend the configuration of nvim-cmp, I suggest you change the preset to `lsp-compe`. There is an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#the-current-api-is-not-enough) in the Advance usage page.
 
+### `.store_config({server_name}, {opts})`
+
+Saves the settings for `server_name` for later use. See [.use()](#useserver-opts) for the full example.
+
 ### `.use({server}, {opts})`
 
 For when you want full control of the servers you want to use in particular project. It is meant to be called in project local config.
 
-Ideally, you would setup some default values for your servers in your neovim config using [.setup_servers()](#set_server_configopts) or [.configure()](#configurename-opts). Example.
+Ideally, you would setup some default values for your servers in your neovim config using [.store_config()](#store_configname-opts). Example.
 
 ```lua
 -- init.lua
@@ -205,7 +225,7 @@ Ideally, you would setup some default values for your servers in your neovim con
 local lsp = require('lsp-zero')
 lsp.preset('per-project')
 
-lsp.configure('pyright', {
+lsp.store_config('pyright', {
   single_file_support = false
 })
 
@@ -230,7 +250,7 @@ lsp.use('pyright', {
 })
 ```
 
-Options from [.configure()](#configurename-opts) will be merged with the ones on `.use()` and the server will be initialized.
+Options from [.store_config()](#store_configname-opts) will be merged with the ones on `.use()` and the server will be initialized.
 
 `.use()` can also take a list of servers. All the servers on the list will share the same options.
 
@@ -389,6 +409,32 @@ require('lsp-zero').extend_lspconfig({
       }
     }
   }
+})
+```
+
+### `extend_cmp({opts})`
+
+Configures basic formatting options, enables border for the documentation window and sets luasnip to expand snippets. It leaves the `sources` and `mapping` to be configured by the user using nvim-cmp itself.
+
+```lua
+require('lsp-zero').extend_cmp()
+require('luasnip.loaders.from_vscode').lazy_load()
+
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  })
 })
 ```
 

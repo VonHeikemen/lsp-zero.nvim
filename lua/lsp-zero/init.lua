@@ -23,6 +23,8 @@ else
   vim.notify(msg, vim.log.levels.WARN)
 end
 
+M.cmp_action = require('lsp-zero.cmp-mapping')
+
 function M.setup()
   if s.setup_status == 'complete' then
     return
@@ -106,7 +108,7 @@ end
 
 function M.build_options(_, opts)
   local defaults = {
-    capabilities = Server.client_capabilities()
+    capabilities = Server.client_capabilities(),
     on_attach = function() end,
   }
 
@@ -245,7 +247,10 @@ function M.defaults.cmp_sources(opts)
 end
 
 function M.defaults.cmp_config(opts)
-  local config = require('lsp-zero.cmp-setup').cmp_config()
+  local cmp_setup = require('lsp-zero.cmp-setup')
+  local config = cmp_setup.cmp_config()
+  config.sources = cmp_setup.sources()
+  config.mapping = cmp_setup.default_mappings()
 
   if type(opts) == 'table' then
     return vim.tbl_deep_extend('force', config, opts)
