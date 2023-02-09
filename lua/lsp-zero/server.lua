@@ -179,7 +179,12 @@ M.setup_diagnostics = function()
     M.set_sign_icons(icon)
   end
 
-  vim.diagnostic.config(M.diagnostics_config())
+  local diagnostic = M.diagnostics_config()
+
+  vim.diagnostic.config({
+    severity_sort = diagnostic.severity_sort,
+    float = diagnostic.float
+  })
 end
 
 M.setup_handlers = function()
