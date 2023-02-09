@@ -68,9 +68,10 @@ end
 preset['per-project'] = function()
   local opts = preset.recommended()
 
-  opts[1] = 'per-project'
-  opts.suggest_lsp_servers = false
-  opts.setup_servers_on_start = 'per-project'
+  local msg = "[lsp-zero] The 'per-project' has been removed.\n"
+    .. "To setup default config for an LSP server use the .store_config() function"
+
+  vim.notify(msg, vim.log.levels.WARN)
 
   return opts
 end
