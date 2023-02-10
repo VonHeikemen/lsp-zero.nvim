@@ -65,8 +65,12 @@ lsp.set_server_config({
 Useful when you need to pass some custom options to a specific language server. Takes the same options as `nvim-lspconfig`'s setup function. You can find more details in the help page `:help lspconfig-setup`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.configure('tsserver', {
   single_file_support = false,
@@ -107,8 +111,12 @@ lsp.setup_servers({'dartls', 'vls', force = true})
 Disables one or more language server. It tells lsp-zero to skip the initialization of the language servers provided. Its only effective when `setup_servers_on_start` is set to `true`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.skip_server_setup({'eslint', 'angularls'})
 
@@ -122,11 +130,11 @@ Execute `{callback}` function every time a server is attached to a buffer.
 Let's say you want to disable all the default keybindings for lsp actions and diagnostics, and then declare your own.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.set_preferences({
-  set_lsp_keymaps = false
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = false,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -201,8 +209,11 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero')
-lsp.preset('per-project')
+local lsp = require('lsp-zero').preset({
+  name = 'per-project',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+})
 
 lsp.configure('pyright', {
   single_file_support = false
@@ -256,8 +267,12 @@ This function was designed as an escape hatch, so you can call a language server
 For example, if you want to use `rust-tools`, this is how you'll do it.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.skip_server_setup({'rust_analyzer'})
 
@@ -294,8 +309,12 @@ Returns a table with the default keybindings for `nvim-cmp`. If you provide the 
 Here is an example that disables completion with tab and replace it with `Ctrl + space`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -318,11 +337,17 @@ lsp.setup()
 
 ### `.defaults.cmp_config({opts})`
 
-Returns the entire configuration table for `nvim-cmp`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+Returns the entire configuration table for nvim-cmp. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+
+In this example we set `manage_nvim_cmp` to `false` then seutp nvim-cmp directly.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('lsp-compe')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = false,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
