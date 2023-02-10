@@ -139,6 +139,14 @@ M.preset = function(opts)
     opts = {name = opts}
   end
 
+  if opts == nil then
+    opts = {name = 'minimal'}
+  end
+
+  if opts.name == nil then
+    opts.name = 'minimal' 
+  end
+
   local settings = M.create_preset(opts.name)
   settings = vim.tbl_extend('force', settings, opts)
 
