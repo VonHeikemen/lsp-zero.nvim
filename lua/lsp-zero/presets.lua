@@ -25,6 +25,21 @@ preset.defaults = function()
   }
 end
 
+preset.minimal = function()
+  local opts = preset.defaults()
+
+  opts[1] = 'minimal'
+  opts.set_lsp_keymaps = false
+  opts.configure_diagnostics = true
+  opts.call_servers = 'local'
+  opts.suggest_lsp_servers = false
+  opts.setup_servers_on_start = true
+  opts.cmp_capabilities = true
+  opts.manage_nvim_cmp = false
+
+  return opts
+end
+
 preset.recommended = function()
   local opts = preset.defaults()
 

@@ -20,6 +20,7 @@ It creates a combination of settings safe to use for specific cases. Make sure i
 
 `{name}` can be one of the following:
 
+* minimal
 * recommended
 * lsp-compe
 * lsp-only

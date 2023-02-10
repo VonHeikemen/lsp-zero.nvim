@@ -154,6 +154,11 @@ These are the available presets.
      * Setup some keybindings related to LSP actions, things like go to
        definition or rename variable.
 
+  minimal: ~
+      It enables the automatic setup of language servers and the configuration
+      of diagnostics. It doesn't create keybindings for LSP. It doesn't handle
+      the setup for nvim-cmp.
+
   lsp-compe: ~
       Is the same as the `recommended` except that it assumes you want full
       control over the configuration for `nvim-cmp`. It'll provide the

@@ -53,6 +53,10 @@ Presets are a combinations of options that determine how [.setup()](https://gith
 * Diagnostic messages are shown in a floating window.
 * Setup some keybindings related to LSP actions, things like go to definition or rename variable.
 
+### minimal
+
+It enables the automatic setup of language servers and the configuration of diagnostics. It doesn't create keybindings for LSP. It doesn't handle the setup for nvim-cmp.
+
 ### lsp-compe
 
 Is the same as the [recommended](#recommended) except that it assumes you want full control over the configuration for nvim-cmp. It'll provide the "client capabilities" config to the languages server but the rest of the config is controlled by the user.
