@@ -182,7 +182,8 @@ M.setup_diagnostics = function()
   local config = M.diagnostics_config()
 
   vim.diagnostic.config({
-    severity_sort = config.severity_sort,
+    virtual_text = false,
+    severity_sort = true,
     float = config.float
   })
 end
