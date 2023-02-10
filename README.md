@@ -22,6 +22,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Introduction to nvim-lspconfig](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#introduction)
   * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#default-keybindings)
   * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#commands)
+  * [Install new language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#install-new-language-servers) 
   * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#configure-language-servers) 
   * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#disable-a-language-server) 
   * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#diagnostics) (A.K.A. error messages and warnings)
@@ -175,7 +176,9 @@ lsp.nvim_workspace()
 lsp.setup()
 ```
 
-If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
+If you want to install a language server for a particular file type use the command `:LspInstall`. And when the installation is done restart neovim.
+
+If you don't want to manage your language servers with `mason.nvim` then you'll need to list the LSP servers you want to configure with [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_serverslist).
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -195,7 +198,7 @@ lsp.nvim_workspace()
 lsp.setup()
 ```
 
-Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
+When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
 lua <<EOF

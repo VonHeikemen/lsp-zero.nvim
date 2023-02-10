@@ -114,9 +114,34 @@ lsp.setup()
 
 * `LspZeroWorkspaceList`: List workspace folders. See [:help vim.lsp.buf.list_workspace_folders()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.list_workspace_folders()).
 
+## Install new language servers
+
+If you have `mason.nvim` available then you can use the command `:LspInstall` to get a list of language servers available for the current file type. You'll also be able to use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#ensure_installedlist) to install a list of servers automatically.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.ensure_installed({
+  'tsserver',
+  'sumneko_lua',
+  'rust_analyzer',
+})
+
+lsp.setup()
+```
+
+If you don't have `mason.nvim` you'll need to install each server manually in your system. You can find the install instructions for the supported LSP servers here: [server configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
 ## Configure language servers
 
-To pass arguments to language servers use the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts). You'll need to call it before [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup). 
+To pass arguments to language servers use the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts). You'll need to call it before [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup).
+
+You can find the list of servers here: [server configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
 Here is an example that adds a few options to `tsserver`.
 
