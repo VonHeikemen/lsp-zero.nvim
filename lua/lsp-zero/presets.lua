@@ -36,6 +36,7 @@ preset.minimal = function()
   opts.setup_servers_on_start = true
   opts.cmp_capabilities = true
   opts.manage_nvim_cmp = false
+  opts.sign_icons = {}
 
   return opts
 end
