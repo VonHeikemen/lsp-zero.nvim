@@ -134,14 +134,22 @@ M.use = function(servers, lsp_opts, force)
   end
 end
 
-M.preset = function(name)
-  local opts = M.create_preset(name)
-  if not opts[1] then
-    error('[lsp-zero] Invalid preset')
-    return
+M.preset = function(opts)
+  if type(opts) == 'string' then
+    opts = {name = opts}
   end
 
-  M.set_preferences(opts)
+  local settings = M.create_preset(opts.name)
+  settings = vim.tbl_extend('force', settings, opts)
+
+  if not settings[1] then
+    error('[lsp-zero] Invalid preset')
+    return M
+  end
+
+  M.set_preferences(settings)
+
+  return M
 end
 
 M.set_preferences = function(opts)
