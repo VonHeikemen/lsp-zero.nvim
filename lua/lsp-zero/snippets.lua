@@ -6,7 +6,5 @@ luasnip.config.set_config({
   delete_check_events = 'InsertLeave'
 })
 
-if package.loaded['luasnip.loaders.from_vscode'] == nil then
-  require('luasnip.loaders.from_vscode').lazy_load()
-end
+require('luasnip.loaders.from_vscode').lazy_load()
 
