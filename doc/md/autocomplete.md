@@ -57,8 +57,12 @@ You can get more details about the `mapping` option using the command `:help cmp
 If you want to start with neovim's default and then add your own, use nvim-cmp's preset. Like this:
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -78,8 +82,12 @@ lsp.setup()
 If you want to add/change a mapping in lsp-zero's default, do this.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -99,8 +107,12 @@ Just like before we are going to use [lsp.defaults.cmp_mappings](https://github.
 Here is an example that disables `tab` to autocomplete, and also disables `Enter` to confirm.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 

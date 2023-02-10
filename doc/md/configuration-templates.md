@@ -38,15 +38,11 @@ end)
 
 vim.opt.signcolumn = 'yes'
 
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
--- See :help lsp-zero-preferences
-lsp.set_preferences({
-  set_lsp_keymaps = true, -- set to false if you want to configure your own keybindings
-  manage_nvim_cmp = true, -- set to false if you want to configure nvim-cmp on your own
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 -- (Optional) Configure lua language server for neovim
@@ -85,16 +81,11 @@ call plug#end()
 set signcolumn=yes
 
 lua <<EOF
--- "Learn the keybindings, see :help lsp-zero-keybindings
--- "Learn to configure LSP servers, see :help lsp-zero-api-showcase
-
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
--- "See :help lsp-zero-preferences
-lsp.set_preferences({
-  set_lsp_keymaps = true, -- "set to false if you want to configure your own keybindings
-  manage_nvim_cmp = true, -- "set to false if you want to configure nvim-cmp on your own
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 lsp.setup()

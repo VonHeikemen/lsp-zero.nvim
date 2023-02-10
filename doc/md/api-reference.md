@@ -14,11 +14,11 @@
 
 ## Lua api
 
-### `.preset({name})`
+### `.preset({opts})`
 
-It creates a combination of settings safe to use for specific cases. Make sure is the first function you call after you require lsp-zero module.
+It creates a combination of settings safe to use for specific cases.
 
-`{name}` can be one of the following:
+`{opts}` can be a string with one of these values:
 
 * minimal
 * recommended
@@ -28,25 +28,23 @@ It creates a combination of settings safe to use for specific cases. Make sure i
 * per-project
 * system-lsp
 
+
+If you want to override a setting from a preset use a lua table. Like this.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+```
+
 ### `.set_preferences({opts})`
 
 It gives the user control over the options available in the plugin.
 
-You can use it to override options from a preset.
-
-You could disable the automatic suggestions for language servers, and also specify a list of lsp keymaps to omit during setup.
-
-```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.set_preferences({
-  suggest_lsp_servers = false
-  set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
-})
-
-lsp.setup()
-```
+When using a preset is better to use [.preset()](#presetopts) to configure these settings.
 
 ### `.setup()`
 

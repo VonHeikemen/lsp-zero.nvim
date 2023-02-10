@@ -53,16 +53,16 @@ When a language server gets attached to a buffer you gain access to some keybind
 
 ### Disable default keybindings
 
-Call the function [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_preferencesopts) right after you set the preset, then change the option `set_lsp_keymaps`.
+Call the function [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#presetopts) then change the option `set_lsp_keymaps`.
 
 To disable all default keybindings change `set_lsp_keymaps` to `false`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.set_preferences({
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
   set_lsp_keymaps = false,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 lsp.setup()
@@ -71,11 +71,11 @@ lsp.setup()
 If you just want to disable a few of them use the `omit` option.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.set_preferences({
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
   set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 lsp.setup()
@@ -86,8 +86,12 @@ lsp.setup()
 Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr}
@@ -117,8 +121,12 @@ To pass arguments to language servers use the function [.configure()](https://gi
 Here is an example that adds a few options to `tsserver`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.configure('tsserver', {
   on_attach = function(client, bufnr)
@@ -158,8 +166,12 @@ I'm telling you this because I want you to know you can "translate" any config t
 Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.skip_server_setup({'eslint'})
 
@@ -197,8 +209,12 @@ If you want to override some settings lsp-zero provides make sure you call `vim.
 Here is an example that restores neovim's default configuration for diagnostics.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -235,15 +251,19 @@ require('mason.settings').set({
   }
 })
 
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 ```
 
 ### Opt-out of mason.nvim
 
-Really all you need is to do is uninstall `mason.nvim` and `mason-lspconfig`. But the correct way to opt-out if you are using the [recommended](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#recommended) preset is to change it to [system-lsp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#system-lsp). Or call [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#lua-api#set_preferencesopts) and use these settings:
+Really all you need is to do is uninstall `mason.nvim` and `mason-lspconfig`. Or call [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#lua-api#presetopts) and use these settings:
 
 ```lua
 suggest_lsp_servers = false

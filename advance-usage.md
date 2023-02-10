@@ -1,29 +1,5 @@
 # Advance usage
 
-## Changing sign icons
-
-After setting the preset you are allowed to override the icons shown in the gutter for diagnostics.
-
-```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
-lsp.set_preferences({
-  sign_icons = {
-    error = 'E',
-    warn = 'W',
-    hint = 'H',
-    info = 'I'
-  }
-})
-```
-
-## Yes, you can override the settings of a preset
-
-Be careful though. If you are going to override a preset do it right after calling [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#presetname).
-
-If you have any questions you can stop by the [discussions](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) page.
-
 ## Configuring language servers
 
 Here's an example configuration showing the functions you have available to configure and install LSP servers.
@@ -32,8 +8,12 @@ Here's an example configuration showing the functions you have available to conf
 -- reserve space for diagnostic icons
 vim.opt.signcolumn = 'yes'
 
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 -- make sure this servers are installed
 -- see :help lsp-zero.ensure_installed()
@@ -113,12 +93,11 @@ endfunction
 Next you call that function when the LSP server is attached to a buffer.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
-
--- Disable default keybindings (optional)
-lsp.set_preferences({
-  set_lsp_keymaps = false
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = false, -- (optional) Disable default keybindings
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
 })
 
 lsp.on_attach(function(client, bufnr)
@@ -133,8 +112,12 @@ lsp.setup()
 Yes, call the function [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts) and set the option `force_setup` to `true`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.configure('dartls', {
   force_setup = true,
@@ -153,8 +136,12 @@ You are looking for "diagnostics". If you want to configure them use the functio
 Here is an example that enables virtual text.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -200,8 +187,12 @@ Using [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x
 You want to modify `completion.completeopt`. For this to work write all the defaults and then add `noselect`. Then make sure "preselect mode" is set to `none`. Like this. 
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   preselect = 'none',
@@ -222,8 +213,12 @@ Using the `sources` option you can specify the priority of each source by changi
 Here is an example that recreates the default configuration for sources.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   sources = {
@@ -245,8 +240,12 @@ This you do with the `formatting` option. It is kind of a complex topic because 
 Anyway, here is an example changing the names of the sources with some icons.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   formatting = {
@@ -277,8 +276,12 @@ lsp.setup()
 We can change that too. There's the `documentation` option. Is the same as nvim-cmp's `window.documentation` option. And these are the defaults.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   documentation = {
@@ -298,8 +301,12 @@ lsp.setup()
 You could also disable it if you set it to `false`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   documentation = false
@@ -315,8 +322,12 @@ The option you want is `mapping`. The trickiest. Here you are going to find your
 Here is an example that adds `<C-Space>` to trigger completion and makes `<C-e>` cancel the completion instead of toggling.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -337,8 +348,12 @@ Want to know how much fun you can have creating your own mappings? Check out the
 You can use the preset that comes with nvim-cmp.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -380,8 +395,12 @@ end, {'i', 's'}),
 You can disable any default keymap by overriding the `mapping` property in `nvim-cmp`. Use [lsp.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to expose the default keybindings then "delete" the one you want. Let's make an example with `Tab`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp = require('cmp')
 
@@ -401,8 +420,12 @@ lsp.setup()
 You can extend the sources by overriding the `sources` property. Use [lsp.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_sources) to expose the default sources and then insert the new source.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 local cmp_sources = lsp.defaults.cmp_sources()
 
@@ -420,8 +443,12 @@ lsp.setup()
 Not a fan of constant completion suggestions? Don't worry there is a way to invoke the completion only demand. If you set `completion.autocomplete` to `false`, the menu will only show up when you press `tab` or `ctrl + e`.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup_nvim_cmp({
   completion = {autocomplete = false}
@@ -432,11 +459,15 @@ lsp.setup()
 
 ### The current api is not enough?
 
-Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. If you are using the `recommended` preset, change it to `lsp-compe` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to extend or change the default configuration table.
+Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. Disable the setting `manage_nvim_cmp` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to extend or change the default configuration table.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('lsp-compe')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = false,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -463,8 +494,12 @@ null-ls isn't a real language server, if you want "integrate it" with lsp-zero a
 The only option that makes sense to share with null-ls is the `on_attach` function. Here is an example on how to do it.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -494,8 +529,12 @@ null_ls.setup({
 The solution I propose here is to use the `on_attach` function to create a command called `NullFormat`. This new command will have all the arguments necessary to send a formatting request specifically to null-ls. You could then create a keymap bound to the `NullFormat` command.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -539,8 +578,12 @@ null_ls.setup({
 Ensure the tools you have listed in the `sources` option are installed automatically.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 
@@ -576,8 +619,12 @@ require('mason-null-ls').setup({
 Make null-ls aware of the tools you installed using mason.nvim, and configure them automatically.
 
 ```lua
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 

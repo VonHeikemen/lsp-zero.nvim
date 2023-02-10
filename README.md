@@ -162,10 +162,12 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
 Inside your configuration file add this piece of lua code.
 
 ```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 -- (Optional) Configure lua language server for neovim
 lsp.nvim_workspace()
@@ -176,10 +178,12 @@ lsp.setup()
 If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
 
 ```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 -- When you don't have mason.nvim installed
 -- You'll need to list the servers installed in your system
@@ -195,10 +199,12 @@ Remember, when using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
 lua <<EOF
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
-local lsp = require('lsp-zero')
-lsp.preset('recommended')
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
 
 lsp.setup()
 EOF

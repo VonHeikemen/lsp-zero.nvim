@@ -18,8 +18,12 @@ The fastest way to get started is by using a "preset" and immediately call
 the |lsp-zero.setup()| function.
 
 >
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
 
   lsp.setup()
 <
@@ -28,8 +32,12 @@ If your config file is written in vimscript use |lua-heredoc|.
 
 >
   lua <<EOF
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
 
   lsp.setup()
   EOF
@@ -55,8 +63,12 @@ https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#configur
   -- reserve space for diagnostic icons
   vim.opt.signcolumn = 'yes'
 
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
 
   -- make sure this servers are installed
   -- see :help lsp-zero.ensure_installed()
@@ -130,9 +142,19 @@ will behave, they can enable or disable features.
 They are created when you use the function |lsp-zero.preset()|.
 
 >
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset('minimal')
 >
+
+If you wish to override a setting from a preset use a lua table.
+
+>
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
+<
 
 These are the available presets.
 
@@ -194,7 +216,7 @@ These are the available presets.
 ==============================================================================
 Preferences                                             *lsp-zero-preferences*
 
-You can choose the features you want using |lsp-zero.set_preferences()|
+You can choose the features you want using |lsp-zero.preset()|
 function. It takes as argument a "table" describing the options you want to
 enable/disable.
 
@@ -243,7 +265,7 @@ These are the available options.
 The code below describes the same features the `recommended` preset enables.
 
 >
-  require('lsp-zero').set_preferences({
+  local lsp = require('lsp-zero').preset({
     suggest_lsp_servers = true,
     setup_servers_on_start = true,
     set_lsp_keymaps = true,
@@ -257,22 +279,6 @@ The code below describes the same features the `recommended` preset enables.
       hint = '⚑',
       info = ''
     }
-  })
-<
-
-It is possible to override the preferences of a preset if you use
-|lsp-zero.set_preferences()| right after |lsp-zero.preset()|.
-
-You could disable the automatic suggestions for language servers, and also
-specify a list of lsp keymaps to omit during setup.
-
->
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
-
-  lsp.set_preferences({
-    suggest_lsp_servers = false
-    set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
   })
 <
 
@@ -516,8 +522,12 @@ If you want to override settings lsp-zero provides make sure you call
 Here is an example that restores the built-in configuration for diagnostics.
 
 >
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
 
   lsp.setup()
 
@@ -578,8 +588,12 @@ calling the `lsp-zero` module.
     }
   })
 
-  local lsp = require('lsp-zero')
-  lsp.preset('recommended')
+  local lsp = require('lsp-zero').preset({
+    name = 'minimal',
+    set_lsp_keymaps = true,
+    manage_nvim_cmp = true,
+    suggest_lsp_servers = false,
+  })
 
   lsp.setup()
 <
@@ -588,8 +602,7 @@ Opt-out of mason.nvim                             *lsp-zero-installer-opt-out*
 
 Really all you need is to uninstall `mason.nvim` and `mason-lspconfig`.
 But the correct way to opt-out if you are using the `recommended` preset
-is to change it to `system-lsp`. Or call |lsp-zero.set_preferences()|
-and use these settings:
+is to change it to `system-lsp`. Or use these settings:
 
 >
   suggest_lsp_servers = false
@@ -706,12 +719,12 @@ Lua API                                                     *lsp-zero-lua-api*
 
                                                            *lsp-zero.preset()*
 
-  .preset({name}): ~
+  .preset({opts}): ~
       It creates a combination of settings safe to use for specific cases.
-      Make sure is the first function you call after you require lsp-zero.
 
-      {name} can be one of the following:
+      {opts} can be a string with one of these values:
 
+          * `minimal`
           * `recommended`
           * `lsp-compe`
           * `lsp-only`
@@ -721,11 +734,24 @@ Lua API                                                     *lsp-zero-lua-api*
 
       For more details about them see |lsp-zero-presets|.
 
+      If you want to override a setting from a preset use a lua table.
+
+>
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
+<
+
                                                   *lsp-zero.set_preferences()*
 
   .set_preferences({opts}): ~
       It gives the user control over the options available in the plugin.
-      You are allowed to use it to override the options set by a preset.
+
+      When using a preset is better to use |lsp-zero.preset()| to configure
+      these settings.
 
       {opts} is table with the properties:
 
@@ -819,8 +845,12 @@ Lua API                                                     *lsp-zero-lua-api*
       setup function. You can find more in |lspconfig-setup|.
 
 >
-      local lsp = require('lsp-zero')
-      lsp.preset('recommended')
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
       lsp.configure('tsserver', {
         single_file_support = false,
@@ -847,8 +877,12 @@ Lua API                                                     *lsp-zero-lua-api*
       when `setup_servers_on_start` is set to `true`.
 
 >
-      local lsp = require('lsp-zero')
-      lsp.preset('recommended')
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
       lsp.skip_server_setup({'eslint', 'angularls'})
 
@@ -865,8 +899,12 @@ Lua API                                                     *lsp-zero-lua-api*
       you want to declare your own.
 
 >
-      local lsp = require('lsp-zero')
-      lsp.preset('recommended')
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
       lsp.set_preferences({
         set_lsp_keymaps = false
@@ -1046,8 +1084,12 @@ Lua API                                                     *lsp-zero-lua-api*
       For example, if you want to use `rust-tools`, this is how you'll do it.
 
 >
-      local lsp = require('lsp-zero')
-      lsp.preset('recommended')
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
       lsp.skip_server_setup({'rust_analyzer'})
 
@@ -1100,8 +1142,12 @@ Lua API                                                     *lsp-zero-lua-api*
       Here is an example that disables completion with tab and replace it
       with `Ctrl + space`.
 >
-      local lsp = require('lsp-zero')
-      lsp.preset('recommended')
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
       local cmp = require('cmp')
       local cmp_mappings = lsp.defaults.cmp_mappings({

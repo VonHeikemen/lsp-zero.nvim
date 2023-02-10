@@ -79,12 +79,12 @@ Is the same as [manual-setup](#manual-setup), automatic setup for language serve
 
 ## Choose your features
 
-For this I would recommend deleting the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#presetname) call,  use [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_preferencesopts) instead. This function takes a "table" of options, they describe the features this plugin offers.
+You can use [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#presetopts), this function takes a "table" of options, they describe the features this plugin offers.
 
 These are the options the [recommended](#recommended) preset uses.
 
 ```lua
-lsp.set_preferences({
+local lsp = require('lsp-zero').preset({
   suggest_lsp_servers = true,
   setup_servers_on_start = true,
   set_lsp_keymaps = true,
