@@ -210,9 +210,7 @@ lsp.setup()
 EOF
 ```
 
-The [recommended](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/getting-started.md#recommended) preset will enable automatic suggestions of language servers. So any time you open a filetype for the first time it'll try to ask if you want to install a language server that supports it.
-
-If you already know what language servers you want, you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#ensure_installedlist) to install them automatically.
+Remember to read the documentation for [LSP](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#introduction) and [autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#about-nvim-cmp) for more details.
 
 ## FAQ
 
