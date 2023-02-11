@@ -23,7 +23,9 @@ else
   vim.notify(msg, vim.log.levels.WARN)
 end
 
-M.cmp_action = require('lsp-zero.cmp-mapping')
+function M.cmp_action()
+  return require('lsp-zero.cmp-mapping')
+end
 
 function M.setup()
   if s.setup_status == 'complete' then
@@ -153,20 +155,6 @@ function M.nvim_workspace(opts)
 
   if opts.root_dir then
     server_opts.root_dir = opts.root_dir
-  end
-
-  local nvim_source = pcall(require, 'cmp_nvim_lua')
-
-  if nvim_source then
-    server_opts.before_init = function()
-      local cmp_sources = require('cmp').get_config().sources
-      local names = vim.tbl_map(function(x) return x.name end, cmp_sources)
-
-      if not vim.tbl_contains(names, 'nvim_lua') then
-        table.insert(cmp_sources, {name = 'nvim_lua'})
-        require('cmp').setup.filetype('lua', {sources = cmp_sources})
-      end
-    end
   end
 
   M.configure('sumneko_lua', server_opts)

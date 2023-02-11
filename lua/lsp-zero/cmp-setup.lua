@@ -10,7 +10,7 @@ if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
 end
 
-function M.apply(opts)
+function M.apply(opts, mode)
   if not ok_cmp then
     local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
     vim.notify(msg, vim.log.levels.WARN)
@@ -23,10 +23,6 @@ function M.apply(opts)
     select_opts = {behavior = opts.select_behavior}
   end
 
-  local config = M.cmp_config()
-  config.sources = M.sources()
-  config.mapping = M.default_mappings()
-
   -- Apparently this can fail
   pcall(function()
     if vim.o.completeopt == 'menu,preview' then
@@ -35,6 +31,18 @@ function M.apply(opts)
       vim.opt.completeopt:append('noselect')
     end
   end)
+
+  local config = M.cmp_config()
+
+  if mode == 'extend' then
+    config.preselect = nil
+    config.completion = nil
+    cmp.setup(config)
+    return
+  end
+
+  config.sources = M.sources()
+  config.mapping = M.default_mappings()
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
@@ -161,7 +169,7 @@ function M.default_mappings()
   return result
 end
 
-M.cmp_config = function()
+function M.cmp_config()
   local result = {
     preselect = cmp.PreselectMode.Item,
     completion = {
@@ -201,57 +209,6 @@ M.cmp_config = function()
   end
 
   return result
-end
-
-function M.extend_cmp(opts)
-  if setup_complete then
-    return false
-  end
-
-  local ok, cmp = pcall(require, 'cmp')
-  if not ok then
-    local msg = "[lsp-zero] Could not find 'cmp' module."
-    vim.notify(msg, vim.log.levels.ERROR)
-    return false
-  end
-
-  local defaults = {
-    formatting = true,
-    documentation = true,
-    snippet = true,
-  }
-
-  setup_complete = true
-
-  opts = vim.tbl_deep_extend('force', defaults, opts or {})
-  local config = M.cmp_config()
-  config.completion = nil
-  config.preselect = nil
-
-  if opts.formatting == false then
-    config.formatting = nil
-  end
-
-  if opts.documentation == false then
-    config.window.documentation = nil
-  end
-
-  if opts.snippet == false then
-    config.snippet = nil
-  end
-
-  -- Apparently this can fail
-  pcall(function()
-    if vim.o.completeopt == 'menu,preview' then
-      vim.opt.completeopt:append('menu')
-      vim.opt.completeopt:append('menuone')
-      vim.opt.completeopt:append('noselect')
-    end
-  end)
-
-  cmp.setup(config)
-
-  return true
 end
 
 function s.merge(a, b)

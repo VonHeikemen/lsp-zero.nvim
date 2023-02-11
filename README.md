@@ -160,6 +160,7 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
 ```lua
+" Don't copy this example
 lua <<EOF
 print('this an example code')
 print('written in lua')
@@ -171,30 +172,39 @@ EOF
 Inside your configuration file add this piece of lua code.
 
 ```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp_zero = require('lsp-zero').preset({
   name = 'minimal',
-  suggest_lsp_servers = true,
   set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
 })
 
 -- (Optional) Configure lua language server for neovim
 lsp_zero.nvim_workspace()
 
 lsp_zero.setup()
+
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  })
+})
 ```
 
 If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
 
 ```lua
--- Learn the keybindings, see :help lsp-zero-keybindings
--- Learn to configure LSP servers, see :help lsp-zero-api-showcase
 local lsp_zero = require('lsp-zero').preset({
   name = 'minimal',
   set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
 })
 
 -- When you don't have mason.nvim installed
@@ -230,7 +240,6 @@ Settings and functions that will change in the `v3.x` branch. If you are using t
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [.preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
 * [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts).
 * [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_server_configopts) will be removed. There is no way I can enforce the settings unless lsp-zero controls everything... which is something I don't want to do anymore.
-* [,configure](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) will be removed. To pass options to an LSP server the user will need to call `lspconfig`.
 * [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
 * [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will return the arguments for the lua language server, the user will need to call the server manually.
 * [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.

@@ -18,6 +18,7 @@ preset.minimal = function()
   opts[1] = 'minimal'
   opts.configure_diagnostics = true
   opts.setup_servers_on_start = true
+  opts.manage_nvim_cmp = 'extend'
   opts.call_servers = 'local'
 
   return opts
@@ -32,6 +33,7 @@ preset.recommended = function()
   opts.setup_servers_on_start = true
   opts.manage_nvim_cmp = true
   opts.call_servers = 'local'
+  opts.manage_nvim_cmp = 'full-setup'
 
   return opts
 end

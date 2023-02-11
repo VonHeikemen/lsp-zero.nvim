@@ -10,7 +10,10 @@ function M.apply(args)
   local user_settings = s.settings(args.preset, args.preset_overrides)
 
   if user_settings.manage_nvim_cmp then
-    require('lsp-zero.cmp-setup').apply(args.cmp_opts)
+    require('lsp-zero.cmp-setup').apply(
+      args.cmp_opts,
+      user_settings.manage_nvim_cmp
+    )
   end
 
   if user_settings.configure_diagnostics then
