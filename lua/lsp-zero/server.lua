@@ -5,6 +5,7 @@ local state = {
   capabilities = nil,
   exclude = {},
   map_ctrlk = false,
+  omit_keys = {n = {}, i = {}, x = {}},
 }
 
 local global_config = require('lsp-zero.settings')
@@ -238,6 +239,10 @@ s.set_keymaps = function(bufnr, opts)
       return
     end
 
+    if s.map_check(m, lhs) then
+      return
+    end
+
     local key_opts = {noremap = true, silent = true}
     vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, key_opts)
   end
@@ -252,13 +257,23 @@ s.set_keymaps = function(bufnr, opts)
   map('n', '<F4>', lsp 'buf.code_action()')
   map('x', '<F4>', lsp 'buf.range_code_action()')
 
-  if opts.map_ctrlk then
-    map('n', '<C-k>', lsp 'buf.signature_help()')
-  end
+  map('n', '<C-k>', lsp 'buf.signature_help()')
 
   map('n', 'gl', diagnostic 'open_float()')
   map('n', '[d', diagnostic 'goto_prev()')
   map('n', ']d', diagnostic 'goto_next()')
+end
+
+s.map_check = function(mode, lhs)
+  local cache = state.omit_keys[mode][lhs]
+  if cache == nil then
+    local available = vim.fn.mapcheck(lhs, mode) == ''
+    state.omit_keys[mode][lhs] = not available
+
+    return not available
+  end
+
+  return cache
 end
 
 s.set_capabilities = function(current)
