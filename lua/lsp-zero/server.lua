@@ -256,11 +256,9 @@ s.set_keymaps = function(bufnr, opts)
     map('n', '<C-k>', lsp 'buf.signature_help()')
   end
 
-  if opts.configure_diagnostics then
-    map('n', 'gl', diagnostic 'open_float()')
-    map('n', '[d', diagnostic 'goto_prev()')
-    map('n', ']d', diagnostic 'goto_next()')
-  end
+  map('n', 'gl', diagnostic 'open_float()')
+  map('n', '[d', diagnostic 'goto_prev()')
+  map('n', ']d', diagnostic 'goto_next()')
 end
 
 s.set_capabilities = function(current)
