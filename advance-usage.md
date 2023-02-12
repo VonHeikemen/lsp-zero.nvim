@@ -21,7 +21,6 @@ lsp.ensure_installed({
   'rust_analyzer',
   'tsserver',
   'eslint',
-  'lua_ls',
 })
 
 -- don't initialize this language server

@@ -76,7 +76,6 @@ https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#configur
     'rust_analyzer',
     'tsserver',
     'eslint',
-    'lua_ls',
   })
 
   -- don't initialize this language server
