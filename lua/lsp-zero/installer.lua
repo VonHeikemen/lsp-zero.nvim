@@ -2,7 +2,6 @@ local M = {}
 local s = {mason = {}, lsp = {}}
 local valid = {mason = true,  ['lsp-installer'] = true}
 local id = function(arg) return arg end
-local server_map = {sumneko_lua = 'lua_ls'}
 
 M.enabled = false
 
@@ -136,23 +135,12 @@ s.mason.use = function(setup_server)
   -- which I think are caused by `.setup_handlers`
   local servers = s.mason.get_servers()
   for _, name in ipairs(servers) do
-    if server_map[name] then
-      name = server_map[name]
-    end
-
     setup_server(name)
   end
 
   -- This will duplicate the call to `setup_server`
   -- for now this is OK. `setup_server` will not configure a server twice
-  require('mason-lspconfig').setup_handlers({
-    function(name)
-      if server_map[name] then
-        name = server_map[name]
-      end
-      setup_server(name)
-    end
-  })
+  require('mason-lspconfig').setup_handlers({setup_server})
 end
 
 s.mason.install = function(list)
