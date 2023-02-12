@@ -76,7 +76,7 @@ https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#configur
     'rust_analyzer',
     'tsserver',
     'eslint',
-    'sumneko_lua',
+    'lua_ls',
   })
 
   -- don't initialize this language server
@@ -1197,7 +1197,7 @@ Lua API                                                     *lsp-zero-lua-api*
                                           *lsp-zero.defaults.nvim_workspace()*
 
   .defaults.nvim_workspace(): ~
-      Returns the neovim specific settings for `sumneko_lua` language server.
+      Returns the neovim specific settings for `lua_ls` language server.
 
                                                  *lsp-zero.extend_lspconfig()*
 

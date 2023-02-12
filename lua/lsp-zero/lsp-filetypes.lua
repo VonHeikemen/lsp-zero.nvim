@@ -643,7 +643,7 @@ return {
     vue = true,
     wxss = true
   },
-  sumneko_lua = {
+  lua_ls = {
     lua = true
   },
   svelte = {

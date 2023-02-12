@@ -128,7 +128,7 @@ local lsp = require('lsp-zero').preset({
 
 lsp.ensure_installed({
   'tsserver',
-  'sumneko_lua',
+  'lua_ls',
   'rust_analyzer',
 })
 
