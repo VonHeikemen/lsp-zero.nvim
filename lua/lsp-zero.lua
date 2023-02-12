@@ -315,7 +315,7 @@ M.nvim_workspace = function(opts)
     end
   end
 
-  M.configure('sumneko_lua', server_opts)
+  M.configure('lua_ls', server_opts)
 end
 
 M.set_sign_icons = function(opts)

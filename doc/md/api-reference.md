@@ -365,7 +365,7 @@ cmp.setup(cmp_config)
 
 ### `.defaults.nvim_workspace()`
 
-Returns the neovim specific settings for `sumneko_lua` language server.
+Returns the neovim specific settings for `lua_ls` language server.
 
 ### `.extend_lspconfig({opts})`
 
