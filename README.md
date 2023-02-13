@@ -222,7 +222,6 @@ Settings and functions that will change in the `v3.x` branch. If you are using t
 
 ### Preset settings
 
-* `set_lsp_keymaps` will be removed. The default keymaps will be opt-in in the future. The [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#default_keymapsbufnr) function will be only way to set them.
 * `suggest_lsp_servers` will be removed. The suggestions will still be available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they will have to be triggered manually using the command `:LspInstall`.
 * `cmp_capabilities` will be removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
 * `manage_nvim_cmp` will be removed. I recommend using [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts) then call the setup function for nvim-cmp.
