@@ -135,7 +135,7 @@ Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 
 When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
 
-```lua
+```vim
 " Don't copy this example
 lua <<EOF
 print('this an example code')
