@@ -19,24 +19,16 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 ## Documentation
 
 * LSP
-  * [Introduction to nvim-lspconfig](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#introduction)
-  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#default-keybindings)
-  * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#commands)
-  * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#configure-language-servers) 
-  * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#disable-a-language-server) 
-  * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#diagnostics) (A.K.A. error messages and warnings)
-  * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#language-servers-and-masonnvim)
-  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#you-might-not-need-lsp-zero).
+
+TODO
 
 * Autocompletion
-  * [About nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#about-nvim-cmp)
-  * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#default-keybindings)
-  * [Override keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#override-keybindings)
-  * [Snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#snippets)
+
+TODO
 
 * How to customize lsp-zero
-  * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md)
-  * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md) (Available functions)
+
+TODO
 
 ## Quickstart (for the impatient)
 
