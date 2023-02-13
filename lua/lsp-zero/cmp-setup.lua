@@ -38,7 +38,7 @@ function M.apply(opts, mode)
     config.preselect = nil
     config.completion = nil
     config.mapping = cmp.mapping.preset.insert({
-      ['<C-y>'] = cmp.mapping.confirm({select = false}),
+      ['<C-y>'] = cmp.mapping.confirm({select = true}),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
     })
@@ -105,7 +105,7 @@ end
 function M.default_mappings()
   local result = {
     -- confirm selection
-    ['<C-y>'] = cmp.mapping.confirm({select = false}),
+    ['<C-y>'] = cmp.mapping.confirm({select = true}),
 
     -- navigate items on the list
     ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
