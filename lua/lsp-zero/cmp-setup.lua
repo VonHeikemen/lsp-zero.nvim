@@ -37,6 +37,11 @@ function M.apply(opts, mode)
   if mode == 'extend' then
     config.preselect = nil
     config.completion = nil
+    config.mapping = cmp.mapping.preset.insert({
+      ['<C-y>'] = cmp.mapping.confirm({select = false}),
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    })
     cmp.setup(config)
     return
   end
@@ -100,7 +105,6 @@ end
 function M.default_mappings()
   local result = {
     -- confirm selection
-    ['<CR>'] = cmp.mapping.confirm({select = false}),
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
 
     -- navigate items on the list
@@ -110,8 +114,8 @@ function M.default_mappings()
     ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
 
     -- scroll up and down in the completion documentation
-    ['<C-f>'] = cmp.mapping.scroll_docs(5),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
+    ['<C-u>'] = cmp.mapping.scroll_docs(4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
 
     -- toggle completion
     ['<C-e>'] = cmp.mapping(function(fallback)
@@ -148,7 +152,7 @@ function M.default_mappings()
 
   if ok_luasnip then
     -- go to next placeholder in the snippet
-    result['<C-d>'] = cmp.mapping(function(fallback)
+    result['<C-f>'] = cmp.mapping(function(fallback)
       if luasnip.jumpable(1) then
         luasnip.jump(1)
       else

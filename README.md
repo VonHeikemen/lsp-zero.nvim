@@ -172,10 +172,7 @@ EOF
 Inside your configuration file add this piece of lua code.
 
 ```lua
-local lsp_zero = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-})
+local lsp_zero = require('lsp-zero').preset('minimal')
 
 -- (Optional) Configure lua language server for neovim
 lsp_zero.nvim_workspace()
@@ -189,13 +186,11 @@ cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
   },
-  mapping = cmp.mapping.preset.insert({
+  mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  })
+  }
 })
 ```
 
