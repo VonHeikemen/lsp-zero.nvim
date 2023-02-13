@@ -157,7 +157,7 @@ function M.nvim_workspace(opts)
     server_opts.root_dir = opts.root_dir
   end
 
-  M.configure('sumneko_lua', server_opts)
+  M.configure('lua_ls', server_opts)
 end
 
 function M.setup_nvim_cmp(opts)
