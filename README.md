@@ -122,16 +122,12 @@ With `paq`:
 {'williamboman/mason-lspconfig.nvim'}; -- Optional
 
 -- Autocompletion Engine
-{'hrsh7th/nvim-cmp'};         -- Required
-{'hrsh7th/cmp-nvim-lsp'};     -- Required
-{'hrsh7th/cmp-buffer'};       -- Optional
-{'hrsh7th/cmp-path'};         -- Optional
-{'saadparwaiz1/cmp_luasnip'}; -- Optional
-{'hrsh7th/cmp-nvim-lua'};     -- Optional
+{'hrsh7th/nvim-cmp'};     -- Required
+{'hrsh7th/cmp-nvim-lsp'}; -- Required
+{'hrsh7th/cmp-buffer'};   -- Optional
 
 -- Snippets
-{'L3MON4D3/LuaSnip'};             -- Required
-{'rafamadriz/friendly-snippets'}; -- Optional
+{'L3MON4D3/LuaSnip'}; -- Required
 ```
 
 With `vim-plug`:
@@ -143,16 +139,13 @@ Plug 'williamboman/mason.nvim'           " Optional
 Plug 'williamboman/mason-lspconfig.nvim' " Optional
 
 " Autocompletion Engine
-Plug 'hrsh7th/nvim-cmp'         " Required
-Plug 'hrsh7th/cmp-nvim-lsp'     " Required
-Plug 'hrsh7th/cmp-buffer'       " Optional
-Plug 'hrsh7th/cmp-path'         " Optional
-Plug 'saadparwaiz1/cmp_luasnip' " Optional
-Plug 'hrsh7th/cmp-nvim-lua'     " Optional
+Plug 'hrsh7th/nvim-cmp'     " Required
+Plug 'hrsh7th/cmp-nvim-lsp' " Required
+Plug 'hrsh7th/cmp-buffer'   " Optional
+Plug 'hrsh7th/cmp-nvim-lua' " Optional
 
 "  Snippets
-Plug 'L3MON4D3/LuaSnip'             " Required
-Plug 'rafamadriz/friendly-snippets' " Optional
+Plug 'L3MON4D3/LuaSnip' " Required
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 ```
@@ -185,6 +178,7 @@ local cmp_action = require('lsp-zero').cmp_action()
 cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
+    {name = 'buffer'},
   },
   mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
@@ -218,7 +212,7 @@ lsp_zero.setup()
 
 ## Changes/Deprecation notice
 
-Settings and functions that will change in the `v3.x` branch. If you are using the `main` branch and want to avoid breaking changes use the `dev-v2` branch.
+Settings and functions that will change in the `v3.x` branch. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
 
 ### Preset settings
 
