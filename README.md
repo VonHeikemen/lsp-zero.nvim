@@ -197,10 +197,7 @@ cmp.setup({
 If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
 
 ```lua
-local lsp_zero = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-})
+local lsp_zero = require('lsp-zero').preset('minimal')
 
 -- When you don't have mason.nvim installed
 -- You'll need to list the servers installed in your system
