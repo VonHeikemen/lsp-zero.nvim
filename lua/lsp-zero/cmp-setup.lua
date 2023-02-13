@@ -2,7 +2,6 @@ local M = {}
 local s = {}
 
 local ok_cmp, cmp = pcall(require, 'cmp')
-local ok_luasnip, luasnip = pcall(require, 'luasnip')
 local select_opts = {behavior = 'select'}
 local setup_complete = false
 
@@ -37,11 +36,7 @@ function M.apply(opts, mode)
   if mode == 'extend' then
     config.preselect = nil
     config.completion = nil
-    config.mapping = cmp.mapping.preset.insert({
-      ['<C-y>'] = cmp.mapping.confirm({select = true}),
-      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-      ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    })
+    config.mapping = M.basic_mappings()
     cmp.setup(config)
     return
   end
@@ -150,6 +145,8 @@ function M.default_mappings()
     end, {'i', 's'}),
   }
 
+  local ok_luasnip, luasnip = pcall(require, 'luasnip')
+
   if ok_luasnip then
     -- go to next placeholder in the snippet
     result['<C-f>'] = cmp.mapping(function(fallback)
@@ -171,6 +168,14 @@ function M.default_mappings()
   end
 
   return result
+end
+
+function M.basic_mappings()
+  return cmp.mapping.preset.insert({
+    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+  })
 end
 
 function M.cmp_config()
@@ -203,6 +208,8 @@ function M.cmp_config()
       end,
     }
   }
+
+  local ok_luasnip, luasnip = pcall(require, 'luasnip')
 
   if ok_luasnip then
     result.snippet = {

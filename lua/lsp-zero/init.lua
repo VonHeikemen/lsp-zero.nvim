@@ -204,8 +204,19 @@ function M.default_keymaps(bufnr)
   Server.default_keymaps(bufnr or 0)
 end
 
+function M.extend_cmp()
+  local cmp_setup = require('lsp-zero.cmp-setup')
+
+  local config = cmp_setup.cmp_config()
+  config.mapping = cmp_setup.basic_mappings() 
+  config.preselect = nil
+  config.completion = nil
+
+  require('cmp').setup(config)
+end
+
 function M.defaults.diagnostics(opts)
-local config = Server.diagnostics_config()
+  local config = Server.diagnostics_config()
 
   if type(opts) == 'table' then
     return vim.tbl_deep_extend('force', config, opts)
