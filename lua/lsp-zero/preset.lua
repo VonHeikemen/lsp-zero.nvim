@@ -16,10 +16,11 @@ preset.minimal = function()
   local opts = preset.defaults()
 
   opts[1] = 'minimal'
+  opts.set_lsp_keymaps = true
   opts.configure_diagnostics = true
+  opts.call_servers = 'local'
   opts.setup_servers_on_start = true
   opts.manage_nvim_cmp = 'extend'
-  opts.call_servers = 'local'
 
   return opts
 end
