@@ -235,8 +235,11 @@ These are the available options.
   set_lsp_keymaps: ~
       Add keybindings to a buffer with a language server attached.
       This bindings will trigger actions like go to definition, go
-      to reference, etc. You can also specify list of keys you want to omit,
-      see the example at the end of this section.
+      to reference, etc. You can configure the behavior using the 
+      options `preserve_mappings` and `omit`. If you enable
+      `preserve_mappings` lsp-zero will not override your existing
+      keybindings. Using `omit` you can specify a list of keybindings
+      you don't want to override.
 
   configure_diagnostics: ~
       Uses the built-in function |vim.diagnostic.config()| to setup the
@@ -267,11 +270,11 @@ The code below describes the same features the `recommended` preset enables.
   local lsp = require('lsp-zero').preset({
     suggest_lsp_servers = true,
     setup_servers_on_start = true,
-    set_lsp_keymaps = true,
     configure_diagnostics = true,
     cmp_capabilities = true,
     manage_nvim_cmp = true,
     call_servers = 'local',
+    set_lsp_keymaps = {preserve_mappings = true, omit = {}},
     sign_icons = {
       error = '✘',
       warn = '▲',
@@ -768,7 +771,7 @@ Lua API                                                     *lsp-zero-lua-api*
               |lsp-zero.use()| will be initialized.
 
           set_lsp_keymaps: ~
-              (boolean) Decides whether or not the default keymaps
+              (boolean | table) Decides whether or not the default keymaps
               should be used (see |lsp-zero-keybindings|).
 
           configure_diagnostics: ~
@@ -900,13 +903,9 @@ Lua API                                                     *lsp-zero-lua-api*
 >
       local lsp = require('lsp-zero').preset({
         name = 'minimal',
-        set_lsp_keymaps = true,
+        set_lsp_keymaps = false,
         manage_nvim_cmp = true,
         suggest_lsp_servers = false,
-      })
-
-      lsp.set_preferences({
-        set_lsp_keymaps = false
       })
 
       lsp.on_attach(function(client, bufnr)

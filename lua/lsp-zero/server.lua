@@ -226,11 +226,16 @@ s.set_keymaps = function(bufnr, opts)
   local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
   local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
   local omit = {}
+  local keep_defaults = true
 
   if type(opts.set_lsp_keymaps) == 'table' then
     local keys = opts.set_lsp_keymaps.omit or {}
     for _, key in ipairs(keys) do
       omit[key] = true
+    end
+
+    if type(opts.set_lsp_keymaps.preserve_mappings) == 'boolean' then
+      keep_defaults = opts.set_lsp_keymaps.preserve_mappings
     end
   end
 
@@ -239,7 +244,7 @@ s.set_keymaps = function(bufnr, opts)
       return
     end
 
-    if s.map_check(m, lhs) then
+    if keep_defaults and s.map_check(m, lhs) then
       return
     end
 

@@ -34,7 +34,7 @@ If you want to override a setting from a preset use a lua table. Like this.
 ```lua
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
-  set_lsp_keymaps = true,
+  set_lsp_keymaps = {preserve_mappings = true, omit = {'K', 'gl'}},
   manage_nvim_cmp = true,
   suggest_lsp_servers = false,
 })
@@ -42,9 +42,25 @@ local lsp = require('lsp-zero').preset({
 
 ### `.set_preferences({opts})`
 
+When using a preset is better to use [.preset()](#presetopts) to configure these settings.
+
 It gives the user control over the options available in the plugin.
 
-When using a preset is better to use [.preset()](#presetopts) to configure these settings.
+* `suggest_lsp_servers`: enables the suggestions of lsp servers when you enter a filetype for the first time.
+
+* `setup_servers_on_start`: when set to `true` all installed servers will be initialized on startup. When is set to the string `"per-project"` only the servers listed with the function [.use()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#useserver-opts) will be initialized. If the value is `false` servers will be initialized when you call [.configure()](#configurename-opts) or [.setup_servers()](#setup_serverslist).
+
+* `set_lsp_keymaps`: add keybindings to a buffer with a language server attached. You can configure the behavior using the options `preserve_mappings` and `omit`. If you enable `preserve_mappings` lsp-zero will not override your existing keybindings. Using `omit` you can specify a list of keybindings you don't want to override.
+
+* `configure_diagnostics`: uses the built-in function [vim.diagnostic.config](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()) to setup the way error messages are shown in the buffer. It also creates keymaps to navigate between the location of these errors.
+
+* `cmp_capabilities`: tells the language servers what capabilities nvim-cmp supports.
+
+* `manage_nvim_cmp`: use the default setup for nvim-cmp. It configures keybindings and completion sources for nvim-cmp.
+
+* `call_servers`: if set to `'local'` it'll try to initialize servers that where installed using mason.nvim. If set to `'global'` all language servers you list using [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts) or [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_server_configopts) are assumed to be installed (a warning message will show up if they aren't).
+
+* `sign_icons`: they are shown in the "gutter" on the line diagnostics messages are located.
 
 ### `.setup()`
 
