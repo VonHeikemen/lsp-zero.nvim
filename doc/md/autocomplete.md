@@ -146,3 +146,71 @@ Uninstall friendly-snippets if you have it. Use [onza/vim-snippets](https://gith
 require('luasnip.loaders.from_snipmate').lazy_load()
 ```
 
+## Common configurations
+
+### Don't preselect first match
+
+For those who want to use the `Enter` key freely.
+
+```lua
+lsp.setup_nvim_cmp({
+  preselect = 'none',
+  completion = {
+    completeopt = 'menu,menuone,noinsert,noselect'
+  },
+})
+```
+
+### Configure a source
+
+There is no good way to add/change/delete a source, there is an ugly way. What you need to do is use [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_nvim_cmpopts) and paste the defaults right back in the `sources` option.
+
+```lua
+lsp.setup_nvim_cmp({
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp', keyword_length = 1},
+    {name = 'buffer', keyword_length = 3},
+    {name = 'luasnip', keyword_length = 2},
+  }
+})
+```
+
+Once you have this in your config you can manipulate them in any way you see fit.
+
+### Trigger completions menu manually
+
+Set the `completion.autocomplete` option to false.
+
+```lua
+lsp.setup_nvim_cmp({
+  completion = {autocomplete = false}
+})
+```
+
+### Add borders to completion menu
+
+For this you can't use [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#setup_nvim_cmpopts). You'll have to disable the setting `manage_nvim_cmp`. After that use [.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_configopts) to extend/change lsp-zero's default.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = false,
+})
+
+lsp.setup()
+
+vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
+
+local cmp = require('cmp')
+local cmp_config = lsp.defaults.cmp_config({
+  window = {
+    completion = cmp.config.window.bordered()
+  }
+})
+
+cmp.setup(cmp_config)
+```
+
+Why do I make you do this? I would like to get rid of `.setup_nvim_cmp()` in the future, so any chance I can get to make you stop using it I'll take it. But why? Y'all seem to enjoy customizing nvim-cmp, so the purpose I had for `.setup_nvim_cmp()` is now obsolete. Is okay because you can still use nvim-cmp directly and add lsp-zero's defaults if you want.

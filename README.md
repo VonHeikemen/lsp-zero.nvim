@@ -34,6 +34,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Default keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#default-keybindings)
   * [Override keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#override-keybindings)
   * [Snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#snippets)
+  * [Common Configurations](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/autocomplete.md#common-configurations)
 
 * How to customize lsp-zero
   * [Advance Usage](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/advance-usage.md)
