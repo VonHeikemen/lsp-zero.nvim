@@ -458,7 +458,7 @@ lsp.setup()
 
 ### The current api is not enough?
 
-Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. Disable the setting `manage_nvim_cmp` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_mappingsopts) to extend or change the default configuration table.
+Welp, that's interesting. Maybe this is a good time to setup `nvim-cmp` yourself. Disable the setting `manage_nvim_cmp` and then use the function [lsp.defaults.cmp_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#defaultscmp_configopts) to extend or change the default configuration table.
 
 ```lua
 local lsp = require('lsp-zero').preset({
