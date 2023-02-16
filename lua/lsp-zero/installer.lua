@@ -171,7 +171,8 @@ s.id = {
   setup = id,
   use = id,
   install = id,
-  get_servers = function() return {} end
+  get_servers = function() return {} end,
+  get_available = function() return {} end,
 }
 
 M.fn = s.id
