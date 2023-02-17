@@ -41,7 +41,9 @@ M.choose = function()
     M.fn = s.id
   end
 
-  if M.enabled == false then
+  if M.enabled then
+    method = 'local'
+  else
     method = 'global'
     global_config.suggest_lsp_servers = false
     global_config.setup_servers_on_start = false
