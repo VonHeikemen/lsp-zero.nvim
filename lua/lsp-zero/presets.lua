@@ -15,7 +15,7 @@ preset.defaults = function()
     'defaults',
     set_lsp_keymaps = true,
     configure_diagnostics = true,
-    call_servers = 'global',
+    call_servers = 'local',
     suggest_lsp_servers = false,
     setup_servers_on_start = false,
     cmp_capabilities = false,
