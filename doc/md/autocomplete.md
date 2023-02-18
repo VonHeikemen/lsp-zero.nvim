@@ -36,9 +36,9 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 * `<Ctrl-u>`: Scroll up in the item's documentation.
 
-* `<Ctrl-f>`: Scroll down in the item's documentation.
+* `<Ctrl-d>`: Scroll down in the item's documentation.
 
-* `<Ctrl-d>`: Go to the next placeholder in the snippet.
+* `<Ctrl-f>`: Go to the next placeholder in the snippet.
 
 * `<Ctrl-b>`: Go to the previous placeholder in the snippet.
 
@@ -136,7 +136,7 @@ Both friendly-snippets and luasnip are optional. But nvim-cmp will give you a wa
 
 ### How to disable snippets?
 
-If you already have it all setup then uninstall friendly-snippets and also cmp_luasnip. 
+If you already have it all setup then uninstall friendly-snippets and also cmp_luasnip.
 
 ### Change to snippets with snipmate syntax
 
