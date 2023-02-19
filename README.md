@@ -222,6 +222,14 @@ Remember to read the documentation for [LSP](https://github.com/VonHeikemen/lsp-
 
 If you press `gl` on a line with errors (or warnings) a popup window will show up, it will tell you every "diagnostic" on that line.
 
+### Some of the default keybindings for LSP don't work, what do I do?
+
+By default lsp-zero will not override a keybinding if it's already "taken". Maybe you or another plugin are already using these keybindings. What you can do is modify the option `set_lsp_keymaps` so lsp-zero can force its keybindings.
+
+```lua
+set_lsp_keymaps = {preserve_mappings = false},
+```
+
 ### How do I get rid warnings in my neovim lua config?
 
 lsp-zero has a function that will configure the lua language server for you: [nvim_workspace](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#nvim_workspaceopts)
