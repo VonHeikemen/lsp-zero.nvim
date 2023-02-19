@@ -73,7 +73,7 @@ If you just want to disable a few of them use the `omit` option.
 ```lua
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
-  set_lsp_keymaps = {omit = {'<F2>', 'gl'}}
+  set_lsp_keymaps = {omit = {'<F2>', 'gl'}},
   manage_nvim_cmp = true,
   suggest_lsp_servers = false,
 })
