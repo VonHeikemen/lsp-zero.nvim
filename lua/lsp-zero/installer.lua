@@ -4,6 +4,7 @@ local valid = {mason = true,  ['lsp-installer'] = true}
 local id = function(arg) return arg end
 
 M.enabled = false
+M.current = ''
 
 M.choose = function()
   local global_config = require('lsp-zero.settings')
@@ -13,6 +14,7 @@ M.choose = function()
     M.enabled = true
     method = 'mason'
     M.fn = s.mason
+    M.current = 'mason.nvim'
 
     if pcall(require, 'mason-lspconfig') == false then
       local msg = "[lsp-zero] Couldn't find module 'mason-lspconfig'"
@@ -27,6 +29,7 @@ M.choose = function()
     M.enabled = true
     method = 'lsp-installer'
     M.fn = s.lsp
+    M.current = 'nvim-lsp-installer'
   end
 
   if method == 'mason' and lsp_installer then
