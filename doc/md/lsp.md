@@ -202,7 +202,7 @@ lsp.skip_server_setup({'eslint'})
 lsp.setup()
 ```
 
-### Troubleshooting
+## Troubleshooting
 
 ### Automatic setup failed
 
