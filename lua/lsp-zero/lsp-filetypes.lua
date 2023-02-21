@@ -57,6 +57,9 @@ return {
   bufls = {
     proto = true
   },
+  cadence = {
+    cdc = true
+  },
   ccls = {
     c = true,
     cpp = true,
@@ -130,6 +133,9 @@ return {
     dhall = true
   },
   diagnosticls = {},
+  docker_compose_language_service = {
+    yaml = true
+  },
   dockerls = {
     dockerfile = true
   },
@@ -196,7 +202,10 @@ return {
     typescriptreact = true,
     vue = true
   },
-  ["fennel-ls"] = {
+  fennel_language_server = {
+    fennel = true
+  },
+  fennel_ls = {
     fennel = true
   },
   flow = {
@@ -360,6 +369,9 @@ return {
     rnoweb = true,
     rst = true,
     tex = true
+  },
+  lua_ls = {
+    lua = true
   },
   luau_lsp = {
     luau = true
@@ -622,7 +634,7 @@ return {
     mysql = true,
     sql = true
   },
-  ["starlark-rust"] = {
+  starlark_rust = {
     ["BUILD.bazel"] = true,
     bzl = true,
     star = true
@@ -642,9 +654,6 @@ return {
     typescriptreact = true,
     vue = true,
     wxss = true
-  },
-  lua_ls = {
-    lua = true
   },
   svelte = {
     svelte = true
@@ -729,6 +738,11 @@ return {
     bib = true,
     plaintex = true,
     tex = true
+  },
+  textlsp = {
+    org = true,
+    tex = true,
+    text = true
   },
   tflint = {
     terraform = true
@@ -818,6 +832,10 @@ return {
   yamlls = {
     yaml = true,
     ["yaml.docker-compose"] = true
+  },
+  yls = {
+    yar = true,
+    yara = true
   },
   zk = {
     markdown = true
