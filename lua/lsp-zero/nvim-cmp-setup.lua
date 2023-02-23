@@ -25,7 +25,7 @@ M.sources = function()
   end
 
   register('cmp_path', {name = 'path'})
-  register('cmp_nvim_lsp', {name = 'nvim_lsp', keyword_length = 1})
+  register('cmp_nvim_lsp', {name = 'nvim_lsp'})
   register('cmp_buffer', {name = 'buffer', keyword_length = 3})
   register('cmp_luasnip', {name = 'luasnip', keyword_length = 2})
 

@@ -169,7 +169,7 @@ There is no good way to add/change/delete a source, there is an ugly way. What y
 lsp.setup_nvim_cmp({
   sources = {
     {name = 'path'},
-    {name = 'nvim_lsp', keyword_length = 1},
+    {name = 'nvim_lsp'},
     {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
   }
