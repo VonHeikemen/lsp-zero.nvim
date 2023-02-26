@@ -107,7 +107,7 @@ end
 
 M.inspect_server_config = function(name)
   local util = require('lspconfig.util')
-  local client = util.get_active_client_by_name(name)
+  local client = util.get_active_client_by_name(0, name)
 
   if client == nil then
     local msg = '* "%s" is not active in the current buffer'
