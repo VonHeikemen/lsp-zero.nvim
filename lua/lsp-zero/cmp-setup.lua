@@ -9,40 +9,52 @@ if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
 end
 
-function M.apply(opts, mode)
+function M.apply(cmp_opts, user_config)
   if not ok_cmp then
     local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
     vim.notify(msg, vim.log.levels.WARN)
     return
   end
 
-  opts = opts or {}
+  if user_config == true then
+    user_config = {
+      set_mappings = true,
+      set_sources = true,
+      use_luasnip = true,
+      set_format = true,
+      documentation_border = true,
+    }
+  end
+
+  local opts = cm_opts or {}
 
   if type(opts.select_behavior) == 'string' then
     select_opts = {behavior = opts.select_behavior}
   end
 
-  -- Apparently this can fail
-  pcall(function()
-    if vim.o.completeopt == 'menu,preview' then
-      vim.opt.completeopt:append('menu')
-      vim.opt.completeopt:append('menuone')
-      vim.opt.completeopt:append('noselect')
-    end
-  end)
-
   local config = M.cmp_config()
 
-  if mode == 'extend' then
-    config.preselect = nil
-    config.completion = nil
-    config.mapping = M.basic_mappings()
-    cmp.setup(config)
-    return
+  if user_config.set_sources then
+    config.sources = M.sources()
   end
 
-  config.sources = M.sources()
-  config.mapping = M.default_mappings()
+  if user_config.set_mappings then
+    config.mapping = M.default_mappings()
+  else
+    config.mapping = M.basic_mappings()
+  end
+
+  if user_config.set_format == false then
+    config.formatting = {}
+  end
+
+  if user_config.documentation_border == false then
+    config.window.documentation = {}
+  end
+
+  if user_config.use_luasnip == false then
+    config.snippet = nil
+  end
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
@@ -62,7 +74,7 @@ function M.apply(opts, mode)
   end
 
   if type(opts.completion) == 'table' then
-    config.completion = s.merge(config.completion, opts.completion)
+    config.completion = opts.completion
   end
 
   if type(opts.formatting) == 'table' then
@@ -90,7 +102,7 @@ function M.sources()
   end
 
   register('cmp_path', {name = 'path'})
-  register('cmp_nvim_lsp', {name = 'nvim_lsp', keyword_length = 3})
+  register('cmp_nvim_lsp', {name = 'nvim_lsp'})
   register('cmp_buffer', {name = 'buffer', keyword_length = 3})
   register('cmp_luasnip', {name = 'luasnip', keyword_length = 2})
 
@@ -171,19 +183,18 @@ function M.default_mappings()
 end
 
 function M.basic_mappings()
-  return cmp.mapping.preset.insert({
+  return {
+    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
+    ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
     ['<C-y>'] = cmp.mapping.confirm({select = true}),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-  })
+    ['<C-e>'] = cmp.mapping.abort(),
+  }
 end
 
 function M.cmp_config()
   local result = {
-    preselect = cmp.PreselectMode.Item,
-    completion = {
-      completeopt = 'menu,menuone,noinsert'
-    },
     window = {
       documentation = s.merge(
         cmp.config.window.bordered(),

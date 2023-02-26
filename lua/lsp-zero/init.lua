@@ -204,13 +204,31 @@ function M.default_keymaps(bufnr)
   Server.default_keymaps(bufnr or 0)
 end
 
-function M.extend_cmp()
+function M.extend_cmp(opts)
   local cmp_setup = require('lsp-zero.cmp-setup')
 
   local config = cmp_setup.cmp_config()
   config.mapping = cmp_setup.basic_mappings() 
-  config.preselect = nil
-  config.completion = nil
+
+  if opts.set_format == false then
+    config.formatting = nil
+  end
+
+  if opts.use_luasnip == false then
+    config.snippet = nil
+  end
+
+  if opts.documentation_border == false then
+    config.window.documentation = nil
+  end
+
+  if opts.set_sources then
+    config.sources = cmp_setup.sources()
+  end
+
+  if opts.set_mappings then
+    config.mapping = cmp_setup.default_mappings()
+  end
 
   require('cmp').setup(config)
 end

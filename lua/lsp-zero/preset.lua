@@ -3,11 +3,14 @@ local preset = {}
 preset.defaults = function()
   return {
     'defaults',
-    set_lsp_keymaps = false,
-    configure_diagnostics = false,
-    call_servers = 'global',
-    setup_servers_on_start = false,
+    set_lsp_keymaps = {
+      preserve_mappings = false,
+      omit = {},
+    },
     manage_nvim_cmp = false,
+    call_servers = 'local',
+    configure_diagnostics = false,
+    setup_servers_on_start = false,
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
   }
 end
@@ -16,11 +19,17 @@ preset.minimal = function()
   local opts = preset.defaults()
 
   opts[1] = 'minimal'
-  opts.set_lsp_keymaps = true
   opts.configure_diagnostics = true
   opts.call_servers = 'local'
   opts.setup_servers_on_start = true
-  opts.manage_nvim_cmp = 'extend'
+  opts.set_lsp_keymaps = false
+  opts.manage_nvim_cmp = {
+    set_mappings = false,
+    set_sources = false,
+    use_luasnip = true,
+    set_format = true,
+    documentation_border = true,
+  }
 
   return opts
 end
@@ -29,12 +38,20 @@ preset.recommended = function()
   local opts = preset.defaults()
 
   opts[1] = 'recommended'
-  opts.set_lsp_keymaps = true
   opts.configure_diagnostics = true
   opts.setup_servers_on_start = true
-  opts.manage_nvim_cmp = true
   opts.call_servers = 'local'
-  opts.manage_nvim_cmp = 'full-setup'
+  opts.set_lsp_keymaps = {
+    preserve_mappings = false,
+    omit = {}
+  }
+  opts.manage_nvim_cmp = {
+    set_mappings = true,
+    set_sources = true,
+    use_luasnip = true,
+    set_format = true,
+    documentation_border = true,
+  }
 
   return opts
 end
@@ -53,7 +70,6 @@ preset['lsp-only'] = function()
 
   opts[1] = 'lsp-only'
   opts.manage_nvim_cmp = false
-  opts.cmp_capabilities = false
 
   return opts
 end
