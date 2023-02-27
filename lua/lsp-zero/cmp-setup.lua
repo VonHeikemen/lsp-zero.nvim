@@ -18,16 +18,16 @@ function M.apply(cmp_opts, user_config)
 
   if user_config == true then
     user_config = {
+      set_sources = 'recommended',
       set_basic_mappings = true,
       set_extra_mappings = true,
-      set_sources = true,
       use_luasnip = true,
       set_format = true,
       documentation_border = true,
     }
   end
 
-  local opts = cm_opts or {}
+  local opts = cmp_opts or {}
 
   if type(opts.select_behavior) == 'string' then
     select_opts = {behavior = opts.select_behavior}
@@ -44,6 +44,10 @@ function M.apply(cmp_opts, user_config)
   end
 
   if type(opts.documentation) == 'table' then
+    if config.window.documentation == cmp.config.disable then
+      config.window.documentation = {}
+    end
+
     config.window.documentation = s.merge(
       config.window.documentation,
       opts.documentation
@@ -81,7 +85,9 @@ function M.get_config(opts)
     config.mapping = s.merge(config.mapping, M.extra_mappings())
   end
 
-  if opts.set_sources then
+  if opts.set_sources == 'lsp' then
+    config.sources = {{name = 'nvim_lsp'}}
+  elseif opts.set_sources == 'recommended' or opts.set_sources == true then
     config.sources = M.sources()
   end
 
@@ -93,8 +99,8 @@ function M.get_config(opts)
     config.formatting = {}
   end
 
-  if opts.documentation_border == false then
-    config.window.documentation = {}
+  if opts.documentation_window == false then
+    config.window.documentation = cmp.config.disable
   end
 
   return config
@@ -185,25 +191,34 @@ end
 
 function M.basic_mappings()
   return {
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
-    ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
     ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<C-e>'] = cmp.mapping.abort(),
+    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
+    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<C-p>'] = cmp.mapping(function()
+      if not cmp.visible() then
+        cmp.complete()
+      end
+
+      cmp.select_prev_item(select_opts)
+    end),
+    ['<C-n>'] = cmp.mapping(function()
+      if not cmp.visible() then
+        cmp.complete()
+      end
+
+      cmp.select_next_item(select_opts)
+    end),
   }
 end
 
 function M.cmp_config()
   local result = {
     window = {
-      documentation = s.merge(
-        cmp.config.window.bordered(),
-        {
-          max_height = 15,
-          max_width = 60,
-        }
-      )
+      documentation = {
+        max_height = 15,
+        max_width = 60,
+      }
     },
     formatting = {
       fields = {'abbr', 'menu', 'kind'},

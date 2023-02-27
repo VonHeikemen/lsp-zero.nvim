@@ -24,12 +24,12 @@ preset.minimal = function()
   opts.setup_servers_on_start = true
   opts.set_lsp_keymaps = false
   opts.manage_nvim_cmp = {
-    set_basic_mappings = false,
+    set_sources = 'lsp',
+    set_basic_mappings = true,
     set_extra_mappings = false,
-    set_sources = false,
     use_luasnip = true,
     set_format = true,
-    documentation_border = true,
+    documentation_window = false,
   }
 
   return opts
@@ -47,12 +47,12 @@ preset.recommended = function()
     omit = {}
   }
   opts.manage_nvim_cmp = {
+    set_sources = 'recommended',
     set_basic_mappings = true,
     set_extra_mappings = true,
-    set_sources = true,
     use_luasnip = true,
     set_format = true,
-    documentation_border = true,
+    documentation_window = true,
   }
 
   return opts

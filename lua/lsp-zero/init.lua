@@ -5,6 +5,7 @@ local s = {
   args = {
     preset = 'none',
     preset_overrides = {},
+    cmp_opts = {},
     servers = {},
     skip_servers = {},
     install = {},
@@ -167,7 +168,7 @@ end
 
 function M.setup_nvim_cmp(opts)
   if type(opts) == 'table' then
-    s.cmp_opts = opts
+    s.args.cmp_opts = opts
   end
 end
 
@@ -229,7 +230,7 @@ function M.defaults.diagnostics(opts)
 end
 
 function M.defaults.cmp_mappings(opts)
-  local cmp_setup = require('lsp-zero.cmp-setup').
+  local cmp_setup = require('lsp-zero.cmp-setup')
   local config = vim.tbl_deep_extend(
     'force',
     cmp_setup.basic_mappings(),
