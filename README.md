@@ -171,7 +171,7 @@ cmp.setup({
 })
 ```
 
-If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](#setup_serverslist).
+If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts).
 
 ```lua
 local lsp_zero = require('lsp-zero').preset('minimal')
@@ -192,22 +192,17 @@ lsp_zero.setup()
 * `force_setup` option of [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) was removed. lsp-zero will configure the server even if is not installed.
 * `force` option of [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) was removed. lsp-zero will configure all the servers listed even if they are not installed.
 * The preset `per-project` was removed in favor of the function [.store_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#store_configname-opts).
+* `suggest_lsp_servers` was removed. The suggestions are still available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they can be triggered manually using the command `:LspInstall`.
+* `cmp_capabilities` was removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
 
 ## Changes/Deprecation notice
 
-Settings and functions that will change in the `v3.x` branch. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
-
-### Preset settings
-
-* `suggest_lsp_servers` will be removed. The suggestions will still be available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they will have to be triggered manually using the command `:LspInstall`.
-* `cmp_capabilities` will be removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
-* `manage_nvim_cmp` will be removed. I recommend using [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts) then call the setup function for nvim-cmp.
+Settings and functions that will change in the future. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
 
 ### Functions
 
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [.preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
-* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts).
-* [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_server_configopts) will be removed. There is no way I can enforce the settings unless lsp-zero controls everything... which is something I don't want to do anymore.
+* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor of [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts).
 * [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
 * [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will return the arguments for the lua language server, the user will need to call the server manually.
 * [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.
@@ -217,23 +212,9 @@ Settings and functions that will change in the `v3.x` branch. If you are using t
 
 ## FAQ
 
-### How do I display error messages?
-
-If you press `gl` on a line with errors (or warnings) a popup window will show up, it will tell you every "diagnostic" on that line.
-
 ### How do I get rid warnings in my neovim lua config?
 
 lsp-zero has a function that will configure the lua language server for you: [nvim_workspace](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts)
-
-### The function .setup_nvim_cmp is not taking any effect, what do I do?
-
-nvim-cmp is tricky. First check [Advance usage - customize nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#customizing-nvim-cmp), the solution you want might be there.
-
-If the settings you want to modify are not supported by [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#setup_nvim_cmpopts) then follow this example: [The current api is not enough?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/advance-usage.md#the-current-api-is-not-enough)
-
-### How about adding an option to setup_nv..?
-
-I don't want to add anything to that function. If you have a good reason I will listen, but the answer will probably be no.
 
 ## Support
 
