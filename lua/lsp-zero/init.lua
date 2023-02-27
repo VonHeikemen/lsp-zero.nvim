@@ -206,31 +206,11 @@ end
 
 function M.extend_cmp(opts)
   local cmp_setup = require('lsp-zero.cmp-setup')
+  local defaults = require('lsp-zero.preset').minimal().manage_nvim_cmp
 
-  local config = cmp_setup.cmp_config()
-  config.mapping = cmp_setup.basic_mappings() 
+  opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
-  if opts.set_format == false then
-    config.formatting = nil
-  end
-
-  if opts.use_luasnip == false then
-    config.snippet = nil
-  end
-
-  if opts.documentation_border == false then
-    config.window.documentation = nil
-  end
-
-  if opts.set_sources then
-    config.sources = cmp_setup.sources()
-  end
-
-  if opts.set_mappings then
-    config.mapping = cmp_setup.default_mappings()
-  end
-
-  require('cmp').setup(config)
+  require('cmp').setup(cmp_setup.get_config(opts))
 end
 
 function M.defaults.diagnostics(opts)
@@ -244,7 +224,12 @@ function M.defaults.diagnostics(opts)
 end
 
 function M.defaults.cmp_mappings(opts)
-  local config = require('lsp-zero.cmp-setup').default_mappings()
+  local cmp_setup = require('lsp-zero.cmp-setup').
+  local config = vim.tbl_deep_extend(
+    'force',
+    cmp_setup.basic_mappings(),
+    cmp_setup.extra_mappings()
+  )
 
   if type(opts) == 'table' then
     return vim.tbl_deep_extend('force', config, opts)
@@ -267,7 +252,7 @@ function M.defaults.cmp_config(opts)
   local cmp_setup = require('lsp-zero.cmp-setup')
   local config = cmp_setup.cmp_config()
   config.sources = cmp_setup.sources()
-  config.mapping = cmp_setup.default_mappings()
+  config.mapping = M.defaults.cmp_mappings()
 
   if type(opts) == 'table' then
     return vim.tbl_deep_extend('force', config, opts)

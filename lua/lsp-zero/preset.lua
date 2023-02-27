@@ -24,7 +24,8 @@ preset.minimal = function()
   opts.setup_servers_on_start = true
   opts.set_lsp_keymaps = false
   opts.manage_nvim_cmp = {
-    set_mappings = false,
+    set_basic_mappings = false,
+    set_extra_mappings = false,
     set_sources = false,
     use_luasnip = true,
     set_format = true,
@@ -46,7 +47,8 @@ preset.recommended = function()
     omit = {}
   }
   opts.manage_nvim_cmp = {
-    set_mappings = true,
+    set_basic_mappings = true,
+    set_extra_mappings = true,
     set_sources = true,
     use_luasnip = true,
     set_format = true,
@@ -78,7 +80,6 @@ preset['manual-setup'] = function()
   local opts = preset.recommended()
 
   opts[1] = 'manual-setup'
-  opts.suggest_lsp_servers = false
   opts.setup_servers_on_start = false
 
   return opts
@@ -99,7 +100,6 @@ preset['system-lsp'] = function()
   local opts = preset.recommended()
 
   opts[1] = 'system-lsp'
-  opts.suggest_lsp_servers = false
   opts.setup_servers_on_start = false
   opts.call_servers = 'global'
 

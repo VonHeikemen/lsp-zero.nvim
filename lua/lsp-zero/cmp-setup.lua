@@ -18,7 +18,8 @@ function M.apply(cmp_opts, user_config)
 
   if user_config == true then
     user_config = {
-      set_mappings = true,
+      set_basic_mappings = true,
+      set_extra_mappings = true,
       set_sources = true,
       use_luasnip = true,
       set_format = true,
@@ -32,29 +33,7 @@ function M.apply(cmp_opts, user_config)
     select_opts = {behavior = opts.select_behavior}
   end
 
-  local config = M.cmp_config()
-
-  if user_config.set_sources then
-    config.sources = M.sources()
-  end
-
-  if user_config.set_mappings then
-    config.mapping = M.default_mappings()
-  else
-    config.mapping = M.basic_mappings()
-  end
-
-  if user_config.set_format == false then
-    config.formatting = {}
-  end
-
-  if user_config.documentation_border == false then
-    config.window.documentation = {}
-  end
-
-  if user_config.use_luasnip == false then
-    config.snippet = nil
-  end
+  local config = M.get_config(user_config)
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
@@ -90,6 +69,37 @@ function M.apply(cmp_opts, user_config)
   cmp.setup(config)
 end
 
+function M.get_config(opts)
+  local config = M.cmp_config()
+  config.mapping = {}
+
+  if opts.set_basic_mappings then
+    config.mapping = s.merge(config.mapping, M.basic_mappings())
+  end
+
+  if opts.set_extra_mappings then
+    config.mapping = s.merge(config.mapping, M.extra_mappings())
+  end
+
+  if opts.set_sources then
+    config.sources = M.sources()
+  end
+
+  if opts.use_luasnip == false then
+    config.snippet = {}
+  end
+
+  if opts.set_format == false then
+    config.formatting = {}
+  end
+
+  if opts.documentation_border == false then
+    config.window.documentation = {}
+  end
+
+  return config
+end
+
 function M.sources()
   local result = {}
   local register = function(mod, value)
@@ -109,17 +119,8 @@ function M.sources()
   return result
 end
 
-function M.default_mappings()
+function M.extra_mappings()
   local result = {
-    -- confirm selection
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
-
-    -- navigate items on the list
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
-    ['<C-p>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<C-n>'] = cmp.mapping.select_next_item(select_opts),
-
     -- scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(4),
     ['<C-d>'] = cmp.mapping.scroll_docs(-4),
