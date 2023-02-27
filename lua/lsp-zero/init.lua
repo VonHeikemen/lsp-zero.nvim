@@ -114,7 +114,12 @@ function M.build_options(_, opts)
     on_attach = function() end,
   }
 
-  return vim.tbl_deep_extend('force', defaults, opts or {})
+  return vim.tbl_deep_extend(
+    'force',
+    defaults,
+    Server.default_config,
+    opts or {}
+  )
 end
 
 function M.store_config(name, opts)
