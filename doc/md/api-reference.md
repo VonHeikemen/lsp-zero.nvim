@@ -23,7 +23,6 @@ local lsp = require('lsp-zero').preset({
   name = 'minimal',
   set_lsp_keymaps = true,
   manage_nvim_cmp = true,
-  suggest_lsp_servers = false,
 })
 
 lsp.set_sign_icons({
@@ -60,7 +59,6 @@ So you also have the ability to override any setting in the preset if you pass a
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
   set_lsp_keymaps = true,
-  suggest_lsp_servers = true,
 })
 ```
 
@@ -170,7 +168,6 @@ manage_nvim_cmp = false
 Is based on [recommended](#recommended) but it disables the automatic setup of language servers.
 
 ```lua
-suggest_lsp_servers = false
 setup_servers_on_start = false
 ```
 
@@ -179,7 +176,6 @@ setup_servers_on_start = false
 Is based on [recommended](#recommended) but it disables all the features that depends on mason.nvim.
 
 ```lua
-suggest_lsp_servers = false
 setup_servers_on_start = false
 call_servers = 'global'
 ```
