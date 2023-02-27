@@ -1,1 +1,1 @@
-return require('lsp-zero.presets').defaults()
+return require('lsp-zero.preset').defaults()
