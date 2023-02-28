@@ -151,7 +151,7 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) Configure lua language server for neovim
-lsp_zero.nvim_workspace()
+lsp.nvim_workspace()
 
 lsp.setup()
 ```
@@ -167,10 +167,10 @@ end)
 
 -- When you don't have mason.nvim installed
 -- You'll need to list the servers installed in your system
-lsp_zero.setup_servers({'tsserver', 'eslint'})
+lsp.setup_servers({'tsserver', 'eslint'})
 
 -- (Optional) Configure lua language server for neovim
-lsp_zero.nvim_workspace()
+lsp.nvim_workspace()
 
 lsp.setup()
 ```
