@@ -237,9 +237,9 @@ The default keybindings in lsp-zero are meant to emulate Neovim's default whenev
 
 * `<Up>`: Navigate to previous item on the list.
 
-* `<Ctrl-n>`: If completion menu is not visible, trigger completion and go to the first item. Else, Navigate to the next item on the list.
+* `<Ctrl-n>`: If the completion menu is visible, go to the next item. Else, trigger completion menu.
 
-* `<Ctrl-p>`: If completion menu is not visible, trigger completion and go to the last item. Else, Navigate to the next item on the list.
+* `<Ctrl-p>`: If the completion menu is visible, go to the previous item. Else, trigger completion menu.
 
 * `<Ctrl-d>`: Scroll down the documentation window.
 
@@ -247,16 +247,13 @@ The default keybindings in lsp-zero are meant to emulate Neovim's default whenev
 
 To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) directly.
 
-Here is an example configuration that adds navigation between snippets and adds a custom keybinding to trigger the completion menu.
+Here is an example configuration that adds navigation between snippets and adds a custom keybinding to trigger the completion menu manually.
 
 ```lua
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'}
-  },
   mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
