@@ -11,6 +11,7 @@ preset.defaults = function()
     call_servers = 'local',
     configure_diagnostics = false,
     setup_servers_on_start = false,
+    float_border = 'none',
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
   }
 end
@@ -19,6 +20,7 @@ preset.minimal = function()
   local opts = preset.defaults()
 
   opts[1] = 'minimal'
+  opts.float_border = 'rounded'
   opts.configure_diagnostics = true
   opts.call_servers = 'local'
   opts.setup_servers_on_start = true
@@ -39,6 +41,7 @@ preset.recommended = function()
   local opts = preset.defaults()
 
   opts[1] = 'recommended'
+  opts.float_border = 'rounded'
   opts.configure_diagnostics = true
   opts.setup_servers_on_start = true
   opts.call_servers = 'local'

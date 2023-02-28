@@ -3,7 +3,6 @@ local s = {}
 
 function M.apply(args)
   require('lsp-zero.snippets')
-  s.setup_ui({border = 'rounded'})
 
   local Server = require('lsp-zero.server')
 
@@ -18,6 +17,8 @@ function M.apply(args)
       user_settings.manage_nvim_cmp
     )
   end
+
+  s.setup_ui({border = user_settings.float_border})
 
   if user_settings.configure_diagnostics then
     vim.diagnostic.config(Server.diagnostics_config())
