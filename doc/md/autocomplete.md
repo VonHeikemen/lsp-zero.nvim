@@ -8,12 +8,12 @@ Before we start let me just remind you the settings you can tweak from a preset.
 
 ```lua
 manage_nvim_cmp = {
-  set_basic_mappings = false,
+  set_sources = 'lsp',
+  set_basic_mappings = true,
   set_extra_mappings = false,
-  set_sources = false,
   use_luasnip = true,
   set_format = true,
-  documentation_border = true,
+  documentation_window = false,
 }
 ```
 

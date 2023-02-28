@@ -64,9 +64,7 @@ use {
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
-
-    -- Snippets
-    {'L3MON4D3/LuaSnip'}, -- Required
+    {'L3MON4D3/LuaSnip'},     -- Required
   }
 }
 ```
@@ -86,9 +84,7 @@ With `lazy.nvim`:
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
-
-    -- Snippets
-    {'L3MON4D3/LuaSnip'}, -- Required
+    {'L3MON4D3/LuaSnip'},     -- Required
   }
 }
 ```
@@ -103,12 +99,10 @@ With `paq`:
 {'williamboman/mason.nvim'};           -- Optional
 {'williamboman/mason-lspconfig.nvim'}; -- Optional
 
--- Autocompletion Engine
+-- Autocompletion
 {'hrsh7th/nvim-cmp'};     -- Required
 {'hrsh7th/cmp-nvim-lsp'}; -- Required
-
--- Snippets
-{'L3MON4D3/LuaSnip'}; -- Required
+{'L3MON4D3/LuaSnip'};     -- Required
 ```
 
 With `vim-plug`:
@@ -119,12 +113,10 @@ Plug 'neovim/nvim-lspconfig'             " Required
 Plug 'williamboman/mason.nvim'           " Optional
 Plug 'williamboman/mason-lspconfig.nvim' " Optional
 
-" Autocompletion Engine
+" Autocompletion
 Plug 'hrsh7th/nvim-cmp'     " Required
 Plug 'hrsh7th/cmp-nvim-lsp' " Required
-
-"  Snippets
-Plug 'L3MON4D3/LuaSnip' " Required
+Plug 'L3MON4D3/LuaSnip'     " Required
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v2'}
 ```
@@ -157,6 +149,8 @@ lsp.setup()
 ```
 
 If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts).
+
+> Note: if you use NixOS don't install mason.nvim
 
 ```lua
 local lsp = require('lsp-zero').preset({name = 'minimal'})
