@@ -29,9 +29,11 @@ function M.apply(args)
     use_local = require('lsp-zero.installer').setup()
   end
 
-  Server.user_settings({
-    enable_keymaps = user_settings.set_lsp_keymaps
-  })
+  Server.enable_keymaps = user_settings.set_lsp_keymaps
+
+  if Server.enable_keymaps == true then
+    Server.enable_keymaps = {}
+  end
 
   if use_local == false or user_settings.setup_servers_on_start == false then
     Server.setup_servers(args.servers, {ignore = args.skip_servers})

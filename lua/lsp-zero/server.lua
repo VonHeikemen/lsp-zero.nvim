@@ -1,6 +1,7 @@
 local M = {
   default_config = {},
-  common_attach = nil
+  common_attach = nil,
+  enable_keymaps = false,
 }
 
 local s = {}
@@ -8,7 +9,6 @@ local s = {}
 local state = {
   exclude = {},
   capabilities = nil,
-  enable_keymaps = false,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
@@ -32,8 +32,12 @@ function M.extend_lspconfig(opts)
     callback = function(event)
       local bufnr = event.buf
 
-      if s.enable_keymaps then
-        M.default_keymaps(bufnr)
+      if type(M.enable_keymaps) == 'table' then
+        M.default_keymaps({
+          buffer = bufnr,
+          preserve_mappings = M.enable_keymaps.preserve_mappings,
+          omit = M.enable_keymaps.omit,
+        })
       end
 
       s.set_buf_commands(bufnr)
@@ -132,14 +136,30 @@ function M.diagnostics_config()
   return {severity_sort = true}
 end
 
-function M.default_keymaps(bufnr)
+function M.default_keymaps(opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
+
+  local buffer = opts.buffer or 0
+  local keep_defaults = true
+  local omit = {}
+
+  if type(opts.preserve_mappings) == 'boolean' then
+    keep_defaults = opts.preserve_mappings
+  end
+
+  if type(opts.omit) == 'table' then
+    omit = opts.omit
+  end
 
   local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
   local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
 
   local map = function(m, lhs, rhs)
-    if s.map_check(m, lhs) then
+    if vim.tbl_contains(omit, lhs) then
+      return
+    end
+
+    if keep_defaults and s.map_check(m, lhs) then
       return
     end
 
@@ -183,16 +203,6 @@ function M.set_sign_icons(opts)
   sign({name = 'warn', hl = 'DiagnosticSignWarn'})
   sign({name = 'hint', hl = 'DiagnosticSignHint'})
   sign({name = 'info', hl = 'DiagnosticSignInfo'})
-end
-
-function M.user_settings(opts)
-  if opts.enable_keymaps == true then
-    s.enable_keymaps = true
-  end
-
-  if opts.on_attach then
-    M.common_attach = opts.on_attach
-  end
 end
 
 function M.nvim_workspace(opts)

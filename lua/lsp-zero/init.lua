@@ -197,7 +197,11 @@ function M.extend_lspconfig(opts)
 
   opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
 
-  Server.user_settings({enable_keymaps = opts.set_lsp_keymaps})
+  Server.enable_keymaps = opts.set_lsp_keymaps
+
+  if Server.enable_keymaps == true then
+    Server.enable_keymaps = {}
+  end
 
   M.on_attach(opts.on_attach)
 
@@ -206,8 +210,13 @@ function M.extend_lspconfig(opts)
   end
 end
 
-function M.default_keymaps(bufnr)
-  Server.default_keymaps(bufnr or 0)
+function M.default_keymaps(opts)
+  opts = opts or {buffer = 0}
+  if Server.enable_keymaps then
+    Server.enable_keymaps = false
+  end
+
+  Server.default_keymaps(opts)
 end
 
 function M.extend_cmp(opts)
