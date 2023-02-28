@@ -19,11 +19,11 @@
 Defines the sign icons that appear in the gutter.
 
 ```lua
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-})
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.set_sign_icons({
   error = '✘',
@@ -58,7 +58,7 @@ So you also have the ability to override any setting in the preset if you pass a
 ```lua
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
-  set_lsp_keymaps = true,
+  call_servers = 'global',
 })
 ```
 
@@ -104,6 +104,10 @@ String. When set to `local` it will use mason.nvim whenever possible. When set t
 
 Boolean. When set to true adds borders and sorts "severity" of diagnostics.
 
+#### `float_border`
+
+String. Shape of borders in floating windows. It can be one of the following: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`.
+
 ### Available presets
 
 #### minimal
@@ -114,6 +118,7 @@ These are the settings it uses.
 
 ```lua
 {
+  float_border = 'rounded',
   call_servers = 'local',
   configure_diagnostics = true,
   setup_servers_on_start = true,
@@ -136,6 +141,7 @@ These are the settings it uses.
 
 ```lua
 {
+  float_border = 'rounded',
   call_servers = 'local',
   configure_diagnostics = true,
   setup_servers_on_start = true,
@@ -194,6 +200,8 @@ This is where you can declare your own keymaps and commands.
 local lsp = require('lsp-zero').preset('minimal')
 
 lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr}) -- add lsp-zero defaults
+
   local opts = {buffer = bufnr}
   local bind = vim.keymap.set
 
@@ -229,11 +237,11 @@ lsp.set_server_config({
 Gathers the arguments for a particular language server. `{name}` must be a string with the name of language server in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations). And `{opts}` is a lua table with the options for that server. These options are the same nvim-lspconfig uses in their setup function, see [:help lspconfig-setup](https://github.com/neovim/nvim-lspconfig/blob/41dc4e017395d73af0333705447e858b7db1f75e/doc/lspconfig.txt#L68) for more details.
 
 ```lua
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-})
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.configure('tsserver', {
   single_file_support = false,
@@ -254,10 +262,12 @@ This is useful when you disable the automatic setup of language servers.
 ```lua
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
   setup_servers_on_start = false,
 })
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.setup_servers({'tssever', 'rust_analyzer'})
 
@@ -287,11 +297,11 @@ lsp.nvim_workspace({
 All the language servers in `{list}` will be ignored during setup.
 
 ```lua
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-})
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.skip_server_setup({'eslint', 'rust_analyzer'})
 
@@ -304,10 +314,11 @@ lsp.setup()
 If you have support for mason.nvim enabled it will install all the servers in `{list}`. The names of the servers should match the ones listed here: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-})
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.ensure_installed({
   'tsserver',
@@ -335,11 +346,11 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-  manage_nvim_cmp = true,
-})
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 lsp.store_config('pyright', {
   single_file_support = false,
@@ -409,6 +420,10 @@ local cmp_action = require('lsp-zero').cmp_action()
 cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
+  },
+  window = {
+    completion = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
@@ -504,33 +519,7 @@ Is used to modify the default settings for nvim-cmp.
 
 What to do instead of using `.setup_nvim_cmp()`?
 
-If you really need to customize nvim-cmp I suggest you use the [minimal](#minimal) preset and setup the `sources` and `mappings` directly using the `cmp` module. Like this.
-
-```lua
-local lsp = require('lsp-zero').preset({
-  name = 'minimal',
-  set_lsp_keymaps = true,
-})
-
-lsp.setup()
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'},
-  },
-  mapping = {
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  })
-})
-```
+If you really need to customize nvim-cmp I suggest you use the [minimal](#minimal) preset and setup everything directly using the `cmp` module.
 
 ### `.defaults.diagnostics({opts})`
 
@@ -551,5 +540,4 @@ Returns the entire configuration table for nvim-cmp. If you provide the `{opts}`
 ### `.defaults.nvim_workspace({opts})`
 
 Returns the neovim specific settings for `lua_ls` language server.
-
 
