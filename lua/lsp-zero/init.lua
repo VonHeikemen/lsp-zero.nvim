@@ -151,6 +151,10 @@ function M.use(servers, opts)
   end
 end
 
+function M.nvim_lua_ls(opts)
+  return Server.nvim_workspace(opts)
+end
+
 function M.nvim_workspace(opts)
   opts = opts or {}
   local server_opts = M.defaults.nvim_workspace()

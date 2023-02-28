@@ -314,24 +314,6 @@ lsp.setup_servers({'tssever', 'rust_analyzer'})
 lsp.setup()
 ```
 
-### `.nvim_workspace({opts})`
-
-Configures the language server for lua with options specifically tailored for Neovim.
-
-`{opts}` supports the following properties:
-
-* `root_dir`: a function that determines the working directory of the language server.
-
-* `library`: a list of paths that the server should analyze.
-
-By default only the runtime files of neovim and `vim.fn.stdpath('config')` will be included. To add the path to every plugin you'll need to do this.
-
-```lua
-lsp.nvim_workspace({
-  library = vim.api.nvim_get_runtime_file('', true)
-})
-```
-
 ### `.skip_server_setup({list})`
 
 All the language servers in `{list}` will be ignored during setup.
@@ -347,7 +329,6 @@ lsp.skip_server_setup({'eslint', 'rust_analyzer'})
 
 lsp.setup()
 ```
-
 
 ### `.ensure_installed({list})`
 
@@ -372,6 +353,10 @@ lsp.setup()
 ### `.build_options({name}, {opts})`
 
 Returns all the parameters lsp-zero uses to initialize a language server. This includes default capabilities and settings that were added using the [.set_server_config()](#set_server_configopts) function.
+
+### `.nvim_lua_ls({opts})`
+
+Returns settings specific to Neovim for the lua language server, `lua_ls`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
 
 ### `.store_config({name}, {opts})`
 
@@ -560,6 +545,24 @@ Is used to modify the default settings for nvim-cmp.
 What to do instead of using `.setup_nvim_cmp()`?
 
 If you really need to customize nvim-cmp I suggest you use the [minimal](#minimal) preset and setup everything directly using the `cmp` module.
+
+### `.nvim_workspace({opts})`
+
+Configures the language server for lua with options specifically tailored for Neovim.
+
+`{opts}` supports the following properties:
+
+* `root_dir`: a function that determines the working directory of the language server.
+
+* `library`: a list of paths that the server should analyze.
+
+By default only the runtime files of neovim and `vim.fn.stdpath('config')` will be included. To add the path to every plugin you'll need to do this.
+
+```lua
+lsp.nvim_workspace({
+  library = vim.api.nvim_get_runtime_file('', true)
+})
+```
 
 ### `.defaults.diagnostics({opts})`
 
