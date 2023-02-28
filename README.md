@@ -49,27 +49,8 @@ Make sure you have at least the minimum requirements listed in `unix systems` or
 
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
 
-With `packer.nvim`: 
-
-```lua
-use {
-  'VonHeikemen/lsp-zero.nvim',
-  branch = 'dev-v2',
-  requires = {
-    -- LSP Support
-    {'neovim/nvim-lspconfig'},             -- Required
-    {'williamboman/mason.nvim'},           -- Optional
-    {'williamboman/mason-lspconfig.nvim'}, -- Optional
-
-    -- Autocompletion
-    {'hrsh7th/nvim-cmp'},     -- Required
-    {'hrsh7th/cmp-nvim-lsp'}, -- Required
-    {'L3MON4D3/LuaSnip'},     -- Required
-  }
-}
-```
-
-With `lazy.nvim`:
+<details>
+<summary>Expand lazy.nvim snippet: </summary>
 
 ```lua
 {
@@ -89,7 +70,32 @@ With `lazy.nvim`:
 }
 ```
 
-With `paq`:
+</details>
+
+<details>
+<summary>Expand packer.nvim snippet: </summary>
+
+```lua
+use {
+  'VonHeikemen/lsp-zero.nvim',
+  branch = 'dev-v2',
+  requires = {
+    -- LSP Support
+    {'neovim/nvim-lspconfig'},             -- Required
+    {'williamboman/mason.nvim'},           -- Optional
+    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+
+    -- Autocompletion
+    {'hrsh7th/nvim-cmp'},     -- Required
+    {'hrsh7th/cmp-nvim-lsp'}, -- Required
+    {'L3MON4D3/LuaSnip'},     -- Required
+  }
+}
+```
+</details>
+
+<details>
+<summary>Expand paq.nvim snippet: </summary>
 
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v2'};
@@ -105,7 +111,10 @@ With `paq`:
 {'L3MON4D3/LuaSnip'};     -- Required
 ```
 
-With `vim-plug`:
+</details>
+
+<details>
+<summary>Expand vim-plug snippet: </summary>
 
 ```vim
 " LSP Support
@@ -130,6 +139,8 @@ print('this an example code')
 print('written in lua')
 EOF
 ```
+
+</details>
 
 ## Usage
 
@@ -171,6 +182,50 @@ lsp.configure('lua_ls', lsp.nvim_lua_ls())
 lsp.setup()
 ```
 
+## Keybindings
+
+### LSP functions
+
+* `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
+
+* `gd`: Jumps to the definition of the symbol under the cursor. See [:help vim.lsp.buf.definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.definition()).
+
+* `gD`: Jumps to the declaration of the symbol under the cursor. Some servers don't implement this feature. See [:help vim.lsp.buf.declaration()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.declaration()).
+
+* `gi`: Lists all the implementations for the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.implementation()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.implementation()).
+
+* `go`: Jumps to the definition of the type of the symbol under the cursor. See [:help vim.lsp.buf.type_definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.type_definition()).
+
+* `gr`: Lists all the references to the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.references()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.references()).
+
+* `gs`: Displays signature information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.signature_help()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.signature_help()). If a mapping already exists for this key this function is not bound.
+
+* `<F2>`: Renames all references to the symbol under the cursor. See [:help vim.lsp.buf.rename()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.rename()).
+
+* `<F3>`: Format code in current buffer. See [:help vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+
+* `<F4>`: Selects a code action available at the current cursor position. See [:help vim.lsp.buf.code_action()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.code_action()).
+
+* `gl`: Show diagnostics in a floating window. See [:help vim.diagnostic.open_float()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.open_float()).
+
+* `[d`: Move to the previous diagnostic in the current buffer. See [:help vim.diagnostic.goto_prev()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_prev()).
+
+* `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
+
+### Autocomplete
+
+* `<Ctrl-y>`: Confirms selection.
+
+* `<Ctrl-e>`: Cancel completion.
+
+* `<Down>`: Navigate to the next item on the list.
+
+* `<Up>`: Navigate to previous item on the list.
+
+* `<Ctrl-n>`: If completion menu is not visible, trigger completion and go to the first item. Else, Navigate to the next item on the list.
+
+* `<Ctrl-p>`: If completion menu is not visible, trigger completion and go to the last item. Else, Navigate to the next item on the list.
+
 ## Breaking changes
 
 * `sign_icons` was removed. If you want the icons you can configure them using [.set_sign_icons()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_sign_iconsopts).
@@ -180,7 +235,7 @@ lsp.setup()
 * `suggest_lsp_servers` was removed. The suggestions are still available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they can be triggered manually using the command `:LspInstall`.
 * `cmp_capabilities` was removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
 
-## Changes/Deprecation notice
+## Future Changes/Deprecation notice
 
 Settings and functions that will change in the future. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
 
@@ -203,7 +258,7 @@ Settings and functions that will change in the future. If you are using the `mai
 
 ### How do I get rid warnings in my neovim lua config?
 
-lsp-zero has a function that will configure the lua language server for you: [nvim_workspace](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts)
+lsp-zero has a function that will configure the lua language server for you: [nvim_lua_ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts)
 
 ## Support
 
