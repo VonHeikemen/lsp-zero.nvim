@@ -82,15 +82,17 @@ It can be a boolean or a lua table. When is set to a boolean every supported pro
 
 Supported properties:
 
-* `set_mappings`. Boolean. When set to true keybindings for autocomplete will be choosen for you.
+* `set_basic_mappings`. Boolean. When set to true it will create keybindings that emulate Neovim's default completion.
 
-* `set_sources`. Boolean. When set to true it will try to setup some [recommended sources](#) for nvim-cmp.
+* `set_extra_mappings`. Boolean. When set to true it will setup tab completion, scrolling through documentation window, and navigation between snippets.
+
+* `set_sources`. String or Boolean. When set to `'lsp'` it will only setup [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) as a source. When set to `'recommended'` it will try to setup a few [recommended sources](#) for nvim-cmp. When set to the Boolean `false` it won't setup any sources.
 
 * `use_luasnip`. Boolean. When set to true it will setup luasnip to expand snippets. This option does not include a collection of snippets.
 
-* `set_format`. Boolean. When set to true it'll modify the "format" of completion items.
+* `set_format`. Boolean. When set to true it'll modify the "format" of the completion items.
     
-* `documentation_border`. Boolean. When set to true adds border to the documentation window.
+* `documentation_window`. Boolean. When set to true enables the documentation window.
 
 #### `setup_servers_on_start`
 
@@ -124,18 +126,19 @@ These are the settings it uses.
   setup_servers_on_start = true,
   set_lsp_keymaps = false,
   manage_nvim_cmp = {
-    set_mappings = false,
-    set_sources = false,
+    set_sources = 'lsp',
+    set_basic_mappings = true,
+    set_extra_mappings = false,
     use_luasnip = true,
     set_format = true,
-    documentation_border = true,
+    documentation_window = false,
   },
 }
 ```
 
 #### recommended
 
-Creates keybindings bound to [LSP actions](#). Configures diagnostics. Adds a complete configuration to nvim-cmp. And enables support for mason.nvim.
+Creates keybindings bound to [LSP actions](#lsp-actions). Configures diagnostics. Adds a complete configuration to nvim-cmp. And enables support for mason.nvim.
 
 These are the settings it uses.
 
@@ -150,11 +153,12 @@ These are the settings it uses.
     omit = {},
   },
   manage_nvim_cmp = {
-    set_mappings = true,
-    set_sources = true,
+    set_sources = 'recommended',
+    set_basic_mappings = true,
+    set_extra_mappings = false,
     use_luasnip = true,
     set_format = true,
-    documentation_border = true,
+    documentation_window = true,
   },
 }
 ```
@@ -185,6 +189,42 @@ Is based on [recommended](#recommended) but it disables all the features that de
 setup_servers_on_start = false
 call_servers = 'global'
 ```
+
+### `.default_keymaps({opts})`
+
+Create the keybindings bound to built-in LSP functions. 
+
+The `{opts}` table supports the same properties as [set_lsp_keymaps](#set_lsp_keymaps) and adds the following:
+
+* buffer: Number. The "id" of an open buffer. If the number `0` is provided then the keymaps will be effective in the current buffer.
+
+#### LSP Actions
+
+* K: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
+
+* gd: Jumps to the definition of the symbol under the cursor. See [:help vim.lsp.buf.definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.definition()).
+
+* gD: Jumps to the declaration of the symbol under the cursor. Some servers don't implement this feature. See [:help vim.lsp.buf.declaration()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.declaration()).
+
+* gi: Lists all the implementations for the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.implementation()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.implementation()).
+
+* go: Jumps to the definition of the type of the symbol under the cursor. See [:help vim.lsp.buf.type_definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.type_definition()).
+
+* gr: Lists all the references to the symbol under the cursor in the quickfix window. See [:help vim.lsp.buf.references()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.references()).
+
+* gs: Displays signature information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.signature_help()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.signature_help()). If a mapping already exists for this key this function is not bound.
+
+* <F2>: Renames all references to the symbol under the cursor. See [:help vim.lsp.buf.rename()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.rename()).
+
+* <F3>: Format code in current buffer.
+
+* <F4>: Selects a code action available at the current cursor position. See [:help vim.lsp.buf.code_action()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.code_action()).
+
+* gl: Show diagnostics in a floating window. See [:help vim.diagnostic.open_float()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.open_float()).
+
+* [d: Move to the previous diagnostic in the current buffer. See [:help vim.diagnostic.goto_prev()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_prev()).
+
+* ]d: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
 ### `.setup()`
 
