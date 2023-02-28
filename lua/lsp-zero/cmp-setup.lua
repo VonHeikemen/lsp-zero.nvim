@@ -23,7 +23,7 @@ function M.apply(cmp_opts, user_config)
       set_extra_mappings = true,
       use_luasnip = true,
       set_format = true,
-      documentation_border = true,
+      documentation_window = true,
     }
   end
 
@@ -44,7 +44,7 @@ function M.apply(cmp_opts, user_config)
   end
 
   if type(opts.documentation) == 'table' then
-    if config.window.documentation == cmp.config.disable then
+    if config.window.documentation == nil then
       config.window.documentation = {}
     end
 
@@ -100,7 +100,7 @@ function M.get_config(opts)
   end
 
   if opts.documentation_window == false then
-    config.window.documentation = cmp.config.disable
+    config.window.documentation = nil
   end
 
   return config
@@ -127,10 +127,6 @@ end
 
 function M.extra_mappings()
   local result = {
-    -- scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-
     -- toggle completion
     ['<C-e>'] = cmp.mapping(function(fallback)
       if cmp.visible() then
@@ -191,23 +187,25 @@ end
 
 function M.basic_mappings()
   return {
+    ['<C-u>'] = cmp.mapping.scroll_docs(4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
     ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
     ['<Down>'] = cmp.mapping.select_next_item(select_opts),
     ['<C-p>'] = cmp.mapping(function()
-      if not cmp.visible() then
+      if cmp.visible() then
         cmp.complete()
+      else
+        cmp.select_prev_item(select_opts)
       end
-
-      cmp.select_prev_item(select_opts)
     end),
     ['<C-n>'] = cmp.mapping(function()
-      if not cmp.visible() then
+      if cmp.visible() then
         cmp.complete()
+      else
+        cmp.select_next_item(select_opts)
       end
-
-      cmp.select_next_item(select_opts)
     end),
   }
 end
