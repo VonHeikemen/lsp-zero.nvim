@@ -64,7 +64,6 @@ use {
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
-    {'hrsh7th/cmp-buffer'},   -- Optional
 
     -- Snippets
     {'L3MON4D3/LuaSnip'}, -- Required
@@ -87,7 +86,6 @@ With `lazy.nvim`:
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
-    {'hrsh7th/cmp-buffer'},   -- Optional
 
     -- Snippets
     {'L3MON4D3/LuaSnip'}, -- Required
@@ -108,7 +106,6 @@ With `paq`:
 -- Autocompletion Engine
 {'hrsh7th/nvim-cmp'};     -- Required
 {'hrsh7th/cmp-nvim-lsp'}; -- Required
-{'hrsh7th/cmp-buffer'};   -- Optional
 
 -- Snippets
 {'L3MON4D3/LuaSnip'}; -- Required
@@ -125,7 +122,6 @@ Plug 'williamboman/mason-lspconfig.nvim' " Optional
 " Autocompletion Engine
 Plug 'hrsh7th/nvim-cmp'     " Required
 Plug 'hrsh7th/cmp-nvim-lsp' " Required
-Plug 'hrsh7th/cmp-buffer'   " Optional
 
 "  Snippets
 Plug 'L3MON4D3/LuaSnip' " Required
@@ -148,33 +144,26 @@ EOF
 Inside your configuration file add this piece of lua code.
 
 ```lua
-local lsp_zero = require('lsp-zero').preset('minimal')
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 -- (Optional) Configure lua language server for neovim
 lsp_zero.nvim_workspace()
 
-lsp_zero.setup()
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'},
-    {name = 'buffer'},
-  },
-  mapping = {
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
-})
+lsp.setup()
 ```
 
 If you don't install `mason.nvim` then you'll need to list the LSP servers you have installed using [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts).
 
 ```lua
-local lsp_zero = require('lsp-zero').preset('minimal')
+local lsp = require('lsp-zero').preset({name = 'minimal'})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 
 -- When you don't have mason.nvim installed
 -- You'll need to list the servers installed in your system
@@ -183,7 +172,7 @@ lsp_zero.setup_servers({'tsserver', 'eslint'})
 -- (Optional) Configure lua language server for neovim
 lsp_zero.nvim_workspace()
 
-lsp_zero.setup()
+lsp.setup()
 ```
 
 ## Breaking changes
@@ -199,10 +188,14 @@ lsp_zero.setup()
 
 Settings and functions that will change in the future. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
 
+### Preset settings
+
+* `set_lsp_keymaps` will be removed in favor of [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#default_keymapsopts)
+
 ### Functions
 
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [.preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
-* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed in favor of [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#extend_cmpopts).
+* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed. Use the `cmp` module to customize nvim-cmp.
 * [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
 * [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will return the arguments for the lua language server, the user will need to call the server manually.
 * [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.
