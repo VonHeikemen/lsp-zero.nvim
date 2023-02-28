@@ -39,13 +39,13 @@ If you know your way around neovim and how to configure it, take a look at this 
 * [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/configuration-templates.md#lua-template)
 * [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/configuration-templates.md#vimscript-template)
 
-## Requirements for language servers
+### Requirements for language servers
 
 I suggest you read the [requirements of mason.nvim](https://github.com/williamboman/mason.nvim#requirements).
 
 Make sure you have at least the minimum requirements listed in `unix systems` or `windows`.
 
-## Installing
+### Installing
 
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
 
@@ -142,7 +142,7 @@ EOF
 
 </details>
 
-## Usage
+### Usage
 
 Inside your configuration file add this piece of lua code.
 
@@ -186,6 +186,8 @@ lsp.setup()
 
 ### LSP functions
 
+When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these shortcuts are bound to built-in functions, so you can get more details using the `:help` command.
+
 * `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
 
 * `gd`: Jumps to the definition of the symbol under the cursor. See [:help vim.lsp.buf.definition()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.definition()).
@@ -212,7 +214,20 @@ lsp.setup()
 
 * `]d`: Move to the next diagnostic. See [:help vim.diagnostic.goto_next()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.goto_next()).
 
+By default lsp-zero will not create a keybinding if its "taken". This means if you already use one of these in your config, or some other plugins uses it ([which-key](https://github.com/folke/which-key.nvim) might be one), then lsp-zero's bindings will not work.
+
+You can force lsp-zero's bindings by adding `preserve_mappings = false` to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#default_keymapsopts).
+
+```lua
+lsp.default_keymaps({
+  buffer = bufnr,
+  preserve_mappings = false
+})
+```
+
 ### Autocomplete
+
+The default keybindings in lsp-zero are meant to emulate Neovim's default whenever possible.
 
 * `<Ctrl-y>`: Confirms selection.
 
@@ -225,6 +240,30 @@ lsp.setup()
 * `<Ctrl-n>`: If completion menu is not visible, trigger completion and go to the first item. Else, Navigate to the next item on the list.
 
 * `<Ctrl-p>`: If completion menu is not visible, trigger completion and go to the last item. Else, Navigate to the next item on the list.
+
+* `<Ctrl-d>`: Scroll down the documentation window.
+
+* `<Ctrl-u>`: Scroll up the documentation window.
+
+To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) directly.
+
+Here is an example configuration that adds navigation between snippets and adds a custom keybinding to trigger the completion menu.
+
+```lua
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'}
+  },
+  mapping = {
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  }
+})
+```
 
 ## Breaking changes
 
@@ -247,18 +286,18 @@ Settings and functions that will change in the future. If you are using the `mai
 
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#set_preferencesopts) will be removed in favor of overriding option directly in [.preset](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#presetname)
 * [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_nvim_cmpopts) will be removed. Use the `cmp` module to customize nvim-cmp.
-* [,setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
+* [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
 * [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsdiagnosticsopts) will be removed. Diagnostic config has been reduced, only `severity_sort` and borders are enabled. There is no need for this anymore.
 * [.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_sources) will be removed. Sources for nvim-cmp will be handled by the user.
 * [.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultscmp_mappingsopts) will be removed. In the future only the defaults that align with Neovim's behavior will be configured. lsp-zero default functions for nvim-cmp will have to be added manually by the user.
-* [,nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will be removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts) to get the config and then use [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) to setup the server.
-* [,defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsnvim_workspace) will be replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts).
+* [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_workspaceopts) will be removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts) to get the config and then use [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) to setup the server.
+* [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#defaultsnvim_workspace) will be replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts).
 
 ## FAQ
 
 ### How do I get rid warnings in my neovim lua config?
 
-lsp-zero has a function that will configure the lua language server for you: [nvim_lua_ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts)
+lsp-zero has a function that will configure the lua language server for you: [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#nvim_lua_lsopts)
 
 ## Support
 
