@@ -58,6 +58,8 @@ It gives the user control over the options available in the plugin.
 
 * `manage_nvim_cmp`: use the default setup for nvim-cmp. It configures keybindings and completion sources for nvim-cmp.
 
+* `manage_luasnip`: use the default setup for luasnip.
+
 * `call_servers`: if set to `'local'` it'll try to initialize servers that where installed using mason.nvim. If set to `'global'` all language servers you list using [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#configurename-opts) or [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#set_server_configopts) are assumed to be installed (a warning message will show up if they aren't).
 
 * `sign_icons`: they are shown in the "gutter" on the line diagnostics messages are located.

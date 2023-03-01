@@ -253,6 +253,9 @@ These are the available options.
       Use the default setup for `nvim-cmp`. It configures keybindings and
       completion sources for `nvim-cmp`.
 
+  manage_luasnip: ~
+      Use the default setup for `luasnip`.
+
   call_servers: ~
       if set to `'local'` it'll try to setup one of the supported installers
       (mason.nvim or nvim-lsp-installer). If set to `'lsp-installer'`
@@ -273,6 +276,7 @@ The code below describes the same features the `recommended` preset enables.
     configure_diagnostics = true,
     cmp_capabilities = true,
     manage_nvim_cmp = true,
+    manage_luasnip = true,
     call_servers = 'local',
     set_lsp_keymaps = {preserve_mappings = true, omit = {}},
     sign_icons = {
@@ -786,6 +790,9 @@ Lua API                                                     *lsp-zero-lua-api*
           manage_nvim_cmp: ~
               (boolean) When enabled it configures `nvim-cmp` with a series of
               sources and keybindings.
+
+          manage_luasnip: ~
+              (boolean) When enabled it configures `luasnip`.
 
           sign_icons: ~
               (table) The list of icons to use when showing the location of a

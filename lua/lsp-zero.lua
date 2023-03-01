@@ -35,7 +35,9 @@ local run = function(args)
   local suggest = user_config.suggest_lsp_servers
   local handle_setup = user_config.setup_servers_on_start
 
-  require('lsp-zero.snippets')
+  if user_config.manage_luasnip then
+    require('lsp-zero.snippets')
+  end
 
   Server.setup_handlers()
 

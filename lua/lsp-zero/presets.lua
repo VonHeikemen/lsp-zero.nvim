@@ -20,6 +20,7 @@ preset.defaults = function()
     setup_servers_on_start = false,
     cmp_capabilities = false,
     manage_nvim_cmp = false,
+    manage_luasnip = false,
     state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
     sign_icons = icons.sign(),
   }
@@ -36,6 +37,7 @@ preset.minimal = function()
   opts.setup_servers_on_start = true
   opts.cmp_capabilities = true
   opts.manage_nvim_cmp = false
+  opts.manage_luasnip = true
   opts.sign_icons = {}
 
   return opts
@@ -49,6 +51,7 @@ preset.recommended = function()
   opts.setup_servers_on_start = true
   opts.cmp_capabilities = true
   opts.manage_nvim_cmp = true
+  opts.manage_luasnip = true
   opts.call_servers = 'local'
 
   return opts
