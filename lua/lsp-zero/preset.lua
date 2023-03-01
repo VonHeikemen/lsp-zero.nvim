@@ -31,7 +31,7 @@ preset.minimal = function()
     set_extra_mappings = false,
     use_luasnip = true,
     set_format = true,
-    documentation_window = false,
+    documentation_window = true,
   }
 
   return opts
