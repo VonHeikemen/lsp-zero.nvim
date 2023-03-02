@@ -44,8 +44,6 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md)
 
-TODO
-
 ## Quickstart (for the impatient)
 
 This section will teach you how to create a basic configuration for autocompletion and the LSP client.
@@ -170,7 +168,7 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) Configure lua language server for neovim
-lsp.configure('lua_ls', lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.setup()
 ```
@@ -193,7 +191,7 @@ end)
 lsp.setup_servers({'tsserver', 'eslint'})
 
 -- (Optional) Configure lua language server for neovim
-lsp.configure('lua_ls', lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.setup()
 ```
