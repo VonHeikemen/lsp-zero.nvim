@@ -10,7 +10,7 @@ This is the development branch for version 2 of lsp-zero.
 
 ## How to get started
 
-If you are new to neovim go to the section [Resources for new users](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/getting-started.md#resources-for-new-users).
+If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/tutorial.md). 
 
 If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
 
@@ -20,13 +20,29 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 * LSP
 
-TODO
+  * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#introduction)
+  * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#commands)
+  * [Creating new keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#creating-new-keybindings)
+  * [Disable keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#disable-keybindings)
+  * [Install new language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#install-new-language-servers)
+  * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#configure-language-servers)
+  * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#disable-a-language-server)
+  * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#troubleshooting)
+  * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#diagnostics) (A.K.A. error messages, warnings, etc.)
+  * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#language-servers-and-masonnvim)
+  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/lsp.md#you-might-not-need-lsp-zero)
 
 * Autocompletion
 
-TODO
+  * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#introduction)
+  * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#)
+  * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#)
+  * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#)
+  * [Customizing nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/autocomplete.md#)
 
-* How to customize lsp-zero
+* Reference and guides
+  
+  * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md)
 
 TODO
 
