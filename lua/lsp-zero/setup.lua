@@ -2,8 +2,6 @@ local M = {}
 local s = {}
 
 function M.apply(args)
-  require('lsp-zero.snippets')
-
   local Server = require('lsp-zero.server')
 
   local user_settings = s.settings(args.preset, args.preset_overrides)
