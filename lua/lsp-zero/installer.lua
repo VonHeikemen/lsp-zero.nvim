@@ -1,5 +1,7 @@
 local M = {}
+
 M.enabled = false
+M.current = 'mason.nvim'
 
 function M.setup()
   local mason = M.load_module('mason')
@@ -29,6 +31,11 @@ function M.load_module(name)
   mod.setup()
 
   return 'loaded'
+end
+
+function M.get_servers()
+  local mason = require('mason-lspconfig')
+  return mason.get_installed_servers()
 end
 
 return M
