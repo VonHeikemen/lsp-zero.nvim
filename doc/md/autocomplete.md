@@ -105,6 +105,36 @@ cmp.setup({
 
 Once you have this you can change the priority by changing the order in the list. You can delete sources or you can add more.
 
+### Add an external collection of snippets
+
+It turns out luasnip can load snippets in a couple of popular formats like the VScode format and a snipmate-like format. All you have to do is call the right "loader" and then add the [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) to nvim-cmp.
+
+This is how you add support for [friendly-snippets](https://github.com/rafamadriz/friendly-snippets).
+
+```lua
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+require('luasnip.loaders.from_vscode').lazy_load()
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+    {name = 'luasnip'},
+  },
+  mapping = {
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  }
+})
+```
+
+If you want to use [honza/vim-snippets](https://github.com/honza/vim-snippets), you'll have to call a different loader.
+
+```lua
+require('luasnip.loaders.from_snipmate').lazy_load()
+```
+
 ### Enable "Super Tab"
 
 If you are the kind of person who likes to do everything with the `Tab` key, try this:
