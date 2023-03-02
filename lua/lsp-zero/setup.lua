@@ -4,7 +4,7 @@ local s = {}
 function M.apply(args)
   local Server = require('lsp-zero.server')
 
-  local user_settings = s.settings(args.preset, args.preset_overrides)
+  local user_settings = require('lsp-zero.settings').get()
   local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 1) or {}
 
   M.state = user_settings
@@ -64,23 +64,6 @@ function s.setup_ui(opts)
   vim.diagnostic.config({
     float = {border = opts.border}
   })
-end
-
-function s.settings(name, opts)
-  local preset = require('lsp-zero.preset')
-  local result = {}
-
-  if name == 'none' then
-    name = 'default'
-  end
-
-  if preset[name] then
-    result = preset[name]()
-  end
-
-  result = vim.tbl_deep_extend('force', {}, result, opts)
-
-  return result
 end
 
 return M

@@ -4,7 +4,6 @@ local s = {
   lsp_project_configs = {},
   args = {
     preset = 'none',
-    preset_overrides = {},
     cmp_opts = {},
     servers = {},
     skip_servers = {},
@@ -39,26 +38,49 @@ function M.setup()
 end
 
 function M.preset(opts)
+  local name = 'none'
+  local user_config = {}
+  local defaults = {}
+
   if type(opts) == 'string' then
-    s.args.preset = opts
+    name = opts
   end
 
   if type(opts) == 'table' then
     if type(opts.name) == 'string' then
-      s.args.preset = opts.name
+      name = opts.name
     else
-      s.args.preset = 'defaults'
+      name = 'defaults'
     end
-
-    s.args.preset_overrides = opts
+    user_config = opts
   end
+
+  if name == 'none' then
+    return M
+  end
+
+  local preset = require('lsp-zero.preset')
+
+  if preset[name] then
+    s.args.preset = name
+    defaults = preset[name]()
+  else
+    s.args.preset = 'defaults'
+    defaults = preset.defaults()
+  end
+
+  local config = require('lsp-zero.settings')
+  local new_config = vim.tbl_deep_extend('force', defaults, user_config)
+
+  config.current = new_config
 
   return M
 end
 
 function M.set_preferences(opts)
   if type(opts) == 'table' then
-    s.args.preset_overrides = opts
+    opts[1] = 'custom'
+    require('lsp-zero.settings').set(opts)
   end
 end
 
