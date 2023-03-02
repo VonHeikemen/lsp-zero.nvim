@@ -246,12 +246,12 @@ function M.default_keymaps(opts)
 end
 
 function M.extend_cmp(opts)
-  local cmp_setup = require('lsp-zero.cmp-setup')
+  local config = require('lsp-zero.cmp-setup').get_config
   local defaults = require('lsp-zero.preset').minimal().manage_nvim_cmp
 
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
-  require('cmp').setup(cmp_setup.get_config(opts))
+  require('cmp').setup(config(opts))
 end
 
 function M.defaults.diagnostics(opts)
