@@ -135,6 +135,25 @@ If you want to use [honza/vim-snippets](https://github.com/honza/vim-snippets), 
 require('luasnip.loaders.from_snipmate').lazy_load()
 ```
 
+### Basic completions for Neovim's lua api
+
+Add the [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) source.
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+    {name = 'nvim_lua'},
+  },
+  mapping = {
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  }
+})
+```
+
 ### Enable "Super Tab"
 
 If you are the kind of person who likes to do everything with the `Tab` key, try this:
