@@ -47,7 +47,7 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.setup()
 ```
@@ -80,7 +80,7 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 -- " (Optional) Configure lua language server for neovim
-lsp.nvim_workspace()
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 lsp.setup()
 EOF
