@@ -15,7 +15,6 @@ local s = {
 local Server = require('lsp-zero.server')
 
 if vim.fn.has('nvim-0.8') == 1 then
-  Server.track_servers()
   Server.extend_lspconfig()
 else
   local msg = '[lsp-zero] You need Neovim v0.8 or greater to use lsp-zero v2.\n'
@@ -140,7 +139,7 @@ function M.build_options(_, opts)
   return vim.tbl_deep_extend(
     'force',
     defaults,
-    Server.default_config,
+    Server.default_config or {},
     opts or {}
   )
 end
@@ -159,7 +158,6 @@ function M.use(servers, opts)
   for _, name in ipairs(servers) do
     local config = vim.tbl_deep_extend(
       'force',
-      Server.default_config,
       s.lsp_project_configs[name] or {},
       opts or {}
     )

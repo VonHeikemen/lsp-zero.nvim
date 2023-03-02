@@ -1,5 +1,5 @@
 local M = {
-  default_config = {},
+  default_config = false,
   common_attach = nil,
   enable_keymaps = false,
 }
@@ -12,17 +12,16 @@ local state = {
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
-function M.extend_lspconfig(opts)
+function M.extend_lspconfig()
   local ok, lspconfig = pcall(require, 'lspconfig')
   if not ok then
     return
   end
 
-  opts = opts or {}
   local util = lspconfig.util
 
   -- Set client capabilities
-  M.set_default_capabilities(opts.capabilities)
+  M.set_default_capabilities()
 
   -- Set on_attach hook
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
@@ -48,6 +47,16 @@ function M.extend_lspconfig(opts)
       end
     end
   })
+
+  -- Ensure proper setup
+  util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
+    s.setup_installer()
+    s.skip_server(config.name)
+
+    if type(M.default_config) == 'table' then
+      s.apply_global_config(config, user_config)
+    end
+  end)
 end
 
 function M.setup(name, opts, autostart)
@@ -59,7 +68,8 @@ function M.setup(name, opts, autostart)
   opts = opts or {}
 
   local lsp = require('lspconfig')[name]
-  lsp.setup(vim.tbl_deep_extend('force', M.default_config, opts))
+  local defaults = M.default_config or {}
+  lsp.setup(vim.tbl_deep_extend('force', defaults, opts))
 
   if autostart and lsp.manager and vim.bo.filetype ~= '' then
     lsp.manager.try_add_wrapper()
@@ -106,14 +116,6 @@ function M.ensure_installed(list)
 
   require('mason-lspconfig.settings').set({ensure_installed = list})
   require('mason-lspconfig.ensure_installed')()
-end
-
-function M.track_servers()
-  local util = require('lspconfig').util
-  util.on_setup = util.add_hook_after(util.on_setup, function(config)
-    s.setup_installer()
-    s.skip_server(config.name)
-  end)
 end
 
 function M.set_default_capabilities(opts)
@@ -326,6 +328,17 @@ function s.setup_installer()
   end
 
   s.setup_installer = function() return true end
+end
+
+function s.apply_global_config(config, user_config)
+  local new_config = vim.tbl_deep_extend('force', M.default_config, user_config)
+  for key, val in pairs(new_config) do
+    if type(val) == 'table' then
+      config[key] = vim.tbl_deep_extend('force', config[key], val)
+    else
+      config[key] = val
+    end
+  end
 end
 
 return M
