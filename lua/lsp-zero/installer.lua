@@ -2,6 +2,7 @@ local M = {}
 
 M.enabled = false
 M.current = 'mason.nvim'
+M.state = 'init'
 
 function M.setup()
   local mason = M.load_module('mason')
@@ -9,10 +10,12 @@ function M.setup()
 
   if mason == 'failed' or lspconfig == 'failed' then
     M.enabled = false
+    M.state = 'failed'
     return false
   end
 
   M.enabled = true
+  M.state = 'ok'
 
   return true
 end

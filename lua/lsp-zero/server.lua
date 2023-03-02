@@ -111,6 +111,7 @@ end
 function M.track_servers()
   local util = require('lspconfig').util
   util.on_setup = util.add_hook_after(util.on_setup, function(config)
+    s.setup_installer()
     s.skip_server(config.name)
   end)
 end
@@ -314,6 +315,17 @@ function s.map_check(mode, lhs)
   end
 
   return cache
+end
+
+function s.setup_installer()
+  local installer = require('lsp-zero.installer')
+  local config = require('lsp-zero.settings').get()
+
+  if config.call_servers == 'local' and installer.state == 'init' then
+    installer.setup()
+  end
+
+  s.setup_installer = function() return true end
 end
 
 return M
