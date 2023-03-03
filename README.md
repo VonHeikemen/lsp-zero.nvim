@@ -43,6 +43,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 * Reference and guides
   
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md)
+  * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/guides/integrate-with-null-ls.md)
 
 ## Quickstart (for the impatient)
 
