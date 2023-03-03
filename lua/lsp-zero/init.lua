@@ -76,13 +76,6 @@ function M.preset(opts)
   return M
 end
 
-function M.set_preferences(opts)
-  if type(opts) == 'table' then
-    opts[1] = 'custom'
-    require('lsp-zero.settings').set(opts)
-  end
-end
-
 function M.setup_servers(list)
   if type(list) ~= 'table' then
     return
@@ -175,27 +168,6 @@ function M.nvim_lua_ls(opts)
   return Server.nvim_workspace(opts)
 end
 
-function M.nvim_workspace(opts)
-  opts = opts or {}
-  local server_opts = M.defaults.nvim_workspace()
-
-  if opts.library then
-    server_opts.settings.Lua.workspace.library = opts.library
-  end
-
-  if opts.root_dir then
-    server_opts.root_dir = opts.root_dir
-  end
-
-  M.configure('lua_ls', server_opts)
-end
-
-function M.setup_nvim_cmp(opts)
-  if type(opts) == 'table' then
-    s.args.cmp_opts = opts
-  end
-end
-
 function M.set_sign_icons(opts)
   Server.set_sign_icons(opts)
 end
@@ -252,6 +224,39 @@ function M.extend_cmp(opts)
   require('cmp').setup(config(opts))
 end
 
+
+---
+-- Deprecated functions
+---
+
+function M.set_preferences(opts)
+  if type(opts) == 'table' then
+    opts[1] = 'custom'
+    require('lsp-zero.settings').set(opts)
+  end
+end
+
+function M.nvim_workspace(opts)
+  opts = opts or {}
+  local server_opts = M.defaults.nvim_workspace()
+
+  if opts.library then
+    server_opts.settings.Lua.workspace.library = opts.library
+  end
+
+  if opts.root_dir then
+    server_opts.root_dir = opts.root_dir
+  end
+
+  M.configure('lua_ls', server_opts)
+end
+
+function M.setup_nvim_cmp(opts)
+  if type(opts) == 'table' then
+    s.args.cmp_opts = opts
+  end
+end
+
 function M.defaults.diagnostics(opts)
   local config = Server.diagnostics_config()
 
@@ -260,6 +265,10 @@ function M.defaults.diagnostics(opts)
   end
 
   return config
+end
+
+function M.defaults.nvim_workspace(opts)
+  return Server.nvim_workspace(opts)
 end
 
 function M.defaults.cmp_mappings(opts)
@@ -298,10 +307,6 @@ function M.defaults.cmp_config(opts)
   end
 
   return config
-end
-
-function M.defaults.nvim_workspace(opts)
-  return Server.nvim_workspace(opts)
 end
 
 return M
