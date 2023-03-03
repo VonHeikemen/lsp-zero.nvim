@@ -44,6 +44,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md)
   * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/guides/integrate-with-null-ls.md)
+  * [Setup copilot.lua + nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/guides/setup-copilot-lua-plus-nvim-cmp.md)
 
 ## Quickstart (for the impatient)
 
