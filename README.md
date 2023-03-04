@@ -6,7 +6,7 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-The branch [v2.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v2.x) has been created. You can now test `v2` of lsp-zero. If you are still using the `main` branch, please change it to `v1.x` to avoid breaking changes.
+The branch [v2.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v2.x) has been created. You can now test `v2` of lsp-zero. The `main` branch still points to `v1.x`, but this will probably change by the end of March. So if you are still using the `main` branch, please change it to `v1.x` to avoid breaking changes.
 
 This new release of lsp-zero recommends a less opinionated configuration. The aim is to let lsp-zero "extend" `lspconfig` and `nvim-cmp` with some defaults, and then let the user interact with each plugin directly if they need further customizations. This will make it easier for everyone to integrate other plugins from the Neovim ecosystem with lsp-zero.
 
