@@ -6,7 +6,7 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 ## Preset settings
 
-You can tweak the behavior of nvim-cmp using a preset. You can control what lsp-zero is going to do with nvim-cmp. The [minimal](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#minimal) preset has the following settings:
+You can tweak the behavior of nvim-cmp using a preset. You can control what lsp-zero is going to do with nvim-cmp. The [minimal](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#minimal) preset has the following settings:
 
 ```lua
 manage_nvim_cmp = {
@@ -19,7 +19,7 @@ manage_nvim_cmp = {
 }
 ```
 
-If you want to know the details of each property go to [the api reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#manage_nvim_cmp). But what this means is you can do stuff like this.
+If you want to know the details of each property go to [the api reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#manage_nvim_cmp). But what this means is you can do stuff like this.
 
 ```lua
 local lsp = require('lsp-zero').preset({

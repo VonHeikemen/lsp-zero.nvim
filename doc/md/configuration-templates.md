@@ -25,7 +25,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v2',
+    branch = 'v2.x',
     dependencies = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required
