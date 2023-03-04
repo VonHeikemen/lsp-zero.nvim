@@ -175,10 +175,6 @@ end
 
 function M.default_keymaps(opts)
   opts = opts or {buffer = 0}
-  if Server.enable_keymaps then
-    Server.enable_keymaps = false
-  end
-
   Server.default_keymaps(opts)
 end
 
