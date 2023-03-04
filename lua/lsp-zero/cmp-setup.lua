@@ -9,6 +9,15 @@ if ok_cmp then
   select_opts = {behavior = cmp.SelectBehavior.Select}
 end
 
+function M.extend(opts)
+  local config = require('lsp-zero.cmp-setup').get_config
+  local defaults = require('lsp-zero.preset').minimal().manage_nvim_cmp
+
+  opts = vim.tbl_deep_extend('force', defaults, opts or {})
+
+  require('cmp').setup(config(opts))
+end
+
 function M.apply(cmp_opts, user_config)
   if not ok_cmp then
     local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
