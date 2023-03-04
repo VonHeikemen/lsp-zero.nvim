@@ -6,7 +6,7 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-This is the development branch for version 2 of lsp-zero.
+Hello, there. This is the new branch for version 2 of lsp-zero.
 
 ## How to get started
 
