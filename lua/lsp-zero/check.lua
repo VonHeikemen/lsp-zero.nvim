@@ -89,7 +89,7 @@ M.is_executable = function(name)
     cmd = lsp.cmd[3]
   end
 
-  return {cmd = cmd, result = vim.fn.executable(cmd)}
+  return {cmd = cmd, result = vim.fn.executable(cmd) == 1}
 end
 
 M.inspect_settings = function(name)
