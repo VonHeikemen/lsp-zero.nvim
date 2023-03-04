@@ -19,7 +19,7 @@
 Defines the sign icons that appear in the gutter.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -51,9 +51,7 @@ This creates a combination of settings suitable for common use cases. It support
 * [manual-setup](#manual-setup)
 * [system-lsp](#system-lsp)
 
-With time I've learned these presets are only useful to a tiny set of users. So I suggest you start with the [minimal](#minimal) preset and enable other options when you need them.
-
-So you also have the ability to override any setting in the preset if you pass a lua table.
+You also have the ability to override any setting in the preset if you pass a lua table.
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -61,6 +59,8 @@ local lsp = require('lsp-zero').preset({
   call_servers = 'global',
 })
 ```
+
+If you don't specify a preset then [minimal](#minimal) will be the default.
 
 ### Preset settings
 
@@ -235,7 +235,7 @@ Executes the `{callback}` function every time a server is attached to a buffer.
 This is where you can declare your own keymaps and commands.
 
 ```lua
-local lsp = require('lsp-zero').preset('minimal')
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr}) -- add lsp-zero defaults
@@ -275,7 +275,7 @@ lsp.set_server_config({
 Gathers the arguments for a particular language server. `{name}` must be a string with the name of language server in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations). And `{opts}` is a lua table with the options for that server. These options are the same nvim-lspconfig uses in their setup function, see [:help lspconfig-setup](https://github.com/neovim/nvim-lspconfig/blob/41dc4e017395d73af0333705447e858b7db1f75e/doc/lspconfig.txt#L68) for more details.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -299,7 +299,6 @@ This is useful when you disable the automatic setup of language servers.
 
 ```lua
 local lsp = require('lsp-zero').preset({
-  name = 'minimal',
   setup_servers_on_start = false,
 })
 
@@ -317,7 +316,7 @@ lsp.setup()
 All the language servers in `{list}` will be ignored during setup.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -333,7 +332,7 @@ lsp.setup()
 If you have support for mason.nvim enabled it will install all the servers in `{list}`. The names of the servers should match the ones listed here: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -369,7 +368,7 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

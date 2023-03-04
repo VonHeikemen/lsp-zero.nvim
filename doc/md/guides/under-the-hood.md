@@ -1,9 +1,9 @@
-I realize some people would want to know what happens under the hood when they use the "recommended" configuration.
+I realize some people would want to know what happens under the hood when they use the recommended configuration.
 
 Okay, so this thing.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

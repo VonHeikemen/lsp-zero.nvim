@@ -40,7 +40,7 @@ require('lazy').setup({
   }
 })
 
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -73,7 +73,7 @@ call plug#end()
 
 
 lua <<EOF
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

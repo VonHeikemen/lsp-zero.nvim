@@ -165,7 +165,7 @@ EOF
 Inside your configuration file add this piece of lua code.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -184,7 +184,7 @@ If you don't install `mason.nvim` then you'll need to list the LSP servers you h
 > Note: if you use NixOS don't install mason.nvim
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

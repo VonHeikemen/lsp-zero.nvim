@@ -17,7 +17,7 @@ Quickstart                                               *lsp-zero-quickstart*
 The fastest way to get started is by using a "preset" and immediately call
 the |lsp-zero.setup()| function.
 >lua
-  local lsp = require('lsp-zero').preset({name = 'minimal'})
+  local lsp = require('lsp-zero').preset({})
 
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
@@ -34,7 +34,7 @@ the autocompletion plugin with a few "data sources" and keybindings.
 Here's a more advanced configuration showing the functions you have available
 to configure and install LSP servers.
 >lua
-  local lsp = require('lsp-zero').preset({name = 'minimal'})
+  local lsp = require('lsp-zero').preset({})
 
   -- the function below will be executed whenever
   -- a language server is attached to a buffer
@@ -106,8 +106,7 @@ These are the available presets.
     * manual-setup
     * system-lsp
 
-With time I've learned these presets are only useful to a tiny set of users.
-Use the minimal preset and enable the other settings when you need them.
+If you don't specify a preset then `minimal` will be the default.
 
                                                     *lsp-zero-preset-settings*
 
@@ -472,7 +471,7 @@ calling the `lsp-zero` module.
     }
   })
 
-  local lsp = require('lsp-zero').preset({name = 'minimal'})
+  local lsp = require('lsp-zero').preset({})
 
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
@@ -590,7 +589,7 @@ on_attach({callback}): ~
 
     This is the place where you can create your own keybindings.
 >lua
-    local lsp = require('lsp-zero').preset({name = 'minimal'})
+    local lsp = require('lsp-zero').preset({})
 
     lsp.on_attach(function(client, bufnr)
       local noremap = {buffer = bufnr}
@@ -678,7 +677,7 @@ use({name}, {opts}): ~
 >lua
     -- init.lua
 
-    local lsp = require('lsp-zero').preset({name = 'minimal'})
+    local lsp = require('lsp-zero').preset({})
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -720,7 +719,7 @@ nvim_lua_ls({opts}): ~
     If you provide the {opts} table it'll merge it with the defaults,
     this way you can extend or change the values easily.
 >lua
-    local lsp = require('lsp-zero').preset({name = 'minimal'})
+    local lsp = require('lsp-zero').preset({})
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})

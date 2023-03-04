@@ -55,7 +55,7 @@ Just like the default keybindings the idea here is to create them only when a la
 Here is an example the replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -94,7 +94,7 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#ensure_installedlist) to list the language servers you want to install with `mason.nvim`.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -117,7 +117,7 @@ Keep in mind the names of the servers must be in [this list](https://github.com/
 To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the require of lsp-zero.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -138,7 +138,7 @@ Keep in mind that plugins like [rust-tools](https://github.com/simrat39/rust-too
 For backwards compatibility with the `v1.x` branch the [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#configurename-opts) function is still available. So this is still valid.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -161,7 +161,7 @@ The name of the server can be anything [lspconfig supports](https://github.com/n
 Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v2/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -271,7 +271,6 @@ That's the name neovim uses for error messages, warnings, hints, etc. lsp-zero o
 
 ```lua
 local lsp = require('lsp-zero').preset({
-  name = 'minimal',
   float_border = 'none',
   configure_diagnostics = false,
 })
@@ -308,7 +307,7 @@ require('mason').setup({
   }
 })
 
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

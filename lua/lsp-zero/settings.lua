@@ -27,6 +27,10 @@ function M.preset(opts)
   local user_config = {}
   local defaults = {}
 
+  if opts == nil then
+    opts = {name = 'minimal'} 
+  end
+
   if type(opts) == 'string' then
     name = opts
   end
@@ -34,6 +38,9 @@ function M.preset(opts)
   if type(opts) == 'table' then
     if type(opts.name) == 'string' then
       name = opts.name
+    elseif opts.name == nil then
+      name = 'minimal'
+      opts.name = 'minimal'
     else
       name = 'defaults'
     end

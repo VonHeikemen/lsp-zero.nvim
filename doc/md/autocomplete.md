@@ -23,7 +23,6 @@ If you want to know the details of each property go to [the api reference](https
 
 ```lua
 local lsp = require('lsp-zero').preset({
-  name = 'minimal',
   manage_nvim_cmp = {
     set_sources = 'recommended'
   }

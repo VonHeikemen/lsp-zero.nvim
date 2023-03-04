@@ -147,7 +147,7 @@ require('lazy').setup({
 Then we add the configuration at the end of the file.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -231,7 +231,7 @@ vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
 -- LSP
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

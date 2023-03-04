@@ -5,7 +5,7 @@
 null-ls isn't a real language server, if you want "integrate it" with lsp-zero all you need to do is call their setup function after lsp-zero's config.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -30,7 +30,7 @@ null_ls.setup({
 The solution I propose here is to use the `on_attach` function to create a command called `NullFormat`. This new command will have all the arguments necessary to send a formatting request specifically to null-ls. You could then create a keymap bound to the `NullFormat` command.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -77,7 +77,7 @@ null_ls.setup({
 Ensure the tools you have listed in the `sources` option are installed automatically.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -110,7 +110,7 @@ require('mason-null-ls').setup({
 Make null-ls aware of the tools you installed using mason.nvim, and configure them automatically.
 
 ```lua
-local lsp = require('lsp-zero').preset({name = 'minimal'})
+local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
