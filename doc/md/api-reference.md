@@ -163,8 +163,6 @@ These are the settings it uses.
 }
 ```
 
-Only use this if you agree with every default setting lsp-zero creates. Otherwise you'll have a very complicated setup that tries to disable everything lsp-zero does (I've seen it happen. Don't be that person).
-
 #### lsp-only
 
 Is base on [recommended](#recommended) but it disables the support for nvim-cmp.
@@ -568,7 +566,7 @@ lsp.nvim_workspace({
 
 Returns the configuration for diagnostics. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
 
-### `.defaults.cmp_soures()`
+### `.defaults.cmp_sources()`
 
 Returns the list of "sources" used in nvim-cmp.
 
