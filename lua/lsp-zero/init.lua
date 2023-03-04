@@ -37,42 +37,7 @@ function M.setup()
 end
 
 function M.preset(opts)
-  local name = 'none'
-  local user_config = {}
-  local defaults = {}
-
-  if type(opts) == 'string' then
-    name = opts
-  end
-
-  if type(opts) == 'table' then
-    if type(opts.name) == 'string' then
-      name = opts.name
-    else
-      name = 'defaults'
-    end
-    user_config = opts
-  end
-
-  if name == 'none' then
-    return M
-  end
-
-  local preset = require('lsp-zero.preset')
-
-  if preset[name] then
-    s.args.preset = name
-    defaults = preset[name]()
-  else
-    s.args.preset = 'defaults'
-    defaults = preset.defaults()
-  end
-
-  local config = require('lsp-zero.settings')
-  local new_config = vim.tbl_deep_extend('force', defaults, user_config)
-
-  config.current = new_config
-
+  require('lsp-zero.settings').preset(opts)
   return M
 end
 
@@ -233,7 +198,6 @@ end
 
 function M.set_preferences(opts)
   if type(opts) == 'table' then
-    opts[1] = 'custom'
     require('lsp-zero.settings').set(opts)
   end
 end
