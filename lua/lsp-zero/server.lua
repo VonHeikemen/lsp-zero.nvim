@@ -51,7 +51,7 @@ function M.extend_lspconfig()
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     s.setup_installer()
-    s.skip_server(config.name)
+    M.skip_server(config.name)
 
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config)
@@ -64,7 +64,7 @@ function M.setup(name, opts, autostart)
     return
   end
 
-  s.skip_server(name)
+  M.skip_server(name)
   opts = opts or {}
 
   local lsp = require('lspconfig')[name]
@@ -78,7 +78,7 @@ end
 
 function M.setup_servers(list, opts)
   for name, _ in pairs(opts.ignore) do
-    s.skip_server(name)
+    M.skip_server(name)
   end
 
   for server, config in pairs(list) do
@@ -88,7 +88,7 @@ end
 
 function M.setup_installed(list, opts)
   for name, _ in pairs(opts.ignore) do
-    s.skip_server(name)
+    M.skip_server(name)
   end
 
   local mason = require('mason-lspconfig')
@@ -265,7 +265,7 @@ function s.set_buf_commands(bufnr)
   )
 end
 
-function s.skip_server(name)
+function M.skip_server(name)
   if type(name) == 'string' then
     state.exclude[name] = true
   end

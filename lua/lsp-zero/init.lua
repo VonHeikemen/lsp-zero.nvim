@@ -123,7 +123,9 @@ function M.set_server_config(opts)
   end
 end
 
-function M.build_options(_, opts)
+function M.build_options(name, opts)
+  Server.skip_server(name)
+
   local defaults = {
     capabilities = Server.client_capabilities(),
     on_attach = function() end,
