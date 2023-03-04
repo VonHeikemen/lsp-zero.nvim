@@ -1,5 +1,7 @@
 local M = {}
 
+local state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json'
+
 function M.defaults()
   return {
     float_border = 'none',
@@ -8,7 +10,7 @@ function M.defaults()
     setup_servers_on_start = false,
     set_lsp_keymaps = false,
     manage_nvim_cmp = false,
-    state_file = vim.fn.stdpath('data') .. '/lsp-zero.info.json',
+    state_file = state_file,
   }
 end
 
@@ -60,6 +62,10 @@ function M.preset(opts)
   end
 
   local new_config = vim.tbl_deep_extend('force', defaults, user_config)
+
+  if new_config.state_file == nil then
+    new_config.state_file = state_file
+  end
 
   M.current = new_config
 

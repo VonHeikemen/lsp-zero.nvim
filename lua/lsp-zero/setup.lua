@@ -7,8 +7,6 @@ function M.apply(args)
   local user_settings = require('lsp-zero.settings').get()
   local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 1) or {}
 
-  M.state = user_settings
-
   if user_settings.manage_nvim_cmp and #cmp_txt > 0 then
     require('lsp-zero.cmp-setup').apply(
       args.cmp_opts,
