@@ -85,9 +85,9 @@ function M.luasnip_supertab(select_opts)
     elseif luasnip.expand_or_jumpable() then
       luasnip.expand_or_jump()
     elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-      cmp.complete()
-    else
       fallback()
+    else
+      cmp.complete()
     end
   end, {'i', 's'})
 end
