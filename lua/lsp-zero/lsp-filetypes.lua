@@ -60,6 +60,9 @@ return {
   cadence = {
     cdc = true
   },
+  cairo_ls = {
+    cairo = true
+  },
   ccls = {
     c = true,
     cpp = true,
@@ -677,6 +680,7 @@ return {
     astro = true,
     ["astro-markdown"] = true,
     blade = true,
+    clojure = true,
     css = true,
     ["django-html"] = true,
     edge = true,
