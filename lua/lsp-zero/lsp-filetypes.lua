@@ -634,6 +634,9 @@ return {
     mysql = true,
     sql = true
   },
+  standardrb = {
+    ruby = true
+  },
   starlark_rust = {
     ["BUILD.bazel"] = true,
     bzl = true,
