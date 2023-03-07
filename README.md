@@ -30,7 +30,6 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#troubleshooting)
   * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#diagnostics) (A.K.A. error messages, warnings, etc.)
   * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#language-servers-and-masonnvim)
-  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#you-might-not-need-lsp-zero)
 
 * Autocompletion
 
@@ -43,8 +42,9 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 * Reference and guides
   
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md)
-  * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md)
   * [Tutorial: Step by step setup from scratch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md)
+  * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md)
+  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#you-might-not-need-lsp-zero)
   * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/integrate-with-null-ls.md)
   * [Setup copilot.lua + nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/setup-copilot-lua-plus-nvim-cmp.md)
   * [Setup with nvim-navic](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/quick-recipes.md#setup-with-nvim-navic)
