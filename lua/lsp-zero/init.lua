@@ -55,6 +55,7 @@ function M.configure(name, opts)
   local arg_type = type(opts)
   if arg_type == 'table' then
     s.args.servers[name] = opts
+    M.store_config(name, opts)
   elseif opts then
     s.args.servers[name] = {}
   end

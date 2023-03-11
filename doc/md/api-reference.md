@@ -361,20 +361,20 @@ Saves the configuration options for a language server, so you can use it at a la
 
 ### `.use({name}, {opts})`
 
-For when you want full control of the servers you want to use in a particular project. It is meant to be called in project local config.
+For when you want you want to add more settings to a particular language server in a particular project. It is meant to be called in project local config (but you can still use it in your init.lua).
 
-Ideally, you would setup some default values for your servers in your neovim config using [.store_config()](#store_configname-opts).
+Ideally, you would setup some default values for your servers in your neovim config using [.configure()](#configurename-opts), or maybe [.store_config()](#store_configname-opts) if you don't use any presets.
 
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.store_config('pyright', {
+lsp.configure('pyright', {
   single_file_support = false,
 })
 
@@ -399,7 +399,7 @@ lsp.use('pyright', {
 })
 ```
 
-Options from [.store_config()](#store_configname-opts) will be merged with the ones on `.use()` and the server will be initialized.
+Options from [.configure()](#configurename-opts) will be merged with the ones on `.use()` and the server will restart with the new config.
 
 lsp-zero does not execute files. It only provides utility functions. So to execute your "local config" you'll have to use another plugin.
 
