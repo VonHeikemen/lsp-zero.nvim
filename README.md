@@ -207,9 +207,16 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 ```
 
-## Keybindings
+## Language servers
 
-### LSP functions
+Here are some things you need to know:
+
+* The configuration for the language servers is provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). 
+* lsp-zero will create keybindings, commands, and will integrate nvim-cmp (the autocompletion plugin) with lspconfig if possible. You need to require lsp-zero before lspconfig for this to work.
+* Even though lsp-zero calls [mason.nvim](https://github.com/williamboman/mason.nvim) under the hood it only configures LSP servers. Other tools like formatters, linters or debuggers are not configured by lsp-zero.
+* If you need to configure a language server use `lspconfig`.
+
+### Keybindings
 
 When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these shortcuts are bound to built-in functions, so you can get more details using the `:help` command.
 
@@ -250,7 +257,11 @@ lsp.default_keymaps({
 })
 ```
 
-### Autocomplete
+## Autocomplete
+
+The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). The default preset (which is called [minimal](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#minimal)) will only add the minimum required to integrate lspconfig, nvim-cmp and [luasnip](https://github.com/L3MON4D3/LuaSnip).
+
+### Keybindings
 
 The default keybindings in lsp-zero are meant to emulate Neovim's default whenever possible.
 
@@ -281,6 +292,40 @@ local cmp_action = require('lsp-zero').cmp_action()
 cmp.setup({
   mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+  }
+})
+```
+
+### Adding extra sources
+
+In nvim-cmp a "source" is a plugin (a neovim plugin) that provides the actual data displayed in the completion menu.
+
+Here is a list of source you might want to install to get a better experience.
+
+* [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
+
+* [cmp-path](https://github.com/hrsh7th/cmp-path): gives completions based on the filesystem.
+
+* [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip): it shows snippets in the suggestions.
+
+* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data send by the language server.
+
+* [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua): provides completions based on neovim's lua api.
+
+```lua
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  sources = {
+    {name = 'path'},
+    {name = 'nvim_lsp'},
+    {name = 'buffer', keyword_length = 3},
+    {name = 'luasnip', keyword_length = 2},
+  },
+  mapping = {
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
