@@ -264,6 +264,10 @@ M.default_keymaps = function(opts)
   Server.default_keymaps(opts)
 end
 
+M.buffer_commands = function()
+  Server.buffer_commands()
+end
+
 M.set_server_config = function(opts)
   if type(opts) == 'table' then
     Server.default_config = opts

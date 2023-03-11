@@ -926,7 +926,7 @@ Lua API                                                     *lsp-zero-lua-api*
       lsp.setup()
 <
 
-                                                   *lsp-zero.default_keymaps()*
+                                                  *lsp-zero.default_keymaps()*
 
   .default_keymaps({opts}): ~
       Create |lsp-zero-keybindings| in the current buffer.
@@ -937,6 +937,10 @@ Lua API                                                     *lsp-zero-lua-api*
           * buffer: (Number). Needs to be the "id" of an open buffer.
           The number `0` means the current buffer.
 
+                                                  *lsp-zero.buffer_commands()*
+
+  .buffer_commands(): ~
+      Create |lsp-zero-buffer-commands| in the current buffer.
 
                                                  *lsp-zero.ensure_installed()*
 

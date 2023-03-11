@@ -174,6 +174,10 @@ Create [LSP keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/
 
   * buffer: (Number). Needs to be the "id" of an open buffer. The number `0` means the current buffer.
 
+### `.buffer_commands()`
+
+Create [LSP commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#commands) in the current buffer.
+
 ### `.ensure_installed({list})`
 
 Installs all the servers in `{list}` if they are missing.

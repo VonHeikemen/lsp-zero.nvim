@@ -227,6 +227,17 @@ M.default_keymaps = function(opts)
   s.set_keymaps(opts.buffer, opts)
 end
 
+M.buffer_commands = function()
+  local command = function(name, attr, str)
+    vim.cmd(string.format('command! -buffer %s %s lua %s', attr, name, str))
+  end
+
+  command('LspZeroWorkspaceAdd', '', 'vim.lsp.buf.add_workspace_folder()')
+  command('LspZeroWorkspaceList', '','vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))')
+
+  s.set_buf_commands()
+end
+
 s.set_keymaps = function(bufnr, opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
