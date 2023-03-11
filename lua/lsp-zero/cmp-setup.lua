@@ -43,13 +43,21 @@ function M.apply(cmp_opts, user_config)
   end
 
   local config = M.get_config(user_config)
+  local cmp_config = cmp.get_config()
 
   if type(opts.sources) == 'table' then
     config.sources = opts.sources
+  elseif #cmp_config.sources > 0 then
+    config.sources = cmp_config.sources
   end
 
   if type(opts.mapping) == 'table' then
     config.mapping = opts.mapping
+  elseif (
+    vim.tbl_isempty(cmp_config.mapping) == false 
+    and vim.tbl_isempty(config.mapping) == false
+  ) then
+    config.mapping = vim.tbl_deep_extend('force', config.mapping, cmp_config.mapping)
   end
 
   if type(opts.documentation) == 'table' then
