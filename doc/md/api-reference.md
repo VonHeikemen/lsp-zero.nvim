@@ -166,6 +166,14 @@ end)
 lsp.setup()
 ```
 
+### `.default_keymaps({opts})`
+
+Create [LSP keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#default-keybindings) in the current buffer.
+
+`{opts}` supports the same properties as the setting `set_lsp_keymaps` and adds the following:
+
+  * buffer: (Number). Needs to be the "id" of an open buffer. The number `0` means the current buffer.
+
 ### `.ensure_installed({list})`
 
 Installs all the servers in `{list}` if they are missing.

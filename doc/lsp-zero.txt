@@ -926,6 +926,18 @@ Lua API                                                     *lsp-zero-lua-api*
       lsp.setup()
 <
 
+                                                   *lsp-zero.default_keymaps()*
+
+  .default_keymaps({opts}): ~
+      Create |lsp-zero-keybindings| in the current buffer.
+
+      {opts} supports the same properties as the setting `set_lsp_keymaps`
+      and adds the following:
+
+          * buffer: (Number). Needs to be the "id" of an open buffer.
+          The number `0` means the current buffer.
+
+
                                                  *lsp-zero.ensure_installed()*
 
   .ensure_installed({list}): ~

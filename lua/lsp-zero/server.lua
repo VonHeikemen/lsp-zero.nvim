@@ -220,6 +220,13 @@ M.set_sign_icons = function(icon)
   sign({name = 'DiagnosticSignInfo', text = icon.info})
 end
 
+M.default_keymaps = function(opts)
+  local defaults = {buffer = 0, preserve_mappings = true}
+  opts = vim.tbl_deep_extend('force', defaults, opts or {})
+
+  s.set_keymaps(opts.buffer, opts)
+end
+
 s.set_keymaps = function(bufnr, opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
