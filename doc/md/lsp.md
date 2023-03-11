@@ -297,6 +297,49 @@ Here is an example.
 
 > The name of the language server must match with one in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
+### Testing a server in isolation
+
+And by that I mean without the lsp-zero setup.
+
+First thing you'll need to do is delete or "comment out" the configuration you have for lsp-zero. Then do everything manually. Call the setup function for `mason` and `mason-lspconfig`. After that, use `lspconfig` to configure the language server you want to test. If you use lsp-zero's keybindings or commands, you can add them in the `.on_attach` function.
+
+Here is an example configuration for `tsserver`.
+
+```lua
+local lsp_zero = require('lsp-zero')
+local lspconfig = require('lspconfig')
+
+require('mason').setup()
+require('mason-lspconfig').setup()
+
+lspconfig.tsserver.setup({
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+  on_attach = function(client, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
+    lsp_zero.buffer_commands()
+  end
+})
+```
+
+If the issue you have persists even without lsp-zero and you want to ask for help in `stackoverflow` or any other forum, I suggest you present a minimal config like this one. You'll increase the chances of getting support from the community (because sadly there aren't any lsp-zero experts out there).
+
+If you need a minimal config for nvim-cmp, use this.
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+  })
+})
+```
+
 ## Diagnostics
 
 ### Default settings
