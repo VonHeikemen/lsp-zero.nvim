@@ -302,7 +302,7 @@ cmp.setup({
 
 In nvim-cmp a "source" is a plugin (a neovim plugin) that provides the actual data displayed in the completion menu.
 
-Here is a list of source you might want to install to get a better experience.
+Here is a list of source you might want to configure to get a better experience.
 
 * [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
 
@@ -310,7 +310,7 @@ Here is a list of source you might want to install to get a better experience.
 
 * [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip): it shows snippets in the suggestions.
 
-* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data send by the language server.
+* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data sent by the language server.
 
 * [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua): provides completions based on neovim's lua api.
 
