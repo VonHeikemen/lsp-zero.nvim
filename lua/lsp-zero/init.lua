@@ -183,6 +183,28 @@ function M.extend_cmp(opts)
   require('lsp-zero.cmp-setup').extend(opts)
 end
 
+function M.new_server(opts)
+  if type(opts) ~= 'table' then
+    return
+  end
+
+  Server.setup_installer()
+
+  local name = opts.name or ''
+  local config = M.build_options(name, opts)
+
+  require('lsp-zero.client').setup(config)
+end
+
+M.dir = {}
+
+function M.dir.find_all(list, dir)
+  return require('lsp-zero.dir').find_all(list, dir)
+end
+
+function M.dir.find_first(list, dir)
+  return require('lsp-zero.dir').find_first(list, dir)
+end
 
 ---
 -- Deprecated functions

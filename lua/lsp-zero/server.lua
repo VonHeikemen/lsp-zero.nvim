@@ -13,16 +13,6 @@ local state = {
 }
 
 function M.extend_lspconfig()
-  local ok, lspconfig = pcall(require, 'lspconfig')
-  if not ok then
-    return
-  end
-
-  local util = lspconfig.util
-
-  -- Set client capabilities
-  M.set_default_capabilities()
-
   -- Set on_attach hook
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
   vim.api.nvim_create_autocmd('LspAttach', {
@@ -48,9 +38,19 @@ function M.extend_lspconfig()
     end
   })
 
+  local ok, lspconfig = pcall(require, 'lspconfig')
+  if not ok then
+    return
+  end
+
+  local util = lspconfig.util
+
+  -- Set client capabilities
+  util.default_config.capabilities = s.set_capabilities()
+
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
-    s.setup_installer()
+    M.setup_installer()
     M.skip_server(config.name)
 
     if type(M.default_config) == 'table' then
@@ -245,6 +245,10 @@ function M.nvim_workspace(opts)
 end
 
 function M.client_capabilities()
+  if state.capabilities == nil then
+    return s.set_capabilities()
+  end
+
   return state.capabilities
 end
 
@@ -270,6 +274,17 @@ function M.skip_server(name)
   if type(name) == 'string' then
     state.exclude[name] = true
   end
+end
+
+function M.setup_installer()
+  local installer = require('lsp-zero.installer')
+  local config = require('lsp-zero.settings').get()
+
+  if config.call_servers == 'local' and installer.state == 'init' then
+    installer.setup()
+  end
+
+  M.setup_installer = function() return true end
 end
 
 function s.set_capabilities(current)
@@ -318,17 +333,6 @@ function s.map_check(mode, lhs)
   end
 
   return cache
-end
-
-function s.setup_installer()
-  local installer = require('lsp-zero.installer')
-  local config = require('lsp-zero.settings').get()
-
-  if config.call_servers == 'local' and installer.state == 'init' then
-    installer.setup()
-  end
-
-  s.setup_installer = function() return true end
 end
 
 function s.apply_global_config(config, user_config)
