@@ -280,7 +280,7 @@ If you want to disable the "virtual text" you'll need to use the function [vim.d
 
 ```lua
 vim.diagnostic.config({
-  virtual_text = true,
+  virtual_text = false,
 })
 ```
 
