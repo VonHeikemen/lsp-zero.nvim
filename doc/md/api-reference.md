@@ -403,6 +403,105 @@ Options from [.configure()](#configurename-opts) will be merged with the ones on
 
 lsp-zero does not execute files. It only provides utility functions. So to execute your "local config" you'll have to use another plugin.
 
+### `.new_server({opts})`
+
+lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.
+
+This function does not depend on `lspconfig`, it's a thin wrapper around a Neovim function called [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()).
+
+`{opts}` supports every property `vim.lsp.start` supports with a few changes:
+
+  * `filestypes`: Can be list filetype names. This can be any pattern the `FileType` autocommand accepts.
+
+  * `root_dir`: Can be a function, it'll be executed after Neovim assigns the file type for a buffer. If it returns a string that will be considered the root directory for the project.
+
+Other important properties are:
+
+  * `cmd`: (Table) A lua table with the arguments necessary to start the language server.
+
+  * `name`: (String) This is the name Neovim will assign to the client object.
+
+  * `on_attach`: (Function) A function that will be executed after the language server gets attached to a buffer.
+
+Here is an example that starts the [typescript language server](https://github.com/typescript-language-server/typescript-language-server) on javascript and typescript, but only in a project that package.json in the current directory or any of its parent folders.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.on_attach(function()
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.new_server({
+  name = 'tsserver',
+  cmd = {'typescript-language-server', '--stdio'},
+  filetypes = {'javascript', 'typescript'},
+  root_dir = function()
+    return lsp.dir.find_first({'package.json'})
+  end
+})
+```
+
+### `.dir.find_first({list})`
+
+Checks the parent directories and returns the path to the first folder that has a file in `{list}`. This is useful to detect the root directory. 
+
+Note: search will stop once it gets to your "HOME" folder.
+
+`{list}` supports the following properties:
+
+  * path: (String) The path from where it should start looking for the files in `{list}`.
+
+  * buffer: (Boolean) When set to `true` use the path of the current buffer.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').lua_ls.setup({
+  root_dir = function()
+    --- project root will be the first directory that has
+    --- either .luarc.json or .stylua.toml
+    return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+  end
+})
+
+lsp.setup()
+```
+
+### `.dir.find_all({list})`
+
+Checks the parent directories and returns the path to the first folder that has all the files in `{list}`.
+
+Note: search will stop once it gets to your "HOME" folder.
+
+`{list}` supports the following properties:
+
+  * path: (String) The path from where it should start looking for the files in `{list}`.
+
+  * buffer: (Boolean) When set to `true` use the path of the current buffer.
+
+```lua
+local lsp = require('lsp-zero')
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').vuels.setup({
+  root_dir = function()
+    --- project root will be the directory that has
+    --- package.json + vetur config
+    return lsp.dir.find_all({'package.json', 'vetur.config.js'})
+  end
+})
+
+lsp.setup()
+```
+
 ### `.cmp_action()`
 
 Is a function that returns methods meant to be used as mappings for nvim-cmp.
@@ -494,7 +593,7 @@ Here's an example that showcase each option.
 -- There is no need to copy any of this
 
 require('lsp-zero').extend_lspconfig({
-  set_lsp_keymaps = {omit = {'<C-k>', 'gl'}},
+  set_lsp_keymaps = {omit = {'gs', 'gl'}},
   on_attach = function(client, bufnr)
     print('hello there')
   end,
