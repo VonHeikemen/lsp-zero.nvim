@@ -403,6 +403,34 @@ Options from [.configure()](#configurename-opts) will be merged with the ones on
 
 lsp-zero does not execute files. It only provides utility functions. So to execute your "local config" you'll have to use another plugin.
 
+### `.format_on_save({opts})`
+
+Setup autoformat on save using [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()). This will to allow you to associate a language server with a list of filetypes.
+
+Keep in mind it's only meant to allow one LSP server per filetype, this is so the formatting is consistent.
+
+`{opts}` supports the following properties:
+
+  * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
+  * format_opts: (Table). These are the options you can pass to `vim.lsp.buf.format()`.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.format_on_save({
+  servers = {
+    ['lua_ls'] = {'lua'},
+    ['rust_analyzer'] = {'rust'},
+  }
+})
+
+lsp.setup()
+```
+
 ### `.new_server({opts})`
 
 lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.
@@ -628,11 +656,11 @@ Is used to modify the default settings for nvim-cmp.
 
 * `sources`: List of configurations for "data sources". See `:help cmp-config.sources` to know more.
 
-* `documentation`: Modifies the look of the documentation window. You can find more details about its properities if you start typing the command `:help cmp-config.window`.
+* `documentation`: Modifies the look of the documentation window. You can find more details about its properties if you start typing the command `:help cmp-config.window`.
 
 * `preselect`: Sometimes the first item in the completion menu is preselected. Disable this behaviour by setting this to `cmp.PreselectMode.None`.
 
-* `formatting`: Modifies the look of the completion menu. You can find more details about its properities if you start typing the command `:help cmp-config.formatting`.
+* `formatting`: Modifies the look of the completion menu. You can find more details about its properties if you start typing the command `:help cmp-config.formatting`.
 
 * `mapping`: Sets the keybindings. See `:help cmp-mapping`.
 

@@ -196,6 +196,10 @@ function M.new_server(opts)
   require('lsp-zero.client').setup(config)
 end
 
+function M.format_on_save(opts)
+  return require('lsp-zero.format').format_on_save(opts)
+end
+
 M.dir = {}
 
 function M.dir.find_all(list, dir)
