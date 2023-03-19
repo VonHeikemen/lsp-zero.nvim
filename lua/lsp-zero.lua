@@ -351,6 +351,16 @@ M.extend_lspconfig = function(opts)
   return Server.extend_lspconfig(opts)
 end
 
+M.dir = {}
+
+M.dir.find_first = function(list)
+  return require('lsp-zero.dir').find_first(list)
+end
+
+M.dir.find_all = function(list)
+  return require('lsp-zero.dir').find_all(list)
+end
+
 M.defaults = {}
 
 M.defaults.diagnostics = function(opts)

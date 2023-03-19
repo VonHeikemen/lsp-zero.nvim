@@ -324,6 +324,72 @@ Defines the sign icons that appear in the gutter. If `{opts}` is not provided th
 * `hint`: Text for the hint signs.
 * `info`: Text for the information signs.
 
+### `.dir.find_first({list})`
+
+Checks the parent directories and returns the path to the first folder that has a file in `{list}`. This is useful to detect the root directory. 
+
+Note: search will stop once it gets to your "HOME" folder.
+
+`{list}` supports the following properties:
+
+  * path: (String) The path from where it should start looking for the files in `{list}`.
+
+  * buffer: (Boolean) When set to `true` use the path of the current buffer.
+
+  * stop: (String) Defaults to the HOME directory. Stop the search on this directory.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.configure('tsserver' {
+  root_dir = function()
+    --- project root will be the first directory that has
+    --- either package.json or node_modules.
+    return lsp.dir.find_first({'package.json', 'node_modules'})
+  end
+})
+
+lsp.setup()
+```
+
+### `.dir.find_all({list})`
+
+Checks the parent directories and returns the path to the first folder that has all the files in `{list}`.
+
+Note: by default the search will stop once it gets to your "HOME" folder.
+
+`{list}` supports the following properties:
+
+  * path: (String) The path from where it should start looking for the files in `{list}`.
+
+  * buffer: (Boolean) When set to `true` use the path of the current buffer.
+
+  * stop: (String) Defaults to the HOME directory. Stop the search on this directory.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.configure('vuels' {
+  root_dir = function()
+    --- project root will be the directory that has
+    --- package.json + vetur config
+    return lsp.dir.find_all({'package.json', 'vetur.config.js'})
+  end
+})
+
+lsp.setup()
+```
+
 ### `.defaults.diagnostics({opts})`
 
 Returns the configuration for diagnostics. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
