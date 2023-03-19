@@ -25,7 +25,7 @@ M.choose = function()
   end
 
   local lsp_installer = pcall(require, 'nvim-lsp-installer')
-  if method == 'local' and lsp_installer then
+  if method == 'local' and lsp_installer and vim.fn.has('nvim-0.6') == 1 then
     M.enabled = true
     method = 'lsp-installer'
     M.fn = s.lsp

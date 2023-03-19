@@ -182,6 +182,10 @@ M.setup_diagnostics = function()
 
   local config = M.diagnostics_config()
 
+  if vim.diagnostic == nil then
+    return
+  end
+
   vim.diagnostic.config({
     virtual_text = false,
     severity_sort = true,
@@ -240,11 +244,11 @@ end
 
 s.set_keymaps = function(bufnr, opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
-
-  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
-  local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
   local omit = {}
   local keep_defaults = true
+
+  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
+  local diagnostic = ''
 
   if type(opts.set_lsp_keymaps) == 'table' then
     local keys = opts.set_lsp_keymaps.omit or {}
@@ -270,6 +274,14 @@ s.set_keymaps = function(bufnr, opts)
     vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, key_opts)
   end
 
+  if vim.diagnostic then
+    diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
+    map('n', 'gl', diagnostic 'open_float()')
+  else
+    diagnostic = fmt('<cmd>lua vim.lsp.diagnostic.%s<cr>')
+    map('n', 'gl', diagnostic 'show_line_diagnostics()')
+  end
+
   map('n', 'K', lsp 'buf.hover()')
   map('n', 'gd', lsp 'buf.definition()')
   map('n', 'gD', lsp 'buf.declaration()')
@@ -282,7 +294,6 @@ s.set_keymaps = function(bufnr, opts)
 
   map('n', '<C-k>', lsp 'buf.signature_help()')
 
-  map('n', 'gl', diagnostic 'open_float()')
   map('n', '[d', diagnostic 'goto_prev()')
   map('n', ']d', diagnostic 'goto_next()')
 end
