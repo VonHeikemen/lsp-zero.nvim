@@ -1123,7 +1123,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
                                                    *lsp-zero.format_on_save()*
 
-    .format_on_save({opts}): ~
+  .format_on_save({opts}): ~
       Setup autoformat on save. This will to allow you to associate a language
       server with a list of filetypes.
 
@@ -1138,21 +1138,88 @@ Lua API                                                     *lsp-zero-lua-api*
         by the |FileType| autocommand.
 
 >
-    local lsp = require('lsp-zero').preset({
-      name = 'minimal',
-      set_lsp_keymaps = true,
-      manage_nvim_cmp = true,
-      suggest_lsp_servers = false,
-    })
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
 
-    lsp.format_on_save({
-      servers = {
-        ['lua_ls'] = {'lua'},
-        ['rust_analyzer'] = {'rust'},
-      }
-    })
+      lsp.format_on_save({
+        servers = {
+          ['lua_ls'] = {'lua'},
+          ['rust_analyzer'] = {'rust'},
+        }
+      })
 
-    lsp.setup()
+      lsp.setup()
+<
+                                                   *lsp-zero.dir.find_first()*
+
+  .dir.find_first({list}): ~
+      Checks the parent directories and returns the path to the first folder
+      that has a file in `{list}`. Useful to detect the root directory.
+
+      Note: search will stop once it gets to your "HOME" folder.
+
+      `{list}` supports the following properties:
+
+        * path: (String) The path from where it should start looking for
+        the files in `{list}`.
+
+        * buffer: (Boolean) When enabled use the path of the current buffer.
+
+>
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
+
+      require('lspconfig').lua_ls.setup({
+        root_dir = function()
+          --- project root will be the first directory that has
+          --- either .luarc.json or .stylua.toml
+          return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+        end
+      })
+
+      lsp.setup()
+<
+
+                                                     *lsp-zero.dir.find_all()*
+
+  .dir.find_all({list}): ~
+      Checks the parent directories and returns the path to the first folder
+      that has all the files in `{list}`. Useful to detect the root directory.
+
+      Note: search will stop once it gets to your "HOME" folder.
+
+      `{list}` supports the following properties:
+
+        * path: (String) The path from where it should start looking for
+        the files in `{list}`.
+
+        * buffer: (Boolean) When enabled use the path of the current buffer.
+
+>
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
+
+      require('lspconfig').lua_ls.setup({
+        root_dir = function()
+          --- project root will be the first directory that has
+          --- either .luarc.json or .stylua.toml
+          return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+        end
+      })
+
+      lsp.setup()
 <
 
                                                    *lsp-zero.set_sign_icons()*
