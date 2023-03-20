@@ -78,7 +78,7 @@ to configure and install LSP servers.
 
   -- initialize rust_analyzer with rust-tools
   require('rust-tools').setup({server = rust_lsp})
->
+<
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
 
@@ -88,7 +88,7 @@ will behave, they can enable or disable features.
 They are created when you use the function |lsp-zero.preset()|.
 >lua
   local lsp = require('lsp-zero').preset('minimal')
->
+<
 If you wish to override a setting from a preset use a lua table.
 >lua
   local lsp = require('lsp-zero').preset({
