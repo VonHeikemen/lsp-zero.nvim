@@ -335,6 +335,10 @@ M.set_sign_icons = function(opts)
   Server.set_sign_icons(icon)
 end
 
+M.format_on_save = function(opts)
+  require('lsp-zero.format').format_on_save(opts)
+end
+
 M.extend_lspconfig = function(opts)
   if internal.setup_status == 'complete' then
     local msg = "[lsp-zero] You can't use .extend_lspconfig() after .setup()"

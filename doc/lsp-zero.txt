@@ -130,7 +130,7 @@ https://github.com/VonHeikemen/lsp-zero.nvim/blob/main/advance-usage.md#configur
   })
 
   require('rust-tools').setup({server = rust_lsp})
->
+<
 
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
@@ -142,7 +142,7 @@ They are created when you use the function |lsp-zero.preset()|.
 
 >
   local lsp = require('lsp-zero').preset('minimal')
->
+<
 
 If you wish to override a setting from a preset use a lua table.
 
@@ -1119,6 +1119,40 @@ Lua API                                                     *lsp-zero-lua-api*
       -- Initialize rust_analyzer with rust-tools
       local rust_lsp = lsp.build_options('rust_analyzer', {})
       require('rust-tools').setup({server = rust_lsp})
+<
+
+                                                   *lsp-zero.format_on_save()*
+
+    .format_on_save({opts}): ~
+      Setup autoformat on save. This will to allow you to associate a language
+      server with a list of filetypes.
+
+      Keep in mind it's only meant to allow one LSP server per filetype,
+      this is so the formatting is consistent.
+
+      `{opts}` supports the following properties:
+
+        * servers: (Table) Key/value pair list. On the left hand side you must
+        specify the name of a language server. On the right hand side you must
+        provide a list of filetypes, this can be any pattern supported
+        by the |FileType| autocommand.
+
+>
+    local lsp = require('lsp-zero').preset({
+      name = 'minimal',
+      set_lsp_keymaps = true,
+      manage_nvim_cmp = true,
+      suggest_lsp_servers = false,
+    })
+
+    lsp.format_on_save({
+      servers = {
+        ['lua_ls'] = {'lua'},
+        ['rust_analyzer'] = {'rust'},
+      }
+    })
+
+    lsp.setup()
 <
 
                                                    *lsp-zero.set_sign_icons()*

@@ -202,6 +202,28 @@ lsp.skip_server_setup({'eslint'})
 lsp.setup()
 ```
 
+## Enable Format on save
+
+You can use the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_saveopts) to associate a language server with a list of filetypes.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.format_on_save({
+  servers = {
+    ['lua_ls'] = {'lua'},
+    ['rust_analyzer'] = {'rust'},
+  }
+})
+
+lsp.setup()
+```
+
 ## Troubleshooting
 
 ### Automatic setup failed

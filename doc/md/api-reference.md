@@ -324,6 +324,34 @@ Defines the sign icons that appear in the gutter. If `{opts}` is not provided th
 * `hint`: Text for the hint signs.
 * `info`: Text for the information signs.
 
+### `.format_on_save({opts})`
+
+Setup autoformat on save. This will to allow you to associate a language server with a list of filetypes.
+
+Keep in mind it's only meant to allow one LSP server per filetype, this is so the formatting is consistent.
+
+`{opts}` supports the following properties:
+
+  * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.format_on_save({
+  servers = {
+    ['lua_ls'] = {'lua'},
+    ['rust_analyzer'] = {'rust'},
+  }
+})
+
+lsp.setup()
+```
+
 ### `.dir.find_first({list})`
 
 Checks the parent directories and returns the path to the first folder that has a file in `{list}`. This is useful to detect the root directory. 
