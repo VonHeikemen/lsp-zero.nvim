@@ -324,6 +324,49 @@ Defines the sign icons that appear in the gutter. If `{opts}` is not provided th
 * `hint`: Text for the hint signs.
 * `info`: Text for the information signs.
 
+
+### `.new_server({opts})`
+
+lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.
+
+This function does not depend on `lspconfig`, it's a wrapper around a Neovim function called [vim.lsp.start_client()](https://neovim.io/doc/user/lsp.html#vim.lsp.start_client()).
+
+`{opts}` supports every property `vim.lsp.start_client` supports with a few changes:
+
+  * `filestypes`: Can be list filetype names. This can be any pattern the `FileType` autocommand accepts.
+
+  * `root_dir`: Can be a function, it'll be executed after Neovim assigns the file type for a buffer. If it returns a string that will be considered the root directory for the project.
+
+Other important properties are:
+
+  * `cmd`: (Table) A lua table with the arguments necessary to start the language server.
+
+  * `name`: (String) This is the name Neovim will assign to the client object.
+
+  * `on_attach`: (Function) A function that will be executed after the language server gets attached to a buffer.
+
+Here is an example that starts the [typescript language server](https://github.com/typescript-language-server/typescript-language-server) on javascript and typescript, but only in a project that package.json in the current directory or any of its parent folders.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.new_server({
+  name = 'tsserver',
+  cmd = {'typescript-language-server', '--stdio'},
+  filetypes = {'javascript', 'typescript'},
+  root_dir = function()
+    return lsp.dir.find_first({'package.json'})
+  end
+})
+
+lsp.setup()
+```
+
 ### `.format_on_save({opts})`
 
 Setup autoformat on save. This will to allow you to associate a language server with a list of filetypes.

@@ -202,6 +202,62 @@ lsp.skip_server_setup({'eslint'})
 lsp.setup()
 ```
 
+## Custom servers
+
+There are two ways you can use a server that is not supported by `lspconfig`:
+
+### Add the configuration to lspconfig (recommended)
+
+You can add the configuration to the module `lspconfig.configs` and then use lsp-zero.
+
+You'll need to provide the command to start the LSP server, a list of filetypes where you want to attach the LSP server, and a function that detects the "root directory" of the project.
+
+```lua
+require('lspconfig.configs').my_new_lsp = {
+  default_config = {
+    name = 'my-new-lsp',
+    cmd = {'my-new-lsp'},
+    filetypes = {'my-filetype'},
+    root_dir = require('lspconfig.util').root_pattern({'some-config-file'})
+  }
+}
+
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.configure('my_new_lsp', {force_setup = true})
+
+lsp.setup()
+```
+
+### Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#new_serveropts)
+
+If you don't need a "robust" solution you can use the function `.new_server()`. This function is just a wrapper that calls [vim.lsp.start_client()](https://neovim.io/doc/user/lsp.html#vim.lsp.start_client()) in a `FileType` autocommand.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.new_server({
+  name = 'my-new-lsp',
+  cmd = {'my-new-lsp'},
+  filetypes = {'my-filetype'},
+  root_dir = function()
+    return lsp.dir.find_first({'some-config-file'}) 
+  end
+})
+
+lsp.setup()
+```
+
 ## Enable Format on save
 
 You can use the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_saveopts) to associate a language server with a list of filetypes.

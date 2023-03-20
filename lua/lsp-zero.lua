@@ -328,6 +328,16 @@ M.nvim_workspace = function(opts)
   M.configure('lua_ls', server_opts)
 end
 
+M.new_server = function(opts)
+  if type(opts) ~= 'table' then
+    return
+  end
+
+  local config = M.build_options(opts.name or '', opts)
+
+  require('lsp-zero.client').setup(config)
+end
+
 M.set_sign_icons = function(opts)
   local defaults = require('lsp-zero.presets').defaults().sign_icons
   local icon = vim.tbl_deep_extend('force', defaults, opts or {})
