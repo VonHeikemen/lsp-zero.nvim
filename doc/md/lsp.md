@@ -260,7 +260,9 @@ lsp.setup()
 
 ## Enable Format on save
 
-You can use the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_saveopts) to associate a language server with a list of filetypes.
+### Explicit setup
+
+If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -278,6 +280,33 @@ lsp.format_on_save({
 })
 
 lsp.setup()
+```
+
+### Always use the active servers
+
+If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) in the [.on_attach](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#on_attachcallback) hook.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.buffer_autoformat()
+end)
+
+lsp.setup()
+```
+
+If you have multiple servers active in one file it'll try to format using all of them, and I can't warranty the order.
+
+You could be more specific if you give the name of a server to [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr).
+
+```lua
+lsp.buffer_autoformat({name = 'lua_ls'})
 ```
 
 ## Troubleshooting

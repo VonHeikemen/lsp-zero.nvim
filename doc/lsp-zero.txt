@@ -1155,6 +1155,35 @@ Lua API                                                     *lsp-zero-lua-api*
       lsp.setup()
 <
 
+                                                *lsp-zero.buffer_autoformat()*
+
+  .buffer_autoformat({client}, {bufnr}): ~
+      Format the current buffer using the active language servers.
+
+      If {client} argument is provided it will only use the LSP server
+      associated with that client.
+
+          * {client} (Table, Optional) if provided it must be a lua table
+          with a `name` property or an instance of |vim.lsp.client|.
+
+          * {bufnr} (Number, Optional) if provided it must be the id
+          of an open buffer.
+
+>
+      local lsp = require('lsp-zero').preset({
+        name = 'minimal',
+        set_lsp_keymaps = true,
+        manage_nvim_cmp = true,
+        suggest_lsp_servers = false,
+      })
+
+      lsp.on_attach(function(client, bufnr)
+        lsp.buffer_autoformat()
+      end)
+
+      lsp.setup()
+<
+
                                                        *lsp-zero.new_server()*
 
   .new_server({opts}): ~

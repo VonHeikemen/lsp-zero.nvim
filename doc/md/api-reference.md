@@ -395,6 +395,31 @@ lsp.format_on_save({
 lsp.setup()
 ```
 
+### `.buffer_autoformat({client}, {bufnr})`
+
+Format the current buffer using the active language servers.
+
+If {client} argument is provided it will only use the LSP server associated with that client.
+
+  * client: (Table, Optional) if provided it must be a lua table with a `name` property or an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
+
+  * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.buffer_autoformat()
+end)
+
+lsp.setup()
+```
+
 ### `.dir.find_first({list})`
 
 Checks the parent directories and returns the path to the first folder that has a file in `{list}`. This is useful to detect the root directory. 
