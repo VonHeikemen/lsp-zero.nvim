@@ -386,7 +386,7 @@ M.format_cmd = function(line1, line2, count, bang)
   local has_range = line2 == count
   execute = vim.lsp.buf.formatting
 
-  if bang then
+  if not bang then
     if has_range then
       local msg = "[lsp-zero] Synchronous formatting doesn't support ranges"
       vim.notify(msg, vim.log.levels.ERROR)
