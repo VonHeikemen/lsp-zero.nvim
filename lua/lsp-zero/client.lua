@@ -95,17 +95,22 @@ M.attach_fallback = function(current)
   ---
   -- reuse another client
   ---
-  local active = vim.lsp.get_active_clients()
   local filetype = vim.bo.filetype
+  local attached = false
+  local bufnr = vim.api.nvim_get_current_buf()
+  current.config.root_dir = new
 
-  local active_client = vim.tbl_filter(function(c)
-    return c.config.root_dir == new
+  for _, c in ipairs(vim.lsp.get_active_clients()) do
+    if c.config.root_dir == new
       and vim.tbl_contains(c.config.filetypes, filetype)
-  end, active)[1]
+      and (not vim.lsp.buf_is_attached(bufnr, c.id))
+    then
+      attached = true
+      vim.lsp.buf_attach_client(0, c.id)
+    end
+  end
 
-  if active_client then
-    current.config.root_dir = new
-    vim.lsp.buf_attach_client(0, active_client.id)
+  if attached then
     return
   end
 
@@ -113,7 +118,6 @@ M.attach_fallback = function(current)
   -- create new client
   ---
   count = count + 1
-  current.config.root_dir = new
 
   local id = vim.lsp.start_client(current.config)
   if id then
