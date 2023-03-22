@@ -34,6 +34,9 @@ return {
   awk_ls = {
     awk = true
   },
+  azure_pipelines_ls = {
+    yaml = true
+  },
   bashls = {
     sh = true
   },
@@ -159,6 +162,9 @@ return {
   ds_pinyin_lsp = {
     markdown = true,
     org = true
+  },
+  ecsact = {
+    ecsact = true
   },
   efm = {},
   elixirls = {
@@ -810,6 +816,10 @@ return {
   veryl_ls = {
     veryl = true
   },
+  vhdl_ls = {
+    vhd = true,
+    vhdl = true
+  },
   vimls = {
     vim = true
   },
@@ -817,6 +827,7 @@ return {
     visualforce = true
   },
   vls = {
+    v = true,
     vlang = true
   },
   volar = {
