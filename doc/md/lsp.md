@@ -12,7 +12,7 @@ Then it creates an autocommand on the event `LspAttach`. This autocommand will b
 
 Finally it calls the `.setup()` of each language server.
 
-The code is a little bit like this.
+If you were to do it all by yourself, the code would look like this.
 
 ```lua
 local lspconfig = require('lspconfig')

@@ -334,7 +334,7 @@ all keybindings and commands are created.
 
 Finally it calls the .setup() of each language server.
 
-If you where to do it all by yourself, the code would look like this.
+If you were to do it all by yourself, the code would look like this.
 >lua
   local lspconfig = require('lspconfig')
   local lsp_defaults = lspconfig.util.default_config
