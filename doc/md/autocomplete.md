@@ -65,17 +65,22 @@ local lsp = require('lsp-zero').preset({
 })
 
 local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
 
 lsp.setup_nvim_cmp({
   mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-b>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   })
 })
 
 lsp.setup()
 ```
+
+Note: [.cmp_action()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#cmp_action) has methods you can use as mappings in nvim-cmp.
 
 ### Change default mapping
 
@@ -90,9 +95,11 @@ local lsp = require('lsp-zero').preset({
 })
 
 local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
 
 lsp.setup_nvim_cmp({
   mapping = lsp.defaults.cmp_mappings({
+    ['<C-Space>'] = cmp_action.toggle_completion(),
     ['<C-e>'] = cmp.mapping.abort(),
   })
 })

@@ -608,3 +608,25 @@ require('lsp-zero').extend_lspconfig({
 })
 ```
 
+### `.cmp_action()`
+
+Is a function that returns methods meant to be used as mappings for nvim-cmp.
+
+These are the supported methods:
+
+* `tab_complete`: Enables completion when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list. If the line is empty it uses the fallback.
+
+* `select_prev_or_fallback`: If the completion menu is visible navigate to the previous item in the list. Else, uses the fallback.
+
+* `toggle_completion`: If the completion menu is visible it cancels the process. Else, it triggers the completion menu.
+
+* `luasnip_jump_forward`: Go to the next placeholder in the snippet.
+
+* `luasnip_jump_backward`: Go to the previous placeholder in the snippet.
+
+* `luasnip_supertab`: If the completion menu is visible it will navigate to the next item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a snippet placeholder, it moves to it. If the cursor is in the middle of a word that doesn't trigger a snippet it displays the completion menu. Else, it uses the fallback.
+
+* `luasnip_shift_supertab`: If the completion menu is visible it will navigate to previous item in the list. If the cursor can navigate to a previous snippet placeholder, it moves to it. Else, it uses the fallback.
+
+Quick note: "the fallback" is the default behavior of the key you assign to a method.
+

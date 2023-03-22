@@ -369,6 +369,10 @@ M.extend_lspconfig = function(opts)
   return Server.extend_lspconfig(opts)
 end
 
+M.cmp_action = function()
+  return require('lsp-zero.cmp-mapping')
+end
+
 M.dir = {}
 
 M.dir.find_first = function(list)
