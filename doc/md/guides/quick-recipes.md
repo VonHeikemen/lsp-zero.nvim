@@ -56,6 +56,38 @@ lsp.set_server_config({
 lsp.setup()
 ```
 
+## Enable inlay hints with inlay-hints.nvim
+
+First make sure you setup [inlay-hints.nvim](https://github.com/simrat39/inlay-hints.nvim). Then, visit the documentation of the language server you want to configure, figure out what options you need to enable. Finally, use `lspconfig` to enable those options and execute the `.on_attach` function of `inlay-hints.nvim`.
+
+Here an example using the lua language server.
+
+```lua
+local ih = require('inlay-hints')
+ih.setup()
+
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').lua_ls.setup({
+  on_attach = function(client, bufnr)
+    ih.on_attach(client, bufnr)
+  end,
+  settings = {
+    Lua = {
+      hint = {
+        enable = true,
+      },
+    },
+  },
+})
+
+lsp.setup()
+```
+
 ## Setup with rust-tools
 
 Using [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
