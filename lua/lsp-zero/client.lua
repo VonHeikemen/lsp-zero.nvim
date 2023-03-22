@@ -3,9 +3,12 @@ local M = {}
 local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
 
 function M.setup(opts)
+  if opts.filetypes == nil then
+    return
+  end
+
   local setup_id
   local desc = 'Attach LSP server'
-
   local defaults = {
     capabilities = vim.lsp.protocol.make_client_capabilities(),
     on_exit = vim.schedule_wrap(function()
@@ -17,10 +20,6 @@ function M.setup(opts)
 
   local config = vim.tbl_deep_extend('force', defaults, opts)
 
-  if config.filetypes == nil then
-    return
-  end
-
   local get_root = opts.root_dir
   if type(get_root) == 'function' then
     config.root_dir = nil
@@ -29,9 +28,9 @@ function M.setup(opts)
   if opts.on_exit then
     local cb = opts.on_exit
     local cleanup = defaults.on_exit
-    config.on_exit = function()
+    config.on_exit = function(...)
       cleanup()
-      cb()
+      cb(...)
     end
   end
 
