@@ -431,6 +431,27 @@ lsp.format_on_save({
 lsp.setup()
 ```
 
+### `.buffer_autoformat({client}, {bufnr})`
+
+Format the current buffer using the active language servers.
+
+If {client} argument is provided it will only use the LSP server associated with that client.
+
+  * client: (Table, Optional) if provided it must be a lua table with a `name` property or an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
+
+  * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+  lsp.buffer_autoformat()
+end)
+
+lsp.setup()
+```
+
 ### `.new_server({opts})`
 
 lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.

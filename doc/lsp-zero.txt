@@ -77,7 +77,7 @@ to configure and install LSP servers.
   lsp.setup()
 
   -- initialize rust_analyzer with rust-tools
-  require('rust-tools').setup({server = rust_lsp})
+  require('rust-tools').setup({})
 <
 ==============================================================================
 Presets                                                     *lsp-zero-presets*
@@ -250,7 +250,7 @@ is that we have to assemble various pieces to get a good experience.
 
 |nvim-cmp| has a concept of "sources", these provide the actual data
 displayed in neovim. If you set `manage_nvim_cmp.set_sources` to the
-string 'recommended' lsp-zero will try to setup the following sources
+string `'recommended'` lsp-zero will try to setup the following sources
 if they are installed:
 
     cmp-buffer: ~
@@ -673,7 +673,7 @@ use({name}, {opts}): ~
     particular project. It is meant to be called in project local config.
 
     Ideally, you would setup some default values for your servers
-    in your neovim config using |lsp-zero.store_config()|.
+    in your neovim config using |lsp-zero.configure()|.
 >lua
     -- init.lua
 
@@ -683,7 +683,7 @@ use({name}, {opts}): ~
       lsp.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.store_config('pyright', {
+    lsp.configure('pyright', {
       single_file_support = false,
     })
 
@@ -763,6 +763,30 @@ nvim_lua_ls({opts}): ~
 
     lsp.setup()
 <
+                                               *lsp-zero.buffer_autoformat()*
+
+buffer_autoformat({client}, {bufnr}): ~
+    Format the current buffer using the active language servers.
+
+    If {client} argument is provided it will only use the LSP server
+    associated with that client.
+
+        * {client} (Table, Optional) if provided it must be a lua table
+        with a `name` property or an instance of |vim.lsp.client|.
+
+        * {bufnr} (Number, Optional) if provided it must be the id
+        of an open buffer.
+
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+      lsp.buffer_autoformat()
+    end)
+
+    lsp.setup()
+<
                                                    *lsp-zero.set_sign_icons()*
 
 set_sign_icons({opts}): ~
@@ -770,17 +794,18 @@ set_sign_icons({opts}): ~
 
     {opts} table supports these properties:
 
-        error: ~
+        * error: ~
             Text for the error signs.
 
-        warn: ~
+        * warn: ~
             Text for the warning signs.
 
-        hint: ~
+        * hint: ~
             Text for the hint signs.
 
-        info: ~
+        * info: ~
             Text for the information signs.
+
 >lua
     lsp.set_sign_icons({
       error = '✘',
@@ -843,14 +868,14 @@ new_server({opts}): ~
 
 dir.find_first({list}): ~
     Checks the parent directories and returns the path to the first folder
-    that has a file in `{list}`. Useful to detect the root directory.
+    that has a file in {list}. Useful to detect the root directory.
 
     Note: search will stop once it gets to your "HOME" folder.
 
-    `{list}` supports the following properties:
+    {list} supports the following properties:
 
       * path: (String) The path from where it should start looking for
-      the files in `{list}`.
+      the files in {list}.
 
       * buffer: (Boolean) When enabled use the path of the current buffer.
 
@@ -875,14 +900,14 @@ dir.find_first({list}): ~
 
 dir.find_all({list}): ~
     Checks the parent directories and returns the path to the first folder
-    that has all the files in `{list}`. Useful to detect the root directory.
+    that has all the files in {list}. Useful to detect the root directory.
 
     Note: search will stop once it gets to your "HOME" folder.
 
-    `{list}` supports the following properties:
+    {list} supports the following properties:
 
       * path: (String) The path from where it should start looking for
-      the files in `{list}`.
+      the files in {list}.
 
       * buffer: (Boolean) When enabled use the path of the current buffer.
 

@@ -176,7 +176,7 @@ lsp.setup()
 
 There are two ways you can use a server that is not supported by `lspconfig`:
 
-* Add the configuration to lspconfig (recommended)
+### Add the configuration to lspconfig (recommended)
 
 You can add the configuration to the module `lspconfig.configs` then you can call the `.setup` function.
 
@@ -203,7 +203,7 @@ require('lspconfig.configs').my_new_lsp = {
 require('lspconfig').my_new_lsp.setup({})
 ```
 
-* Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts)
+### Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts)
 
 If you don't need a "robust" solution you can use the function `.new_server()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()) in a `FileType` autocommand.
 
@@ -228,7 +228,11 @@ lsp.new_server({
 
 ## Enable Format on save
 
-You can use the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts) to associate a language server with a list of filetypes.
+You can choose one of these methods.
+
+### Explicit setup
+
+If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -245,6 +249,29 @@ lsp.format_on_save({
 })
 
 lsp.setup()
+```
+
+### Always use the active servers
+
+If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) in the [.on_attach](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#on_attachcallback) hook.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+  lsp.buffer_autoformat()
+end)
+
+lsp.setup()
+```
+
+If you have multiple servers active in one file it'll try to format using all of them, and I can't warranty the order.
+
+You could be more specific if you give the name of a server to [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr).
+
+```lua
+lsp.buffer_autoformat({name = 'lua_ls'})
 ```
 
 ## Troubleshooting

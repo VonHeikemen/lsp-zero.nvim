@@ -68,7 +68,7 @@ call plug#begin()
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'L3MON4D3/LuaSnip'         " Required
 
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v1.x'}
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 call plug#end()
 
 
