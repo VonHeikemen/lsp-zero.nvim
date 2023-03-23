@@ -1171,6 +1171,14 @@ defaults.nvim_workspace({opts}): ~
     Returns the neovim specific settings for `lua_ls` language server.
 
 ==============================================================================
+Version                                                     *lsp-zero-version*
+
+Current version: `v2.x`
+
+The code on this version requires Neovim v0.8 or greater. If you need support
+for Neovim v0.7 or lower use the `v1.x` branch of lsp.zero.
+
+==============================================================================
 Support                                                    *lsp-zero-donation*
 
 If you find this tool useful and want to support my efforts, consider
