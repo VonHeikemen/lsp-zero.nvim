@@ -4,9 +4,9 @@
 
 Language servers are configured and initialized using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
-Ever wondered what does lsp-zero does under the hood? Let me tell you.
+Ever wondered what lsp-zero does under the hood? Let me tell you.
 
-What happens is that lsp-zero uses `lspconfig`'s setup function to initialize the LSP server. It uses [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) to tell the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor. And configures a function that will be executed every time a language server is attached to a buffer, this is where all keybindings and commands are created.
+lsp-zero calls lspconfig's setup function to initialize the LSP servers. It uses [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) to tell the LSP server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor. And then it configures a function that will be executed every time a language server is attached to a buffer, this is where all keybindings and commands are created.
 
 If you were to do it all by yourself, the code would look like this.
 
