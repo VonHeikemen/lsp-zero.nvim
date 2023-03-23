@@ -360,8 +360,12 @@ If you were to do it all by yourself, the code would look like this.
 
 LspZeroFormat: ~
     Formats the current buffer or range. If the "bang" is provided
-    formatting will be synchronous (ex: `LspZeroFormat!`). See
-    |vim.lsp.buf.format()|.
+    formatting will be asynchronous (ex: `LspZeroFormat!`). If you provide the
+    name of a language server as a first argument it will try to format only
+    using that server. Otherwise, it will use every active language server
+    with formatting capabilities.
+
+    See |vim.lsp.buf.format()|.
 
 LspZeroWorkspaceRemove: ~
     Remove the folder at path from the workspace folders.

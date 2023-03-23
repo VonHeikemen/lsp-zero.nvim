@@ -258,8 +258,8 @@ function s.set_buf_commands(bufnr)
   bufcmd(
     bufnr,
     'LspZeroFormat',
-    'lua vim.lsp.buf.format({async = <bang> == "!"})',
-    {range = true, bang = true}
+    'lua vim.lsp.buf.format({timeout_ms = 10000, async = "<bang>" == "!", name = ({<f-args>})[1]})',
+    {range = true, bang = true, nargs = '*'}
   )
 
   bufcmd(
