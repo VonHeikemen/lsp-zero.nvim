@@ -1513,6 +1513,14 @@ Lua API                                                     *lsp-zero-lua-api*
       you assign to a method.
 
 ==============================================================================
+Version                                                     *lsp-zero-version*
+
+Current version: `v1.x`
+
+The code on this version will remain compatible with Neovim v0.5.
+Future versions of lsp-zero will require Neovim v0.8 or greater.
+
+==============================================================================
 Support                                                    *lsp-zero-donation*
 
 If you find this tool useful and want to support my efforts, consider
