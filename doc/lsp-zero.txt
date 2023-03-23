@@ -473,9 +473,14 @@ so you can get more details using the `:help` command.
 
   LspZeroFormat: ~
       Formats the current buffer or range. If the "bang" is provided
-      formatting will be synchronous (ex: `LspZeroFormat!`). See
-      |vim.lsp.buf.formatting()|, |vim.lsp.buf.range_formatting()|
-      and |vim.lsp.buf.formatting_sync()|.
+      formatting will be synchronous (ex: `LspZeroFormat!`). 
+
+      If you provide the name of a language server as a first argument it will
+      try to format only using that server. Otherwise, it will use every active
+      language server with formatting capabilities.
+
+      See |vim.lsp.buf.formatting()|, |vim.lsp.buf.range_formatting()|
+      and |vim.lsp.buf.formatting_sync()|. Or |vim.lsp.buf.format()|
 
   LspZeroWorkspaceRemove: ~
       Remove the folder at path from the workspace folders.

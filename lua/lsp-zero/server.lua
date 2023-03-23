@@ -139,8 +139,8 @@ s.set_buf_commands = function()
 
   command(
     'LspZeroFormat',
-    '-range -bang',
-    "require('lsp-zero.server').format_cmd(<line1>, <line2>, <count>, '<bang>' == '!')"
+    '-range -bang -nargs=*',
+    "require('lsp-zero.server').format_cmd(<line1>, <line2>, <count>, '<bang>' == '!', {<f-args>})"
   )
   command('LspZeroWorkspaceRemove', '', 'vim.lsp.buf.remove_workspace_folder()')
 end
@@ -375,24 +375,29 @@ M.ensure_installed = function(list)
   installer.fn.install(list)
 end
 
-M.format_cmd = function(line1, line2, count, bang)
+M.format_cmd = function(line1, line2, count, bang, list)
   local execute = vim.lsp.buf.format
+  local async = bang
 
   if execute then
-    execute({async = bang})
+    execute({async = async, name = list[1]})
     return
   end
 
   local has_range = line2 == count
   execute = vim.lsp.buf.formatting
 
-  if not bang then
+  if list[1] then
+    s.format_with(list[1], has_range, async)
+    return
+  end
+
+  if not async then
     if has_range then
-      local msg = "[lsp-zero] Synchronous formatting doesn't support ranges"
-      vim.notify(msg, vim.log.levels.ERROR)
-      return
+      execute = s.format_range_fallback
+    else
+      execute = vim.lsp.buf.formatting_sync
     end
-    execute = vim.lsp.buf.formatting_sync
   end
 
   if has_range then
@@ -400,6 +405,49 @@ M.format_cmd = function(line1, line2, count, bang)
   end
 
   execute()
+end
+
+s.format_with = function(server, has_range, async)
+  local active = vim.lsp.get_active_clients()
+  local buffer = vim.api.nvim_get_current_buf()
+  
+  local client = vim.tbl_filter(function(c)
+    return c.name == server
+  end, active)[1]
+
+  if client == nil then
+    return
+  end
+
+  local lsp_format = require('lsp-zero.format')
+  local execute = lsp_format.apply_fallback
+
+  if has_range then
+    execute = lsp_format.apply_range_fallback
+  end
+
+  if async then
+    if has_range then
+      execute = lsp_format.apply_async_range_fallback
+    else
+      execute = lsp_format.apply_async_fallback
+    end
+  end
+
+  execute(client, buffer)
+end
+
+s.format_range_fallback = function()
+  local lsp_format = require('lsp-zero.format')
+  local buffer = vim.api.nvim_get_current_buf()
+
+  for _, c in ipairs(vim.lsp.get_active_clients()) do
+    if vim.lsp.buf_is_attached(buffer, c.id)
+      and c.supports_method('textDocument/rangeFormatting')
+    then
+      lsp_format.apply_range_fallback(c, buffer)
+    end
+  end
 end
 
 return M

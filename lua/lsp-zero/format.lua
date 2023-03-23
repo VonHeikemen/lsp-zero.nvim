@@ -34,7 +34,7 @@ M.filetype_setup = function(server)
   vim.cmd(autocmd:format(
     format_group,
     'BufWritePre <buffer>',
-    fmt('lua require("lsp-zero.format").use(%q)', server)
+    fmt('lua require("lsp-zero.format").use(%q, false)', server)
   ))
 end
 
@@ -60,15 +60,11 @@ M.buffer_autoformat = function(client, buffer)
   vim.cmd(autocmd:format(
     format_group,
     event,
-    fmt('lua require("lsp-zero.format").use(%q)', client.name)
+    fmt('lua require("lsp-zero.format").use(%q, false)', client.name)
   ))
 end
 
 M.apply_format = function(server)
-  if vim.b.lsp_zero_enable_autoformat ~= 1 then
-    return
-  end
-
   local buffer = vim.api.nvim_get_current_buf()
   local active = vim.lsp.get_active_clients({bufnr = buffer, name = server})[1]
 
@@ -84,11 +80,7 @@ M.apply_format = function(server)
   })
 end
 
-M.apply_fallback = function(server)
-  if vim.b.lsp_zero_enable_autoformat ~= 1 then
-    return
-  end
-
+local ensure_client = function(server, verbose)
   local active = vim.lsp.get_active_clients()
   local buffer = vim.api.nvim_get_current_buf()
   
@@ -97,13 +89,34 @@ M.apply_fallback = function(server)
   end, active)[1]
 
   if client == nil then
-    return
+    if verbose then
+      local msg = '[lsp-zero] %s is not active'
+      vim.notify(msg:format(server), vim.log.levels.WARN)
+    end
+    return false, -1
   end
 
   if vim.lsp.buf_is_attached(buffer, client.id) == false then
-    return
+    if verbose then
+      local msg = '[lsp-zero] %s is not active in the current buffer'
+      vim.notify(msg:format(server), vim.log.levels.WARN)
+    end
+    return false, -1
   end
 
+  return client, buffer
+end
+
+local ensure_enabled = function(fn)
+  return function(...)
+    if vim.b.lsp_zero_enable_autoformat ~= 1 then
+      return
+    end
+    fn(...)
+  end
+end
+
+M.apply_fallback = function(client, buffer)
   local params = vim.lsp.util.make_formatting_params({})
   local response = client.request_sync(
     'textDocument/formatting',
@@ -117,22 +130,50 @@ M.apply_fallback = function(server)
   end
 end
 
+M.apply_range_fallback = function(client, buffer)
+  local params = vim.lsp.util.make_given_range_params()
+  params.options = vim.lsp.util.make_formatting_params().options
+
+  local response = client.request_sync(
+    'textDocument/rangeFormatting',
+    params,
+    timeout_ms,
+    buffer
+  )
+
+  if response and response.result then
+    vim.lsp.util.apply_text_edits(response.result, buffer, client.offset_encoding)
+  end
+end
+
+M.apply_async_fallback = function(client, buffer)
+  local params = vim.lsp.util.make_formatting_params({})
+  client.request('textDocument/formatting', params, nil, buffer)
+end
+
+M.apply_async_range_fallback = function(client, buffer)
+  local params = vim.lsp.util.make_given_range_params()
+  params.options = vim.lsp.util.make_formatting_params().options
+
+  client.request('textDocument/rangeFormatting', params, nil, buffer)
+end
+
 if vim.lsp.buf.format then
-  M.use = M.apply_format
-  M.format_buffer = function()
-    if vim.b.lsp_zero_enable_autoformat ~= 1 then
-      return
-    end
+  M.use = ensure_enabled(function(...)
+    local client, buffer = ensure_client(...)
+    if client then M.apply_format(client, buffer) end
+  end)
+  M.format_buffer = ensure_enabled(function()
     vim.lsp.buf.format({async = false, timeout_ms = timeout_ms})
-  end
+  end)
 else
-  M.use = M.apply_fallback
-  M.format_buffer = function()
-    if vim.b.lsp_zero_enable_autoformat ~= 1 then
-      return
-    end
+  M.use = ensure_enabled(function(...)
+    local client, buffer = ensure_client(...)
+    if client then M.apply_fallback(client, buffer) end
+  end)
+  M.format_buffer = ensure_enabled(function()
     vim.lsp.buf.formatting_seq_sync(nil, timeout_ms)
-  end
+  end)
 end
 
 return M
