@@ -65,8 +65,8 @@ M.luasnip_jump_backward = function()
   local luasnip = get_luasnip()
 
   return cmp.mapping(function(fallback)
-    if luasnip.jumpable(1) then
-      luasnip.jump(1)
+    if luasnip.jumpable(-1) then
+      luasnip.jump(-1)
     else
       fallback()
     end
