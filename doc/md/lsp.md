@@ -4,7 +4,11 @@
 
 Language servers are configured and initialized using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
-If you ever wondered "What does lsp-zero do?" This is the answer:
+Ever wondered what does lsp-zero does under the hood? Let me tell you.
+
+What happens is that lsp-zero uses `lspconfig`'s setup function to initialize the LSP server. It uses [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) to tell the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor. And configures a function that will be executed every time a language server is attached to a buffer, this is where all keybindings and commands are created.
+
+If you were to do it all by yourself, the code would look like this.
 
 ```lua
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
@@ -15,13 +19,14 @@ end
 
 require('lspconfig').tsserver.setup({
   on_attach = lsp_attach,
-  capabilities = lsp_capabilities
+  capabilities = lsp_capabilities,
+})
+
+require('lspconfig').eslint.setup({
+  on_attach = lsp_attach,
+  capabilities = lsp_capabilities,
 })
 ```
-
-In this example I'm using `tsserver` but it could be any LSP server.
-
-What happens is that lsp-zero uses `lspconfig`'s setup function to initialize the LSP server. Then uses the `on_attach` option to create the keybindings and commands. Finally, it passes the "client capabilities" to the LSP server, this is the integration between the LSP client and the autocompletion plugin.
 
 ## Default keybindings
 
@@ -95,9 +100,8 @@ local lsp = require('lsp-zero').preset({
 
 lsp.on_attach(function(client, bufnr)
   local opts = {buffer = bufnr}
-  local bind = vim.keymap.set
 
-  bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+  vim.keymap.set('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
   -- more keybindings...
 end)
 
@@ -116,7 +120,19 @@ lsp.setup()
 
 ## Install new language servers
 
-If you have `mason.nvim` available then you can use the command `:LspInstall` to get a list of language servers available for the current file type. You'll also be able to use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#ensure_installedlist) to install a list of servers automatically.
+### Manual install
+
+You can find the instruction for each language server in lspconfig's documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
+### Via command
+
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can use the command `:LspInstall` to install a language server. If you call this command while you are in a file it'll suggest a list of language server based on the type of that file.
+
+### Automatic installs
+
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#ensure_installedlist) to list the language servers you want to install with mason.nvim.
+
+The names of the servers must be in [this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -133,8 +149,6 @@ lsp.ensure_installed({
 
 lsp.setup()
 ```
-
-If you don't have `mason.nvim` you'll need to install each server manually in your system. You can find the install instructions for the supported LSP servers here: [server configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
 ## Configure language servers
 
@@ -260,6 +274,8 @@ lsp.setup()
 
 ## Enable Format on save
 
+You can choose one of these methods.
+
 ### Explicit setup
 
 If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
@@ -359,12 +375,10 @@ The executable for your language server should be in one of those folders. Make 
 You used the command `:LspInfo` and it showed `root directory: Not found.` This means [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/) couldn't figure out what is the "root" folder of your project. In this case you should go to `lspconfig`'s github repo and browse the [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file, look for the language server then search for `root_dir`, it'll have something like this.
 
 ```lua
-root_pattern("package.json", "tsconfig.json", "jsconfig.json", ".git")
+root_pattern("somefile.json", ".somefile" , ".git")
 ```
 
-`root_pattern` is a function inside `lspconfig`, it tries to look for one of those files/folders in the current folder or any of the parent folders.
-
-Make sure you have at least one of those files in your project.
+`root_pattern` is a function inside lspconfig, it tries to look for one of those files/folders in the current folder or any of the parent folders. Make sure you have at least one of the files/folders listed in the arguments of the function.
 
 Now, sometimes the documentation in lspconfig just says `see source file`. This means you need to go the source code to figure out what lspconfig looks for. You need to go to the [server config folder](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/server_configurations), click in the file for the language server, look for the `root_dir` property that is inside a "lua table" called `default_config`.
 
