@@ -274,6 +274,55 @@ You could be more specific if you give the name of a server to [.buffer_autoform
 lsp.buffer_autoformat({name = 'lua_ls'})
 ```
 
+## Format buffer using a keybinding
+
+### Using built-in functions
+
+You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+
+  vim.keymap.set({'n', 'x'}, 'gq', function()
+    vim.lsp.buf.format({async = false, timeout_ms = 10000})
+  end)
+end)
+
+lsp.setup()
+```
+
+With this the keyboard shortcut `gq` will be able to format the current buffer using **all** active servers with formatting capabilities.
+
+If you want to allow only a list of servers, use the `filter` option.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+local function allow_format(servers)
+  return function(client) return vim.tbl_contains(servers, client.name) end
+end
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+  local opts = {buffer = bufnr}
+
+  vim.keymap.set({'n', 'x'}, 'gq', function()
+    vim.lsp.buf.format({
+      async = false,
+      timeout_ms = 10000,
+      filter = allow_format({'lua_ls', 'rust_analyzer'})
+    })
+  end, opts)
+end)
+
+lsp.setup()
+```
+
+Using this `allow_format` function you can specify the language servers that you want to use.
+
 ## Troubleshooting
 
 ### Automatic setup failed
