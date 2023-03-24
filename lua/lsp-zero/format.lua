@@ -12,18 +12,25 @@ function M.format_on_save(opts)
   local list = opts.servers or {}
   local format_opts = opts.format_opts or {}
 
-  local format = function(config)
-    if vim.b.lsp_zero_enable_autoformat == 1 then
-      vim.lsp.buf.format(config)
+  local filetype_setup = function(event)
+    local autoformat = vim.b.lsp_zero_enable_autoformat
+    local enabled = (autoformat == 1 or autoformat == nil or autoformat == true)
+    if not enabled then
+      return
     end
-  end
 
-  local filetype_setup = function(server, event)
-    local opts = vim.tbl_deep_extend(
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local files = list[client.name] or {}
+
+    if not vim.tbl_contains(files, vim.bo.filetype) then
+      return
+    end
+
+    local config = vim.tbl_deep_extend(
       'force',
       {async = false, timeout_ms = timeout_ms},
       format_opts,
-      {name = server, bufnr = event.buf}
+      {id = client.id, bufnr = event.buf}
     )
 
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
@@ -31,29 +38,16 @@ function M.format_on_save(opts)
     autocmd('BufWritePre', {
       group = format_id,
       buffer = event.buf,
-      desc = 'Format current buffer',
-      callback = function() format(opts) end
+      desc = 'Apply format in current buffer',
+      callback = function() vim.lsp.buf.format(config)  end
     })
   end
 
   autocmd('LspAttach', {
     group = setup_id,
     desc = 'Enable format on save',
-    callback = function()
-      if vim.b.lsp_zero_enable_autoformat == nil then
-        vim.b.lsp_zero_enable_autoformat = 1
-      end
-    end,
+    callback = filetype_setup,
   })
-
-  for server, files in pairs(list) do
-    autocmd('FileType', {
-      group = setup_id,
-      pattern = files,
-      desc = 'Setup format on save',
-      callback = function(ev) filetype_setup(server, ev) end
-    })
-  end
 end
 
 function M.buffer_autoformat(client, bufnr)
@@ -69,7 +63,9 @@ function M.buffer_autoformat(client, bufnr)
   vim.b.lsp_zero_enable_autoformat = 1
 
   local format = function()
-    if vim.b.lsp_zero_enable_autoformat ~= 1 then
+    local autoformat = vim.b.lsp_zero_enable_autoformat
+    local enabled = (autoformat == 1 or autoformat == nil or autoformat == true)
+    if not enabled then
       return
     end
 
