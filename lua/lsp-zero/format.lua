@@ -21,13 +21,9 @@ function M.format_on_save(opts)
   local filetype_setup = function(server, event)
     local opts = vim.tbl_deep_extend(
       'force',
-      {async = false},
+      {async = false, timeout_ms = timeout_ms},
       format_opts,
-      {
-        name = server,
-        bufnr = event.buf,
-        timeout_ms = timeout_ms,
-      }
+      {name = server, bufnr = event.buf}
     )
 
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
@@ -43,7 +39,11 @@ function M.format_on_save(opts)
   autocmd('LspAttach', {
     group = setup_id,
     desc = 'Enable format on save',
-    callback = function() vim.b.lsp_zero_enable_autoformat = 1 end,
+    callback = function()
+      if vim.b.lsp_zero_enable_autoformat == nil then
+        vim.b.lsp_zero_enable_autoformat = 1
+      end
+    end,
   })
 
   for server, files in pairs(list) do
