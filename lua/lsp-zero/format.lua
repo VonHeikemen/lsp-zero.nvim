@@ -85,5 +85,50 @@ function M.buffer_autoformat(client, bufnr)
   })
 end
 
+function M.format_mapping(key, opts)
+  if opts == nil or key == nil then
+    return
+  end
+
+  local autocmd = vim.api.nvim_create_autocmd
+  local augroup = vim.api.nvim_create_augroup
+  local format_id = augroup('lsp_zero_format_mapping', {clear = true})
+
+  local list = opts.servers or {}
+  local mode = opts.mode or {'n', 'x'}
+  local format_opts = opts.format_opts or {}
+
+  if vim.tbl_isempty(list) then
+    return
+  end
+
+  local filetype_setup = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local files = list[client.name]
+
+    if files == nil or not vim.tbl_contains(files, vim.bo.filetype) then
+      return
+    end
+
+    local config = vim.tbl_deep_extend(
+      'force',
+      {async = false, timeout_ms = timeout_ms},
+      format_opts,
+      {id = client.id, bufnr = event.buf}
+    )
+
+    local exec = function() vim.lsp.buf.format(config) end
+    local desc = string.format('Format buffer with %s', client.name)
+
+    vim.keymap.set(mode, key, exec, {buffer = event.buf, desc = desc})
+  end
+
+  autocmd('LspAttach', {
+    group = format_id,
+    desc = string.format('Format buffer with %s', key),
+    callback = filetype_setup,
+  })
+end
+
 return M
 

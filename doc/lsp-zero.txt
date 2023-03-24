@@ -734,7 +734,7 @@ nvim_lua_ls({opts}): ~
     lsp.setup()
 <
                                                    *lsp-zero.format_on_save()*
-.format_on_save({opts}): ~
+format_on_save({opts}): ~
     Setup autoformat on save using |vim.lsp.buf.format()|. This will to allow
     you to associate a language server with a list of filetypes.
 
@@ -788,6 +788,44 @@ buffer_autoformat({client}, {bufnr}): ~
       lsp.default_keymaps({buffer = bufnr})
       lsp.buffer_autoformat()
     end)
+
+    lsp.setup()
+<
+
+                                                   *lsp-zero.format_mapping()*
+format_mapping({key}, {opts}): ~
+    Configure {key} to format the current buffer.   
+
+    The idea here is that you associate a language server with a list of
+    filetypes, so {key} can format the buffer using only one LSP server.
+
+    `{opts}` supports the following properties:
+
+        * servers: (Table) Key/value pair list. On the left hand side you must
+        specify the name of a language server. On the right hand side you must
+        provide a list of filetypes, this can be any pattern supported
+        by the |FileType| autocommand.
+
+        * format_opts: (Table). These are the same options you can pass to
+        |vim.lsp.buf.format()|.
+
+        * mode: (Table). The list of modes where the keybinding will be active.
+        By default is set to `{'n', 'x'}`, which means normal mode and visual
+        mode.
+
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    lsp.format_mapping('gq', {
+      servers = {
+        ['lua_ls'] = {'lua'},
+        ['rust_analyzer'] = {'rust'},
+      }
+    })
 
     lsp.setup()
 <

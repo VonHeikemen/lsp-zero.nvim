@@ -200,6 +200,10 @@ function M.format_on_save(opts)
   return require('lsp-zero.format').format_on_save(opts)
 end
 
+function M.format_mapping(...)
+  return require('lsp-zero.format').format_mapping(...)
+end
+
 function M.buffer_autoformat(...)
   return require('lsp-zero.format').buffer_autoformat(...)
 end
