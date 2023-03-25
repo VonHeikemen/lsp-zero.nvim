@@ -378,36 +378,59 @@ end
 M.format_cmd = function(line1, line2, count, bang, list)
   local execute = vim.lsp.buf.format
   local async = bang
+  local server = list[1]
+  local timeout = list[2]
+
+  if #list > 2 then
+    vim.notify('Too many arguments for LspZeroFormat', vim.log.levels.ERROR)
+    return
+  end
+
+  if timeout and timeout:find('timeout=') then
+    timeout = timeout:gsub('timeout=', '')
+    timeout = tonumber(timeout)
+  end
+
+  if server and server:find('timeout=') then
+    timeout = server:gsub('timeout=', '')
+    timeout = tonumber(timeout)
+    server = list[2]
+  end
 
   if execute then
-    execute({async = async, name = list[1]})
+    execute({async = async, name = server, timeout_ms = timeout})
     return
   end
 
   local has_range = line2 == count
-  execute = vim.lsp.buf.formatting
 
-  if list[1] then
-    s.format_with(list[1], has_range, async)
+  if server then
+    s.format_with(server, has_range, async, timeout)
     return
   end
 
-  if not async then
-    if has_range then
-      execute = s.format_range_fallback
-    else
-      execute = vim.lsp.buf.formatting_sync
-    end
-  end
+  execute = vim.lsp.buf.formatting
 
   if has_range then
     execute = vim.lsp.buf.range_formatting
   end
 
+  if not async then
+    if has_range then
+      execute = function()
+        s.format_range_fallback(timeout)
+      end
+    else
+      execute = function()
+        vim.lsp.buf.formatting_sync(nil, timeout)
+      end
+    end
+  end
+
   execute()
 end
 
-s.format_with = function(server, has_range, async)
+s.format_with = function(server, has_range, async, timeout)
   local active = vim.lsp.get_active_clients()
   local buffer = vim.api.nvim_get_current_buf()
   
@@ -434,18 +457,23 @@ s.format_with = function(server, has_range, async)
     end
   end
 
-  execute(client, buffer)
+  local config = {timeout_ms = timeout}
+
+  execute(client, buffer, config)
 end
 
-s.format_range_fallback = function()
+s.format_range_fallback = function(timeout)
   local lsp_format = require('lsp-zero.format')
   local buffer = vim.api.nvim_get_current_buf()
+  local config = {
+    timeout_ms = timeout
+  }
 
   for _, c in ipairs(vim.lsp.get_active_clients()) do
     if vim.lsp.buf_is_attached(buffer, c.id)
       and c.supports_method('textDocument/rangeFormatting')
     then
-      lsp_format.apply_range_fallback(c, buffer)
+      lsp_format.apply_range_fallback(c, buffer, config)
     end
   end
 end

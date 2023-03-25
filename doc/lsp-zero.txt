@@ -1137,10 +1137,20 @@ Lua API                                                     *lsp-zero-lua-api*
 
       `{opts}` supports the following properties:
 
-        * servers: (Table) Key/value pair list. On the left hand side you must
-        specify the name of a language server. On the right hand side you must
-        provide a list of filetypes, this can be any pattern supported
-        by the |FileType| autocommand.
+          * servers: (Table) Key/value pair list. On the left hand side you
+          must specify the name of a language server. On the right hand side
+          you must provide a list of filetypes, this can be any pattern
+          supported by the |FileType| autocommand.
+
+          * format_opts: (Table, optional). Configuration that will passed to
+          the formatting function. It supports the following properties:
+
+              * timeout_ms: (Number, optional). Time in milliseconds to block
+              for formatting requests. Defaults to `10000`.
+
+              * formatting_options: (Table, optional). Can be used to set
+              `FormattingOptions`, these options are sent to the language
+              server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >
       local lsp = require('lsp-zero').preset({
@@ -1151,6 +1161,9 @@ Lua API                                                     *lsp-zero-lua-api*
       })
 
       lsp.format_on_save({
+        format_opts = {
+          timeout_ms = 10000,
+        },
         servers = {
           ['lua_ls'] = {'lua'},
           ['rust_analyzer'] = {'rust'},
@@ -1162,7 +1175,7 @@ Lua API                                                     *lsp-zero-lua-api*
 
                                                 *lsp-zero.buffer_autoformat()*
 
-  .buffer_autoformat({client}, {bufnr}): ~
+  .buffer_autoformat({client}, {bufnr}, {opts}): ~
       Format the current buffer using the active language servers.
 
       If {client} argument is provided it will only use the LSP server
@@ -1173,6 +1186,16 @@ Lua API                                                     *lsp-zero-lua-api*
 
           * {bufnr} (Number, Optional) if provided it must be the id
           of an open buffer.
+
+          * format_opts: (Table, optional). Configuration that will passed to
+          the formatting function. It supports the following properties:
+
+              * timeout_ms: (Number, optional). Time in milliseconds to block
+              for formatting requests. Defaults to `10000`.
+
+              * formatting_options: (Table, optional). Can be used to set
+              `FormattingOptions`, these options are sent to the language
+              server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >
       local lsp = require('lsp-zero').preset({
@@ -1207,6 +1230,20 @@ Lua API                                                     *lsp-zero-lua-api*
           The default is `{'n', 'x'}`, which means is active in normal mode
           and visual mode.
 
+          * format_opts: (Table, optional). Configuration that will passed to
+          the formatting function. It supports the following properties:
+
+              * async: If true the formatting request won't block.
+              Defaults to false.
+
+              * timeout_ms: (Number, optional). Time in milliseconds to block
+              for formatting requests. Has no effect when `async` is true.
+              Defaults to `10000`.
+
+              * formatting_options: (Table, optional). Can be used to set
+              `FormattingOptions`, these options are sent to the language
+              server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
+
 >
       local lsp = require('lsp-zero').preset({
         name = 'minimal',
@@ -1216,6 +1253,10 @@ Lua API                                                     *lsp-zero-lua-api*
       })
 
       lsp.format_mapping('gq', {
+        format_opts = {
+          async = false,
+          timeout_ms = 10000,
+        },
         servers = {
           ['lua_ls'] = {'lua'},
           ['rust_analyzer'] = {'rust'},

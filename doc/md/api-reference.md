@@ -377,6 +377,13 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
 
+  * format_opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+    
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Defaults to `10000`.
+
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
+                     
+
 ```lua
 local lsp = require('lsp-zero').preset({
   name = 'minimal',
@@ -386,6 +393,9 @@ local lsp = require('lsp-zero').preset({
 })
 
 lsp.format_on_save({
+  format_opts = {
+    timeout_ms = 10000
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
@@ -395,15 +405,21 @@ lsp.format_on_save({
 lsp.setup()
 ```
 
-### `.buffer_autoformat({client}, {bufnr})`
+### `.buffer_autoformat({client}, {bufnr}, {opts})`
 
 Format the current buffer using the active language servers.
 
-If {client} argument is provided it will only use the LSP server associated with that client.
+If `{client}` argument is provided it will only use the LSP server associated with that client.
 
   * client: (Table, Optional) if provided it must be a lua table with a `name` property or an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
 
   * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+  * opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Has no effect when `async` is true. Defaults to `10000`
+
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -422,7 +438,7 @@ lsp.setup()
 
 ### `.format_mapping({key}, {opts})`
 
-Configure {key} to format the current buffer.   
+Configure `{key}` to format the current buffer.   
 
 The idea here is that you associate a language server with a list of filetypes, so `{key}` can format the buffer using only one LSP server.
 
@@ -430,7 +446,15 @@ The idea here is that you associate a language server with a list of filetypes, 
 
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
 
-  * mode: (Table). The list of modes where the keybinding will be active. By default is set to `{'n', 'x'}`, which means normal mode and visual mode.
+  * mode: (Table, optional). The list of modes where the keybinding will be active. By default is set to `{'n', 'x'}`, which means normal mode and visual mode.
+
+  * format_opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+
+    * async: If true the formatting request won't block. Defaults to false.
+
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Has no effect when `async` is true. Defaults to `10000`.
+
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -441,6 +465,10 @@ local lsp = require('lsp-zero').preset({
 })
 
 lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
