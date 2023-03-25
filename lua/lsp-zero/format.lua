@@ -113,11 +113,24 @@ M.keymap_action = function(key, opts)
 
     local exec = function() vim.lsp.buf.format(config) end
     local mapping = '<Plug>(lsp-zero-format)'
+    vim.keymap.set({'n', 'x', 'i', 's'}, mapping, exec, {buffer = event.buf})
 
-    vim.keymap.set({'n', 'x', 's', 'i'}, mapping, exec, {buffer = event.buf})
+    local exec = {
+      n = 'nnoremap <buffer> %s %s',
+      x = 'xnoremap <buffer> %s %s',
+      s = 'snoremap <buffer> %s <C-g>%s',
+      v = 'vnoremap <buffer> %s %s',
+      i = 'inoremap <buffer> %s %s',
+    }
 
     local desc = string.format('Format buffer with %s', client.name)
-    vim.keymap.set(mode, key, mapping, {buffer = event.buf, desc = desc})
+
+    for _, m in pairs(mode) do
+      if exec[m] then
+        vim.cmd(exec[m]:format(key, mapping))
+      end
+    end
+
   end
 
   autocmd('LspAttach', {
