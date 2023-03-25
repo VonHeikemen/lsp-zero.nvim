@@ -525,7 +525,9 @@ null_ls.setup({
 
 ### Format buffer using only null-ls
 
-The solution I propose here is to use the `on_attach` function to create a command called `NullFormat`. This new command will have all the arguments necessary to send a formatting request specifically to null-ls. You could then create a keymap bound to the `NullFormat` command.
+You can assign a keyboard shortcut using the [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_mappingkey-opts) function. This will allow you to specify a list of filetypes where you want to format using null-ls. 
+
+Here is an example showing a setup focused on lua and javascript. We assign the keymap `gq` to format.
 
 ```lua
 local lsp = require('lsp-zero').preset({
@@ -533,6 +535,16 @@ local lsp = require('lsp-zero').preset({
   set_lsp_keymaps = true,
   manage_nvim_cmp = true,
   suggest_lsp_servers = false,
+})
+
+lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
+  servers = {
+    ['null-ls'] = {'javascript', 'typescript', 'lua'},
+  }
 })
 
 lsp.setup()
@@ -543,21 +555,6 @@ local null_opts = lsp.build_options('null-ls', {})
 null_ls.setup({
   on_attach = function(client, bufnr)
     null_opts.on_attach(client, bufnr)
-
-    local format_cmd = function(input)
-      vim.lsp.buf.format({
-        id = client.id,
-        timeout_ms = 5000,
-        async = input.bang,
-      })
-    end
-
-    local bufcmd = vim.api.nvim_buf_create_user_command
-    bufcmd(bufnr, 'NullFormat', format_cmd, {
-      bang = true,
-      range = true,
-      desc = 'Format using null-ls'
-    })
   end,
   sources = {
     --- Replace these with the tools you have installed
@@ -565,7 +562,44 @@ null_ls.setup({
     null_ls.builtins.formatting.prettier,
   }
 })
+```
 
+### Format on save
+
+This can be almost the same as the previous example, except here we replace the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_mappingkey-opts) with [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#format_on_save-opts).
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.format_on_save({
+  format_opts = {
+    timeout_ms = 10000,
+  },
+  servers = {
+    ['null-ls'] = {'javascript', 'typescript', 'lua'},
+  }
+})
+
+lsp.setup()
+
+local null_ls = require('null-ls')
+local null_opts = lsp.build_options('null-ls', {})
+
+null_ls.setup({
+  on_attach = function(client, bufnr)
+    null_opts.on_attach(client, bufnr)
+  end,
+  sources = {
+    --- Replace these with the tools you have installed
+    null_ls.builtins.formatting.stylua,
+    null_ls.builtins.formatting.prettier,
+  }
+})
 ```
 
 ### Adding mason-null-ls.nvim
