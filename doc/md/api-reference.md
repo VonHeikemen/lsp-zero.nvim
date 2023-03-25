@@ -420,6 +420,36 @@ end)
 lsp.setup()
 ```
 
+### `.format_mapping({key}, {opts})`
+
+Configure {key} to format the current buffer.   
+
+The idea here is that you associate a language server with a list of filetypes, so `{key}` can format the buffer using only one LSP server.
+
+`{opts}` supports the following properties:
+
+  * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
+
+  * mode: (Table). The list of modes where the keybinding will be active. By default is set to `{'n', 'x'}`, which means normal mode and visual mode.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.format_mapping('gq', {
+  servers = {
+    ['lua_ls'] = {'lua'},
+    ['rust_analyzer'] = {'rust'},
+  }
+})
+
+lsp.setup()
+```
+
 ### `.dir.find_first({list})`
 
 Checks the parent directories and returns the path to the first folder that has a file in `{list}`. This is useful to detect the root directory. 

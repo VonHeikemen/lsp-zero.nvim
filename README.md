@@ -29,6 +29,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#disable-a-language-server) 
   * [Custom servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#custom-servers) 
   * [Enable format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#enable-format-on-save) 
+  * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#format-buffer-using-a-keybinding) 
   * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#troubleshooting)
   * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#diagnostics) (A.K.A. error messages and warnings)
   * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/lsp.md#language-servers-and-masonnvim)

@@ -80,6 +80,84 @@ M.apply_format = function(server)
   })
 end
 
+M.keymap_action = function(key, opts)
+  if opts == nil or key == nil then
+    return
+  end
+
+  local autocmd = vim.api.nvim_create_autocmd
+  local augroup = vim.api.nvim_create_augroup
+  local format_id = augroup('lsp_zero_format_mapping', {clear = true})
+
+  local list = opts.servers or {}
+  local mode = opts.mode or {'n', 'x'}
+
+  if vim.tbl_isempty(list) then
+    return
+  end
+
+  local filetype_setup = function(event)
+    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local files = list[client.name]
+
+    if files == nil or not vim.tbl_contains(files, vim.bo.filetype) then
+      return
+    end
+
+    local config = {
+      async = false,
+      timeout_ms = timeout_ms,
+      id = client.id,
+      bufnr = event.buf
+    }
+
+    local exec = function() vim.lsp.buf.format(config) end
+    local mapping = '<Plug>(lsp-zero-format)'
+
+    vim.keymap.set({'n', 'x', 's', 'i'}, mapping, exec, {buffer = event.buf})
+
+    local desc = string.format('Format buffer with %s', client.name)
+    vim.keymap.set(mode, key, mapping, {buffer = event.buf, desc = desc})
+  end
+
+  autocmd('LspAttach', {
+    group = format_id,
+    desc = string.format('Format buffer with %s', key),
+    callback = filetype_setup,
+  })
+end
+
+M.keymap_fallback = function(key, opts)
+  local group = 'lsp_zero_format_mapping'
+  local autocmd = 'autocmd %s FileType %s %s'
+  local list = opts.servers or {}
+  local mode = opts.mode or {'n', 'x'}
+
+  local keymap = {
+    n = 'nnoremap <buffer> %s <cmd>LspZeroFormat %s<cr>',
+    x = 'xnoremap <buffer> %s :LspZeroFormat %s<cr>',
+    s = "snoremap <buffer> %s <Esc><cmd>'<,'>LspZeroFormat %s<cr>",
+    v = "vnoremap <buffer> %s <Esc><cmd>'<,'>LspZeroFormat %s<cr>",
+    i = 'inoremap <buffer> %s <cmd>LspZeroFormat %s<cr>',
+  }
+
+  vim.cmd('augroup ' .. group)
+
+  for server, files in pairs(list) do
+    local pattern = table.concat(files, ',')
+
+    for _, m in ipairs(mode) do
+      local mapping = keymap[m]
+      if mapping then
+        local exec = mapping:format(key, server)
+        vim.cmd(autocmd:format(group, pattern, exec))
+      end
+    end
+  end
+
+  vim.cmd('augroup END')
+end
+
 local ensure_client = function(server, verbose)
   local active = vim.lsp.get_active_clients()
   local buffer = vim.api.nvim_get_current_buf()
@@ -159,18 +237,25 @@ M.apply_async_range_fallback = function(client, buffer)
 end
 
 if vim.lsp.buf.format then
+  M.format_mapping = M.keymap_action
+
   M.use = ensure_enabled(function(...)
     local client, buffer = ensure_client(...)
     if client then M.apply_format(client, buffer) end
   end)
+
   M.format_buffer = ensure_enabled(function()
     vim.lsp.buf.format({async = false, timeout_ms = timeout_ms})
   end)
+
 else
+  M.format_mapping = M.keymap_fallback
+
   M.use = ensure_enabled(function(...)
     local client, buffer = ensure_client(...)
     if client then M.apply_fallback(client, buffer) end
   end)
+
   M.format_buffer = ensure_enabled(function()
     vim.lsp.buf.formatting_seq_sync(nil, timeout_ms)
   end)

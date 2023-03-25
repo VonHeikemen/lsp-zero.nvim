@@ -353,6 +353,10 @@ M.buffer_autoformat = function(client)
   require('lsp-zero.format').buffer_autoformat(client)
 end
 
+M.format_mapping = function(...)
+  require('lsp-zero.format').format_mapping(...)
+end
+
 M.extend_lspconfig = function(opts)
   if internal.setup_status == 'complete' then
     local msg = "[lsp-zero] You can't use .extend_lspconfig() after .setup()"
