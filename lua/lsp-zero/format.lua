@@ -108,18 +108,12 @@ M.buffer_autoformat = function(client, buffer, opts)
   ))
 end
 
-M.apply_format = function(server, buffer, opts)
-  local active = vim.lsp.get_active_clients({bufnr = buffer, name = server})[1]
-
-  if active == nil then
-    return
-  end
-
+M.apply_format = function(client, buffer, opts)
   opts = opts or {}
   local config = {
     async = false,
     timeout_ms = timeout_ms,
-    id = active.id,
+    id = client.id,
     bufnr = buffer
   }
 
