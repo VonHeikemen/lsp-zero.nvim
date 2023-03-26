@@ -2,7 +2,7 @@
 
 ## Commands
 
-* `LspZeroFormat`: Formats the current buffer or range. If the "bang" is provided formatting will be asynchronous (ex: `LspZeroFormat!`). If you provide the name of a language server as a first argument it will try to format only using that server. Otherwise, it will use every active language server with formatting capabilities. See [:help vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+* `LspZeroFormat {server} timeout={timeout}`: Formats the current buffer or range. Under the hood lsp-zero is using the function `vim.lsp.buf.format()`. If the "bang" is provided formatting will be asynchronous (ex: `LspZeroFormat!`). If you provide the name of a language server as a first argument it will try to format only using that server. Otherwise, it will use every active language server with formatting capabilities. With the `timeout` parameter you can configure the time in milliseconds to wait for the response of the formatting requests.
 
 * `LspZeroWorkspaceRemove`: Remove the folder at path from the workspace folders. See [:help vim.lsp.buf.remove_workspace_folder()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.remove_workspace_folder()).
 
@@ -412,7 +412,8 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 `{opts}` supports the following properties:
 
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
-  * format_opts: (Table). These are the options you can pass to `vim.lsp.buf.format()`.
+
+  * format_opts: (Table). These are the options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -422,6 +423,9 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.format_on_save({
+  format_opts = {
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
@@ -431,7 +435,7 @@ lsp.format_on_save({
 lsp.setup()
 ```
 
-### `.buffer_autoformat({client}, {bufnr})`
+### `.buffer_autoformat({client}, {bufnr}, {opts})`
 
 Format the current buffer using the active language servers.
 
@@ -440,6 +444,8 @@ If {client} argument is provided it will only use the LSP server associated with
   * client: (Table, Optional) if provided it must be a lua table with a `name` property or an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
 
   * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+  * {opts}: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -474,6 +480,10 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},

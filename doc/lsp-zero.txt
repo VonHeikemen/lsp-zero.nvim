@@ -358,14 +358,19 @@ If you were to do it all by yourself, the code would look like this.
 <
                                                            *lsp-zero-commands*
 
-LspZeroFormat: ~
-    Formats the current buffer or range. If the "bang" is provided
-    formatting will be asynchronous (ex: `LspZeroFormat!`). If you provide the
-    name of a language server as a first argument it will try to format only
-    using that server. Otherwise, it will use every active language server
-    with formatting capabilities.
+LspZeroFormat {server} timeout={timeout}: ~
+    Formats the current buffer or range. Under the hood lsp-zero is using the
+    function |vim.lsp.buf.format()|.
 
-    See |vim.lsp.buf.format()|.
+    If the "bang" is provided formatting will be asynchronous
+    (ex: `LspZeroFormat!`).
+
+    If you provide the name of a language server as a first argument it will
+    try to format only using that server. Otherwise, it will use every
+    active language server with formatting capabilities.
+
+    With the {timeout} parameter you can configure the time in milliseconds
+    to wait for the response of the formatting requests.
 
 LspZeroWorkspaceRemove: ~
     Remove the folder at path from the workspace folders.
@@ -378,7 +383,7 @@ LspZeroWorkspaceAdd: ~
 LspZeroWorkspaceList: ~
     List workspace folders. See |vim.lsp.buf.list_workspace_folders()|.
 
-LspZeroSetupServers: ~
+LspZeroSetupServers [{server}]: ~
     It takes a space separated list of servers and configures them.
     It calls the function |lsp-zero.setup_servers()| under the hood.
     If the `bang` is provided the root dir of the language server
@@ -769,7 +774,7 @@ format_on_save({opts}): ~
 <
                                                *lsp-zero.buffer_autoformat()*
 
-buffer_autoformat({client}, {bufnr}): ~
+buffer_autoformat({client}, {bufnr}, {opts}): ~
     Format the current buffer using the active language servers.
 
     If {client} argument is provided it will only use the LSP server
@@ -780,6 +785,9 @@ buffer_autoformat({client}, {bufnr}): ~
 
         * {bufnr} (Number, Optional) if provided it must be the id
         of an open buffer.
+
+        * {opts}: (Table). These are the same options you can pass to
+        |vim.lsp.buf.format()|.
 
 >lua
     local lsp = require('lsp-zero').preset({})
