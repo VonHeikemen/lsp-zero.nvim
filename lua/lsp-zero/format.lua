@@ -276,6 +276,13 @@ local ensure_client = function(server, verbose)
     return false, -1
   end
 
+
+  if client.supports_method('textDocument/formatting') and verbose then
+    local msg = '[lsp-zero] %s does not support textDocument/formatting method'
+    vim.notify(msg:format(server), vim.log.levels.WARN)
+    return false, -1
+  end
+
   return client, buffer
 end
 
@@ -406,6 +413,10 @@ M.format_bind = function(line1, line2, count, args)
 
   local opts = {timeout_ms = timeout, formatting_options = config}
   execute(client, buffer, opts)
+end
+
+M.check = function(server)
+  ensure_client(server, true)
 end
 
 if vim.lsp.buf.format then
