@@ -416,7 +416,10 @@ M.format_bind = function(line1, line2, count, args)
 end
 
 M.check = function(server)
-  ensure_client(server, true)
+  if ensure_client(server, true) then
+    local msg = '[lsp-zero] %s has formatting capabilities'
+    vim.notify(msg:format(server))
+  end
 end
 
 if vim.lsp.buf.format then
