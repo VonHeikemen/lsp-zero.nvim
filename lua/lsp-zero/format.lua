@@ -277,7 +277,7 @@ local ensure_client = function(server, verbose)
   end
 
 
-  if client.supports_method('textDocument/formatting') and verbose then
+  if not client.supports_method('textDocument/formatting') and verbose then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return false, -1
