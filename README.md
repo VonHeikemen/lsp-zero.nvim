@@ -31,7 +31,8 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Enable Format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#enable-format-on-save)
   * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#format-buffer-using-a-keybinding) 
   * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#troubleshooting)
-  * [Diagnostics](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#diagnostics) (A.K.A. error messages, warnings, etc.)
+  * [Diagnostics (a.k.a. error messages, warnings, etc.)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#diagnostics)
+  * [Use icons in the sign column](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#use-icons-in-the-sign-column)
   * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#language-servers-and-masonnvim)
 
 * Autocompletion

@@ -134,6 +134,21 @@ If you want to use [honza/vim-snippets](https://github.com/honza/vim-snippets), 
 require('luasnip.loaders.from_snipmate').lazy_load()
 ```
 
+### Preselect first item
+
+Make the first item in completion menu always be selected.
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup({
+  preselect = 'item',
+  completion = {
+    completeopt = 'menu,menuone,noinsert'
+  },
+})
+```
+
 ### Basic completions for Neovim's lua api
 
 Add the [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) source.

@@ -456,6 +456,27 @@ vim.diagnostic.config({
 })
 ```
 
+## Use icons in the sign column
+
+If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#set_sign_iconsopts). 
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = '»'
+})
+
+lsp.setup()
+```
+
 ## Language servers and mason.nvim
 
 Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim).
