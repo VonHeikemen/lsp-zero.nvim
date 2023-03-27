@@ -38,10 +38,10 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 * Autocompletion
 
   * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#introduction)
-  * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#)
-  * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#)
-  * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#)
-  * [Customizing nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#)
+  * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preset-settings)
+  * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#recommended-sources)
+  * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#keybindings)
+  * [Customizing nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#customizing-nvim-cmp)
 
 * Reference and guides
   
