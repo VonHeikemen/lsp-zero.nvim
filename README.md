@@ -88,9 +88,9 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
   branch = 'v2.x',
   dependencies = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},             -- Required
-    {'williamboman/mason.nvim'},           -- Optional
-    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    {'neovim/nvim-lspconfig'},                           -- Required
+    {'williamboman/mason.nvim', build = ':MasonUpdate'}, -- Optional
+    {'williamboman/mason-lspconfig.nvim'},               -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
@@ -111,9 +111,9 @@ use {
   branch = 'v2.x',
   requires = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},             -- Required
-    {'williamboman/mason.nvim'},           -- Optional
-    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    {'neovim/nvim-lspconfig'},                         -- Required
+    {'williamboman/mason.nvim', run = ':MasonUpdate'}, -- Optional
+    {'williamboman/mason-lspconfig.nvim'},             -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},     -- Required
@@ -131,9 +131,9 @@ use {
 {'VonHeikemen/lsp-zero.nvim', branch = 'v2.x'};
 
 -- LSP Support
-{'neovim/nvim-lspconfig'};             -- Required
-{'williamboman/mason.nvim'};           -- Optional
-{'williamboman/mason-lspconfig.nvim'}; -- Optional
+{'neovim/nvim-lspconfig'};                                                -- Required
+{'williamboman/mason.nvim', run = function() vim.cmd('MasonUpdate') end}; -- Optional
+{'williamboman/mason-lspconfig.nvim'};                                    -- Optional
 
 -- Autocompletion
 {'hrsh7th/nvim-cmp'};     -- Required
@@ -148,9 +148,9 @@ use {
 
 ```vim
 " LSP Support
-Plug 'neovim/nvim-lspconfig'             " Required
-Plug 'williamboman/mason.nvim'           " Optional
-Plug 'williamboman/mason-lspconfig.nvim' " Optional
+Plug 'neovim/nvim-lspconfig'                           " Required
+Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+Plug 'williamboman/mason-lspconfig.nvim'               " Optional
 
 " Autocompletion
 Plug 'hrsh7th/nvim-cmp'     " Required

@@ -28,9 +28,9 @@ require('lazy').setup({
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {'williamboman/mason.nvim'},           -- Optional
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
+      {'neovim/nvim-lspconfig'},                           -- Required
+      {'williamboman/mason.nvim', build = ':MasonUpdate'}, -- Optional
+      {'williamboman/mason-lspconfig.nvim'},               -- Optional
 
       -- Autocompletion
       {'hrsh7th/nvim-cmp'},     -- Required
@@ -59,9 +59,9 @@ Make sure to download [vim-plug](https://github.com/junegunn/vim-plug) (the plug
 ```vim
 call plug#begin()
   " LSP Support
-  Plug 'neovim/nvim-lspconfig'             " Required
-  Plug 'williamboman/mason.nvim'           " Optional
-  Plug 'williamboman/mason-lspconfig.nvim' " Optional
+  Plug 'neovim/nvim-lspconfig'                           " Required
+  Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+  Plug 'williamboman/mason-lspconfig.nvim'               " Optional
 
   " Autocompletion
   Plug 'hrsh7th/nvim-cmp'         " Required
