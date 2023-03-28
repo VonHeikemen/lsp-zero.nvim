@@ -73,9 +73,12 @@ use {
   branch = 'v1.x',
   requires = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},                         -- Required
-    {'williamboman/mason.nvim', run = ':MasonUpdate'}, -- Optional
-    {'williamboman/mason-lspconfig.nvim'},             -- Optional
+    {'neovim/nvim-lspconfig'},                           -- Required
+    {                                                    -- Optional
+      'williamboman/mason.nvim',
+      run = function() pcall(vim.cmd, 'MasonUpdate') end
+    },
+    {'williamboman/mason-lspconfig.nvim'},               -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},         -- Required
@@ -100,9 +103,12 @@ With `lazy.nvim`:
   branch = 'v1.x',
   dependencies = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},                           -- Required
-    {'williamboman/mason.nvim', build = ':MasonUpdate'}, -- Optional
-    {'williamboman/mason-lspconfig.nvim'},               -- Optional
+    {'neovim/nvim-lspconfig'},                             -- Required
+    {                                                      -- Optional
+      'williamboman/mason.nvim',
+      build = function() pcall(vim.cmd, 'MasonUpdate') end
+    },
+    {'williamboman/mason-lspconfig.nvim'},                 -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},         -- Required
@@ -125,9 +131,12 @@ With `paq`:
 {'VonHeikemen/lsp-zero.nvim', branch = 'v1.x'};
 
 -- LSP Support
-{'neovim/nvim-lspconfig'};                                                -- Required
-{'williamboman/mason.nvim', run = function() vim.cmd('MasonUpdate') end}; -- Optional
-{'williamboman/mason-lspconfig.nvim'};                                    -- Optional
+{'neovim/nvim-lspconfig'};                           -- Required
+{                                                    -- Optional
+  'williamboman/mason.nvim',
+  run = function() pcall(vim.cmd, 'MasonUpdate') end
+};
+{'williamboman/mason-lspconfig.nvim'};               -- Optional
 
 -- Autocompletion Engine
 {'hrsh7th/nvim-cmp'};         -- Required
