@@ -348,7 +348,7 @@ cmp.setup({
 
 ## Future Changes/Deprecation notice
 
-Settings and functions that will change in the future. If you are using the `main` branch and want to avoid breaking changes use the `v1.x` branch.
+Settings and functions that will change in case I feel forced to created a `v3.x` branch.
 
 ### Preset settings
 
