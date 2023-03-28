@@ -73,9 +73,9 @@ use {
   branch = 'v1.x',
   requires = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},             -- Required
-    {'williamboman/mason.nvim'},           -- Optional
-    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    {'neovim/nvim-lspconfig'},                         -- Required
+    {'williamboman/mason.nvim', run = ':MasonUpdate'}, -- Optional
+    {'williamboman/mason-lspconfig.nvim'},             -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},         -- Required
@@ -100,9 +100,9 @@ With `lazy.nvim`:
   branch = 'v1.x',
   dependencies = {
     -- LSP Support
-    {'neovim/nvim-lspconfig'},             -- Required
-    {'williamboman/mason.nvim'},           -- Optional
-    {'williamboman/mason-lspconfig.nvim'}, -- Optional
+    {'neovim/nvim-lspconfig'},                           -- Required
+    {'williamboman/mason.nvim', build = ':MasonUpdate'}, -- Optional
+    {'williamboman/mason-lspconfig.nvim'},               -- Optional
 
     -- Autocompletion
     {'hrsh7th/nvim-cmp'},         -- Required
@@ -125,9 +125,9 @@ With `paq`:
 {'VonHeikemen/lsp-zero.nvim', branch = 'v1.x'};
 
 -- LSP Support
-{'neovim/nvim-lspconfig'};             -- Required
-{'williamboman/mason.nvim'};           -- Optional
-{'williamboman/mason-lspconfig.nvim'}; -- Optional
+{'neovim/nvim-lspconfig'};                                                -- Required
+{'williamboman/mason.nvim', run = function() vim.cmd('MasonUpdate') end}; -- Optional
+{'williamboman/mason-lspconfig.nvim'};                                    -- Optional
 
 -- Autocompletion Engine
 {'hrsh7th/nvim-cmp'};         -- Required
@@ -146,9 +146,9 @@ With `vim-plug`:
 
 ```vim
 " LSP Support
-Plug 'neovim/nvim-lspconfig'             " Required
-Plug 'williamboman/mason.nvim'           " Optional
-Plug 'williamboman/mason-lspconfig.nvim' " Optional
+Plug 'neovim/nvim-lspconfig'                           " Required
+Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
+Plug 'williamboman/mason-lspconfig.nvim'               " Optional
 
 " Autocompletion Engine
 Plug 'hrsh7th/nvim-cmp'         " Required
