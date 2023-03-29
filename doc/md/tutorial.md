@@ -131,12 +131,14 @@ require('lazy').setup({
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},                              -- Required
-      {                                                       -- Optional
+      {'neovim/nvim-lspconfig'},             -- Required
+      {                                      -- Optional
         'williamboman/mason.nvim',
-        build = function() pcall(vim.cmd, 'MasonUpdate') end,
+        build = function()
+          pcall(vim.cmd, 'MasonUpdate')
+        end,
       },
-      {'williamboman/mason-lspconfig.nvim'},                  -- Optional
+      {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
       -- Autocompletion
       {'hrsh7th/nvim-cmp'},     -- Required
@@ -217,12 +219,14 @@ require('lazy').setup({
     branch = 'v2.x',
     dependencies = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},                              -- Required
-      {                                                       -- Optional
+      {'neovim/nvim-lspconfig'},             -- Required
+      {                                      -- Optional
         'williamboman/mason.nvim',
-        build = function() pcall(vim.cmd, 'MasonUpdate') end,
+        build = function()
+          pcall(vim.cmd, 'MasonUpdate')
+        end,
       },
-      {'williamboman/mason-lspconfig.nvim'},                  -- Optional
+      {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
       -- Autocompletion
       {'hrsh7th/nvim-cmp'},     -- Required
