@@ -6,7 +6,9 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-Hello, there. This is the new branch for version 2 of lsp-zero.
+Hello, there. This is the new branch for version 2 of lsp-zero. This new version requires Neovim v0.8 or greater. If you need support for Neovim v0.7 or lower use the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
+
+If you are here to look at the documentation **and** you installed lsp-zero before `March 30th`, the docs you are looking for are in the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
 
 ## How to get started
 
