@@ -10,18 +10,22 @@ if ok_cmp then
 end
 
 function M.extend(opts)
-  local config = require('lsp-zero.cmp-setup').get_config
   local defaults = require('lsp-zero.preset').minimal().manage_nvim_cmp
 
+  setup_complete = true
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
-  require('cmp').setup(config(opts))
+  require('cmp').setup(M.get_config(opts))
 end
 
 function M.apply(cmp_opts, user_config)
   if not ok_cmp then
     local msg = "[lsp-zero] Could not find nvim-cmp. Please install nvim-cmp or set the option `manage_nvim_cmp` to false."
     vim.notify(msg, vim.log.levels.WARN)
+    return
+  end
+
+  if setup_complete then
     return
   end
 

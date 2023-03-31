@@ -180,7 +180,7 @@ function M.default_keymaps(opts)
 end
 
 function M.extend_cmp(opts)
-  require('lsp-zero.cmp-setup').extend(opts)
+  require('lsp-zero.cmp').extend(opts)
 end
 
 function M.new_server(opts)
@@ -264,7 +264,7 @@ function M.defaults.nvim_workspace(opts)
 end
 
 function M.defaults.cmp_mappings(opts)
-  local cmp_setup = require('lsp-zero.cmp-setup')
+  local cmp_setup = require('lsp-zero.cmp')
   local config = vim.tbl_deep_extend(
     'force',
     cmp_setup.basic_mappings(),
@@ -279,7 +279,7 @@ function M.defaults.cmp_mappings(opts)
 end
 
 function M.defaults.cmp_sources(opts)
-  local config = require('lsp-zero.cmp-setup').sources()
+  local config = require('lsp-zero.cmp').sources()
 
   if type(opts) == 'table' then
     return vim.tbl_deep_extend('force', config, opts)
@@ -289,7 +289,7 @@ function M.defaults.cmp_sources(opts)
 end
 
 function M.defaults.cmp_config(opts)
-  local cmp_setup = require('lsp-zero.cmp-setup')
+  local cmp_setup = require('lsp-zero.cmp')
   local config = cmp_setup.cmp_config()
   config.sources = cmp_setup.sources()
   config.mapping = M.defaults.cmp_mappings()
