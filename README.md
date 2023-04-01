@@ -43,7 +43,16 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preset-settings)
   * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#recommended-sources)
   * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#keybindings)
-  * [Customizing nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#customizing-nvim-cmp)
+  * [Adding a source](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#adding-a-source)
+  * [Add an external collection of snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)
+  * [Preselect first item](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preselect-first-item)
+  * [Basic completions for Neovim's lua api](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#basic-completions-for-neovims-lua-api)
+  * [Enable "Super Tab"](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#enable-super-tab)
+  * [Regular tab complete](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#regular-tab-complete)
+  * [Invoke completion menu manually](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#invoke-completion-menu-manually)
+  * [Adding borders to completion menu](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#adding-borders-to-completion-menu)
+  * [Change formatting of completion item](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#change-formatting-of-completion-item)
+  * [lsp-kind](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#lsp-kind)
 
 * Reference and guides
   

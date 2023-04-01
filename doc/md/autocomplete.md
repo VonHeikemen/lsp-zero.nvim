@@ -43,8 +43,6 @@ In nvim-cmp a "source" is a plugin (a neovim plugin) that provides the actual da
 
 * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data send by the language server.
 
-* [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua): provides completions based on neovim's lua api.
-
 ## Keybindings
 
 ### Basic mappings
