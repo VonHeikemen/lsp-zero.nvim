@@ -266,7 +266,7 @@ end)
 lsp.setup()
 ```
 
-If you have multiple servers active in one file it'll try to format using all of them, and I can't warranty the order.
+If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
 You could be more specific if you give the name of a server to [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr).
 
