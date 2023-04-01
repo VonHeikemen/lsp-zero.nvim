@@ -96,17 +96,10 @@ function M.setup_installed(list, opts)
   local servers = mason.get_installed_servers()
   vim.list_extend(servers, vim.tbl_keys(list))
 
-  for _, name in pairs(servers) do
+  for _, name in ipairs(servers) do
     local config = list[name] or {}
     M.setup(name, config, false)
   end
-
-  mason.setup_handlers({
-    function(name)
-      local config = list[name] or {}
-      M.setup(name, config, true)
-    end
-  })
 end
 
 function M.ensure_installed(list)
