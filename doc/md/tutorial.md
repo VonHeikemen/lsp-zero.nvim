@@ -177,7 +177,7 @@ Type number and <Enter> or click with the mouse (q or empty cancels):
 
 Choose 1 for `lua_ls`, then press enter. A floating window will show up. When the server is done installing it a message should appear.
 
-At the moment there is a good chance the language server can't start automatically. Use the command `:edit` to refresh the file or restart Neovim if that doesn't work. Once the server starts you'll notice warning signs in the global variable vim, that means everything is well and good.
+At the moment the language server can't start automatically, restart Neovim so the language server can be configured properly. Once the server starts you'll notice warning signs in the global variable vim, that means everything is well and good.
 
 To make sure `lua_ls` can detect the "root directory" of our config we need to create a file called `.luarc.json` in the Neovim config folder. This file can be empty, it just need to exists.
 
