@@ -6,7 +6,7 @@ Language servers are configured and initialized using [nvim-lspconfig](https://g
 
 Ever wondered what does lsp-zero does under the hood? Let me tell you.
 
-First it adds some extra "capabilities" to lspconfig's defaults. This capabilities come from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). They tell the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
+First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). They tell the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
 
 Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. Is where all keybindings and commands are created.
 
@@ -46,7 +46,7 @@ lspconfig.eslint.setup({})
 
 * `LspZeroWorkspaceList`: List workspace folders. See [:help vim.lsp.buf.list_workspace_folders()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.list_workspace_folders()).
 
-* `LspZeroSetupServers`: It takes a space separated list of servers and configures them.
+* `LspZeroSetupServers [{servers}]`: It takes a space separated list of servers and configures them.
 
 ## Creating new keybindings
 
