@@ -32,6 +32,7 @@ Lots of you really like this lazy loading business. Let me tell you just show yo
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
+      local cmp_action = require('lsp-zero.cmp').action() 
 
       cmp.setup({
         mapping = {
