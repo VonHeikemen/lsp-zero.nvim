@@ -268,6 +268,10 @@ function M.cmp_config()
   return result
 end
 
+function M.action()
+  return require('lsp-zero.cmp-mapping')
+end
+
 function s.merge(a, b)
   return vim.tbl_deep_extend('force', {}, a, b)
 end
