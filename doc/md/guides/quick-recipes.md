@@ -11,7 +11,7 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
   if client.server_capabilities.documentSymbolProvider then
-    require('navic').attach(client, bufnr)
+    require('nvim-navic').attach(client, bufnr)
   end
 end)
 
