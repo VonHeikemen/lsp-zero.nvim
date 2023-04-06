@@ -244,7 +244,7 @@ lsp.setup()
 
 Here are some things you need to know:
 
-* The configuration for the language servers is provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). 
+* The configuration for the language servers are provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). 
 * lsp-zero will create keybindings, commands, and will integrate nvim-cmp (the autocompletion plugin) with lspconfig if possible. You need to require lsp-zero before lspconfig for this to work.
 * Even though lsp-zero calls [mason.nvim](https://github.com/williamboman/mason.nvim) under the hood it only configures LSP servers. Other tools like formatters, linters or debuggers are not configured by lsp-zero.
 * If you need to configure a language server use `lspconfig`.
@@ -405,7 +405,7 @@ lsp-zero has a function that will configure the lua language server for you: [.n
 
 ### Can I use the Enter key to confirm completion item?
 
-Yes, you can. You can find the details in the autocomplete documention: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
+Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
 
 ## Support
 
