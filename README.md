@@ -403,6 +403,10 @@ Settings and functions that will change in case I feel forced to created a `v3.x
 
 lsp-zero has a function that will configure the lua language server for you: [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_lua_lsopts)
 
+### Can I use the Enter key to confirm completion item?
+
+Yes, you can. You can find the details in the autocomplete documention: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
