@@ -6,7 +6,7 @@ Language servers are configured and initialized using [nvim-lspconfig](https://g
 
 Ever wondered what does lsp-zero does under the hood? Let me tell you.
 
-First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). They tell the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
+First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). It tells the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
 
 Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. Is where all keybindings and commands are created.
 
@@ -234,6 +234,8 @@ You can choose one of these methods.
 
 If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
+Note: [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts) doesn't support async formatting.
+
 ```lua
 local lsp = require('lsp-zero').preset({})
 
@@ -272,6 +274,27 @@ You could be more specific if you give the name of a server to [.buffer_autoform
 
 ```lua
 lsp.buffer_autoformat({name = 'lua_ls'})
+```
+
+### I really, really want asynchronous format on save
+
+Fine. But you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim). 
+
+I always recommend having only one language server to format the buffer. This next example will show how to allow only a list of servers.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+
+  local allow_format = {'lua_ls', 'rust_analyzer'}
+  if vim.tbl_contains(allow_format, client.name) then
+    require('lsp-format').on_attach(client)
+  end
+end)
+
+lsp.setup()
 ```
 
 ## Format buffer using a keybinding
