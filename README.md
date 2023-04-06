@@ -43,6 +43,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preset-settings)
   * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#recommended-sources)
   * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#keybindings)
+  * [Use Enter to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion)
   * [Adding a source](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#adding-a-source)
   * [Add an external collection of snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)
   * [Preselect first item](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preselect-first-item)
@@ -318,6 +319,8 @@ To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7t
 Here is an example configuration that adds navigation between snippets and adds a custom keybinding to trigger the completion menu manually.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -347,6 +350,8 @@ Here is a list of sources you might want to configure to get a better experience
 Quick note: when you configure the `source` option in nvim-cmp the previous config will be overriden. This means that is if you use it you need to add the source for LSP again.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 

@@ -81,6 +81,48 @@ These are the keybindings you get when you enable `manage_nvim_cmp.set_extra_map
 
 What I actually recommend is using `cmp` directly. Let lsp-zero do the "minimal" config, then use the module `cmp` any extra feature you want.
 
+Make sure you setup `cmp` after lsp-zero, so you can override every option properly.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup()
+
+local cmp = require('cmp')
+
+cmp.setup({
+  ---
+  -- Add you own config here...
+  ---
+})
+```
+
+### Use Enter to confirm completion
+
+You'll want to add an entry to the `mapping` option of nvim-cmp. You can assign `<CR>` to the function `cmp.mapping.confirm`.
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup({
+  mapping = {
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+  }
+})
+```
+
+In that example `Enter` will only confirm the selected item. You need to select the item before pressing enter.
+
+If you want to confirm without selecting the item, use this.
+
+```lua
+['<CR>'] = cmp.mapping.confirm({select = true}),
+```
+
 ### Adding a source
 
 Yes, I know I have a thing that configures this for you but at this point is only there for backwards compatibility with the `v1.x` branch. There is no "intuitive" way to override that config, so advise you do it this yourself to gain better control.
