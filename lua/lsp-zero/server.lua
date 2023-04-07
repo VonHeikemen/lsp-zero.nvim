@@ -174,7 +174,12 @@ function M.default_keymaps(opts)
   map('n', '<F3>', lsp 'buf.format({async = true})')
   map('x', '<F3>', lsp 'buf.format({async = true})')
   map('n', '<F4>', lsp 'buf.code_action()')
-  map('x', '<F4>', lsp 'buf.range_code_action()')
+
+  if vim.lsp.buf.range_code_action then
+    map('x', '<F4>', lsp 'buf.range_code_action()')
+  else
+    map('x', '<F4>', lsp 'buf.code_action()')
+  end
 
   map('n', 'gl', diagnostic 'open_float()')
   map('n', '[d', diagnostic 'goto_prev()')
