@@ -282,6 +282,12 @@ s.set_keymaps = function(bufnr, opts)
     map('n', 'gl', diagnostic 'show_line_diagnostics()')
   end
 
+  if vim.lsp.buf.range_code_action then
+    map('x', '<F4>', lsp 'buf.range_code_action()')
+  else
+    map('x', '<F4>', lsp 'buf.code_action()')
+  end
+
   map('n', 'K', lsp 'buf.hover()')
   map('n', 'gd', lsp 'buf.definition()')
   map('n', 'gD', lsp 'buf.declaration()')
@@ -290,7 +296,6 @@ s.set_keymaps = function(bufnr, opts)
   map('n', 'gr', lsp 'buf.references()')
   map('n', '<F2>', lsp 'buf.rename()')
   map('n', '<F4>', lsp 'buf.code_action()')
-  map('x', '<F4>', lsp 'buf.range_code_action()')
 
   map('n', '<C-k>', lsp 'buf.signature_help()')
 
