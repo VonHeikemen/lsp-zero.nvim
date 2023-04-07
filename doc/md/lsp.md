@@ -156,6 +156,40 @@ lsp.setup()
 
 The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are same you would pass to lspconfig's setup function.
 
+### Disable semantic highlights
+
+Neovim v0.9 allows an LSP server to define highlight groups, this is known as semantic tokens. This new feature is enabled by default. To disable it we need to modify the `server_capabilities` property of the language server, more specifically we need to "delete" the `semanticTokensProvider` property.
+
+We can disable this new feature in every server using the function [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#set_server_configopts). 
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.set_server_config({
+  on_init = function(client)
+    client.server_capabilities.semanticTokensProvider = nil
+  end,
+})
+
+lsp.setup()
+```
+
+Note that defining an `on_init` hook in a language server will override the one in [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#set_server_configopts). 
+
+If you just want to disable it for a particular server, use lspconfig to assign the `on_init` hook to that server.
+
+```lua
+require('lspconfig').lua_ls.setup({
+  on_init = function(client)
+    client.server_capabilities.semanticTokensProvider = nil
+  end,
+})
+```
+
 ## Disable a language server
 
 Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
