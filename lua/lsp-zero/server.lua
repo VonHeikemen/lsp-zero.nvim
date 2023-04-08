@@ -68,8 +68,7 @@ function M.setup(name, opts, autostart)
   opts = opts or {}
 
   local lsp = require('lspconfig')[name]
-  local defaults = M.default_config or {}
-  lsp.setup(vim.tbl_deep_extend('force', defaults, opts))
+  lsp.setup(opts)
 
   if autostart and lsp.manager and vim.bo.filetype ~= '' then
     lsp.manager.try_add_wrapper()
