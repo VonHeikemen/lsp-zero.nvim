@@ -73,6 +73,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Setup with flutter-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/quick-recipes.md#setup-with-flutter-tools)
   * [Setup with nvim-metals](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/quick-recipes.md#setup-with-nvim-metals)
   * [Setup with haskell-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/quick-recipes.md#setup-with-haskell-tools)
+  * [Setup with clangd_extensions.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/quick-recipes.md#setup-with-clangd_extensionsnvim) 
 
 ## Quickstart (for the impatient)
 

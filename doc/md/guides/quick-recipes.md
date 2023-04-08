@@ -268,3 +268,21 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
+### Setup with clangd_extensions.nvim
+
+[clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is tell lsp-zero to ignore the `clangd` server.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.skip_server_setup({'clangd'})
+
+lsp.setup()
+
+require('clangd_extensions').setup()
+```
+
