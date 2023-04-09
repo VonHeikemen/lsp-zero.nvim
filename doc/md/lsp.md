@@ -52,7 +52,7 @@ lspconfig.eslint.setup({})
 
 Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
 
-Here is an example the replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
+Here is an example that replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -154,7 +154,7 @@ lsp.configure('eslint', {
 lsp.setup()
 ```
 
-The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are same you would pass to lspconfig's setup function.
+The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are same as you would pass to lspconfig's setup function.
 
 ### Disable semantic highlights
 
