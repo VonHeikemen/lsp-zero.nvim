@@ -125,7 +125,7 @@ If you want to confirm without selecting the item, use this.
 
 ### Adding a source
 
-Yes, I know I have a thing that configures this for you but at this point is only there for backwards compatibility with the `v1.x` branch. There is no "intuitive" way to override that config, so advise you do it this yourself to gain better control.
+Yes, I know I have a thing that configures this for you but at this point it is only there for backwards compatibility with the `v1.x` branch. There is no "intuitive" way to override that config, so advise you do this yourself to gain better control.
 
 This is what the "recommended" configuration for `sources` looks like.
 
