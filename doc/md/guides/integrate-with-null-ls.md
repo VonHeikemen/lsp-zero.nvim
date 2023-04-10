@@ -127,7 +127,6 @@ null_ls.setup({
 require('mason-null-ls').setup({
   ensure_installed = nil,
   automatic_installation = true,
-  automatic_setup = false,
 })
 ```
 
@@ -157,10 +156,13 @@ null_ls.setup({
 require('mason-null-ls').setup({
   ensure_installed = nil,
   automatic_installation = false, -- You can still set this to `true`
-  automatic_setup = true,
+  handlers = {
+      -- Here you can add functions to register sources.
+      -- See https://github.com/jay-babu/mason-null-ls.nvim#handlers-usage
+      --
+      -- If left empty, mason-null-ls will  use a "default handler"
+      -- to register all sources
+  }
 })
-
--- Required when `automatic_setup` is true
-require('mason-null-ls').setup_handlers()
 ```
 
