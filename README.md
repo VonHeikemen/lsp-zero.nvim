@@ -318,7 +318,7 @@ The default keybindings in lsp-zero are meant to emulate Neovim's default whenev
 
 To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) directly.
 
-Here is an example configuration that adds navigation between snippets and adds a custom keybinding to trigger the completion menu manually.
+Here is an example configuration.
 
 ```lua
 -- Make sure you setup `cmp` after lsp-zero
@@ -328,7 +328,13 @@ local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
   mapping = {
+    -- `Enter` key to confirm completion
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
+
+    -- Navigate between snippet placeholder
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
