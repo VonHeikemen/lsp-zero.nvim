@@ -458,6 +458,9 @@ return {
   opencl_ls = {
     opencl = true
   },
+  openedge_ls = {
+    progress = true
+  },
   openscad_ls = {
     openscad = true
   },
@@ -781,6 +784,9 @@ return {
   typeprof = {
     eruby = true,
     ruby = true
+  },
+  typst_lsp = {
+    typst = true
   },
   unison = {
     unison = true
