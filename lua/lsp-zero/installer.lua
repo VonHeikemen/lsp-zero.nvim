@@ -41,5 +41,14 @@ function M.get_servers()
   return mason.get_installed_servers()
 end
 
+function M.ensure_installed(list)
+  if M.enabled == false then
+    return
+  end
+
+  require('mason-lspconfig.settings').set({ensure_installed = list})
+  require('mason-lspconfig.ensure_installed')()
+end
+
 return M
 

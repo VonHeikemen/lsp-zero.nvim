@@ -43,6 +43,9 @@ function M.extend_lspconfig()
     return
   end
 
+  -- Configure mason.nvim
+  M.setup_installer()
+
   local util = lspconfig.util
 
   -- Set client capabilities
@@ -50,64 +53,20 @@ function M.extend_lspconfig()
 
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
-    M.setup_installer()
     M.skip_server(config.name)
-
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config)
     end
   end)
 end
 
-function M.setup(name, opts, autostart)
+function M.setup(name, opts)
   if state.exclude[name] then
     return
   end
 
-  M.skip_server(name)
-  opts = opts or {}
-
   local lsp = require('lspconfig')[name]
-  lsp.setup(opts)
-
-  if autostart and lsp.manager and vim.bo.filetype ~= '' then
-    lsp.manager.try_add_wrapper()
-  end
-end
-
-function M.setup_servers(list, opts)
-  for name, _ in pairs(opts.ignore) do
-    M.skip_server(name)
-  end
-
-  for server, config in pairs(list) do
-    M.setup(server, config, false)
-  end
-end
-
-function M.setup_installed(list, opts)
-  for name, _ in pairs(opts.ignore) do
-    M.skip_server(name)
-  end
-
-  local mason = require('mason-lspconfig')
-
-  local servers = mason.get_installed_servers()
-  vim.list_extend(servers, vim.tbl_keys(list))
-
-  for _, name in ipairs(servers) do
-    local config = list[name] or {}
-    M.setup(name, config, false)
-  end
-end
-
-function M.ensure_installed(list)
-  if require('lsp-zero.installer').enabled == false then
-    return
-  end
-
-  require('mason-lspconfig.settings').set({ensure_installed = list})
-  require('mason-lspconfig.ensure_installed')()
+  lsp.setup(opts or {})
 end
 
 function M.set_default_capabilities(opts)
@@ -301,8 +260,6 @@ function M.setup_installer()
   if config.call_servers == 'local' and installer.state == 'init' then
     installer.setup()
   end
-
-  M.setup_installer = function() return true end
 end
 
 function s.set_capabilities(current)

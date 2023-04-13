@@ -21,9 +21,11 @@ function M.apply(args)
   end
 
   local use_local = user_settings.call_servers == 'local'
+  local installer
 
   if use_local then
-    use_local = require('lsp-zero.installer').setup()
+    installer = require('lsp-zero.installer')
+    use_local = installer.setup()
   end
 
   Server.enable_keymaps = user_settings.set_lsp_keymaps
@@ -33,15 +35,15 @@ function M.apply(args)
   end
 
   if use_local == false or user_settings.setup_servers_on_start == false then
-    Server.setup_servers(args.servers, {ignore = args.skip_servers})
+    s.setup_servers(args.servers, {ignore = args.skip_servers})
     return
   end
 
-  if args.install and #args.install > 0 then
-    Server.ensure_installed(args.install)
+  if installer and args.install and #args.install > 0 then
+    installer.ensure_installed(args.install)
   end
 
-  Server.setup_installed(args.servers, {ignore = args.skip_servers})
+  s.setup_installed(args.servers, {ignore = args.skip_servers})
 end
 
 function s.setup_ui(opts)
@@ -62,6 +64,37 @@ function s.setup_ui(opts)
   vim.diagnostic.config({
     float = {border = opts.border}
   })
+end
+
+function s.setup_servers(list, opts)
+  local Server = require('lsp-zero.server')
+
+  for name, _ in pairs(opts.ignore) do
+    Server.skip_server(name)
+  end
+
+  for server, config in pairs(list) do
+    local config = list[name] or {}
+    Server.setup(name, config)
+  end
+end
+
+function s.setup_installed(list, opts)
+  local Server = require('lsp-zero.server')
+
+  for name, _ in pairs(opts.ignore) do
+    Server.skip_server(name)
+  end
+
+  local mason = require('mason-lspconfig')
+
+  local servers = mason.get_installed_servers()
+  vim.list_extend(servers, vim.tbl_keys(list))
+
+  for _, name in ipairs(servers) do
+    local config = list[name] or {}
+    Server.setup(name, config)
+  end
 end
 
 return M
