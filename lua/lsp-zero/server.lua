@@ -313,10 +313,29 @@ end
 function s.apply_global_config(config, user_config)
   local new_config = vim.tbl_deep_extend('force', M.default_config, user_config)
   for key, val in pairs(new_config) do
-    if type(val) == 'table' then
-      config[key] = vim.tbl_deep_extend('force', config[key], val)
+    if type(val) == 'table' and not vim.tbl_islist(val) then
+      s.tbl_merge(config[key], val)
+    elseif key == 'on_new_config' and config[key] then
+      config[key] = s.compose_fn(config[key], new_config[key])
     else
       config[key] = val
+    end
+  end
+end
+
+function s.compose_fn(config_callback, user_callback)
+  return function(...)
+    config_callback(...)
+    user_callback(...)
+  end
+end
+
+function s.tbl_merge(old_val, new_val)
+  for k, v in pairs(new_val) do
+    if type(v) == 'table' and not vim.tbl_islist(v) then
+      s.tbl_merge(old_val[k], v)
+    else
+      old_val[k] = v
     end
   end
 end
