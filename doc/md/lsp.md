@@ -154,7 +154,7 @@ lsp.configure('eslint', {
 lsp.setup()
 ```
 
-The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are same as you would pass to lspconfig's setup function.
+The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are the same as lspconfig's setup function.
 
 ### Disable semantic highlights
 
