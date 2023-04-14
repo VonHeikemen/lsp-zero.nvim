@@ -311,11 +311,17 @@ function s.map_check(mode, lhs)
 end
 
 function s.apply_global_config(config, user_config)
-  local new_config = vim.tbl_deep_extend('force', M.default_config, user_config)
+  local new_config = vim.deepcopy(M.default_config) 
+  s.tbl_merge(new_config, user_config)
+
   for key, val in pairs(new_config) do
     if type(val) == 'table' and not vim.tbl_islist(val) then
       s.tbl_merge(config[key], val)
-    elseif key == 'on_new_config' and config[key] then
+    elseif (
+      key == 'on_new_config' 
+      and config[key]
+      and config[key] ~= new_config[key]
+    ) then
       config[key] = s.compose_fn(config[key], new_config[key])
     else
       config[key] = val
