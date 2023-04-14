@@ -38,6 +38,7 @@ end
 
 function M.preset(opts)
   require('lsp-zero.settings').preset(opts)
+  Server.setup_installer()
   return M
 end
 
@@ -72,6 +73,7 @@ function M.skip_server_setup(list)
 end
 
 function M.ensure_installed(list)
+  Server.setup_installer()
   if type(list) == 'table' then
     s.args.install = list
   end

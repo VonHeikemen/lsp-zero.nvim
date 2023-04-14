@@ -43,9 +43,6 @@ function M.extend_lspconfig()
     return
   end
 
-  -- Configure mason.nvim
-  M.setup_installer()
-
   local util = lspconfig.util
 
   -- Set client capabilities
@@ -53,6 +50,7 @@ function M.extend_lspconfig()
 
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
+    M.setup_installer()
     M.skip_server(config.name)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config)
@@ -260,6 +258,8 @@ function M.setup_installer()
   if config.call_servers == 'local' and installer.state == 'init' then
     installer.setup()
   end
+
+  M.setup_installer = function() end
 end
 
 function s.set_capabilities(current)
