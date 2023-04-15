@@ -146,9 +146,11 @@ Once you have this you can change the priority by changing the order in the list
 
 ### Add an external collection of snippets
 
-It turns out luasnip can load snippets in a couple of popular formats like the VScode format and a snipmate-like format. All you have to do is call the right "loader" and then add the [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) to nvim-cmp.
+By default luasnip is only configured to expand snippets. Also, the only snippets you get will come from your LSP server. If you want to load **custom snippets** into the completion menu you need add [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) as a source in nvim-cmp.
 
-This is how you add support for [friendly-snippets](https://github.com/rafamadriz/friendly-snippets).
+Now, we don't need to write our own snippets, we can download a collection like [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) and then parse them using a luasnip loader.
+
+Here is the code you would need to load `friendly-snippets` into nvim-cmp.
 
 ```lua
 local cmp = require('cmp')
