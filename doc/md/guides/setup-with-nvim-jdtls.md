@@ -203,7 +203,8 @@ local function jdtls_on_attach(client, bufnr)
   -- Uncomment the line below to enable codelens
   -- enable_codelens(bufnr)
 
-  -- Uncomment the line below if you have nvim-dap configured
+  -- Uncomment the line below if you have `java-debug` installed
+  -- (you'll also need to download the plugin nvim-dap)
   -- require('jdtls').setup_dap({hotcodereplace = 'auto'})
 
   -- The following mappings are based on the suggested usage of nvim-jdtls
@@ -376,5 +377,5 @@ vim.api.nvim_create_autocmd('FileType', {
 
 ## What's next?
 
-Setup a debugger, probably. You'll want to configure [nvim-dap](https://github.com/mfussenegger/nvim-dap) and install `java-debug-adapter`. That's beyond the scope of lsp-zero so... good luck.
+Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Then install `java-debug-adapter`. The code to configure the debugger is already there, but is disabled. Look for any reference to `java-debug` then "uncomment" the keybindings and the `.setup_dap` function. I didn't test the debugger so I can't tell you how it works, but I believe it should work.
 
