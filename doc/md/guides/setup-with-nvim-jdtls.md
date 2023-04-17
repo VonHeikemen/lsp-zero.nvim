@@ -23,6 +23,7 @@ Here is the list of Neovim plugins you'll need:
 * [mason.nvim](https://github.com/williamboman/mason.nvim) (optional)
 * [nvim-dap](https://github.com/mfussenegger/nvim-dap) (optional)
 * [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui) (optional)
+* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (optional)
 
 The code to setup the debugger will be disabled. To enable it just "uncomment" the call to the function `enable_debugger()`.
 
@@ -228,17 +229,18 @@ local function enable_codelens(bufnr)
   })
 end
 
-local function enable_debugger()
+local function enable_debugger(bufnr)
   require('jdtls').setup_dap({hotcodereplace = 'auto'})
   require('jdtls.dap').setup_dap_main_class_configs()
 
+  local opts = {buffer = bufnr}
   vim.keymap.set('n', '<leader>df', "<cmd>lua require('jdtls').test_class()<cr>", opts)
   vim.keymap.set('n', '<leader>dn', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
 end
 
 local function jdtls_on_attach(client, bufnr)
   -- Uncomment the line below if you have `nvim-dap`, `java-test` and `java-debug-adapter`
-  -- enable_debugger()
+  -- enable_debugger(bufnr)
 
   -- Uncomment the line below to enable codelens
   -- enable_codelens(bufnr)
@@ -374,11 +376,13 @@ local function jdtls_setup(event)
     },
   }
 
-  if vim.tbl_isempty(jdtls_capabilities) then
+
+  if vim.tbl_isempty(jdtls_capabilities) and ok_cmp then
+    local ok_cmp, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
     jdtls_capabilities = vim.tbl_deep_extend(
       'force',
       vim.lsp.protocol.make_client_capabilities(),
-      require('cmp_nvim_lsp').default_capabilities()
+      ok_cmp and cmp_lsp.default_capabilities() or {}
     )
   end
 
