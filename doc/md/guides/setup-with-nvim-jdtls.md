@@ -4,15 +4,32 @@ Here we will focus on getting a working configuration using [nvim-jdtls](https:/
 
 ## Requirements
 
-* A working environment with Java 17 or greater.
-* Python 3.9 or greater.
-* Neovim with lsp-zero installed (If you haven't configured Neovim, follow this [tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md))
+* A working environment with Java 17 or greater
+* Python 3.9 or greater
+* A working configuration for Neovim (If you don't have one, follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md))
+
+The code on this guide assumes you will be using [mason.nvim](https://github.com/williamboman/mason.nvim) to install the following packages:
+
+* [jdtls](https://github.com/eclipse/eclipse.jdt.ls)
+* [java-test](https://github.com/microsoft/vscode-java-test) (optional)
+* [java-debug-adapter](https://github.com/microsoft/java-debug) (optional)
+
+Using `mason.nvim` to install these packages is optional, you can use the method you want. You'll have to modify a few paths though. I will keep all the paths in a function called `get_jdtls_paths` so is easier for you to change any path.
+
+You will also need these Neovim plugins:
+
+* [lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim)
+* [nvim-jdtls](https://github.com/mfussenegger/nvim-jdtls)
+* [nvim-dap](https://github.com/mfussenegger/nvim-dap) (optional)
+* [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui) (optional)
+
+The code to setup the debugger will be disabled. To enable it just "uncomment" the call to the function `enable_debugger()`.
 
 ## Before we start
 
 Some context... the configuration for this guide was tested in Debian 11. I installed java using [sdkman](https://sdkman.io/). And I installed [jdtls](https://github.com/eclipse/eclipse.jdt.ls) using [mason.nvim](https://github.com/williamboman/mason.nvim). I'm not a java developer, I can't tell you this is the best setup for Java development, I can only tell you it worked on my machine.
 
-You can still follow this guide of you are using another operating system. Using `mason.nvim` to install the server is optional, you can use the method you want. You'll have to modify a few paths though, but don't worry I'll keep all the paths in one place so you can change them easily.
+You can still follow this guide if you are using another operating system.
 
 ## The first step
 
@@ -51,7 +68,7 @@ Now create a lua script called `jdtls.lua`. You can do this with vimscript if yo
 In this new `jdtls.lua` script we are going to add our config for nvim-jdtls. There will be a lot code so first let me show you the structure of the configuration I want to create.
 
 ```lua
--- If you are using linux or mac this file will located at:
+-- If you are using linux or mac this file will be located at:
 -- ~/.config/nvim/plugin/jdtls.lua
 
 -- `nvim-jdtls` will look for these files/folders
@@ -110,7 +127,7 @@ With `jdtls_setup` we will build the config for the module `jdtls`. This is wher
 
 `jdtls_on_attach` is where you can modify the keybindings you want to use.
 
-`get_jdtls_paths` is where you can find the paths used to start the LSP server. If you don't use `mason.nvim` to install the server, this is the place where you can ajust the variables that point to the installation path of jdtls.
+`get_jdtls_paths` is where you can find the paths used to start the LSP server.
 
 ### Show me the code
 
@@ -137,37 +154,47 @@ local function get_jdtls_paths()
   end
 
   local path = {}
-  local mason = vim.fn.stdpath('data') .. '/mason'
-  local jdtls = mason .. '/packages/jdtls'
-   
+
   path.data_dir = vim.fn.stdpath('cache') .. '/nvim-jdtls'
 
+  local jdtls_install = require('mason-registry')
+    .get_package('jdtls')
+    :get_install_path()
+
+  path.java_agent = jdtls_install .. '/lombok.jar'
+  path.launcher_jar = vim.fn.glob(jdtls_install .. '/plugins/org.eclipse.equinox.launcher_*.jar')
+
+  if vim.fn.has('mac') == 1 then
+    path.platform_config = jdtls_install .. '/config_mac'
+  elseif vim.fn.has('unix') == 1 then
+    path.platform_config = jdtls_install .. '/config_linux'
+  elseif vim.fn.has('win32') == 1 then
+    path.platform_config = jdtls_install .. '/config_win'
+  end
+
+  local java_test_path = require('mason-registry')
+    .get_package('java-test')
+    :get_install_path()
+
   path.java_test_bundle = vim.split(
-    vim.fn.glob(mason .. '/packages/java-test/extension/server/*.jar'),
+    vim.fn.glob(java_test_path .. '/extension/server/*.jar'),
     '\n'
   )
+
+  local java_debug_path = require('mason-registry')
+    .get_package('java-debug-adapter')
+    :get_install_path()
 
   path.java_debug_bundle = vim.split(
-    vim.fn.glob(mason .. '/packages/java-debug-adapter/extension/server/com.microsoft.java.debug.plugin-*.jar'),
+    vim.fn.glob(java_debug_path .. '/extension/server/com.microsoft.java.debug.plugin-*.jar'),
     '\n'
   )
-
-  path.java_agent = jdtls .. '/lombok.jar'
-  path.launcher_jar = vim.fn.glob(jdtls .. '/plugins/org.eclipse.equinox.launcher_*.jar')
-
-  path.platform_config = ''
-  if vim.fn.has('mac') == 1 then
-    path.platform_config = jdtls .. '/config_mac'
-  elseif vim.fn.has('unix') == 1 then
-    path.platform_config = jdtls .. '/config_linux'
-  elseif vim.loop.os_uname().version:match('Windows') then
-    path.platform_config = jdtls .. '/config_win'
-  end
 
   path.runtimes = {
     -- Useful if you're starting jdtls with a Java version that's 
     -- different from the one the project uses.
-    -- `name` must be a valid `ExecutionEnvironment`,
+    --
+    -- Note: the field `name` must be a valid `ExecutionEnvironment`,
     -- you can find the list here: 
     -- https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
     --
@@ -200,13 +227,20 @@ local function enable_codelens(bufnr)
   })
 end
 
+local function enable_debugger()
+  require('jdtls').setup_dap({hotcodereplace = 'auto'})
+  require('jdtls.dap').setup_dap_main_class_configs()
+
+  vim.keymap.set('n', '<leader>df', "<cmd>lua require('jdtls').test_class()<cr>", opts)
+  vim.keymap.set('n', '<leader>dn', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
+end
+
 local function jdtls_on_attach(client, bufnr)
+  -- Uncomment the line below if you have `nvim-dap`, `java-test` and `java-debug-adapter`
+  -- enable_debugger()
+
   -- Uncomment the line below to enable codelens
   -- enable_codelens(bufnr)
-
-  -- Uncomment the line below if you have `java-debug` installed
-  -- (you'll also need to download the plugin nvim-dap)
-  -- require('jdtls').setup_dap({hotcodereplace = 'auto'})
 
   -- The following mappings are based on the suggested usage of nvim-jdtls
   -- https://github.com/mfussenegger/nvim-jdtls#usage
@@ -218,10 +252,6 @@ local function jdtls_on_attach(client, bufnr)
   vim.keymap.set('n', 'crc', "<cmd>lua require('jdtls').extract_constant()<cr>", opts)
   vim.keymap.set('x', 'crc', "<esc><cmd>lua require('jdtls').extract_constant(true)<cr>", opts)
   vim.keymap.set('x', 'crm', "<esc><Cmd>lua require('jdtls').extract_method(true)<cr>", opts)
-
-  -- Uncomment these mappings if you have `java-debug-adapter` and `java-test`
-  -- vim.keymap.set('n', '<leader>df', "<cmd>lua require('jdtls').test_class()<cr>", opts)
-  -- vim.keymap.set('n', '<leader>dn', "<cmd>lua require('jdtls').test_nearest_method()<cr>", opts)
 end
 
 local function jdtls_setup(event)
@@ -376,9 +406,25 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
+If you don't use `mason.nvim` you'll have to delete every reference to `require('mason-registry')` and replace it with a hardcoded value. For example the `jdtls` path, you'll have to find these lines:
+
+```lua
+local jdtls_install = require('mason-registry')
+  .get_package('jdtls')
+  :get_install_path()
+```
+
+Then use a string with the path to the folder where you installed `jdtls`.
+
+```lua
+local jdtls_install = '/path/to/my/jdtls'
+```
+
 ## What's next?
 
-Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Then install `java-debug-adapter`. The code to configure the debugger is already there, but is disabled. Look for any reference to `java-debug` then "uncomment" the keybindings and the `.setup_dap` function. I didn't test the debugger so I can't tell you how it works, but I believe it should work.
+Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Then install `java-debug-adapter` and `java-test`. The code to setup the debugger is disabled, you'll need to "uncomment" the call to the function `enable_debugger()` in order to use it.
 
-To learn about nvim-dap and nvim-dap-ui look at this video [Debugging In Neovim (ft TJ DeVries and BashBunni)](https://www.youtube.com/watch?v=0moS8UHupGc). Sadly is not about java, but it should teach you the basics of nvim-dap and how to use it.
+I didn't test the debugger so I can't tell you how it works, but I believe it should work.
+
+To learn about nvim-dap and nvim-dap-ui watch this video [Debugging In Neovim (ft TJ DeVries and BashBunni)](https://www.youtube.com/watch?v=0moS8UHupGc). Sadly is not about java, but it should teach you the basics of nvim-dap and how to use it.
 
