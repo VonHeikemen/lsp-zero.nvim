@@ -377,7 +377,7 @@ local function jdtls_setup(event)
   }
 
 
-  if vim.tbl_isempty(jdtls_capabilities) and ok_cmp then
+  if vim.tbl_isempty(jdtls_capabilities) then
     local ok_cmp, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
     jdtls_capabilities = vim.tbl_deep_extend(
       'force',
