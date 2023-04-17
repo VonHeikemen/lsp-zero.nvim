@@ -6,6 +6,7 @@ Here we will focus on getting a working configuration using [nvim-jdtls](https:/
 
 * A working environment with Java 17 or greater.
 * Python 3.9 or greater.
+* Neovim with lsp-zero installed (If you haven't configured Neovim, follow this [tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md))
 
 ## Before we start
 
