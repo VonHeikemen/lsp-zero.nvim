@@ -16,10 +16,11 @@ The code on this guide assumes you will be using [mason.nvim](https://github.com
 
 Using `mason.nvim` to install these packages is optional, you can use the method you want. You'll have to modify a few paths though. I will keep all the paths in a function called `get_jdtls_paths` so is easier for you to change any path.
 
-You will also need these Neovim plugins:
+Here is the list of Neovim plugins you'll need:
 
 * [lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim)
 * [nvim-jdtls](https://github.com/mfussenegger/nvim-jdtls)
+* [mason.nvim](https://github.com/williamboman/mason.nvim) (optional)
 * [nvim-dap](https://github.com/mfussenegger/nvim-dap) (optional)
 * [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui) (optional)
 
