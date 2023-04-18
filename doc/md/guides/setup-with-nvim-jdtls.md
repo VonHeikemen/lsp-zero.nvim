@@ -338,7 +338,7 @@ local function jdtls_setup(event)
       --   }
       -- },
       format = {
-        enabled = false,
+        enabled = true,
         -- settings = {
         --   profile = 'asdf'
         -- },
