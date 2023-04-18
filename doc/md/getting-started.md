@@ -12,7 +12,7 @@ The following tutorial will teach you how to create a minimal config from scratc
 
 If you haven't created a configuration file (`init.lua`) for neovim, here's a minimal working config. It has a plugin manager, a colorscheme and lsp-zero all setup.
 
-* [nvim-starter - lsp-zero](https://github.com/VonHeikemen/nvim-starter/tree/xx-lsp-zero)
+* [nvim-starter - lsp-zero](https://github.com/VonHeikemen/nvim-starter/tree/xx-lsp-zero-v1)
 
 Do not clone the repo `nvim-starter`, just follow the instructions on the readme.
 
