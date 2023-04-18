@@ -4,7 +4,7 @@
 
 Language servers are configured and initialized using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
-Ever wondered what does lsp-zero does under the hood? Let me tell you.
+Ever wondered what lsp-zero does under the hood? Let me tell you.
 
 First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). It tells the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
 
