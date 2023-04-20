@@ -25,7 +25,7 @@ Here is the list of Neovim plugins you'll need:
 * [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui) (optional)
 * [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (optional)
 
-The code to setup the debugger will be disabled. To enable it just "uncomment" the call to the function `enable_debugger()`.
+The code to setup the debugger will be disabled by default. You can enable it by setting the property `debugger` to `true` in the variable called `features`.
 
 ## Before we start
 
@@ -137,6 +137,7 @@ The complete implementation for `jdtls.lua` is this:
 
 ```lua
 local java_cmds = vim.api.nvim_create_augroup('java_cmds', {clear = true})
+local cache_vars = {}
 
 local root_files = {
   '.git',
@@ -146,13 +147,18 @@ local root_files = {
   'build.gradle',
 }
 
-local jdtls_capabilities = {}
+local features = {
+  -- change this to `true` to enable codelens
+  codelens = false,
 
-local jdtls_paths = false
+  -- change this to `true` if you have `nvim-dap`,
+  -- `java-test` and `java-debug-adapter` installed
+  debugger = false,
+}
 
 local function get_jdtls_paths()
-  if jdtls_paths then
-    return jdtls_paths
+  if cache_vars.paths then
+    return cache_vars.paths
   end
 
   local path = {}
@@ -174,33 +180,50 @@ local function get_jdtls_paths()
     path.platform_config = jdtls_install .. '/config_win'
   end
 
+  path.bundles = {}
+
+  ---
+  -- Include java-test bundle if present
+  ---
   local java_test_path = require('mason-registry')
     .get_package('java-test')
     :get_install_path()
 
-  path.java_test_bundle = vim.split(
+  local java_test_bundle = vim.split(
     vim.fn.glob(java_test_path .. '/extension/server/*.jar'),
     '\n'
   )
 
+  if java_test_bundle[1] ~= '' then
+    vim.list_extend(path.bundles, java_test_bundle)
+  end
+
+  ---
+  -- Include java-debug-adapter bundle if present
+  ---
   local java_debug_path = require('mason-registry')
     .get_package('java-debug-adapter')
     :get_install_path()
 
-  path.java_debug_bundle = vim.split(
+  local java_debug_bundle = vim.split(
     vim.fn.glob(java_debug_path .. '/extension/server/com.microsoft.java.debug.plugin-*.jar'),
     '\n'
   )
 
+  if java_debug_bundle[1] ~= '' then
+    vim.list_extend(path.bundles, java_debug_bundle)
+  end
+
+  ---
+  -- Useful if you're starting jdtls with a Java version that's 
+  -- different from the one the project uses.
+  ---
   path.runtimes = {
-    -- Useful if you're starting jdtls with a Java version that's 
-    -- different from the one the project uses.
-    --
     -- Note: the field `name` must be a valid `ExecutionEnvironment`,
     -- you can find the list here: 
     -- https://github.com/eclipse/eclipse.jdt.ls/wiki/Running-the-JAVA-LS-server-from-the-command-line#initialize-request
     --
-    -- This example assume you are using sdkman: https://get.sdkman.io
+    -- This example assume you are using sdkman: https://sdkman.io
     -- {
     --   name = 'JavaSE-17',
     --   path = vim.fn.expand('~/.sdkman/candidates/java/17.0.6-tem'),
@@ -211,7 +234,7 @@ local function get_jdtls_paths()
     -- },
   }
 
-  jdtls_paths = path
+  cache_vars.paths = path
 
   return path
 end
@@ -239,11 +262,13 @@ local function enable_debugger(bufnr)
 end
 
 local function jdtls_on_attach(client, bufnr)
-  -- Uncomment the line below if you have `nvim-dap`, `java-test` and `java-debug-adapter`
-  -- enable_debugger(bufnr)
+  if features.debugger then
+    enable_debugger(bufnr)
+  end
 
-  -- Uncomment the line below to enable codelens
-  -- enable_codelens(bufnr)
+  if features.codelens then
+    enable_codelens(bufnr)
+  end
 
   -- The following mappings are based on the suggested usage of nvim-jdtls
   -- https://github.com/mfussenegger/nvim-jdtls#usage
@@ -260,21 +285,18 @@ end
 local function jdtls_setup(event)
   local jdtls = require('jdtls')
 
-  jdtls.extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
-
   local path = get_jdtls_paths()
   local data_dir = path.data_dir .. '/' ..  vim.fn.fnamemodify(vim.fn.getcwd(), ':p:h:t')
 
-  local bundles = {}
+  if cache_vars.capabilities == nil then
+    jdtls.extendedClientCapabilities.resolveAdditionalTextEditsSupport = true
 
-  -- Include java-test bundle if present
-  if path.java_test_bundle[1] ~= '' then
-    vim.list_extend(bundles, path.java_test_bundle)
-  end
-
-  -- Include java-debug-adapter bundle if present
-  if path.java_debug_bundle[1] ~= '' then
-    vim.list_extend(bundles, path.java_debug_bundle)
+    local ok_cmp, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+    cache_vars.capabilities = vim.tbl_deep_extend(
+      'force',
+      vim.lsp.protocol.make_client_capabilities(),
+      ok_cmp and cmp_lsp.default_capabilities() or {}
+    )
   end
 
   -- The command that starts the language server
@@ -376,29 +398,19 @@ local function jdtls_setup(event)
     },
   }
 
-
-  if vim.tbl_isempty(jdtls_capabilities) then
-    local ok_cmp, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
-    jdtls_capabilities = vim.tbl_deep_extend(
-      'force',
-      vim.lsp.protocol.make_client_capabilities(),
-      ok_cmp and cmp_lsp.default_capabilities() or {}
-    )
-  end
-
   -- This starts a new client & server,
   -- or attaches to an existing client & server depending on the `root_dir`.
   jdtls.start_or_attach({
     cmd = cmd,
     settings = lsp_settings,
     on_attach = jdtls_on_attach,
-    capabilities = jdtls_capabilities,
+    capabilities = cache_vars.capabilities,
     root_dir = jdtls.setup.find_root(root_files),
     flags = {
       allow_incremental_sync = true,
     },
     init_options = {
-      bundles = bundles,
+      bundles = path.bundles,
     },
   })
 end
@@ -427,7 +439,7 @@ local jdtls_install = '/path/to/my/jdtls'
 
 ## What's next?
 
-Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Then install `java-debug-adapter` and `java-test`. The code to setup the debugger is disabled, you'll need to "uncomment" the call to the function `enable_debugger()` in order to use it.
+Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Install `java-debug-adapter` and `java-test`. Then enable the debugger setup function in `jdtls.lua`, search for the variable `features` and set `debugger` to `true`.
 
 I didn't test the debugger so I can't tell you how it works, but I believe it should work.
 
