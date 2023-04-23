@@ -74,8 +74,8 @@ function s.setup_servers(list, opts)
   end
 
   for server, config in pairs(list) do
-    local config = list[name] or {}
-    Server.setup(name, config)
+    local config = list[server] or {}
+    Server.setup(server, config)
   end
 end
 
