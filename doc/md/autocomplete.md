@@ -106,6 +106,8 @@ cmp.setup({
 You'll want to add an entry to the `mapping` option of nvim-cmp. You can assign `<CR>` to the function `cmp.mapping.confirm`.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -130,6 +132,8 @@ Yes, I know I have a thing that configures this for you but at this point it is 
 This is what the "recommended" configuration for `sources` looks like.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -153,6 +157,8 @@ Now, we don't need to write our own snippets, we can download a collection like 
 Here is the code you would need to load `friendly-snippets` into nvim-cmp.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -181,6 +187,8 @@ require('luasnip.loaders.from_snipmate').lazy_load()
 Make the first item in completion menu always be selected.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -196,6 +204,8 @@ cmp.setup({
 Add the [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) source.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -215,6 +225,8 @@ cmp.setup({
 If you are the kind of person who likes to do everything with the `Tab` key, try this:
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -233,6 +245,8 @@ If the completion menu is visible it will navigate to the next item in the list.
 Trigger the completion menu when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list. If the line is empty it uses the fallback.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -249,6 +263,8 @@ cmp.setup({
 In case you want to trigger the completion menu manually using `Control + Space`.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -264,6 +280,8 @@ cmp.setup({
 ### Adding borders to completion menu
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -279,6 +297,8 @@ cmp.setup({
 Here is a basic example that adds icons based on the name of the source.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
@@ -308,6 +328,8 @@ cmp.setup({
 [lspkind.nvim](https://github.com/onsails/lspkind.nvim) should work too.
 
 ```lua
+-- Make sure you setup `cmp` after lsp-zero
+
 local cmp = require('cmp')
 
 cmp.setup({
