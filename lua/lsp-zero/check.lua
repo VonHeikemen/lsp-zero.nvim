@@ -26,7 +26,7 @@ function M.run(name)
   do
     local result = M.is_executable(name)
 
-    if result == false then
+    if result.cmd == '' then
       print(report)
       return
     end
@@ -72,7 +72,7 @@ function M.is_executable(name)
   local lsp = configs[name]
 
   if lsp == nil then
-    return false
+    return {cmd = '', result = false}
   end
 
   local cmd = lsp.cmd[1]

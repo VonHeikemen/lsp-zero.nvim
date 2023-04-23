@@ -80,6 +80,7 @@ function M.ensure_installed(list)
 end
 
 function M.on_attach(fn)
+  Server.setup_installer()
   if type(fn) == 'function' then
     Server.common_attach = fn
   end
@@ -212,12 +213,12 @@ end
 
 M.dir = {}
 
-function M.dir.find_all(list, dir)
-  return require('lsp-zero.dir').find_all(list, dir)
+function M.dir.find_all(list)
+  return require('lsp-zero.dir').find_all(list)
 end
 
-function M.dir.find_first(list, dir)
-  return require('lsp-zero.dir').find_first(list, dir)
+function M.dir.find_first(list)
+  return require('lsp-zero.dir').find_first(list)
 end
 
 ---

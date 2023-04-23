@@ -2,12 +2,12 @@ local M = {}
 
 local function get_cmp()
   local ok_cmp, cmp = pcall(require, 'cmp')
-  return ok_cmp and cmp or nil
+  return ok_cmp and cmp or {}
 end
 
 local function get_luasnip()
   local ok_luasnip, luasnip = pcall(require, 'luasnip')
-  return ok_luasnip and luasnip or nil
+  return ok_luasnip and luasnip or {}
 end
 
 function M.tab_complete(select_opts)

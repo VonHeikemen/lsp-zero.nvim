@@ -53,7 +53,7 @@ function M.extend_lspconfig()
     M.setup_installer()
     M.skip_server(config.name)
     if type(M.default_config) == 'table' then
-      s.apply_global_config(config, user_config)
+      s.apply_global_config(config, user_config, M.default_config)
     end
   end)
 end
@@ -115,7 +115,7 @@ function M.default_keymaps(opts)
       return
     end
 
-    local key_opts = {buffer = bufnr}
+    local key_opts = {buffer = buffer}
     vim.keymap.set(m, lhs, rhs, key_opts)
   end
 
@@ -216,7 +216,7 @@ function s.set_buf_commands(bufnr)
 
     local server = input.fargs[1]
     local timeout = input.fargs[2]
-    
+
     if timeout and timeout:find('timeout=') then
       timeout = timeout:gsub('timeout=', '')
       timeout = tonumber(timeout)
@@ -310,15 +310,15 @@ function s.map_check(mode, lhs)
   return cache
 end
 
-function s.apply_global_config(config, user_config)
-  local new_config = vim.deepcopy(M.default_config) 
+function s.apply_global_config(config, user_config, defaults)
+  local new_config = vim.deepcopy(defaults)
   s.tbl_merge(new_config, user_config)
 
   for key, val in pairs(new_config) do
     if type(val) == 'table' and not vim.tbl_islist(val) then
       s.tbl_merge(config[key], val)
     elseif (
-      key == 'on_new_config' 
+      key == 'on_new_config'
       and config[key]
       and config[key] ~= new_config[key]
     ) then

@@ -30,7 +30,7 @@ function M.preset(opts)
   local defaults = {}
 
   if opts == nil then
-    opts = {name = 'minimal'} 
+    opts = {name = 'minimal'}
   end
 
   if type(opts) == 'string' then

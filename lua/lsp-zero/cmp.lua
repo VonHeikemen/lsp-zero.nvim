@@ -58,7 +58,7 @@ function M.apply(cmp_opts, user_config)
   if type(opts.mapping) == 'table' then
     config.mapping = opts.mapping
   elseif (
-    vim.tbl_isempty(cmp_config.mapping) == false 
+    vim.tbl_isempty(cmp_config.mapping) == false
     and vim.tbl_isempty(config.mapping) == false
   ) then
     config.mapping = vim.tbl_deep_extend('force', config.mapping, cmp_config.mapping)
@@ -149,7 +149,7 @@ end
 function M.extra_mappings()
   local result = {
     -- toggle completion
-    ['<C-e>'] = cmp.mapping(function(fallback)
+    ['<C-e>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.abort()
       else

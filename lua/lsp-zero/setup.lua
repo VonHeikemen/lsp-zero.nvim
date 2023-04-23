@@ -73,7 +73,7 @@ function s.setup_servers(list, opts)
     Server.skip_server(name)
   end
 
-  for server, config in pairs(list) do
+  for server, _ in pairs(list) do
     local config = list[server] or {}
     Server.setup(server, config)
   end
