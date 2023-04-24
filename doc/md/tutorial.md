@@ -1,6 +1,6 @@
 # Tutorial
 
-Here we will learn enough to about Neovim to configure lsp-zero `v2.0`. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero `v2.0`. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
 
 ## Requirements
 
@@ -74,13 +74,13 @@ end
 vim.opt.rtp:prepend(lazypath)
 ```
 
-Notice in `lazypath` we use `stdpath('data')`, this will return the path to Neovim's data folder. So now we don't need to worry changing our paths depending on the operating system, Neovim will do that for us. If you want to inspect the path, use this command.
+Notice in `lazypath` we use `stdpath('data')`, this will return the path to Neovim's data folder. So now we don't need to worry about changing our paths depending on the operating system, Neovim will do that for us. If you want to inspect the path, use this command inside Neovim.
 
 ```vim
 :echo stdpath('data') . '/lazy/lazy.nvim'
 ```
 
-To actually use lazy.nvim we need to call the `.setup()` function of the lua module called `lazy`.
+To actually use lazy.nvim we need to call the `.setup()` function of the lua module called `lazy`. Like this.
 
 ```lua
 require('lazy').setup({
@@ -117,7 +117,7 @@ vim.cmd.colorscheme('tokyonight')
 
 5. Restart Neovim.
 
-When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugins download. After plugins are installed they will be loaded.
+When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugin's download. After the plugins are installed they will be loaded.
 
 ## Setup lsp-zero
 
@@ -167,7 +167,7 @@ Save the file, restart Neovim and wait for everything to be downloaded.
 
 Let's try to use the language server for lua. 
 
-Open your `init.lua` and execute the command `:LspInstall`. Now `mason.nvim` will suggest a language server.
+Open your `init.lua` and execute the command `:LspInstall`. Now `mason.nvim` will suggest a language server. Neovim should show a message like this.
 
 ```
 Please select which server you want to install for filetype "lua":
@@ -175,7 +175,7 @@ Please select which server you want to install for filetype "lua":
 Type number and <Enter> or click with the mouse (q or empty cancels):
 ```
 
-Choose 1 for `lua_ls`, then press enter. A floating window will show up. When the server is done installing it a message should appear.
+Choose 1 for `lua_ls`, then press enter. A floating window will show up. When the server is done installing, a message should appear.
 
 At the moment the language server can't start automatically, restart Neovim so the language server can be configured properly. Once the server starts you'll notice warning signs in the global variable vim, that means everything is well and good.
 
@@ -189,7 +189,7 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 Add this before the setup function of lsp-zero.
 
-That's it. You are all set. Exit and open neovim again, you should have full support for neovim's lua api.
+That's it. You are all set. Exit and open neovim again, you should have better support for neovim's lua api.
 
 ## Complete Example
 
