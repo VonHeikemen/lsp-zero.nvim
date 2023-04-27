@@ -4,7 +4,7 @@
 
 The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). This plugin is designed to be unopinionated and modular. What this means for us (the users) is that we have to assemble various pieces to get a good experience.
 
-When using a preset lsp-zero will configure nvim-cmp for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control de completion menu. Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server. And change the "formatting" of the completion items, it will add a label that tells the name of the source for that item.
+When using a preset lsp-zero will configure nvim-cmp for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control de completion menu. Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server. Finally, change the "formatting" of the completion items, it will add a label that tells the name of the source for that item.
 
 Here is the code lsp-zero will setup for you.
 
@@ -19,8 +19,8 @@ cmp.setup({
   mapping = {
     ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
-    ['<C-d>'] = cmp.mapping.scroll_docs(5),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<Up>'] = cmp.mapping.select_prev_item(cmp_select_opts),
     ['<Down>'] = cmp.mapping.select_next_item(cmp_select_opts),
     ['<C-p>'] = cmp.mapping(function()
@@ -42,6 +42,12 @@ cmp.setup({
     expand = function(args)
       require('luasnip').lsp_expand(args.body)
     end,
+  },
+  window = {
+    documentation = {
+      max_height = 15,
+      max_width = 60,
+    }
   },
   formatting = {
     fields = {'abbr', 'menu', 'kind'},
