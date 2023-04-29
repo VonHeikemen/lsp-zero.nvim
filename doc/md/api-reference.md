@@ -306,7 +306,7 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup_servers({'tssever', 'rust_analyzer'})
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 lsp.setup()
 ```
