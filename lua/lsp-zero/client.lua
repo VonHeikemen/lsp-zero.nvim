@@ -1,6 +1,6 @@
 local M = {}
 
-local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
+local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_start_client', {clear = true})
 
 function M.setup(opts)
   if opts.filetypes == nil then
