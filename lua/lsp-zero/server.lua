@@ -9,6 +9,7 @@ local s = {}
 local state = {
   exclude = {},
   capabilities = nil,
+  run_installer = false,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
@@ -50,7 +51,6 @@ function M.extend_lspconfig()
 
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
-    M.setup_installer()
     M.skip_server(config.name)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
@@ -252,14 +252,18 @@ function M.skip_server(name)
 end
 
 function M.setup_installer()
+  if state.run_installer then
+    return
+  end
+
+  state.run_installer = true
+
   local installer = require('lsp-zero.installer')
   local config = require('lsp-zero.settings').get()
 
   if config.call_servers == 'local' and installer.state == 'init' then
     installer.setup()
   end
-
-  M.setup_installer = function() end
 end
 
 function s.set_capabilities(current)
@@ -322,7 +326,8 @@ function s.apply_global_config(config, user_config, defaults)
       and config[key]
       and config[key] ~= new_config[key]
     ) then
-      config[key] = s.compose_fn(config[key], new_config[key])
+      local cb = config[key]
+      config[key] = s.compose_fn(cb, new_config[key])
     else
       config[key] = val
     end

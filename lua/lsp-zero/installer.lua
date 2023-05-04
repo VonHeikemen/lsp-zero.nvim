@@ -5,6 +5,10 @@ M.current = 'mason.nvim'
 M.state = 'init'
 
 function M.setup()
+  if M.state ~= 'init' then
+    return M.enabled
+  end
+
   local mason = M.load_module('mason')
   local lspconfig = M.load_module('mason-lspconfig')
 
