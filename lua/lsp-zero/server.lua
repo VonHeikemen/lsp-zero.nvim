@@ -341,9 +341,13 @@ function s.compose_fn(config_callback, user_callback)
   end
 end
 
+function s.is_keyval(v)
+  return type(v) == 'table' and not vim.tbl_islist(v)
+end
+
 function s.tbl_merge(old_val, new_val)
   for k, v in pairs(new_val) do
-    if type(v) == 'table' and not vim.tbl_islist(v) then
+    if s.is_keyval(old_val[k]) and s.is_keyval(v) then
       s.tbl_merge(old_val[k], v)
     else
       old_val[k] = v
