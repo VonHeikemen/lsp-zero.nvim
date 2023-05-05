@@ -319,7 +319,7 @@ function s.apply_global_config(config, user_config, defaults)
   s.tbl_merge(new_config, user_config)
 
   for key, val in pairs(new_config) do
-    if type(val) == 'table' and not vim.tbl_islist(val) then
+    if s.is_keyval(val) and s.is_keyval(config[key]) then
       s.tbl_merge(config[key], val)
     elseif (
       key == 'on_new_config'
