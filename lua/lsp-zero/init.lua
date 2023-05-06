@@ -221,6 +221,12 @@ function M.dir.find_first(list)
   return require('lsp-zero.dir').find_first(list)
 end
 
+M.omnifunc = {}
+
+function M.omnifunc.setup(opts)
+  require('lsp-zero.omnifunc').setup(opts)
+end
+
 ---
 -- Deprecated functions
 ---
