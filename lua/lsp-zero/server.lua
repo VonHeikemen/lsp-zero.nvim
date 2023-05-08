@@ -33,7 +33,13 @@ function M.extend_lspconfig()
       s.set_buf_commands(bufnr)
 
       if M.common_attach then
-        local client = vim.lsp.get_client_by_id(event.data.client_id)
+        local id = vim.tbl_get(event, 'data', 'client_id')
+        local client = nil 
+
+        if id then
+          client = vim.lsp.get_client_by_id(id)
+        end
+
         M.common_attach(client, bufnr)
       end
     end

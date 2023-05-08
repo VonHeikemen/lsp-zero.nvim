@@ -13,7 +13,14 @@ function M.format_on_save(opts)
   local format_opts = opts.format_opts or {}
 
   local filetype_setup = function(event)
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local client_id = vim.tbl_get(event, 'data', 'client_id')
+    if client_id == nil then
+      -- I don't know how this would happen
+      -- but apparently it can happen
+      return
+    end
+    
+    local client = vim.lsp.get_client_by_id(client_id)
     local files = list[client.name] or {}
 
     if type(files) == 'string' then
@@ -124,7 +131,14 @@ function M.format_mapping(key, opts)
   end
 
   local filetype_setup = function(event)
-    local client = vim.lsp.get_client_by_id(event.data.client_id)
+    local client_id = vim.tbl_get(event, 'data', 'client_id')
+    if client_id == nil then
+      -- I don't know how this would happen
+      -- but apparently it can happen
+      return
+    end
+
+    local client = vim.lsp.get_client_by_id(client_id)
     local files = list[client.name]
 
     if type(files) == 'string' then
