@@ -344,9 +344,9 @@ cmp.setup({
 
 ### Adding extra sources
 
-In nvim-cmp a "source" is a plugin (a neovim plugin) that provides the actual data displayed in the completion menu.
+In nvim-cmp a "source" is a neovim plugin that provides the actual data displayed in the completion menu.
 
-Here is a list of sources you might want to configure to get a better experience.
+Here is a list of sources you might want to configure (and install) to get a better experience.
 
 * [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
 
