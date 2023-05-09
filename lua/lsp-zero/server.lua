@@ -74,7 +74,15 @@ function M.setup(name, opts)
   end
 
   local lsp = require('lspconfig')[name]
-  lsp.setup(opts)
+  local ok = pcall(lsp.setup, opts)
+
+  if not ok then
+    local msg = '[lsp-zero] Failed to setup %s.\n\n' 
+      .. 'Configure this server manually using lspconfig to get the full error message.\n'
+      .. 'Or use the function .skip_server_setup() to disable the server.'
+
+    vim.notify(msg:format(name), vim.log.levels.WARN)
+  end
 end
 
 function M.set_default_capabilities(opts)
