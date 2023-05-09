@@ -37,13 +37,25 @@ lsp.setup()
 
 ### `.preset({opts})`
 
-The most basic usage `{opts}` can be a string with the name of a preset.
+Here is where you can add settings specific to lsp-zero. The default configuration is described in the [minimal preset](#minimal). 
+
+You can override any value of the preset by using a lua table, like this.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  float_border = 'none',
+})
+```
+
+In order to remain compatible with the `v1.x` branch `{opts}` can be a string with the name of a preset.
 
 ```lua
 local lsp = require('lsp-zero').preset('minimal')
 ```
 
-This creates a combination of settings suitable for common use cases. It supports the following presets:
+> I would like to get rid of these "named presets" in the future. It's better if you add the settings using a lua table.
+
+It supports the following presets:
 
 * [minimal](#minimal)
 * [recommended](#recommended)
@@ -51,11 +63,11 @@ This creates a combination of settings suitable for common use cases. It support
 * [manual-setup](#manual-setup)
 * [system-lsp](#system-lsp)
 
-You also have the ability to override any setting in the preset if you pass a lua table.
+When using a lua table as argument you can pass the property `name` to specify which preset you wish to use. And of course, you can still override the configuration in the preset.
 
 ```lua
 local lsp = require('lsp-zero').preset({
-  name = 'minimal',
+  name = 'recommended',
   call_servers = 'global',
 })
 ```

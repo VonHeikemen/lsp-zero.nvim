@@ -394,6 +394,8 @@ Settings and functions that will change in case I feel forced to created a `v3.x
 
 ### Preset settings
 
+I would like to get rid of named preset in the future. It's better if you use the default preset, the [minimal](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#minimal). I would advice against using the one called "recommended". Just add your settings using the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#presetopts) function.
+
 * `set_lsp_keymaps` will be removed in favor of [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#default_keymapsopts)
 
 ### Functions
