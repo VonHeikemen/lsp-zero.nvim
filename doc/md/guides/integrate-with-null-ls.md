@@ -1,4 +1,4 @@
-# Intergrate with null-ls
+# Integrate with null-ls
 
 ## Standalone null-ls instance
 
