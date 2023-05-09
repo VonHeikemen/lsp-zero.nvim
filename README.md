@@ -386,6 +386,7 @@ cmp.setup({
 * The preset `per-project` was removed in favor of the function [.store_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#store_configname-opts).
 * `suggest_lsp_servers` was removed. The suggestions are still available (they are a feature of [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)), they can be triggered manually using the command `:LspInstall`.
 * `cmp_capabilities` was removed. The features it enables will be configured automatically if [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is installed.
+* luasnip loaders need to be called manually by the user. See [luasnip documention for details](https://github.com/L3MON4D3/LuaSnip#add-snippets). If you are using `friendly-snippets` you'll want to add the one that says "from_vscode". In the autocomplete documentation you can find an [example configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets).
 
 ## Future Changes/Deprecation notice
 
@@ -415,6 +416,10 @@ lsp-zero has a function that will configure the lua language server for you: [.n
 ### Can I use the Enter key to confirm completion item?
 
 Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
+
+### My luasnip snippet don't show up in completion menu. How do I get them back?
+
+If you have this problem I assume you are migrating from the `v1.x` branch. What you have to do is add the luasnip source in nvim-cmp, then call the correct luasnip loader. You can find more details of this in the [documentation for autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets).
 
 ## Support
 
