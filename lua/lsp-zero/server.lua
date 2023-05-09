@@ -65,12 +65,16 @@ function M.extend_lspconfig()
 end
 
 function M.setup(name, opts)
-  if state.exclude[name] then
+  if type(name) ~= 'string' or state.exclude[name] then
     return
   end
 
+  if type(opts) ~= 'table' then
+    opts = {}
+  end
+
   local lsp = require('lspconfig')[name]
-  lsp.setup(opts or {})
+  lsp.setup(opts)
 end
 
 function M.set_default_capabilities(opts)
