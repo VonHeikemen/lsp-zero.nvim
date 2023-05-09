@@ -57,6 +57,9 @@ return {
     bsl = true,
     os = true
   },
+  buck2 = {
+    bzl = true
+  },
   bufls = {
     proto = true
   },
@@ -117,6 +120,15 @@ return {
   cucumber_language_server = {
     cucumber = true
   },
+  custom_elements_ls = {
+    html = true,
+    javascript = true,
+    ["javascript.jsx"] = true,
+    javascriptreact = true,
+    typescript = true,
+    ["typescript.tsx"] = true,
+    typescriptreact = true
+  },
   dafny = {
     dafny = true,
     dfy = true
@@ -139,6 +151,11 @@ return {
     dhall = true
   },
   diagnosticls = {},
+  digestif = {
+    context = true,
+    plaintex = true,
+    tex = true
+  },
   docker_compose_language_service = {
     yaml = true
   },
@@ -182,14 +199,19 @@ return {
     typescript = true
   },
   emmet_ls = {
+    astro = true,
     css = true,
     eruby = true,
     html = true,
+    htmldjango = true,
     javascriptreact = true,
     less = true,
+    pug = true,
     sass = true,
     scss = true,
-    typescriptreact = true
+    svelte = true,
+    typescriptreact = true,
+    vue = true
   },
   erg_language_server = {
     erg = true
@@ -302,6 +324,9 @@ return {
     systemverilog = true,
     verilog = true,
     vhdl = true
+  },
+  helm_ls = {
+    helm = true
   },
   hhvm = {
     hack = true,
@@ -422,6 +447,9 @@ return {
   nil_ls = {
     nix = true
   },
+  nim_langserver = {
+    nim = true
+  },
   nimls = {
     nim = true
   },
@@ -467,6 +495,9 @@ return {
   openscad_lsp = {
     openscad = true
   },
+  pact_ls = {
+    pact = true
+  },
   pasls = {
     pascal = true
   },
@@ -510,6 +541,9 @@ return {
     purescript = true
   },
   pylsp = {
+    python = true
+  },
+  pylyzer = {
     python = true
   },
   pyre = {
@@ -631,7 +665,11 @@ return {
     swift = true
   },
   sourcery = {
-    python = true
+    javascript = true,
+    javascriptreact = true,
+    python = true,
+    typescript = true,
+    typescriptreact = true
   },
   spectral = {
     json = true,
