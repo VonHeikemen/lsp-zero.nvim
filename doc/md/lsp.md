@@ -276,9 +276,9 @@ lsp.new_server({
 
 ## Enable Format on save
 
-When you enable format on save your LSP server is doing the formatting. The LSP server does not share the same style configuration as Neovim. What do I mean? Tabs and indents can change after the LSP formats the code in the file. Read the documentation of the LSP server you are using, figure out how to configure it to your prefered style.
+You have two ways to enable format on save.
 
-Now, to enable format on save you can choose one of these methods.
+Note: When you enable format on save your LSP server is doing the formatting. The LSP server does not share the same style configuration as Neovim. What do I mean? Tabs and indents can change after the LSP formats the code in the file. Read the documentation of the LSP server you are using, figure out how to configure it to your prefered style.
 
 ### Explicit setup
 
@@ -297,6 +297,9 @@ lsp.format_on_save({
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
+    -- if you have a working setup with null-ls
+    -- you can specify filetypes it can format.
+    -- ['null-ls'] = {'javascript', 'typescript'},
   }
 })
 
