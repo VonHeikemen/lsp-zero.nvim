@@ -360,6 +360,11 @@ Quick note: when you configure the `source` option in nvim-cmp the previous conf
 
 ```lua
 -- Make sure you setup `cmp` after lsp-zero
+-- And you will need to install these plugins:
+-- hrsh7th/cmp-path
+-- hrsh7th/cmp-nvim-lsp
+-- hrsh7th/cmp-buffer
+-- saadparwaiz1/cmp_luasnip
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
