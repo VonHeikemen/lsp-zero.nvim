@@ -381,10 +381,11 @@ local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
+  local opts = {buffer = bufnr}
 
   vim.keymap.set({'n', 'x'}, 'gq', function()
     vim.lsp.buf.format({async = false, timeout_ms = 10000})
-  end)
+  end, opts)
 end)
 
 lsp.setup()
@@ -431,9 +432,16 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
+    -- if you have a working setup with null-ls
+    -- you can specify filetypes it can format.
+    -- ['null-ls'] = {'javascript', 'typescript'},
   }
 })
 
