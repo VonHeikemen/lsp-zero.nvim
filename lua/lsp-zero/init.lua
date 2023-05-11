@@ -119,6 +119,9 @@ function M.use(servers, opts)
     servers = {servers}
   end
 
+  local bufnr = vim.api.nvim_get_current_buf()
+  local has_filetype = vim.bo.filetype ~= ''
+
   for _, name in ipairs(servers) do
     local config = vim.tbl_deep_extend(
       'force',
@@ -129,8 +132,8 @@ function M.use(servers, opts)
     local lsp = require('lspconfig')[name]
     lsp.setup(config)
 
-    if lsp.manager and vim.bo.filetype ~= '' then
-      lsp.manager.try_add_wrapper()
+    if lsp.manager and has_filetype then
+      lsp.manager.try_add_wrapper(bufnr)
     end
   end
 end
