@@ -353,7 +353,7 @@ s.autostart = function(lsp, autostart)
   local has_filetype = vim.bo.filetype ~= ''
 
   if autostart and lsp.manager and has_filetype then
-    lsp.manager.try_add_wrapper()
+    lsp.manager.try_add_wrapper(vim.api.nvim_get_current_buf())
   end
 end
 
