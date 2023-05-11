@@ -214,6 +214,10 @@ function M.buffer_autoformat(...)
   return require('lsp-zero.format').buffer_autoformat(...)
 end
 
+function M.async_autoformat(...)
+  return require('lsp-zero.format').async_autoformat(...)
+end
+
 M.dir = {}
 
 function M.dir.find_all(list)

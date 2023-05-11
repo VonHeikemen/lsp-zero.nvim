@@ -740,8 +740,8 @@ nvim_lua_ls({opts}): ~
 <
                                                    *lsp-zero.format_on_save()*
 format_on_save({opts}): ~
-    Setup autoformat on save using |vim.lsp.buf.format()|. This will to allow
-    you to associate a language server with a list of filetypes.
+    Setup autoformat on save. This will to allow you to associate a language
+    server with a list of filetypes.
 
     Keep in mind it's only meant to allow one LSP server per filetype,
     this is so the formatting is consistent.
@@ -755,6 +755,9 @@ format_on_save({opts}): ~
 
         * format_opts: (Table). These are the same options you can pass to
         |vim.lsp.buf.format()|.
+
+    When you enable async formatting the only argument in `format_opts` that
+    will have any effect is `formatting_options`, the rest will be ignored.
 
 >lua
     local lsp = require('lsp-zero').preset({})
@@ -799,7 +802,45 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
 
     lsp.setup()
 <
+                                               *lsp-zero.async_autoformat()*
 
+async_autoformat({client}, {bufnr}, {opts}): ~
+    Send a formatting request to {client}. After the getting the response
+    from the client it will save the file (again).
+
+    Here is how it works: when you save the file Neovim will write your
+    changes without formatting. Then, lsp-zero will send a request to
+    {client}, when it gets the response it will apply the formatting and
+    save the file again.
+
+      * client: (Table) It must be an instance of |vim.lsp.client|.
+
+      * bufnr: (Number, Optional) if provided it must be the id of an open
+      buffer.
+
+      * opts: (Table). Settings send to the language server. These are
+      the same settings as the `formatting_options` argument in
+      |vim.lsp.buf.format()|.
+
+    Do not use this in the global `on_attach`, call this function
+    with the specific language server you want to format with.
+
+    Here is an example.
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    require('lspconfig').tsserver.setup({
+      on_attach = function(client, bufnr)
+        lsp.async_autoformat(client, bufnr)
+      end
+    })
+
+    lsp.setup()
+<
                                                    *lsp-zero.format_mapping()*
 format_mapping({key}, {opts}): ~
     Configure {key} to format the current buffer.   

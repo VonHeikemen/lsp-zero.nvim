@@ -284,7 +284,7 @@ Note: When you enable format on save your LSP server is doing the formatting. Th
 
 If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
-Note: [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_saveopts) doesn't support async formatting.
+Note: asynchronous formatting on save is experimental right now (2023-05-11).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -294,6 +294,10 @@ lsp.on_attach(function(client, bufnr)
 end)
 
 lsp.format_on_save({
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
@@ -323,17 +327,31 @@ lsp.setup()
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
-You could be more specific if you give the name of a server to [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr).
-
-```lua
-lsp.buffer_autoformat({name = 'lua_ls'})
-```
+Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function.
 
 ### I really, really want asynchronous format on save
 
-Fine. But you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim). 
+There is this new experimental function called [.async_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#async_autoformatclient-bufnr-opts) (it was added on 2023-05-11). This only allows you to use **one** LSP server to do format on save. So the recommended method to call it will be in the `on_attach` function of the specific LSP you want to use.
 
-I always recommend having only one language server to format the buffer. This next example will show how to allow only a list of servers.
+Here is an example.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').tsserver.setup({
+  on_attach = function(client, bufnr)
+    lsp.async_autoformat(client, bufnr)
+  end,
+})
+
+lsp.setup()
+```
+
+If you want something exactly like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -341,6 +359,8 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
+  -- make sure you use clients with formatting capabilities
+  -- otherwise you'll get a warning message
   local allow_format = {'lua_ls', 'rust_analyzer'}
   if vim.tbl_contains(allow_format, client.name) then
     require('lsp-format').on_attach(client)

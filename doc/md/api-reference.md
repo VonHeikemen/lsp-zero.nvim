@@ -417,7 +417,7 @@ lsp-zero does not execute files. It only provides utility functions. So to execu
 
 ### `.format_on_save({opts})`
 
-Setup autoformat on save using [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()). This will to allow you to associate a language server with a list of filetypes.
+Setup autoformat on save. This will to allow you to associate a language server with a list of filetypes.
 
 Keep in mind it's only meant to allow one LSP server per filetype, this is so the formatting is consistent.
 
@@ -426,6 +426,8 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
 
   * format_opts: (Table). These are the options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+
+When you enable async formatting the only argument in `format_opts` that will have any effect is `formatting_options`, the rest will be ignored.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -436,6 +438,7 @@ end)
 
 lsp.format_on_save({
   format_opts = {
+    async = false,
     timeout_ms = 10000,
   },
   servers = {
@@ -457,7 +460,7 @@ If {client} argument is provided it will only use the LSP server associated with
 
   * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
 
-  * {opts}: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+  * opts: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -466,6 +469,36 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
   lsp.buffer_autoformat()
 end)
+
+lsp.setup()
+```
+
+### `.async_autoformat({client}, {bufnr}, {opts})`
+
+Send a formatting request to `{client}`. After the getting the response from the client it will save the file (again).
+
+Here is how it works: when you save the file Neovim will write your changes without formatting. Then, lsp-zero will send a request to `{client}`, when it gets the response it will apply the formatting and save the file again.
+
+* client: (Table) It must be an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
+
+* bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+* opts: (Table). Settings send to the language server. These are the same settings as the `formatting_options` argument in [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+
+Do not use this in the global `on_attach`, call this function with the specific language server you want to format with.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').tsserver.setup({
+  on_attach = function(client, bufnr)
+    lsp.async_autoformat(client, bufnr)
+  end
+})
 
 lsp.setup()
 ```
