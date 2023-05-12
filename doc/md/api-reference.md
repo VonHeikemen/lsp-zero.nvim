@@ -427,7 +427,7 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 
   * format_opts: (Table). These are the options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
 
-When you enable async formatting the only argument in `format_opts` that will have any effect is `formatting_options`, the rest will be ignored.
+When you enable async formatting the only argument in `format_opts` that will have any effect are `formatting_options` and `timeout_ms`, the rest will be ignored.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -483,7 +483,11 @@ Here is how it works: when you save the file Neovim will write your changes with
 
 * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
 
-* opts: (Table). Settings send to the language server. These are the same settings as the `formatting_options` argument in [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+* opts: (Table, Optional) Supports the following properties:
+  
+  * formatting_options: (Table, Optional) Settings send to the language server. These are the same settings as the `formatting_options` argument in [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+
+  * timeout_ms: (Number, Optional) Defaults to 10000. Time in milliseconds to ignore the current format request.
 
 Do not use this in the global `on_attach`, call this function with the specific language server you want to format with.
 

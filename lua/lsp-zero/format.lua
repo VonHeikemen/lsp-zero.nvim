@@ -2,6 +2,7 @@ local M = {}
 local s = {}
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
+local timer = false
 
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
@@ -19,6 +20,7 @@ function M.format_on_save(opts)
       format_opts = format_opts.formatting_options,
       setup_augroup = setup_id,
       format_augroup = format_id,
+      timeout_ms = format_opts.timeout_ms or timeout_ms
     })
     return
   end
@@ -124,7 +126,7 @@ function M.buffer_autoformat(client, bufnr, format_opts)
   })
 end
 
-function M.async_autoformat(client, bufnr, format_opts)
+function M.async_autoformat(client, bufnr, opts)
   if type(client) ~= 'table' or client.id == nil then
     return
   end
@@ -133,6 +135,7 @@ function M.async_autoformat(client, bufnr, format_opts)
     return
   end
 
+  opts = opts or {}
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
 
@@ -145,8 +148,10 @@ function M.async_autoformat(client, bufnr, format_opts)
   local fmt_opts = {}
 
   if type(format_opts) == 'table' then
-    fmt_opts = format_opts
+    fmt_opts = opts.formatting_options
   end
+
+  local timeout = opts.timeout_ms or timeout_ms
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 
@@ -157,7 +162,7 @@ function M.async_autoformat(client, bufnr, format_opts)
     desc = desc:format(client.name or client.id),
     buffer = bufnr,
     callback = function(e)
-      s.request_format(client.id, e.buf, fmt_opts)
+      s.request_format(client.id, e.buf, fmt_opts, timeout)
     end,
   })
 end
@@ -283,7 +288,7 @@ function s.setup_async_format(opts)
       desc = string.format('Request format to %s', client.name),
       buffer = event.buf,
       callback = function(e)
-        s.request_format(client_id, e.buf, opts.format_opts)
+        s.request_format(client_id, e.buf, opts.format_opts, opts.timeout_ms)
       end,
     })
   end
@@ -295,7 +300,7 @@ function s.setup_async_format(opts)
   })
 end
 
-function s.request_format(client_id, buffer, format_opts)
+function s.request_format(client_id, buffer, format_opts, timeout)
   if vim.b.lsp_zero_format_progress == 1 then
     local msg = '[lsp-zero] A formatting request is already in progress.'
     vim.notify(msg, vim.log.levels.WARN)
@@ -303,6 +308,7 @@ function s.request_format(client_id, buffer, format_opts)
   end
 
   local autoformat = vim.b.lsp_zero_enable_autoformat
+
   local enabled = (autoformat == 1 or autoformat == true)
   if not enabled then
     return
@@ -314,6 +320,16 @@ function s.request_format(client_id, buffer, format_opts)
 
   vim.b.lsp_zero_changedtick = vim.b.changedtick
   vim.b.lsp_zero_format_progress = 1
+  timer = vim.loop.new_timer()
+
+  local cleanup = vim.schedule_wrap(function()
+    timer:stop()
+    timer:close()
+    timer = false
+    s.format_cleanup(buffer)
+  end)
+
+  timer:start(timeout, 0, cleanup)
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
   local client = vim.lsp.get_client_by_id(client_id)
@@ -330,7 +346,16 @@ function s.format_handler(err, result, ctx)
   local fmt_var = 'lsp_zero_format_progress'
   local tick_var = 'lsp_zero_changedtick'
   local buffer = ctx.bufnr
+
   buf_set(buffer, fmt_var, 0)
+  
+  if timer then
+    timer:stop()
+    timer:close()
+    timer = false
+  elseif timer == false then
+    return
+  end
 
   if err ~= nil then
     vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
@@ -367,6 +392,27 @@ function s.format_handler(err, result, ctx)
   if buffer == vim.api.nvim_get_current_buf() then
     pcall(vim.api.nvim_command, 'noautocmd update')
     buf_set(buffer, tick_var, vim.b.changedtick)
+  end
+end
+
+function s.format_cleanup(buffer)
+  if vim.fn.bufexists(buffer) == 0 then
+    return
+  end
+
+  local buf_get = vim.api.nvim_buf_get_var
+  local buf_set = vim.api.nvim_buf_set_var
+
+  buf_set(buffer, 'lsp_zero_format_progress', 0)
+
+  local msg = '[lsp-zero] Format request timeout. LSP server is taking too long to respond.'
+  vim.notify(msg, vim.log.levels.WARN)
+
+  local changedtick = buf_get(buffer, 'lsp_zero_changedtick')
+  local current_changedtick = buf_get(buffer, 'changedtick')
+
+  if changedtick  == current_changedtick then
+    buf_set(buffer, 'lsp_zero_changedtick', changedtick - 1)
   end
 end
 
