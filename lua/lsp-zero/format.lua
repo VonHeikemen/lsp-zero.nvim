@@ -358,6 +358,10 @@ function s.format_handler(timer, err, result, ctx)
     timer = nil
   end
 
+  if vim.fn.bufexists(buffer) == 0 then
+    return
+  end
+
   if err ~= nil then
     vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
     buf_set(buffer, fmt_var, 0)
@@ -375,11 +379,6 @@ function s.format_handler(timer, err, result, ctx)
     end
 
     vim.notify(msg, vim.log.levels.WARN)
-    buf_set(buffer, fmt_var, 0)
-    return
-  end
-
-  if vim.fn.bufexists(buffer) == 0 then
     buf_set(buffer, fmt_var, 0)
     return
   end
