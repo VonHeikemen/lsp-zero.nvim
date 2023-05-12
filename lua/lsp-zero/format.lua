@@ -2,7 +2,6 @@ local M = {}
 local s = {}
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
-local timer = false
 
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
@@ -320,23 +319,27 @@ function s.request_format(client_id, buffer, format_opts, timeout)
 
   vim.b.lsp_zero_changedtick = vim.b.changedtick
   vim.b.lsp_zero_format_progress = 1
-  timer = vim.loop.new_timer()
+  local timer = vim.loop.new_timer()
 
   local cleanup = vim.schedule_wrap(function()
     timer:stop()
     timer:close()
-    timer = false
+    timer = nil
     s.format_cleanup(buffer)
   end)
 
   timer:start(timeout, 0, cleanup)
 
+  local handler = function(err, result, ctx)
+    s.format_handler(timer, err, result, ctx)
+  end
+
   local params = vim.lsp.util.make_formatting_params(format_opts)
   local client = vim.lsp.get_client_by_id(client_id)
-  client.request('textDocument/formatting', params, s.format_handler, buffer)
+  client.request('textDocument/formatting', params, handler, buffer)
 end
 
-function s.format_handler(err, result, ctx)
+function s.format_handler(timer, err, result, ctx)
   -- handler based on the implementation of lsp-format.nvim
   -- see: https://github.com/lukas-reineke/lsp-format.nvim
 
@@ -347,12 +350,12 @@ function s.format_handler(err, result, ctx)
   local tick_var = 'lsp_zero_changedtick'
   local buffer = ctx.bufnr
 
-  if timer then
+  if timer == nil or timer:get_due_in() == 0 then
+    return
+  else
     timer:stop()
     timer:close()
-    timer = false
-  elseif timer == false then
-    return
+    timer = nil
   end
 
   buf_set(buffer, fmt_var, 0)
