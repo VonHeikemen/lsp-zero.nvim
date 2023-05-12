@@ -364,9 +364,18 @@ function s.format_handler(timer, err, result, ctx)
     vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
     return
   end
+  vim.print(ctx)
 
   if result == nil then
-    local msg = '[lsp-zero] Could not format file.'
+    local msg = '[lsp-zero] LSP server could not format file.'
+
+    if ctx.client_id then
+      local client = vim.lsp.get_client_by_id(ctx.client_id)
+      if client.name then
+        msg = string.format('[lsp-zero] %s could not format file', client.name)
+      end
+    end
+
     vim.notify(msg, vim.log.levels.WARN)
     return
   end
