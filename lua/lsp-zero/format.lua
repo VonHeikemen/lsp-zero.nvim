@@ -358,13 +358,11 @@ function s.format_handler(timer, err, result, ctx)
     timer = nil
   end
 
-  buf_set(buffer, fmt_var, 0)
-
   if err ~= nil then
     vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
+    buf_set(buffer, fmt_var, 0)
     return
   end
-  vim.print(ctx)
 
   if result == nil then
     local msg = '[lsp-zero] LSP server could not format file.'
@@ -377,10 +375,12 @@ function s.format_handler(timer, err, result, ctx)
     end
 
     vim.notify(msg, vim.log.levels.WARN)
+    buf_set(buffer, fmt_var, 0)
     return
   end
 
   if vim.fn.bufexists(buffer) == 0 then
+    buf_set(buffer, fmt_var, 0)
     return
   end
 
@@ -396,10 +396,12 @@ function s.format_handler(timer, err, result, ctx)
   if current_changedtick ~= buf_changedtick then
     local msg = '[lsp-zero] Format canceled. Buffer was modified after request.'
     vim.notify(msg, vim.log.levels.WARN)
+    buf_set(buffer, fmt_var, 0)
     return
   end
 
   vim.lsp.util.apply_text_edits(result, buffer, 'utf-16')
+  buf_set(buffer, fmt_var, 0)
 
   if buffer == vim.api.nvim_get_current_buf() then
     pcall(vim.api.nvim_command, 'noautocmd update')
