@@ -313,7 +313,7 @@ function s.request_format(client_id, buffer, format_opts)
   end
 
   vim.b.lsp_zero_changedtick = vim.b.changedtick
-  vim.b.lsp_zero_format_progress = 1
+  vim.b.lsp_zero_format_progress = 0
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
   local client = vim.lsp.get_client_by_id(client_id)
