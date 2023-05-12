@@ -347,8 +347,6 @@ function s.format_handler(err, result, ctx)
   local tick_var = 'lsp_zero_changedtick'
   local buffer = ctx.bufnr
 
-  buf_set(buffer, fmt_var, 0)
-  
   if timer then
     timer:stop()
     timer:close()
@@ -356,6 +354,8 @@ function s.format_handler(err, result, ctx)
   elseif timer == false then
     return
   end
+
+  buf_set(buffer, fmt_var, 0)
 
   if err ~= nil then
     vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
