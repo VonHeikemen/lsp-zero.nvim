@@ -339,8 +339,7 @@ lsp.on_attach(function(client, bufnr)
 
   -- make sure you use clients with formatting capabilities
   -- otherwise you'll get a warning message
-  local allow_format = {'lua_ls', 'rust_analyzer'}
-  if vim.tbl_contains(allow_format, client.name) then
+  if client.supports_method('textDocument/formatting') then
     require('lsp-format').on_attach(client)
   end
 end)
