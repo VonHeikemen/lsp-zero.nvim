@@ -329,29 +329,7 @@ If you have multiple servers active in one file it'll try to format using all of
 
 Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function.
 
-### I really, really want asynchronous format on save
-
-There is this new experimental function called [.async_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#async_autoformatclient-bufnr-opts) (it was added on 2023-05-11). This only allows you to use **one** LSP server to do format on save. So the recommended method to call it will be in the `on_attach` function of the specific LSP you want to use.
-
-Here is an example.
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-require('lspconfig').tsserver.setup({
-  on_attach = function(client, bufnr)
-    lsp.async_autoformat(client, bufnr)
-  end,
-})
-
-lsp.setup()
-```
-
-If you want something exactly like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
+If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -374,7 +352,7 @@ lsp.setup()
 
 ### Using built-in functions
 
-You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap.
+You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will format the current buffer using **all** active servers with formatting capabilities.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -391,9 +369,7 @@ end)
 lsp.setup()
 ```
 
-With this the keyboard shortcut `gq` will be able to format the current buffer using **all** active servers with formatting capabilities.
-
-If you want to allow only a list of servers, use the `filter` option.
+If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -417,8 +393,6 @@ end)
 
 lsp.setup()
 ```
-
-Using this `allow_format` function you can specify the language servers that you want to use.
 
 ### Ensure only one LSP server per filetype
 
