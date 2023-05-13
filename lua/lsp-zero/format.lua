@@ -146,7 +146,7 @@ function M.async_autoformat(client, bufnr, opts)
   bufnr = bufnr or vim.api.nvim_get_current_buf()
   local fmt_opts = {}
 
-  if type(format_opts) == 'table' then
+  if type(opts) == 'table' then
     fmt_opts = opts.formatting_options
   end
 
@@ -317,6 +317,10 @@ function s.request_format(client_id, buffer, format_opts, timeout)
     return
   end
 
+  if timeout <= 0 then
+    timeout = timeout_ms
+  end
+
   vim.b.lsp_zero_changedtick = vim.b.changedtick
   vim.b.lsp_zero_format_progress = 1
   local timer = vim.loop.new_timer()
@@ -325,13 +329,20 @@ function s.request_format(client_id, buffer, format_opts, timeout)
     timer:stop()
     timer:close()
     timer = nil
-    s.format_cleanup(buffer)
+    s.format_cleanup(buffer, client_id)
   end)
 
   timer:start(timeout, 0, cleanup)
 
   local handler = function(err, result, ctx)
-    s.format_handler(timer, err, result, ctx)
+    if timer == nil or timer:get_due_in() == 0 then
+      return
+    end
+
+    timer:stop()
+    timer:close()
+    timer = nil
+    s.format_handler(err, result, ctx)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
@@ -339,7 +350,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   client.request('textDocument/formatting', params, handler, buffer)
 end
 
-function s.format_handler(timer, err, result, ctx)
+function s.format_handler(err, result, ctx)
   -- handler based on the implementation of lsp-format.nvim
   -- see: https://github.com/lukas-reineke/lsp-format.nvim
 
@@ -349,14 +360,6 @@ function s.format_handler(timer, err, result, ctx)
   local fmt_var = 'lsp_zero_format_progress'
   local tick_var = 'lsp_zero_changedtick'
   local buffer = ctx.bufnr
-
-  if timer == nil or timer:get_due_in() == 0 then
-    return
-  else
-    timer:stop()
-    timer:close()
-    timer = nil
-  end
 
   if vim.fn.bufexists(buffer) == 0 then
     return
@@ -408,18 +411,26 @@ function s.format_handler(timer, err, result, ctx)
   end
 end
 
-function s.format_cleanup(buffer)
+function s.format_cleanup(buffer, client_id)
   if vim.fn.bufexists(buffer) == 0 then
     return
   end
 
   local buf_get = vim.api.nvim_buf_get_var
   local buf_set = vim.api.nvim_buf_set_var
+  local client = vim.lsp.get_client_by_id(client_id)
+
 
   buf_set(buffer, 'lsp_zero_format_progress', 0)
 
-  local msg = '[lsp-zero] Format request timeout. LSP server is taking too long to respond.'
-  vim.notify(msg, vim.log.levels.WARN)
+  local msg = '[lsp-zero] Format request timeout. %s is taking too long to respond.'
+  local name = 'LSP server'
+
+  if client and client.id then
+    name = client.name or string.format('Client %s', client.id)
+  end
+
+  vim.notify(msg:format(name), vim.log.levels.WARN)
 
   local changedtick = buf_get(buffer, 'lsp_zero_changedtick')
   local current_changedtick = buf_get(buffer, 'changedtick')
