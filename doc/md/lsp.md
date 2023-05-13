@@ -351,7 +351,7 @@ lsp.setup()
 
 ### Using built-in functions
 
-You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will format the current buffer using **all** active servers with formatting capabilities.
+You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will create a keymap `gq` to format the current buffer using **all** active servers with formatting capabilities.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -396,6 +396,8 @@ lsp.setup()
 ### Ensure only one LSP server per filetype
 
 If you want to control exactly what language server can format, use the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_mappingkey-opts). It will allow you to associate a list of filetypes to a particular language server.
+
+Here is an example using `gq` as the keymap.
 
 ```lua
 local lsp = require('lsp-zero').preset({})

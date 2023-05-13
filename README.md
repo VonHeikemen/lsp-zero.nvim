@@ -322,8 +322,15 @@ To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7t
 Here is an example configuration.
 
 ```lua
--- Make sure you setup `cmp` after lsp-zero
+local lsp = require('lsp-zero').preset({})
 
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup()
+
+-- You need to setup `cmp` after lsp-zero
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -359,8 +366,15 @@ Here is a list of sources you might want to configure (and install) to get a bet
 Quick note: when you configure the `source` option in nvim-cmp the previous config will be overriden. This means that is if you use it you need to add the source for LSP again.
 
 ```lua
--- Make sure you setup `cmp` after lsp-zero
--- And you will need to install these plugins:
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup()
+
+-- For this to work you need to install these plugins:
 -- hrsh7th/cmp-path
 -- hrsh7th/cmp-nvim-lsp
 -- hrsh7th/cmp-buffer
