@@ -197,9 +197,22 @@ Note that defining an `on_init` hook in a language server will override the one 
 If you just want to disable it for a particular server, use lspconfig to assign the `on_init` hook to that server.
 
 ```lua
-require('lspconfig').lua_ls.setup({
+require('lspconfig').tsserver.setup({
   on_init = function(client)
     client.server_capabilities.semanticTokensProvider = nil
+  end,
+})
+```
+
+### Disable formatting capabilities
+
+Sometimes you might want to prevent Neovim from using a language server as a formatter. For this you can use the `on_init` hook to modify the client instance.
+
+```lua
+require('lspconfig').tsserver.setup({
+  on_init = function(client)
+    client.server_capabilities.documentFormattingProvider = false
+    client.server_capabilities.documentFormattingRangeProvider = false
   end,
 })
 ```
