@@ -325,11 +325,16 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   vim.b.lsp_zero_format_progress = 1
   local timer = vim.loop.new_timer()
 
+  local client = vim.lsp.get_client_by_id(client_id)
+  local encoding = client.offset_encoding
+  local client_name = client.name
+    or string.format('Client %s', client.id)
+
   local cleanup = vim.schedule_wrap(function()
     timer:stop()
     timer:close()
     timer = nil
-    s.format_cleanup(buffer, client_id)
+    s.format_cleanup(buffer, client_name)
   end)
 
   timer:start(timeout, 0, cleanup)
@@ -342,11 +347,16 @@ function s.request_format(client_id, buffer, format_opts, timeout)
     timer:stop()
     timer:close()
     timer = nil
+
+    ctx.userdata = {
+      client_name = client_name,
+      encoding = encoding,
+    }
+
     s.format_handler(err, result, ctx)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
-  local client = vim.lsp.get_client_by_id(client_id)
   client.request('textDocument/formatting', params, handler, buffer)
 end
 
@@ -366,22 +376,15 @@ function s.format_handler(err, result, ctx)
   end
 
   if err ~= nil then
-    vim.notify('[lsp-zero] Format request failed', vim.log.levels.WARN)
+    vim.notify('[lsp-zero] Format request failed.', vim.log.levels.WARN)
     buf_set(buffer, fmt_var, 0)
     return
   end
 
   if result == nil then
-    local msg = '[lsp-zero] LSP server could not format file.'
+    local msg = '[lsp-zero] %s could not format file.'
 
-    if ctx.client_id then
-      local client = vim.lsp.get_client_by_id(ctx.client_id)
-      if client.name then
-        msg = string.format('[lsp-zero] %s could not format file', client.name)
-      end
-    end
-
-    vim.notify(msg, vim.log.levels.WARN)
+    vim.notify(msg:format(ctx.userdata.client_name), vim.log.levels.WARN)
     buf_set(buffer, fmt_var, 0)
     return
   end
@@ -402,7 +405,7 @@ function s.format_handler(err, result, ctx)
     return
   end
 
-  vim.lsp.util.apply_text_edits(result, buffer, 'utf-16')
+  vim.lsp.util.apply_text_edits(result, buffer, ctx.userdata.encoding)
   buf_set(buffer, fmt_var, 0)
 
   if buffer == vim.api.nvim_get_current_buf() then
@@ -411,26 +414,19 @@ function s.format_handler(err, result, ctx)
   end
 end
 
-function s.format_cleanup(buffer, client_id)
+function s.format_cleanup(buffer, client_name)
   if vim.fn.bufexists(buffer) == 0 then
     return
   end
 
   local buf_get = vim.api.nvim_buf_get_var
   local buf_set = vim.api.nvim_buf_set_var
-  local client = vim.lsp.get_client_by_id(client_id)
-
 
   buf_set(buffer, 'lsp_zero_format_progress', 0)
 
   local msg = '[lsp-zero] Format request timeout. %s is taking too long to respond.'
-  local name = 'LSP server'
 
-  if client and client.id then
-    name = client.name or string.format('Client %s', client.id)
-  end
-
-  vim.notify(msg:format(name), vim.log.levels.WARN)
+  vim.notify(msg:format(client_name), vim.log.levels.WARN)
 
   local changedtick = buf_get(buffer, 'lsp_zero_changedtick')
   local current_changedtick = buf_get(buffer, 'changedtick')
