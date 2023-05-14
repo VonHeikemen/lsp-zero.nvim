@@ -94,7 +94,9 @@ function M.buffer_autoformat(client, bufnr, format_opts)
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 
-  vim.b.lsp_zero_enable_autoformat = 1
+  if vim.b.lsp_zero_enable_autoformat == nil then
+    vim.b.lsp_zero_enable_autoformat = 1
+  end
 
   local config = vim.tbl_deep_extend(
     'force',
@@ -117,10 +119,16 @@ function M.buffer_autoformat(client, bufnr, format_opts)
     vim.lsp.buf.format(config)
   end
 
+  local desc = 'Format current buffer'
+
+  if client.name then
+    desc = string.format('Format buffer with %s', client.name)
+  end
+
   autocmd('BufWritePre', {
     group = format_id,
     buffer = bufnr,
-    desc = 'Format current buffer',
+    desc = desc,
     callback = apply_format
   })
 end
@@ -154,11 +162,12 @@ function M.async_autoformat(client, bufnr, opts)
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 
-  local desc = 'Format buffer using %s'
+  local desc = 'Request format to %s'
+  local client_name = client.name or string.format('Client %s', client.id)
 
   autocmd('BufWritePost', {
     group = format_id,
-    desc = desc:format(client.name or client.id),
+    desc = desc:format(client_name),
     buffer = bufnr,
     callback = function(e)
       s.request_format(client.id, e.buf, fmt_opts, timeout)
