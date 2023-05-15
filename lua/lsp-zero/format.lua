@@ -13,7 +13,7 @@ function M.format_on_save(opts)
   local list = opts.servers or {}
   local format_opts = opts.format_opts or {}
 
-  if opts.format_opts.async then
+  if format_opts.async then
     s.setup_async_format({
       servers = list,
       format_opts = format_opts.formatting_options,
