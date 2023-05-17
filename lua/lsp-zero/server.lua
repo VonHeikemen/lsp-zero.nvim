@@ -34,7 +34,7 @@ function M.extend_lspconfig()
 
       if M.common_attach then
         local id = vim.tbl_get(event, 'data', 'client_id')
-        local client = nil 
+        local client = {}
 
         if id then
           client = vim.lsp.get_client_by_id(id)
@@ -45,19 +45,19 @@ function M.extend_lspconfig()
     end
   })
 
-  local ok, lspconfig = pcall(require, 'lspconfig')
-  if not ok then
+  local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 1) or {}
+
+  if #lsp_txt == 0 then
     return
   end
 
-  local util = lspconfig.util
+  local util = require('lspconfig.util')
 
   -- Set client capabilities
   util.default_config.capabilities = s.set_capabilities()
 
   -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
-    M.skip_server(config.name)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
     end
@@ -73,11 +73,18 @@ function M.setup(name, opts)
     opts = {}
   end
 
+  M.skip_server(name)
+
   local lsp = require('lspconfig')[name]
+
+  if lsp.manager then
+    return
+  end
+
   local ok = pcall(lsp.setup, opts)
 
   if not ok then
-    local msg = '[lsp-zero] Failed to setup %s.\n\n' 
+    local msg = '[lsp-zero] Failed to setup %s.\n\n'
       .. 'Configure this server manually using lspconfig to get the full error message.\n'
       .. 'Or use the function .skip_server_setup() to disable the server.'
 
