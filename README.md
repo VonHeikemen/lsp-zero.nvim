@@ -379,9 +379,12 @@ lsp.setup()
 -- hrsh7th/cmp-nvim-lsp
 -- hrsh7th/cmp-buffer
 -- saadparwaiz1/cmp_luasnip
+-- rafamadriz/friendly-snippets
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
+
+require('luasnip.loaders.from_vscode').lazy_load()
 
 cmp.setup({
   sources = {
