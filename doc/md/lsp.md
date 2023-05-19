@@ -315,8 +315,10 @@ lsp.format_on_save({
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
     -- if you have a working setup with null-ls
-    -- you can specify filetypes it can format.
-    -- ['null-ls'] = {'javascript', 'typescript'},
+    -- you can specify filetypes it can format
+    -- for instance with prettier enabled, this can format many web related file types
+    -- ['null-ls'] = { 'json', 'html', 'css', 'scss', 'javascriptreact', 'typescriptreact', 'javascript', 'typescript' },
+
   }
 })
 
