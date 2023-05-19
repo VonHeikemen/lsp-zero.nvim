@@ -431,6 +431,8 @@ lsp.format_mapping('gq', {
     ['rust_analyzer'] = {'rust'},
     -- if you have a working setup with null-ls
     -- you can specify filetypes it can format.
+    -- see https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md#prettier 
+    -- for a set of filetypes useful for prettier null-ls integration
     -- ['null-ls'] = {'javascript', 'typescript'},
   }
 })
