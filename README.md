@@ -243,6 +243,26 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 ```
 
+### What to do if you suspect lsp-zero is doing something wrong?
+
+Use a minimal configuration. Delete or comment out your original config. Then make a new one with just the functions you need.
+
+Here is an example testing `tsserver`.
+
+```lua
+require('mason').setup()
+require('mason-lspconfig').setup()
+
+local lsp = require('lsp-zero')
+lsp.extend_cmp()
+
+require('lspconfig').tsserver.setup({
+  on_attach = function(client, bufnr)
+    lsp.default_keymaps({buffer = bufnr})
+  end
+})
+```
+
 ## Language servers
 
 Here are some things you need to know:
