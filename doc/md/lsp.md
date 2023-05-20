@@ -27,7 +27,7 @@ lsp_defaults.capabilities = vim.tbl_deep_extend(
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(event)
-    local opts = {buffer = true}
+    local opts = {buffer = event.buf}
 
     vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
     vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
@@ -45,6 +45,10 @@ vim.api.nvim_create_autocmd('LspAttach', {
     vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts) 
   end
 })
+
+-- call mason.nvim if installed 
+-- require('mason').setup()
+-- require('mason-lspconfig').setup()
 
 lspconfig.tsserver.setup({})
 lspconfig.eslint.setup({})
@@ -146,8 +150,6 @@ require('lspconfig').eslint.setup({
 
 lsp.setup()
 ```
-
-Keep in mind that plugins like [rust-tools](https://github.com/simrat39/rust-tools.nvim) and [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) use lspconfig under the hood, you must configure them after lsp-zero.
 
 For backwards compatibility with the `v1.x` branch the [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#configurename-opts) function is still available. So this is still valid.
 
@@ -626,8 +628,14 @@ You'll need these plugins:
 After you have installed all that you configure them in this order.
 
 ```lua
-require('mason').setup()
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    -- Create your keybindings here...
+  end
+})
 
+require('mason').setup()
 require('mason-lspconfig').setup({
   ensure_installed = {
     -- Replace these with whatever servers you want to install
@@ -636,16 +644,12 @@ require('mason-lspconfig').setup({
   }
 })
 
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-local lsp_attach = function(client, bufnr)
-  -- Create your keybindings here...
-end
-
 local lspconfig = require('lspconfig')
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
 require('mason-lspconfig').setup_handlers({
   function(server_name)
     lspconfig[server_name].setup({
-      on_attach = lsp_attach,
       capabilities = lsp_capabilities,
     })
   end,
@@ -662,11 +666,8 @@ local get_servers = require('mason-lspconfig').get_installed_servers
 
 for _, server_name in ipairs(get_servers()) do
   lspconfig[server_name].setup({
-    on_attach = lsp_attach,
     capabilities = lsp_capabilities,
   })
 end
 ```
-
-To learn how to use the `on_attach` option you can read the help page `:help lspconfig-keybindings`.
 
