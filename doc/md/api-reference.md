@@ -339,26 +339,6 @@ lsp.skip_server_setup({'eslint', 'rust_analyzer'})
 lsp.setup()
 ```
 
-### `.ensure_installed({list})`
-
-If you have support for mason.nvim enabled it will install all the servers in `{list}`. The names of the servers should match the ones listed here: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.ensure_installed({
-  'tsserver',
-  'eslint', 
-  'rust_analyzer',
-})
-
-lsp.setup()
-```
-
 ### `.build_options({name}, {opts})`
 
 Returns all the parameters lsp-zero uses to initialize a language server. This includes default capabilities and settings that were added using the [.set_server_config()](#set_server_configopts) function.
@@ -698,55 +678,6 @@ cmp.setup({
 
 `{opts}` supports the same properties [manage_nvim_cmp](#manage_nvim_cmp) has.
 
-### `.extend_lspconfig({opts})`
-
-The purpose of this function is to allow you to interact with `lspconfig` directly and still get some features lsp-zero offers.
-
-It "extends" the default configuration in `lspconfig` by adding the `capabilities` provided by cmp_nvim_lsp. And, it creates an autocommand that executes a function everytime a language server is attached to a buffer.
-
-Note: don't use it along side [.setup()](#setup). It is meant to be independent of any settings provided by presets.
-
-This is the intended usage:
-
-```lua
-require('mason').setup()
-require('mason-lspconfig').setup()
-require('lsp-zero').extend_lspconfig()
-
-require('lspconfig').tsserver.setup({})
-```
-
-Notice here it can coexists with other plugins. Allowing you to have full control of your configuration.
-
-`{opts}` table supports the following properties:
-
-* `set_lsp_keymaps`: it supports the same properties as the [preset counter part](#set_lsp_keymaps).
-
-* `capabilities`: These are the "client capabilities" a language server expects. This argument will be merge nvim-cmp's default capabilities if you have it installed.
-
-* `on_attach`: This must be a function. Think of it as "global" `on_attach` so you don't have to keep passing a function to each server's setup function.
-
-Here's an example that showcase each option.
-
-```lua
--- There is no need to copy any of this
-
-require('lsp-zero').extend_lspconfig({
-  set_lsp_keymaps = {omit = {'gs', 'gl'}},
-  on_attach = function(client, bufnr)
-    print('hello there')
-  end,
-  capabilities = {
-    textDocument = {
-      foldingRange = {
-        dynamicRegistration = false,
-        lineFoldingOnly = true
-      }
-    }
-  }
-})
-```
-
 ### `.omnifunc.setup({opts})`
 
 Configure the behavior of Neovim's completion mechanism. If for some reason you refuse to install nvim-cmp you can use this function to make the built-in completions more user friendly.
@@ -811,6 +742,26 @@ lsp.omnifunc.setup({
 ### Deprecated functions
 
 The following functions will be remove in the future, whenever I feel forced to create a `v3.x` branch (I have no plans for this yet).
+
+### `.ensure_installed({list})`
+
+If you have support for mason.nvim enabled it will install all the servers in `{list}`. The names of the servers should match the ones listed here: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.ensure_installed({
+  'tsserver',
+  'eslint', 
+  'rust_analyzer',
+})
+
+lsp.setup()
+```
 
 ### `.set_preferences({opts})`
 
@@ -878,3 +829,51 @@ Returns the entire configuration table for nvim-cmp. If you provide the `{opts}`
 
 Returns the neovim specific settings for `lua_ls` language server.
 
+### `.extend_lspconfig({opts})`
+
+The purpose of this function is to allow you to interact with `lspconfig` directly and still get some features lsp-zero offers.
+
+It "extends" the default configuration in `lspconfig` by adding the `capabilities` provided by cmp_nvim_lsp. And, it creates an autocommand that executes a function everytime a language server is attached to a buffer.
+
+Note: don't use it along side [.setup()](#setup). It is meant to be independent of any settings provided by presets.
+
+This is the intended usage:
+
+```lua
+require('mason').setup()
+require('mason-lspconfig').setup()
+require('lsp-zero').extend_lspconfig()
+
+require('lspconfig').tsserver.setup({})
+```
+
+Notice here it can coexists with other plugins. Allowing you to have full control of your configuration.
+
+`{opts}` table supports the following properties:
+
+* `set_lsp_keymaps`: it supports the same properties as the [preset counter part](#set_lsp_keymaps).
+
+* `capabilities`: These are the "client capabilities" a language server expects. This argument will be merge nvim-cmp's default capabilities if you have it installed.
+
+* `on_attach`: This must be a function. Think of it as "global" `on_attach` so you don't have to keep passing a function to each server's setup function.
+
+Here's an example that showcase each option.
+
+```lua
+-- There is no need to copy any of this
+
+require('lsp-zero').extend_lspconfig({
+  set_lsp_keymaps = {omit = {'gs', 'gl'}},
+  on_attach = function(client, bufnr)
+    print('hello there')
+  end,
+  capabilities = {
+    textDocument = {
+      foldingRange = {
+        dynamicRegistration = false,
+        lineFoldingOnly = true
+      }
+    }
+  }
+})
+```

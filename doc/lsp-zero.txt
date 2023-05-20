@@ -648,17 +648,6 @@ skip_server_setup({list}): ~
 >lua
     lsp.skip_server_setup({'eslint', 'rust_analyzer'})
 <
-                                                 *lsp-zero.ensure_installed()*
-
-ensure_installed({list}): ~
-    Installs all the servers in {list} if they are missing.
->lua
-      lsp.ensure_installed({
-        'html',
-        'cssls',
-        'tsserver'
-      })
-<
                                                     *lsp-zero.build_options()*
 
 build_options({server}, {opts}): ~
@@ -1103,63 +1092,6 @@ extend_cmp({opts}): ~
       }
     })
 <
-                                                 *lsp-zero.extend_lspconfig()*
-
-.extend_lspconfig({opts}): ~
-    The purpose of this function is to allow you to interact with lspconfig
-    directly and still get some features lsp-zero offers.
-
-    It adds the capabilities provided by cmp_nvim_lsp to the default
-    configuration in lspconfig. It also creates an autocommand that
-    executes a function everytime a language server is attached
-    to a buffer.
-
-    Note: don't use it along side |lsp-zero.setup()|. This function
-    is independent of any settings provided by presets.
-
-    This is the intended usage:
->lua
-    require('mason').setup()
-    require('mason-lspconfig').setup()
-    require('lsp-zero').extend_lspconfig()
-
-    require('lspconfig').tsserver.setup({})
-<
-    Notice here it can coexists with other plugins. Allowing you to have
-    full control of your configuration.
-
-    {opts} table supports the following properties:
-
-        set_lsp_keymaps: ~
-            It supports the same properties as the preset counter part.
-
-        capabilities: ~
-            These are the "client capabilities" a language server expects.
-            This argument will be merge nvim-cmp's default capabilities
-            if you have it installed.
-
-        on_attach: ~
-            This must be a function. Think of it as "global" on_attach
-            so you don't have to keep passing a function to each
-            server's setup function.
-
-    Here's an example that showcase each option.
->lua
-    require('lsp-zero').extend_lspconfig({
-      set_lsp_keymaps = {omit = {'<C-k>', 'gl'}},
-      on_attach = function(client, bufnr)
-        print('hello there')
-      end,
-      capabilities = {
-        textDocument = {
-          foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true
-          }
-        }
-      }
-    })
-<
                                                    *lsp-zero.omnifunc.setup()*
 
 .omnifunc.setup({opts}): ~
@@ -1359,6 +1291,74 @@ defaults.cmp_config({opts}): ~
 defaults.nvim_workspace({opts}): ~
     Returns the neovim specific settings for `lua_ls` language server.
 
+                                                 *lsp-zero.ensure_installed()*
+
+ensure_installed({list}): ~
+    Installs all the servers in {list} if they are missing.
+>lua
+      lsp.ensure_installed({
+        'html',
+        'cssls',
+        'tsserver'
+      })
+<
+                                                 *lsp-zero.extend_lspconfig()*
+
+.extend_lspconfig({opts}): ~
+    The purpose of this function is to allow you to interact with lspconfig
+    directly and still get some features lsp-zero offers.
+
+    It adds the capabilities provided by cmp_nvim_lsp to the default
+    configuration in lspconfig. It also creates an autocommand that
+    executes a function everytime a language server is attached
+    to a buffer.
+
+    Note: don't use it along side |lsp-zero.setup()|. This function
+    is independent of any settings provided by presets.
+
+    This is the intended usage:
+>lua
+    require('mason').setup()
+    require('mason-lspconfig').setup()
+    require('lsp-zero').extend_lspconfig()
+
+    require('lspconfig').tsserver.setup({})
+<
+    Notice here it can coexists with other plugins. Allowing you to have
+    full control of your configuration.
+
+    {opts} table supports the following properties:
+
+        set_lsp_keymaps: ~
+            It supports the same properties as the preset counter part.
+
+        capabilities: ~
+            These are the "client capabilities" a language server expects.
+            This argument will be merge nvim-cmp's default capabilities
+            if you have it installed.
+
+        on_attach: ~
+            This must be a function. Think of it as "global" on_attach
+            so you don't have to keep passing a function to each
+            server's setup function.
+
+    Here's an example that showcase each option.
+>lua
+    require('lsp-zero').extend_lspconfig({
+      set_lsp_keymaps = {omit = {'<C-k>', 'gl'}},
+      on_attach = function(client, bufnr)
+        print('hello there')
+      end,
+      capabilities = {
+        textDocument = {
+          foldingRange = {
+            dynamicRegistration = false,
+            lineFoldingOnly = true
+          }
+        }
+      }
+    })
+<
 ==============================================================================
 Version                                                     *lsp-zero-version*
 

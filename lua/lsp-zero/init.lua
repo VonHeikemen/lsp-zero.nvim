@@ -72,13 +72,6 @@ function M.skip_server_setup(list)
   end
 end
 
-function M.ensure_installed(list)
-  Server.setup_installer()
-  if type(list) == 'table' then
-    s.args.install = list
-  end
-end
-
 function M.on_attach(fn)
   Server.setup_installer()
   if type(fn) == 'function' then
@@ -146,40 +139,6 @@ function M.set_sign_icons(opts)
   Server.set_sign_icons(opts)
 end
 
-function M.extend_lspconfig(opts)
-  if s.args.preset ~= 'none' then
-    return
-  end
-
-  local ok = pcall(require, 'lspconfig')
-
-  if not ok then
-    local msg = "[lsp-zero] Could not find the module lspconfig. Please make sure 'nvim-lspconfig' is installed."
-    vim.notify(msg, vim.log.levels.ERROR)
-    return
-  end
-
-  local defaults_opts = {
-    set_lsp_keymaps = false,
-    capabilities = {},
-    on_attach = nil,
-  }
-
-  opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
-
-  Server.enable_keymaps = opts.set_lsp_keymaps
-
-  if Server.enable_keymaps == true then
-    Server.enable_keymaps = {}
-  end
-
-  M.on_attach(opts.on_attach)
-
-  if type(opts.capabilities) == 'table' then
-    Server.set_default_capabilities(opts.capabilities)
-  end
-end
-
 function M.default_keymaps(opts)
   opts = opts or {buffer = 0}
   Server.default_keymaps(opts)
@@ -237,6 +196,13 @@ end
 ---
 -- Deprecated functions
 ---
+
+function M.ensure_installed(list)
+  Server.setup_installer()
+  if type(list) == 'table' then
+    s.args.install = list
+  end
+end
 
 function M.set_preferences(opts)
   if type(opts) == 'table' then
@@ -315,6 +281,40 @@ function M.defaults.cmp_config(opts)
   end
 
   return config
+end
+
+function M.extend_lspconfig(opts)
+  if s.args.preset ~= 'none' then
+    return
+  end
+
+  local ok = pcall(require, 'lspconfig')
+
+  if not ok then
+    local msg = "[lsp-zero] Could not find the module lspconfig. Please make sure 'nvim-lspconfig' is installed."
+    vim.notify(msg, vim.log.levels.ERROR)
+    return
+  end
+
+  local defaults_opts = {
+    set_lsp_keymaps = false,
+    capabilities = {},
+    on_attach = nil,
+  }
+
+  opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
+
+  Server.enable_keymaps = opts.set_lsp_keymaps
+
+  if Server.enable_keymaps == true then
+    Server.enable_keymaps = {}
+  end
+
+  M.on_attach(opts.on_attach)
+
+  if type(opts.capabilities) == 'table' then
+    Server.set_default_capabilities(opts.capabilities)
+  end
 end
 
 return M
