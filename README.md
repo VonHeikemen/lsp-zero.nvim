@@ -245,9 +245,11 @@ lsp.setup()
 
 ### What to do if you suspect lsp-zero is doing something wrong?
 
-Use a minimal configuration. Delete or comment out your original config. Then make a new one with just the functions you need.
+If you check the introduction in the [LSP documentation](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#introduction) you'll find a quick explanation of what lsp-zero is doing to setup your LSP servers. TL;DR is nothing special.
 
-Here is an example testing `tsserver`.
+If you still want to rule out (or confirm) lsp-zero as the source of whatever issue you have, use a minimal configuration. Delete or comment out your original config. Then make a new one with just the functions you need.
+
+Here is an example with a manual setup of `tsserver`.
 
 ```lua
 require('mason').setup()
