@@ -82,7 +82,7 @@ It can be a boolean or a lua table.
 
 Supported properties:
 
-* `preserve_mappings`. Boolean. When set to `false` lsp-zero will not override any shortcut that is already "taken". When set to `true` lsp-zero the LSP shortcuts will be created no matter what.
+* `preserve_mappings`. Boolean. When set to `true` lsp-zero will not override any shortcut that is already "taken". When set to `false` lsp-zero the LSP shortcuts will be created no matter what.
 
 * `omit`. List of strings. List of shorcuts you don't want lsp-zero to override.
 
