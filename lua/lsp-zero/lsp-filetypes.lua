@@ -654,6 +654,9 @@ return {
   solidity_ls = {
     solidity = true
   },
+  solidity_ls_nomicfoundation = {
+    solidity = true
+  },
   sorbet = {
     ruby = true
   },
