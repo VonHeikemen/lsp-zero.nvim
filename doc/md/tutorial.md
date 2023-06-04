@@ -36,7 +36,7 @@ Open Neovim again and you should notice the light theme. If you get an error it 
 
 If you can't upgrade Neovim you can still install `v1.0` of lsp-zero, I have another tutorial for that:
 
-* [Getting started with neovim's native LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3)
+* [Getting started with neovim's native LSP client](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/tutorial.md)
 
 Assuming everything went well, you can now change the theme to something else.
 
