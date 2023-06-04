@@ -379,6 +379,8 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 
   * format_opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
     
+    * async: (Boolean, optional). If true it will send an asynchronous format request to the LSP server.
+
     * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Defaults to `10000`.
 
     * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
@@ -394,6 +396,7 @@ local lsp = require('lsp-zero').preset({
 
 lsp.format_on_save({
   format_opts = {
+    async = false,
     timeout_ms = 10000
   },
   servers = {
@@ -432,6 +435,41 @@ local lsp = require('lsp-zero').preset({
 lsp.on_attach(function(client, bufnr)
   lsp.buffer_autoformat()
 end)
+
+lsp.setup()
+```
+
+### `.async_autoformat({client}, {bufnr}, {opts})`
+
+Send a formatting request to `{client}`. After the getting the response from the client it will save the file (again).
+
+Here is how it works: when you save the file Neovim will write your changes without formatting. Then, lsp-zero will send a request to `{client}`, when it gets the response it will apply the formatting and save the file again.
+
+* client: (Table) It must be an instance of [vim.lsp.client](https://neovim.io/doc/user/lsp.html#vim.lsp.client).
+
+* bufnr: (Number, Optional) if provided it must be the id of an open buffer.
+
+* opts: (Table, Optional) Supports the following properties:
+  
+  * formatting_options: (Table, Optional) Settings send to the language server. These are the same settings as the `formatting_options` argument in [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+
+  * timeout_ms: (Number, Optional) Defaults to 10000. Time in milliseconds to ignore the current format request.
+
+Do not use this in the global `on_attach`, call this function with the specific language server you want to format with.
+
+```lua
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.configure('tsserver', {
+  on_attach = function(client, bufnr)
+    lsp.async_autoformat(client, bufnr)
+  end
+})
 
 lsp.setup()
 ```

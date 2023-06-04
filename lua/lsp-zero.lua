@@ -349,8 +349,12 @@ M.format_on_save = function(opts)
   require('lsp-zero.format').format_on_save(opts)
 end
 
-M.buffer_autoformat = function(client)
-  require('lsp-zero.format').buffer_autoformat(client)
+M.buffer_autoformat = function(...)
+  require('lsp-zero.format').buffer_autoformat(...)
+end
+
+M.async_autoformat = function(...)
+  require('lsp-zero.format').async_autoformat(...)
 end
 
 M.format_mapping = function(...)

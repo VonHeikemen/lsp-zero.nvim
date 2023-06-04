@@ -289,6 +289,10 @@ local lsp = require('lsp-zero').preset({
 })
 
 lsp.format_on_save({
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
@@ -317,12 +321,29 @@ end)
 lsp.setup()
 ```
 
-If you have multiple servers active in one file it'll try to format using all of them, and I can't warranty the order.
+If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
-You could be more specific if you give the name of a server to [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr).
+Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function.
+
+If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
-lsp.buffer_autoformat({name = 'lua_ls'})
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.on_attach(function(client, bufnr)
+  -- make sure you use clients with formatting capabilities
+  -- otherwise you'll get a warning message
+  if client.supports_method('textDocument/formatting') then
+    require('lsp-format').on_attach(client)
+  end
+end)
+
+lsp.setup()
 ```
 
 ## Format buffer using a keybinding
@@ -396,6 +417,10 @@ local lsp = require('lsp-zero').preset({
 })
 
 lsp.format_mapping('gq', {
+  format_opts = {
+    async = false,
+    timeout_ms = 10000,
+  },
   servers = {
     ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
