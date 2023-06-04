@@ -6,7 +6,7 @@
 
 The following tutorial will teach you how to create a minimal config from scratch. You'll learn how to use a plugin manager and setup lsp-zero v1.
 
-* [Getting started with neovim's LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3#starting-from-scratch)
+* [Getting started with neovim's LSP client](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/tutorial.md)
 
 ### Template configuration
 
