@@ -60,6 +60,9 @@ return {
   buck2 = {
     bzl = true
   },
+  buddy_ls = {
+    mlir = true
+  },
   bufls = {
     proto = true
   },
@@ -93,6 +96,9 @@ return {
   },
   cmake = {
     cmake = true
+  },
+  cobol_ls = {
+    cobol = true
   },
   codeqlls = {
     ql = true
@@ -509,6 +515,9 @@ return {
   },
   perlpls = {
     perl = true
+  },
+  pest_ls = {
+    pest = true
   },
   phan = {
     php = true
