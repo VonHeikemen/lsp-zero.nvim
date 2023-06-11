@@ -107,5 +107,35 @@ function M.luasnip_shift_supertab(select_opts)
   end, {'i', 's'})
 end
 
+function M.luasnip_next_or_expand(select_opts)
+  local cmp = get_cmp()
+  local luasnip = get_luasnip()
+
+  return cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.select_next_item(select_opts)
+    elseif luasnip.expand_or_jumpable() then
+      luasnip.expand_or_jump()
+    else
+      fallback()
+    end
+  end, {'i', 's'})
+end
+
+function M.luasnip_next(select_opts)
+  local cmp = get_cmp()
+  local luasnip = get_luasnip()
+
+  return cmp.mapping(function(fallback)
+    if cmp.visible() then
+      cmp.select_next_item(select_opts)
+    elseif luasnip.jumpable(1) then
+      luasnip.jump(1)
+    else
+      fallback()
+    end
+  end, {'i', 's'})
+end
+
 return M
 

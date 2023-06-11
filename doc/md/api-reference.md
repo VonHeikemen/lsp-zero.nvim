@@ -637,6 +637,10 @@ These are the supported methods:
 
 * `luasnip_jump_backward`: Go to the previous placeholder in the snippet.
 
+* `luasnip_next`: If completion menu is visible it will navigate to the item in the list. If the cursor can jump to a snippet placeholder, it moves to it. Else, it uses the fallback.
+
+* `luasnip_next_or_expand`: If completion menu is visible it will navigate to the item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a snippet placeholder, it moves to it. Else, it uses the fallback.
+
 * `luasnip_supertab`: If the completion menu is visible it will navigate to the next item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a snippet placeholder, it moves to it. If the cursor is in the middle of a word that doesn't trigger a snippet it displays the completion menu. Else, it uses the fallback.
 
 * `luasnip_shift_supertab`: If the completion menu is visible it will navigate to previous item in the list. If the cursor can navigate to a previous snippet placeholder, it moves to it. Else, it uses the fallback.
