@@ -422,6 +422,9 @@ return {
   marksman = {
     markdown = true
   },
+  matlab_ls = {
+    matlab = true
+  },
   metals = {
     scala = true
   },
@@ -443,6 +446,9 @@ return {
   move_analyzer = {
     move = true
   },
+  nelua_lsp = {
+    nelua = true
+  },
   neocmake = {
     cmake = true
   },
@@ -458,6 +464,9 @@ return {
   },
   nimls = {
     nim = true
+  },
+  nixd = {
+    nix = true
   },
   nomad_lsp = {
     ["hcl.nomad"] = true,
@@ -704,6 +713,9 @@ return {
     bzl = true,
     star = true
   },
+  statix = {
+    nix = true
+  },
   steep = {
     eruby = true,
     ruby = true
@@ -730,6 +742,9 @@ return {
   svls = {
     systemverilog = true,
     verilog = true
+  },
+  swift_mesonls = {
+    meson = true
   },
   syntax_tree = {
     ruby = true
@@ -855,6 +870,10 @@ return {
   vala_ls = {
     genie = true,
     vala = true
+  },
+  vale_ls = {
+    markdown = true,
+    text = true
   },
   vdmj = {
     vdmpp = true,
