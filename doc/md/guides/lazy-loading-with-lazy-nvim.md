@@ -1,6 +1,6 @@
 # Lazy loading with lazy.nvim
 
-Lots of you really like this lazy loading business. Let me tell you just show you how to defer everything in lsp-zero using [lazy.nvim](https://github.com/folke/lazy.nvim).
+Lots of you really like this lazy loading business. Let me show you how to defer everything in lsp-zero using [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 ```lua
 {
