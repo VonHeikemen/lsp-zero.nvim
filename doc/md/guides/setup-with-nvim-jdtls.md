@@ -6,7 +6,7 @@ Here we will focus on getting a working configuration using [nvim-jdtls](https:/
 
 * A working environment with Java 17 or greater
 * Python 3.9 or greater
-* A working configuration for Neovim (If you don't have one, follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md))
+* A working configuration for Neovim (If you don't have one, follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md))
 
 The code on this guide assumes you will be using [mason.nvim](https://github.com/williamboman/mason.nvim) to install the following packages:
 
@@ -37,7 +37,7 @@ You can still follow this guide if you are using another operating system.
 
 We need to tell lsp-zero to ignore the LSP server `jdtls`. We want the plugin `nvim-jdtls` to have full control of the configuration for the server.
 
-We will use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#skip_server_setuplist) to make sure lsp-zero doesn't initialize jdtls.
+We will use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#skip_server_setuplist) to make sure lsp-zero doesn't initialize jdtls.
 
 ```lua
 local lsp = require('lsp-zero').preset({})

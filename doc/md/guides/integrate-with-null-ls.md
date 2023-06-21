@@ -29,7 +29,7 @@ null_ls.setup({
 
 ### Format buffer using only null-ls
 
-You can assign a keyboard shortcut using the [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_mappingkey-opts) function. This will allow you to specify a list of filetypes where you want to format using null-ls. 
+You can assign a keyboard shortcut using the [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_mappingkey-opts) function. This will allow you to specify a list of filetypes where you want to format using null-ls. 
 
 Here is an example showing a setup focused on lua and javascript. We assign the keymap `gq` to format.
 
@@ -67,7 +67,7 @@ null_ls.setup({
 
 ### Format on save
 
-This can be almost the same as the previous example, except here we replace the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_mappingkey-opts) with [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#format_on_save-opts).
+This can be almost the same as the previous example, except here we replace the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_mappingkey-opts) with [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_save-opts).
 
 ```lua
 local lsp = require('lsp-zero').preset({})

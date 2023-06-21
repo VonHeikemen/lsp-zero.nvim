@@ -6,7 +6,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'dev-v3',
     lazy = true,
     config = function()
       -- This is where you modify the settings for lsp-zero
@@ -26,7 +26,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     config = function()
       -- Here is where you configure the autocompletion settings.
       -- The arguments for .extend() have the same shape as `manage_nvim_cmp`: 
-      -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#manage_nvim_cmp
+      -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#manage_nvim_cmp
 
       require('lsp-zero.cmp').extend()
 

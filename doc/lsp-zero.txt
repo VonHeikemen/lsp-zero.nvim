@@ -1373,7 +1373,7 @@ ensure_installed({list}): ~
 ==============================================================================
 Version                                                     *lsp-zero-version*
 
-Current version: `v2.x`
+Current version: `dev-v3`
 
 The code on this version requires Neovim v0.8 or greater. If you need support
 for Neovim v0.7 or lower use the `v1.x` branch of lsp.zero.

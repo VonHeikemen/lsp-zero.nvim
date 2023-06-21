@@ -128,7 +128,7 @@ require('lazy').setup({
   {'folke/tokyonight.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'dev-v3',
     dependencies = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required
@@ -216,7 +216,7 @@ require('lazy').setup({
   {'folke/tokyonight.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'dev-v3',
     dependencies = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required

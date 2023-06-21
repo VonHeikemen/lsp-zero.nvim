@@ -25,7 +25,7 @@ vim.opt.rtp:prepend(lazypath)
 require('lazy').setup({
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v2.x',
+    branch = 'dev-v3',
     dependencies = {
       -- LSP Support
       {'neovim/nvim-lspconfig'},             -- Required
@@ -73,7 +73,7 @@ call plug#begin()
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
   Plug 'L3MON4D3/LuaSnip'         " Required
 
-  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
+  Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'dev-v3'}
 call plug#end()
 
 
