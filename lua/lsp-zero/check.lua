@@ -1,18 +1,8 @@
 local M = {}
-local installer = require('lsp-zero.installer')
 
 function M.run(name)
   local report = 'LSP server: ' .. name
   local concat = function(msg) return string.format('%s\n%s', report, msg) end
-
-  if installer.enabled then
-    local result = M.installed(name)
-    local msg = '- was not installed with ' .. installer.current
-    if result then
-      msg = '+ was installed with ' .. installer.current
-    end
-    report = concat(msg)
-  end
 
   do
     local result = M.configured(name)
@@ -48,16 +38,6 @@ function M.run(name)
   end
 
   print(report)
-end
-
-function M.installed(name)
-  if installer.enabled == false then
-    print("lsp-zero can only verify LSP servers installed with " .. installer.current)
-    return false
-  end
-
-  local servers = installer.get_servers()
-  return vim.tbl_contains(servers, name)
 end
 
 function M.configured(name)

@@ -1,34 +1,32 @@
 local M = {
   default_config = false,
   common_attach = nil,
-  enable_keymaps = false,
 }
 
 local s = {}
 
 local state = {
   exclude = {},
+  autocmd = false,
+  lspconfig = false,
   capabilities = nil,
-  run_installer = false,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
-function M.extend_lspconfig()
-  -- Set on_attach hook
+function M.setup_autocmd()
+  if state.autocmd then
+    return
+  end
+
+  state.autocmd = true
+
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
+
   vim.api.nvim_create_autocmd('LspAttach', {
     group = lsp_cmds,
     desc = 'lsp-zero on_attach',
     callback = function(event)
       local bufnr = event.buf
-
-      if type(M.enable_keymaps) == 'table' then
-        M.default_keymaps({
-          buffer = bufnr,
-          preserve_mappings = M.enable_keymaps.preserve_mappings,
-          omit = M.enable_keymaps.omit,
-        })
-      end
 
       s.set_buf_commands(bufnr)
 
@@ -44,19 +42,22 @@ function M.extend_lspconfig()
       end
     end
   })
+end
 
-  local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 1) or {}
+function M.extend_lspconfig()
+  local runtime_file = vim.api.nvim_get_runtime_file
 
-  if #lsp_txt == 0 then
+  local lsp_txt = runtime_file('doc/lspconfig.txt', 0) or {}
+  state.lspconfig = #lsp_txt > 0
+
+  if state.lspconfig == false then
     return
   end
 
   local util = require('lspconfig.util')
 
-  -- Set client capabilities
   util.default_config.capabilities = s.set_capabilities()
 
-  -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
@@ -66,19 +67,19 @@ end
 
 function M.setup(name, opts)
   if type(name) ~= 'string' or state.exclude[name] then
-    return
+    return false
   end
 
   if type(opts) ~= 'table' then
     opts = {}
   end
 
-  M.skip_server(name)
+  M.skip_setup(name)
 
   local lsp = require('lspconfig')[name]
 
   if lsp.manager then
-    return
+    return false
   end
 
   local ok = pcall(lsp.setup, opts)
@@ -89,7 +90,10 @@ function M.setup(name, opts)
       .. 'Or use the function .skip_server_setup() to disable the server.'
 
     vim.notify(msg:format(name), vim.log.levels.WARN)
+    return false
   end
+
+  return true
 end
 
 function M.set_default_capabilities(opts)
@@ -118,21 +122,21 @@ function M.default_keymaps(opts)
 
   local buffer = opts.buffer or 0
   local keep_defaults = true
-  local omit = {}
+  local exclude = {}
 
   if type(opts.preserve_mappings) == 'boolean' then
     keep_defaults = opts.preserve_mappings
   end
 
-  if type(opts.omit) == 'table' then
-    omit = opts.omit
+  if type(opts.exclude) == 'table' then
+    exclude = opts.exclude
   end
 
   local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
   local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
 
   local map = function(m, lhs, rhs)
-    if vim.tbl_contains(omit, lhs) then
+    if vim.tbl_contains(exclude, lhs) then
       return
     end
 
@@ -270,44 +274,27 @@ function s.set_buf_commands(bufnr)
   )
 end
 
-function M.skip_server(name)
+function M.skip_setup(name)
   if type(name) == 'string' then
     state.exclude[name] = true
   end
 end
 
-function M.setup_installer()
-  if state.run_installer then
-    return
-  end
-
-  state.run_installer = true
-
-  local installer = require('lsp-zero.installer')
-  local config = require('lsp-zero.settings').get()
-
-  if config.call_servers == 'local' and installer.state == 'init' then
-    installer.setup()
-  end
-end
-
 function s.set_capabilities(current)
   if state.capabilities == nil then
-    local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 1)
-    local ok_lsp_source, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+    local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 0)
     local cmp_default_capabilities = {}
     local base = {}
 
-    local ok_lspconfig, lspconfig = pcall(require, 'lspconfig')
-
-    if ok_lspconfig then
-      base = lspconfig.util.default_config.capabilities
+    if state.lspconfig then
+      base = require('lspconfig.util').default_config.capabilities
     else
       base = vim.lsp.protocol.make_client_capabilities()
     end
 
-    if #cmp_txt > 0 and ok_lsp_source then
-       cmp_default_capabilities = cmp_lsp.default_capabilities()
+    if #cmp_txt > 0 then
+      local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+      cmp_default_capabilities = ok and cmp_lsp.default_capabilities() or {}
     end
 
     state.capabilities = vim.tbl_deep_extend(

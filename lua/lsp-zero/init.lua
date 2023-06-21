@@ -1,79 +1,95 @@
-local M = {defaults = {}}
+local noop = function() end
+
+local M = {}
 local s = {
-  setup_status = 'pending',
   lsp_project_configs = {},
-  args = {
-    preset = 'none',
-    cmp_opts = {},
-    servers = {},
-    skip_servers = {},
-    install = {},
-    server_config = {}
-  }
 }
 
-local Server = require('lsp-zero.server')
-
-if vim.fn.has('nvim-0.8') == 1 then
-  Server.extend_lspconfig()
-else
-  local msg = '[lsp-zero] You need Neovim v0.8 or greater to use lsp-zero v2.\n'
-    .. 'Use the v1.x branch if you need compatibility with Neovim v0.7 or lower.'
-  vim.notify(msg, vim.log.levels.WARN)
-end
+M.setup = noop
 
 function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
 end
 
-function M.setup()
-  if s.setup_status == 'complete' then
-    return
+function M.extend_cmp(opts)
+  require('lsp-zero.cmp').extend(opts)
+end
+
+function M.installed()
+  local ok, mason = pcall(require, 'mason-lspconfig')
+  if not ok then
+    return {}
   end
 
-  s.setup_status = 'complete'
-
-  require('lsp-zero.setup').apply(s.args)
+  return mason.get_installed_servers()
 end
 
 function M.preset(opts)
-  require('lsp-zero.settings').preset(opts)
-  Server.setup_installer()
+  opts = opts or {}
+
+  if opts.extend_lspconfig == nil then
+    opts.extend_lspconfig = true
+  end
+
+  require('lsp-zero.ui').setup({
+    float_border = opts.float_border,
+    set_signcolumn = opts.set_signcolumn,
+  })
+  
+  local Server = require('lsp-zero.server')
+
+  Server.setup_autocmd()
+  
+  if opts.extend_lspconfig then
+    Server.extend_lspconfig()
+  end
+
   return M
 end
 
-function M.setup_servers(list)
+function M.setup_servers(list, opts)
   if type(list) ~= 'table' then
     return
   end
 
-  for _, name in ipairs(list) do
-    s.args.servers[name] = {}
+  opts = opts or {}
+
+  local setup = function()
+    local Server = require('lsp-zero.server')
+    local exclude = opts.exclude or {}
+    local autostart = not (vim.bo.filetype == '')
+    local bufnr = vim.api.nvim_get_current_buf()
+
+    for _, name in ipairs(list) do
+      if not vim.tbl_contains(exclude, name) then
+        local ok = Server.setup(name, {})
+
+        if autostart and ok then
+          require('lspconfig')[name].manager.try_add_wrapper(bufnr)
+        end
+      end
+    end
   end
+
+  if opts.defer then
+    vim.schedule(setup)
+    return
+  end
+
+  setup()
 end
 
 function M.configure(name, opts)
-  local arg_type = type(opts)
-  if arg_type == 'table' then
-    s.args.servers[name] = opts
-    M.store_config(name, opts)
-  elseif opts then
-    s.args.servers[name] = {}
-  end
-end
+  local Server = require('lsp-zero.server')
 
-function M.skip_server_setup(list)
-  if type(list) ~= 'table' then
-    return
-  end
-
-  for _, name in ipairs(list) do
-    s.args.skip_servers[name] = true
-  end
+  M.store_config(name, opts)
+  Server.setup(name, opts)
 end
 
 function M.on_attach(fn)
-  Server.setup_installer()
+  local Server = require('lsp-zero.server')
+  Server.setup_autocmd()
+
   if type(fn) == 'function' then
     Server.common_attach = fn
   end
@@ -81,12 +97,15 @@ end
 
 function M.set_server_config(opts)
   if type(opts) == 'table' then
+    local Server = require('lsp-zero.server')
     Server.default_config = opts
   end
 end
 
 function M.build_options(name, opts)
-  Server.skip_server(name)
+  local Server = require('lsp-zero.server')
+
+  Server.skip_setup(name)
 
   local defaults = {
     capabilities = Server.client_capabilities(),
@@ -132,26 +151,28 @@ function M.use(servers, opts)
 end
 
 function M.nvim_lua_ls(opts)
-  return Server.nvim_workspace(opts)
+  return require('lsp-zero.server').nvim_workspace(opts)
 end
 
 function M.set_sign_icons(opts)
-  Server.set_sign_icons(opts)
+  require('lsp-zero.server').set_sign_icons(opts)
 end
 
 function M.default_keymaps(opts)
   opts = opts or {buffer = 0}
-  Server.default_keymaps(opts)
+  require('lsp-zero.server').default_keymaps(opts)
 end
 
-function M.extend_cmp(opts)
-  require('lsp-zero.cmp').extend(opts)
+function M.get_capabilities()
+  return require('lsp-zero.server').client_capabilities()
 end
 
 function M.new_server(opts)
   if type(opts) ~= 'table' then
     return
   end
+
+  local Server = require('lsp-zero.server')
 
   Server.setup_installer()
 
@@ -191,130 +212,6 @@ M.omnifunc = {}
 
 function M.omnifunc.setup(opts)
   require('lsp-zero.omnifunc').setup(opts)
-end
-
----
--- Deprecated functions
----
-
-function M.ensure_installed(list)
-  Server.setup_installer()
-  if type(list) == 'table' then
-    s.args.install = list
-  end
-end
-
-function M.set_preferences(opts)
-  if type(opts) == 'table' then
-    require('lsp-zero.settings').set(opts)
-  end
-end
-
-function M.nvim_workspace(opts)
-  opts = opts or {}
-  local server_opts = M.defaults.nvim_workspace()
-
-  if opts.library then
-    server_opts.settings.Lua.workspace.library = opts.library
-  end
-
-  if opts.root_dir then
-    server_opts.root_dir = opts.root_dir
-  end
-
-  M.configure('lua_ls', server_opts)
-end
-
-function M.setup_nvim_cmp(opts)
-  if type(opts) == 'table' then
-    s.args.cmp_opts = opts
-  end
-end
-
-function M.defaults.diagnostics(opts)
-  local config = Server.diagnostics_config()
-
-  if type(opts) == 'table' then
-    return vim.tbl_deep_extend('force', config, opts)
-  end
-
-  return config
-end
-
-function M.defaults.nvim_workspace(opts)
-  return Server.nvim_workspace(opts)
-end
-
-function M.defaults.cmp_mappings(opts)
-  local cmp_setup = require('lsp-zero.cmp')
-  local config = vim.tbl_deep_extend(
-    'force',
-    cmp_setup.basic_mappings(),
-    cmp_setup.extra_mappings()
-  )
-
-  if type(opts) == 'table' then
-    return vim.tbl_deep_extend('force', config, opts)
-  end
-
-  return config
-end
-
-function M.defaults.cmp_sources(opts)
-  local config = require('lsp-zero.cmp').sources()
-
-  if type(opts) == 'table' then
-    return vim.tbl_deep_extend('force', config, opts)
-  end
-
-  return config
-end
-
-function M.defaults.cmp_config(opts)
-  local cmp_setup = require('lsp-zero.cmp')
-  local config = cmp_setup.cmp_config()
-  config.sources = cmp_setup.sources()
-  config.mapping = M.defaults.cmp_mappings()
-
-  if type(opts) == 'table' then
-    return vim.tbl_deep_extend('force', config, opts)
-  end
-
-  return config
-end
-
-function M.extend_lspconfig(opts)
-  if s.args.preset ~= 'none' then
-    return
-  end
-
-  local ok = pcall(require, 'lspconfig')
-
-  if not ok then
-    local msg = "[lsp-zero] Could not find the module lspconfig. Please make sure 'nvim-lspconfig' is installed."
-    vim.notify(msg, vim.log.levels.ERROR)
-    return
-  end
-
-  local defaults_opts = {
-    set_lsp_keymaps = false,
-    capabilities = {},
-    on_attach = nil,
-  }
-
-  opts = vim.tbl_deep_extend('force', defaults_opts, opts or {})
-
-  Server.enable_keymaps = opts.set_lsp_keymaps
-
-  if Server.enable_keymaps == true then
-    Server.enable_keymaps = {}
-  end
-
-  M.on_attach(opts.on_attach)
-
-  if type(opts.capabilities) == 'table' then
-    Server.set_default_capabilities(opts.capabilities)
-  end
 end
 
 return M
