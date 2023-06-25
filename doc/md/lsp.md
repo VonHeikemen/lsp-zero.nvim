@@ -103,19 +103,11 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 
 ### Automatic installs
 
-If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can list the language servers you want to install.
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install every language server you initialize with `lspconfig`. 
 
 ```lua
 require('mason').setup({})
-require('mason-lspconfig').setup({
-  ensure_installed = {
-    -- Replace these with the LSP servers 
-    -- you want to install
-    'tsserver',
-    'rust_analyzer',
-    'jdtls',
-  }
-})
+require('mason-lspconfig').setup({automatic_installation = true})
 
 local lsp = require('lsp-zero').preset({})
 
@@ -123,18 +115,16 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup_servers(lsp.installed())
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
-The names of the servers must be in [this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
+In this case `tsserver` and `rust_analyzer` will be installed automatically if they are missing.
 
-In this case you can use the function `lsp.installed()` to get a list of the language servers installed with `mason.nvim`.
-
-If you want lsp-zero to ignore a set language server you can use the property `exclude` in the second argument of `.setup_servers()`.
+Now, if you want to install a language server manually without `mason.nvim` you'll need to exclude it in your config.
 
 ```lua
-lsp.setup_servers(lsp.installed(), {
-  exclude = {'jdtls', 'rust_analyzer'},
+require('mason-lspconfig').setup({
+  automatic_installation = {exclude = {'rust_analyzer', 'jdtls'}}
 })
 ```
 
