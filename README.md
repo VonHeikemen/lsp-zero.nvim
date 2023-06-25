@@ -218,7 +218,7 @@ In this example `mason-lspconfig` will install `lua_ls`, `tsserver` and `rust_an
 require('lsp-zero').extend_cmp()
 
 ---
--- the code is optional I'm just showing
+-- calling `cmp.setup` is optional I'm just showing
 -- how you can customize nvim-cmp
 ---
 local cmp = require('cmp')
