@@ -23,6 +23,8 @@ require('copilot_cmp').setup()
 4. Add the source in nvim-cmp
 
 ```lua
+require('lsp-zero').extend_cmp()
+
 local cmp = require('cmp')
 
 cmp.setup({

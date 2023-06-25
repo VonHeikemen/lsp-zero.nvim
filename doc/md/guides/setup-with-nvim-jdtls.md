@@ -35,20 +35,21 @@ You can still follow this guide if you are using another operating system.
 
 ## The first step
 
-We need to tell lsp-zero to ignore the LSP server `jdtls`. We want the plugin `nvim-jdtls` to have full control of the configuration for the server.
-
-We will use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#skip_server_setuplist) to make sure lsp-zero doesn't initialize jdtls.
+Setup lsp-zero and mason.nvim like you usually do. But don't setup `jdtls` with lsp-zero, we want `nvim-jdtls` to handle that LSP server.
 
 ```lua
+require('mason').setup({})
+require('mason-lspconfig').setup({})
+
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'jdtls'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Working with nvim-jdtls

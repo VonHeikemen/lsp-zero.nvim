@@ -9,7 +9,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+lsp.extend_cmp()
 ```
 
 Will turn into something very close to this.
@@ -96,13 +98,8 @@ end
 
 lsp_settings()
 
-require('mason').setup({})
-require('mason-lspconfig').setup({})
-
-local get_servers = require('mason-lspconfig').get_installed_servers
-for _, server_name in ipairs(get_servers()) do
-  require('lspconfig')[server_name].setup({})
-end
+require('lspconfig').tsserver.setup({})
+require('lspconfig').rust_analyzer.setup({})
 
 
 ---

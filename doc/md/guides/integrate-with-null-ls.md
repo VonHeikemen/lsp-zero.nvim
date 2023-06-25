@@ -2,7 +2,7 @@
 
 ## Standalone null-ls instance
 
-null-ls isn't a real language server, if you want "integrate it" with lsp-zero all you need to do is call their setup function after lsp-zero's config.
+null-ls isn't a real language server, you don't have to do anything to integrate it with lsp-zero. Just use it.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -11,7 +11,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -20,7 +22,6 @@ null_ls.setup({
     -- Replace these with the tools you have installed
     -- make sure the source name is supported by null-ls
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
-    null_ls.builtins.formatting.prettier,
     null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.formatting.stylua,
   }
@@ -46,11 +47,14 @@ lsp.format_mapping('gq', {
     timeout_ms = 10000,
   },
   servers = {
+    ['rust_analyzer'] = {'rust'},
     ['null-ls'] = {'javascript', 'typescript', 'lua'},
   }
 })
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -82,11 +86,14 @@ lsp.format_on_save({
     timeout_ms = 10000,
   },
   servers = {
+    ['rust_analyzer'] = {'rust'},
     ['null-ls'] = {'javascript', 'typescript', 'lua'},
   }
 })
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -116,7 +123,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -125,7 +134,6 @@ null_ls.setup({
     -- Replace these with the tools you want to install
     -- make sure the source name is supported by null-ls
     -- https://github.com/jose-elias-alvarez/null-ls.nvim/blob/main/doc/BUILTINS.md
-    null_ls.builtins.formatting.prettier,
     null_ls.builtins.diagnostics.eslint,
     null_ls.builtins.formatting.stylua,
   }
@@ -150,7 +158,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 

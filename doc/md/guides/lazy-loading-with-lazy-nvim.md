@@ -8,12 +8,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     'VonHeikemen/lsp-zero.nvim',
     branch = 'dev-v3',
     lazy = true,
-    config = function()
-      -- This is where you modify the settings for lsp-zero
-      -- Note: autocompletion settings will not take effect
-
-      require('lsp-zero.settings').preset({})
-    end
+    config = false,
   },
 
   -- Autocompletion
@@ -25,10 +20,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     },
     config = function()
       -- Here is where you configure the autocompletion settings.
-      -- The arguments for .extend() have the same shape as `manage_nvim_cmp`: 
-      -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#manage_nvim_cmp
-
-      require('lsp-zero.cmp').extend()
+      require('lsp-zero').extend_cmp()
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
@@ -51,18 +43,11 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     event = {'BufReadPre', 'BufNewFile'},
     dependencies = {
       {'hrsh7th/cmp-nvim-lsp'},
-      {'williamboman/mason-lspconfig.nvim'},
-      {
-        'williamboman/mason.nvim',
-        build = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
-      },
     },
     config = function()
       -- This is where all the LSP shenanigans will live
 
-      local lsp = require('lsp-zero')
+      local lsp = require('lsp-zero').preset({})
 
       lsp.on_attach(function(client, bufnr)
         lsp.default_keymaps({buffer = bufnr})
@@ -71,7 +56,9 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       -- (Optional) Configure lua language server for neovim
       require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
-      lsp.setup()
+      -- Replace the language servers listed here
+      -- with the ones installed in your system
+      lsp.setup_servers({'tsserver', 'rust_analyzer'})
     end
   }
 }

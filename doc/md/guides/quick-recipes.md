@@ -15,7 +15,9 @@ lsp.on_attach(function(client, bufnr)
   end
 end)
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Enable folds with nvim-ufo
@@ -53,7 +55,9 @@ lsp.set_server_config({
   }
 })
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Enable inlay hints with inlay-hints.nvim
@@ -85,14 +89,16 @@ require('lspconfig').lua_ls.setup({
   },
 })
 
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Setup with rust-tools
 
 Using [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
 
-Here you need to disable the automatic configuration for `rust-analyzer` and then setup `rust-tools` after lsp-zero.
+Here you need to setup `rust-tools` after lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -101,15 +107,15 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'rust_analyzer'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver'})
 
 local rust_tools = require('rust-tools')
 
 rust_tools.setup({
   server = {
-    on_attach = function()
+    on_attach = function(client, bufnr)
       vim.keymap.set('n', '<leader>ca', rust_tools.hover_actions.hover_actions, {buffer = bufnr})
     end
   }
@@ -120,7 +126,7 @@ rust_tools.setup({
 
 Using [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) to configure [tsserver](https://github.com/typescript-language-server/typescript-language-server).
 
-Here you need to disable the automatic configuration for `tsserver` and then setup `typescript.nvim` after lsp-zero.
+Here you need to setup `typescript.nvim` after lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -129,9 +135,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'tsserver'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'rust_analyzer'})
 
 require('typescript').setup({
   server = {
@@ -156,13 +162,13 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
-
-local dart_lsp = lsp.build_options('dartls', {})
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 require('flutter-tools').setup({
   lsp = {
-    capabilities = dart_lsp.capabilities
+    capabilities = lsp.get_capabilities()
   }
 })
 ```
@@ -180,17 +186,15 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'metals'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ---
 -- Create the configuration for metals
 ---
-local metals_lsp = lsp.build_options('metals', {})
 local metals_config = require('metals').bare_config()
-
-metals_config.capabilities = metals_lsp.capabilities
+metals_config.capabilities = require('lsp-zero').get_capabilities()
 
 ---
 -- Autocmd that will actually be in charging of starting metals
@@ -218,19 +222,18 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'hls'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ---
 -- Setup haskell LSP
 ---
 local haskell_tools = require('haskell-tools')
-local hls_lsp = require('lsp-zero').build_options('hls', {})
 
 local hls_config = {
   hls = {
-    capabilities = hls_lsp.capabilities,
+    capabilities = require('lsp-zero').get_capabilities(),
     on_attach = function(client, bufnr)
       local opts = {buffer = bufnr}
 
@@ -270,7 +273,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 ### Setup with clangd_extensions.nvim
 
-[clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is tell lsp-zero to ignore the `clangd` server.
+[clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is use it after lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -279,9 +282,9 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.skip_server_setup({'clangd'})
-
-lsp.setup()
+-- Replace the language servers listed here
+-- with the ones installed in your system
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 require('clangd_extensions').setup()
 ```
