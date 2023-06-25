@@ -43,6 +43,8 @@ require('mason-lspconfig').setup({})
 
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)

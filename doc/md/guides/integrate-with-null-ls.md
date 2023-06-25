@@ -7,6 +7,8 @@ null-ls isn't a real language server, you don't have to do anything to integrate
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -36,6 +38,8 @@ Here is an example showing a setup focused on lua and javascript. We assign the 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -75,6 +79,8 @@ This can be almost the same as the previous example, except here we replace the 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -119,6 +125,8 @@ Ensure the tools you have listed in the `sources` option are installed automatic
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -153,6 +161,8 @@ Make null-ls aware of the tools you installed using mason.nvim, and configure th
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

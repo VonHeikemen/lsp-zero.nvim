@@ -9,6 +9,8 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 lsp.extend_cmp()

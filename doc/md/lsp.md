@@ -69,12 +69,16 @@ Here is an example that replaces the default keybinding `gr` with a [telescope](
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = true})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -111,10 +115,14 @@ require('mason-lspconfig').setup({automatic_installation = true})
 
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -135,6 +143,8 @@ To pass arguments to a language server you can use the lspconfig directly. Just 
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -146,6 +156,8 @@ require('lspconfig').tsserver.setup({
   end
 })
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'rust_analyzer'})
 ```
 
@@ -158,6 +170,8 @@ We can disable this new feature in every server using the function [.set_server_
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -168,6 +182,8 @@ lsp.set_server_config({
   end,
 })
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -209,6 +225,8 @@ You'll need to provide the command to start the LSP server, a list of filetypes 
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -231,6 +249,8 @@ If you don't need a "robust" solution you can use the function `.new_server()`. 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -259,6 +279,8 @@ If you want to control exactly what language server is used to format a file cal
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -277,6 +299,8 @@ lsp.format_on_save({
   }
 })
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -287,11 +311,15 @@ If you only ever have **one** language server attached in each file and you are 
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
   lsp.buffer_autoformat()
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -304,6 +332,8 @@ If you want something that behaves like [.buffer_autoformat()](https://github.co
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
@@ -314,6 +344,8 @@ lsp.on_attach(function(client, bufnr)
   end
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -326,6 +358,8 @@ You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/us
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
   local opts = {buffer = bufnr}
@@ -335,6 +369,8 @@ lsp.on_attach(function(client, bufnr)
   end, opts)
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -342,6 +378,8 @@ If you want to allow only a list of servers, use the `filter` option. You can cr
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 local function allow_format(servers)
   return function(client) return vim.tbl_contains(servers, client.name) end
@@ -360,6 +398,8 @@ lsp.on_attach(function(client, bufnr)
   end, opts)
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'lua_ls', 'rust_analyzer'})
 ```
 
@@ -371,6 +411,8 @@ Here is an example using `gq` as the keymap.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -390,6 +432,8 @@ lsp.format_mapping('gq', {
   }
 })
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -495,6 +539,8 @@ If you don't know, the "sign column" is a space in the gutter next to the line n
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -506,6 +552,8 @@ lsp.set_sign_icons({
   info = '»'
 })
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 

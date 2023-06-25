@@ -124,7 +124,9 @@ lsp.set_server_config({
 Gathers the arguments for a particular language server. `{name}` must be a string with the name of language server in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations). And `{opts}` is a lua table with the options for that server. These options are the same nvim-lspconfig uses in their setup function, see [:help lspconfig-setup](https://github.com/neovim/nvim-lspconfig/blob/41dc4e017395d73af0333705447e858b7db1f75e/doc/lspconfig.txt#L68) for more details.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.configure('tsserver', {
   single_file_support = false,
@@ -139,8 +141,12 @@ lsp.configure('tsserver', {
 Will configure all the language servers you have on `{list}`.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -165,7 +171,9 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.configure('pyright', {
   single_file_support = false,
@@ -217,8 +225,8 @@ lsp.format_on_save({
     timeout_ms = 10000,
   },
   servers = {
-    ['lua_ls'] = {'lua'},
     ['rust_analyzer'] = {'rust'},
+    ['tsserver'] = {'javascript', 'typescript'},
   }
 })
 ```
@@ -264,6 +272,8 @@ Do not use this in the global `on_attach`, call this function with the specific 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -328,7 +338,9 @@ Other important properties are:
 Here is an example that starts the [typescript language server](https://github.com/typescript-language-server/typescript-language-server) on javascript and typescript, but only in a project that package.json in the current directory or any of its parent folders.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function()
   lsp.default_keymaps({buffer = bufnr})
@@ -357,7 +369,9 @@ Note: search will stop once it gets to your "HOME" folder.
   * buffer: (Boolean) When set to `true` use the path of the current buffer.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 require('lspconfig').lua_ls.setup({
   root_dir = function()
@@ -382,6 +396,8 @@ Note: search will stop once it gets to your "HOME" folder.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 require('lspconfig').vuels.setup({
   root_dir = function()

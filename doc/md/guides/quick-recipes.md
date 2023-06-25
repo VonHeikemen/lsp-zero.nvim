@@ -7,6 +7,8 @@ Here what you need to do is call [nvim-navic](https://github.com/SmiteshP/nvim-n
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
@@ -40,6 +42,8 @@ require('ufo').setup()
 
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -72,6 +76,8 @@ ih.setup()
 
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -103,6 +109,8 @@ Here you need to setup `rust-tools` after lsp-zero.
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -131,6 +139,8 @@ Here you need to setup `typescript.nvim` after lsp-zero.
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -158,6 +168,8 @@ The language server for dartls can't be installed with mason.nvim, because is al
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -181,6 +193,8 @@ If I understand correctly, `nvim-metals` is the one that needs to configure the 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -217,6 +231,8 @@ The only option that makes sense to share from lsp-zero is the "capabilities" op
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -277,6 +293,8 @@ vim.api.nvim_create_autocmd('FileType', {
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

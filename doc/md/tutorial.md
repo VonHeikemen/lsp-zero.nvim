@@ -126,18 +126,26 @@ Now we need to add lsp-zero and all its dependencies in lazy's list of plugins.
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
+  -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'dev-v3',
+    lazy = true,
+    config = false,
+  },
+  {
+    'neovim/nvim-lspconfig',
     dependencies = {
-      -- LSP Support
-      {'neovim/nvim-lspconfig'},
-      -- Autocompletion
-      {'hrsh7th/nvim-cmp'},
       {'hrsh7th/cmp-nvim-lsp'},
-      {'L3MON4D3/LuaSnip'},
     }
-  }
+  },
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'}
+    },
+  },
 })
 ```
 
@@ -145,6 +153,8 @@ Then we add the configuration at the end of the file.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -157,17 +167,79 @@ Right now this setup won't do much. We don't have any language server installed 
 
 ### Language servers and how to use them
 
-In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow. At the very least it will have a link to the repository of the LSP server.
+First thing you would want to do is install the language server you want to use. There are two ways you can do this:
 
-If you install multiple language servers you can set them up using the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist). Like this.
+#### Manual global install
+
+In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow, or at the very least it will have a link to the repository of the LSP server.
+
+#### Local installation with mason.nvim
+
+There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described a portable package manager. This plugin will give you a way of downloading language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
+
+Anyway, if you choose this method you will need to add these two plugins:
+
+* `williamboman/mason.nvim`
+* `williamboman/mason-lspconfig.nvim`
+
+```lua
+require('lazy').setup({
+  {'folke/tokyonight.nvim'},
+  {
+     'williamboman/mason.nvim',
+     dependencies = {
+      {'williamboman/mason-lspconfig.nvim'}
+    },
+  },
+  -- LSP Support
+  {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'dev-v3',
+    lazy = true,
+    config = false,
+  },
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      {'hrsh7th/cmp-nvim-lsp'},
+    }
+  },
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'}
+    },
+  },
+})
+```
+
+Then you would need to add these two functions in your lua config.
+
+```lua
+require('mason').setup({})
+require('mason-lspconfig').setup({})
+```
+
+Once you have `mason.nvim` setup you will have access to a command called `:LspInstall`. If you execute that command while you have a file opened `mason-lspconfig.nvim` will suggest a language server compatible with that type of file.
+
+Keep in mind the setup for `mason.nvim` should always go before the config of lsp-zero.
+
+#### LSP setup
+
+You can setup all the language servers using the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist). Like this.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
@@ -178,10 +250,14 @@ For example, if you install the language server for `lua` you would do something
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 require('lspconfig').lua_ls.setup({
@@ -203,10 +279,14 @@ Note that is not necessary to copy these settings for `lua_ls`, lsp-zero has a f
 ```lua
 local lsp = require('lsp-zero').preset({})
 
+lsp.extend_cmp()
+
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+-- Replace the language servers listed here
+-- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
@@ -243,26 +323,50 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
+
+  --- Uncomment this block if you want to manage 
+  --- the download of LSP servers using mason.nvim
+  -- {
+  --    'williamboman/mason.nvim',
+  --    dependencies = {
+  --     {'williamboman/mason-lspconfig.nvim'}
+  --   },
+  -- },
+
+  -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'dev-v3',
+    lazy = true,
+    config = false,
+  },
+  {
+    'neovim/nvim-lspconfig',
     dependencies = {
-      -- LSP Support
-      {'neovim/nvim-lspconfig'},
-      -- Autocompletion
-      {'hrsh7th/nvim-cmp'},
       {'hrsh7th/cmp-nvim-lsp'},
-      {'L3MON4D3/LuaSnip'},
     }
-  }
+  },
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'}
+    },
+  },
 })
 
 -- Set colorscheme
 vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
+-- Uncomment the lines below if you installed mason.nvim
+-- require('mason').setup({})
+-- require('mason-lspconfig').setup({})
+
 -- LSP
 local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
