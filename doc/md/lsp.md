@@ -8,9 +8,7 @@ Ever wondered what lsp-zero does under the hood? Let me tell you.
 
 First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). It tells the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
 
-Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. Is where all keybindings and commands are created.
-
-Finally it calls the `.setup()` of each language server.
+Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. This is where all keybindings and commands are created.
 
 If you were to do it all by yourself, the code would look like this.
 
@@ -46,12 +44,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end
 })
 
--- call mason.nvim if installed 
--- require('mason').setup()
--- require('mason-lspconfig').setup()
-
 lspconfig.tsserver.setup({})
-lspconfig.eslint.setup({})
+lspconfig.rust_analyzer.setup({})
 ```
 
 ## Commands
@@ -81,7 +75,7 @@ lsp.on_attach(function(client, bufnr)
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = true})
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Disable keybindings
@@ -109,26 +103,40 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 
 ### Automatic installs
 
-If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can use the function [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#ensure_installedlist) to list the language servers you want to install with `mason.nvim`.
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim) installed you can list the language servers you want to install.
 
 ```lua
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {
+    -- Replace these with the LSP servers 
+    -- you want to install
+    'tsserver',
+    'rust_analyzer',
+    'jdtls',
+  }
+})
+
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.ensure_installed({
-  -- Replace these with whatever servers you want to install
-  'tsserver',
-  'eslint',
-  'rust_analyzer'
-})
-
-lsp.setup()
+lsp.setup_servers(lsp.installed())
 ```
 
-Keep in mind the names of the servers must be in [this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
+The names of the servers must be in [this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
+
+In this case you can use the function `lsp.installed()` to get a list of the language servers installed with `mason.nvim`.
+
+If you want lsp-zero to ignore a set language server you can use the property `exclude` in the second argument of `.setup_servers()`.
+
+```lua
+lsp.setup_servers(lsp.installed(), {
+  exclude = {'jdtls', 'rust_analyzer'},
+})
+```
 
 ## Configure language servers
 
@@ -141,36 +149,15 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').eslint.setup({
+require('lspconfig').tsserver.setup({
   single_file_support = false,
   on_attach = function(client, bufnr)
-    print('hello eslint')
+    print('hello tsserver')
   end
 })
 
-lsp.setup()
+lsp.setup_servers({'rust_analyzer'})
 ```
-
-For backwards compatibility with the `v1.x` branch the [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#configurename-opts) function is still available. So this is still valid.
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.configure('eslint', {
-  single_file_support = false,
-  on_attach = function(client, bufnr)
-    print('hello eslint')
-  end
-})
-
-lsp.setup()
-```
-
-The name of the server can be anything [lspconfig supports](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and the options are the same as lspconfig's setup function.
 
 ### Disable semantic highlights
 
@@ -191,7 +178,7 @@ lsp.set_server_config({
   end,
 })
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 Note that defining an `on_init` hook in a language server will override the one in [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_server_configopts). 
@@ -219,22 +206,6 @@ require('lspconfig').tsserver.setup({
 })
 ```
 
-## Disable a language server
-
-Use the function [.skip_server_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#skip_server_setupname) to tell lsp-zero to ignore a particular set of language servers.
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.skip_server_setup({'eslint'})
-
-lsp.setup()
-```
-
 ## Custom servers
 
 There are two ways you can use a server that is not supported by `lspconfig`:
@@ -251,8 +222,6 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
-lsp.setup()
 
 require('lspconfig.configs').my_new_lsp = {
   default_config = {
@@ -277,8 +246,6 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup()
-
 lsp.new_server({
   name = 'my-new-lsp',
   cmd = {'my-new-lsp'},
@@ -293,13 +260,11 @@ lsp.new_server({
 
 You have two ways to enable format on save.
 
-Note: When you enable format on save your LSP server is doing the formatting. The LSP server does not share the same style configuration as Neovim. What do I mean? Tabs and indents can change after the LSP formats the code in the file. Read the documentation of the LSP server you are using, figure out how to configure it to your prefered style.
+Note: When you enable format on save your LSP server is doing the formatting. The LSP server does not share the same style configuration as Neovim. Tabs and indents can change after the LSP formats the code in the file. Read the documentation of the LSP server you are using, figure out how to configure it to your prefered style.
 
 ### Explicit setup
 
 If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
-
-Note: asynchronous formatting on save is experimental right now (2023-05-11).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -314,15 +279,15 @@ lsp.format_on_save({
     timeout_ms = 10000,
   },
   servers = {
-    ['lua_ls'] = {'lua'},
+    ['tsserver'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
     -- if you have a working setup with null-ls
     -- you can specify filetypes it can format.
-    -- ['null-ls'] = {'javascript', 'typescript'},
+    -- ['null-ls'] = {'lua', 'python'},
   }
 })
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ### Always use the active servers
@@ -337,7 +302,7 @@ lsp.on_attach(function(client, bufnr)
   lsp.buffer_autoformat()
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
@@ -359,7 +324,7 @@ lsp.on_attach(function(client, bufnr)
   end
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Format buffer using a keybinding
@@ -380,7 +345,7 @@ lsp.on_attach(function(client, bufnr)
   end, opts)
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
@@ -405,7 +370,7 @@ lsp.on_attach(function(client, bufnr)
   end, opts)
 end)
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'lua_ls', 'rust_analyzer'})
 ```
 
 ### Ensure only one LSP server per filetype
@@ -427,15 +392,15 @@ lsp.format_mapping('gq', {
     timeout_ms = 10000,
   },
   servers = {
-    ['lua_ls'] = {'lua'},
+    ['tsserver'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
     -- if you have a working setup with null-ls
     -- you can specify filetypes it can format.
-    -- ['null-ls'] = {'javascript', 'typescript'},
+    -- ['null-ls'] = {'lua', 'python'},
   }
 })
 
-lsp.setup()
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Troubleshooting
@@ -533,23 +498,6 @@ Here is an example.
 
 ## Diagnostics
 
-That's the name neovim uses for error messages, warnings, hints, etc. lsp-zero only does two things to diagnostics: add borders to floating windows and enable "severity sort". All of that can be disable from the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts) call.
-
-```lua
-local lsp = require('lsp-zero').preset({
-  float_border = 'none',
-  configure_diagnostics = false,
-})
-```
-
-If you want to disable the "virtual text" you'll need to use the function [vim.diagnostic.config()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
-
-```lua
-vim.diagnostic.config({
-  virtual_text = false,
-})
-```
-
 ## Use icons in the sign column
 
 If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_sign_iconsopts). 
@@ -568,106 +516,6 @@ lsp.set_sign_icons({
   info = '»'
 })
 
-lsp.setup()
-```
-
-## Language servers and mason.nvim
-
-Install and updates of language servers is done with [mason.nvim](https://github.com/williamboman/mason.nvim).
-
-> With mason.nvim you can also install formatters and debuggers, but lsp-zero will only configure LSP servers.
-
-To install a server manually use the command `LspInstall` with the name of the server you want to install. If you don't provide a name `mason-lspconfig.nvim` will try to suggest a language server based on the filetype of the current buffer.
-
-To check for updates on the language servers use the command `Mason`. A floating window will open showing you all the tools mason.nvim can install. You can filter the packages by categories for example, language servers are in the second category, so if you press the number `2` it'll show only the language servers. The packages you have installed will appear at the top. If there is any update available the item will display a message. Navigate to that item and press `u` to install the update.
-
-To uninstall a package use the command `Mason`. Navigate to the item you want to delete and press `X`.
-
-To know more about the available bindings inside the floating window of Mason press `g?`.
-
-If you need to customize mason.nvim make sure you do it before calling the lsp-zero module.
-
-```lua
-require('mason').setup({
-  ui = {
-    border = 'rounded'
-  }
-})
-
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.setup()
-```
-
-### Opt-out of mason.nvim
-
-Really all you need is to do is uninstall `mason.nvim` and `mason-lspconfig`. Or call [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#lua-api#presetopts) and use modify these settings:
-
-```lua
-setup_servers_on_start = false
-call_servers = 'global'
-```
-
-Then you need to specify which language server you want to setup, for this use [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#lua-api#setup_serverslist) or [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#lua-api#configurename-opts).
-
-## You might not need lsp-zero
-
-Really. Out of all the features this plugin offers there is a good chance the only thing you want is the automatic setup of LSP servers. Let me tell you how to configure that.
-
-You'll need these plugins:
-
-* [mason.nvim](https://github.com/williamboman/mason.nvim)
-* [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim)
-* [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/)
-* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) (optional)
-
-After you have installed all that you configure them in this order.
-
-```lua
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
-  callback = function(event)
-    -- Create your keybindings here...
-  end
-})
-
-require('mason').setup()
-require('mason-lspconfig').setup({
-  ensure_installed = {
-    -- Replace these with whatever servers you want to install
-    'rust_analyzer',
-    'tsserver',
-  }
-})
-
-local lspconfig = require('lspconfig')
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-require('mason-lspconfig').setup_handlers({
-  function(server_name)
-    lspconfig[server_name].setup({
-      capabilities = lsp_capabilities,
-    })
-  end,
-})
-```
-
-In this example I have automatic install of servers using the option `ensure_installed` in mason-lspconfig. You can delete that list of servers and add your own.
-
-If you notice your LSP servers don't behave correctly, it might be because `.setup_handlers`. You can replace that function with a `for` loop.
-
-```lua
-local lspconfig = require('lspconfig')
-local get_servers = require('mason-lspconfig').get_installed_servers
-
-for _, server_name in ipairs(get_servers()) do
-  lspconfig[server_name].setup({
-    capabilities = lsp_capabilities,
-  })
-end
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 

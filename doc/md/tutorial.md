@@ -1,6 +1,6 @@
 # Tutorial
 
-Here we will learn enough about Neovim to configure lsp-zero `v2.0`. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero version 3 (which right now is development phase). We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
 
 ## Requirements
 
@@ -131,19 +131,11 @@ require('lazy').setup({
     branch = 'dev-v3',
     dependencies = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {                                      -- Optional
-        'williamboman/mason.nvim',
-        build = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
-      },
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
-
+      {'neovim/nvim-lspconfig'},
       -- Autocompletion
-      {'hrsh7th/nvim-cmp'},     -- Required
-      {'hrsh7th/cmp-nvim-lsp'}, -- Required
-      {'L3MON4D3/LuaSnip'},     -- Required
+      {'hrsh7th/nvim-cmp'},
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'L3MON4D3/LuaSnip'},
     }
   }
 })
@@ -157,41 +149,78 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
-lsp.setup()
 ```
 
 Save the file, restart Neovim and wait for everything to be downloaded.
 
-### Install a language server
+Right now this setup won't do much. We don't have any language server installed just yet.
 
-Let's try to use the language server for lua. 
+### Language servers and how to use them
 
-Open your `init.lua` and execute the command `:LspInstall`. Now `mason.nvim` will suggest a language server. Neovim should show a message like this.
+In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow. At the very least it will have a link to the repository of the LSP server.
 
-```
-Please select which server you want to install for filetype "lua":
-1: lua_ls
-Type number and <Enter> or click with the mouse (q or empty cancels):
-```
-
-Choose 1 for `lua_ls`, then press enter. A floating window will show up. When the server is done installing, a message should appear.
-
-At the moment the language server can't start automatically, restart Neovim so the language server can be configured properly. Once the server starts you'll notice warning signs in the global variable vim, that means everything is well and good.
-
-To make sure `lua_ls` can detect the "root directory" of our config we need to create a file called `.luarc.json` in the Neovim config folder. This file can be empty, it just need to exists.
-
-If you wanted to, you could setup `lua_ls` specifically for Neovim, all with one line of code.
+If you install multiple language servers you can set them up using the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist). Like this.
 
 ```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+```
+
+And if you need to configure a particular language server I recommend you use the module `lspconfig`. Call the setup function of the language server.
+
+For example, if you install the language server for `lua` you would do something like this.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+require('lspconfig').lua_ls.setup({
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT',
+      },
+      diagnostics = {
+        globals = {'vim'}
+      }
+    }
+  }
+})
+```
+
+Note that is not necessary to copy these settings for `lua_ls`, lsp-zero has a function that will set this (and other parameters) for you. So the code could be simplified like this.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 ```
 
-Add this before the setup function of lsp-zero.
+#### Root directory
 
-That's it. You are all set. Exit and open neovim again, you should have better support for neovim's lua api.
+This is a very important concept you need to keep in mind. The "root directory" is the path where your code is. Think of it as your project folder. When you open a file compatible with a language server `lspconfig` will search for a set of files in the current folder (your working directory) or any of the parent folders. If it finds them, the language server will start analyzing that folder.
 
-## Complete Example
+Some language servers have "single file support" enabled, this means if `lspconfig` can't determine the root directory then the current working directory becomes your root directory.
+
+Let's say you have `lua_ls` installed, if you want it to detect the root directory of your Neovim config you can create a file called `.luarc.json` in the same folder your `init.lua` is located.
+
+## Complete code
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -219,19 +248,11 @@ require('lazy').setup({
     branch = 'dev-v3',
     dependencies = {
       -- LSP Support
-      {'neovim/nvim-lspconfig'},             -- Required
-      {                                      -- Optional
-        'williamboman/mason.nvim',
-        build = function()
-          pcall(vim.cmd, 'MasonUpdate')
-        end,
-      },
-      {'williamboman/mason-lspconfig.nvim'}, -- Optional
-
+      {'neovim/nvim-lspconfig'},
       -- Autocompletion
-      {'hrsh7th/nvim-cmp'},     -- Required
-      {'hrsh7th/cmp-nvim-lsp'}, -- Required
-      {'L3MON4D3/LuaSnip'},     -- Required
+      {'hrsh7th/nvim-cmp'},
+      {'hrsh7th/cmp-nvim-lsp'},
+      {'L3MON4D3/LuaSnip'},
     }
   }
 })
@@ -247,8 +268,10 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+-- Replace the language servers listed here
+-- with the ones you have installed
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
-lsp.setup()
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 ```
 

@@ -11,7 +11,7 @@ end
 
 function M.extend(opts)
   local defaults = {
-    set_sources = 'lsp',
+    set_lsp_source = true,
     set_basic_mappings = true,
     set_extra_mappings = false,
     use_luasnip = true,
@@ -36,10 +36,8 @@ function M.get_config(opts)
     config.mapping = s.merge(config.mapping, M.extra_mappings())
   end
 
-  if opts.set_sources == 'lsp' then
+  if opts.set_lsp_source then
     config.sources = {{name = 'nvim_lsp'}}
-  elseif opts.set_sources == 'recommended' or opts.set_sources == true then
-    config.sources = M.sources()
   end
 
   if opts.use_luasnip == false then
@@ -55,25 +53,6 @@ function M.get_config(opts)
   end
 
   return config
-end
-
-function M.sources()
-  local result = {}
-  local register = function(mod, value)
-    local pattern = string.format('lua/%s*', mod)
-    local path = vim.api.nvim_get_runtime_file(pattern, 0)
-
-    if #path > 0 then
-      table.insert(result, value)
-    end
-  end
-
-  register('cmp_path', {name = 'path'})
-  register('cmp_nvim_lsp', {name = 'nvim_lsp'})
-  register('cmp_buffer', {name = 'buffer', keyword_length = 3})
-  register('cmp_luasnip', {name = 'luasnip', keyword_length = 2})
-
-  return result
 end
 
 function M.extra_mappings()
