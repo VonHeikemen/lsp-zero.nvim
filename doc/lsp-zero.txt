@@ -18,6 +18,8 @@ the |lsp-zero.setup()| function.
 >lua
   local lsp = require('lsp-zero').preset({})
 
+  lsp.extend_cmp()
+
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
   end)
@@ -25,8 +27,6 @@ the |lsp-zero.setup()| function.
   -- Replace the language servers listed here
   -- with the ones you want to install
   lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-  lsp.extend_cmp()
 <
 With this configuration lsp-zero will create keymaps to take advantage of some
 features like jump to definition, rename variables, etc. It will also setup
@@ -243,6 +243,8 @@ on_attach({callback}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       local noremap = {buffer = bufnr}
       local bind = vim.keymap.set
@@ -251,9 +253,9 @@ on_attach({callback}): ~
       -- more code  ...
     end)
 
+    -- Replace the language servers listed here
+    -- with the ones you want to install
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-    lsp.extend_cmp()
 <
                                                 *lsp-zero.set_server_config()*
 
@@ -315,6 +317,8 @@ use({name}, {opts}): ~
 
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -322,8 +326,6 @@ use({name}, {opts}): ~
     lsp.configure('pyright', {
       single_file_support = false,
     })
-
-    lsp.extend_cmp()
 <
     And then in your local config you can tweak the server options even more.
 >lua
@@ -356,13 +358,13 @@ nvim_lua_ls({opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
 
     require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-    lsp.extend_cmp()
 <
                                                    *lsp-zero.format_on_save()*
 format_on_save({opts}): ~
@@ -389,6 +391,8 @@ format_on_save({opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -400,9 +404,9 @@ format_on_save({opts}): ~
       }
     })
 
+    -- Replace the language servers listed here
+    -- with the ones you want to install
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-    lsp.extend_cmp()
 <
                                                *lsp-zero.buffer_autoformat()*
 
@@ -424,14 +428,16 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
       lsp.buffer_autoformat()
     end)
 
+    -- Replace the language servers listed here
+    -- with the ones you want to install
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-    lsp.extend_cmp()
 <
                                                *lsp-zero.async_autoformat()*
 
@@ -465,6 +471,8 @@ async_autoformat({client}, {bufnr}, {opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -475,9 +483,9 @@ async_autoformat({client}, {bufnr}, {opts}): ~
       end
     })
 
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-    lsp.extend_cmp()
+    -- Replace the language servers listed here
+    -- with the ones you want to install
+    lsp.setup_servers({'rust_analyzer'})
 <
                                                    *lsp-zero.format_mapping()*
 format_mapping({key}, {opts}): ~
@@ -503,6 +511,8 @@ format_mapping({key}, {opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -514,9 +524,9 @@ format_mapping({key}, {opts}): ~
       }
     })
 
+    -- Replace the language servers listed here
+    -- with the ones you want to install
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-    lsp.extend_cmp()
 <
                                                    *lsp-zero.set_sign_icons()*
 
@@ -582,6 +592,8 @@ new_server({opts}): ~
 >lua
     local lsp = require('lsp-zero')
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function()
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -594,8 +606,6 @@ new_server({opts}): ~
         return lsp.dir.find_first({'package.json'})
       end
     })
-
-    lsp.extend_cmp()
 <
                                                    *lsp-zero.dir.find_first()*
 
@@ -615,6 +625,8 @@ dir.find_first({list}): ~
 >lua
     local lsp = require('lsp-zero')
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -626,8 +638,6 @@ dir.find_first({list}): ~
         return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
       end
     })
-
-    lsp.extend_cmp()
 <
                                                      *lsp-zero.dir.find_all()*
 
@@ -647,6 +657,8 @@ dir.find_all({list}): ~
 >lua
     local lsp = require('lsp-zero')
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -658,8 +670,6 @@ dir.find_all({list}): ~
         return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
       end
     })
-
-    lsp.extend_cmp()
 <
                                                        *lsp-zero.cmp_action()*
 
