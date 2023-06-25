@@ -8,8 +8,7 @@ Introduction                                                  *lsp-zero-intro*
 
 The purpose of this plugin is to bundle all the "boilerplate code" needed
 to have |nvim-cmp| (a popular autocompletion plugin) and the |LSP| client
-working together. Additionally, with the help of |mason.nvim|,
-it can let you install language servers from inside neovim.
+working together.
 
 ==============================================================================
 Quickstart                                               *lsp-zero-quickstart*
@@ -22,261 +21,28 @@ the |lsp-zero.setup()| function.
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
   end)
+  
+  -- Replace the language servers listed here
+  -- with the ones you want to install
+  lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
-  lsp.setup()
+  lsp.extend_cmp()
 <
 With this configuration lsp-zero will create keymaps to take advantage of some
 features like jump to definition, rename variables, etc. It will also setup
-the autocompletion plugin with a few "data sources" and keybindings.
-
-                                                       *lsp-zero-api-showcase*
-
-Here's a more advanced configuration showing the functions you have available
-to configure and install LSP servers.
->lua
-  local lsp = require('lsp-zero').preset({})
-
-  -- the function below will be executed whenever
-  -- a language server is attached to a buffer
-  lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({buffer = bufnr})
-  end)
-
-  -- make sure this servers are installed
-  -- see :help lsp-zero.ensure_installed()
-  lsp.ensure_installed({
-    'rust_analyzer',
-    'tsserver',
-    'eslint',
-  })
-
-  -- pass arguments to a language server
-  -- using lspconfig, see :help lspconfig-setup
-  require('lspconfig').tsserver.setup({
-    on_attach = function(client, bufnr)
-      print('hello tsserver')
-    end,
-    settings = {
-      completions = {
-        completeFunctionCalls = true
-      }
-    }
-  })
-
-  -- configure lua language server for neovim
-  require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-  -- if you have a language that can't be
-  -- installed with mason.nvim list it here
-  lsp.setup_servers({'dartls'})
-
-  -- don't initialize this language server
-  -- we will use rust-tools to setup rust_analyzer
-  lsp.skip_server_setup({'rust_analyzer'})
-
-  lsp.setup()
-
-  -- initialize rust_analyzer with rust-tools
-  require('rust-tools').setup({})
-<
-==============================================================================
-Presets                                                     *lsp-zero-presets*
-
-Presets are a combinations of options that determine how |lsp-zero.setup()|
-will behave, they can enable or disable features.
-
-They are created when you use the function |lsp-zero.preset()|.
->lua
-  local lsp = require('lsp-zero').preset('minimal')
-<
-If you wish to override a setting from a preset use a lua table.
->lua
-  local lsp = require('lsp-zero').preset({
-    name = 'minimal',
-    set_lsp_keymaps = true,
-    manage_nvim_cmp = true,
-    suggest_lsp_servers = false,
-  })
-<
-These are the available presets.
-
-    * minimal
-    * recommended
-    * lsp-only
-    * manual-setup
-    * system-lsp
-
-If you don't specify a preset then `minimal` will be the default.
-
-                                                    *lsp-zero-preset-settings*
-
-set_lsp_keymaps: ~
-    It can be a boolean or a lua table.
-
-    Supported properties:
-
-    * preserve_mappings: ~
-        Boolean, When set to true lsp-zero will not override any shortcut 
-        that is already "taken". When set to false lsp-zero will create LSP
-        shortcuts no matter what.
-
-    * omit: ~
-        List of strings. List of shorcuts you don't want lsp-zero to override.
-
-    When set_lsp_keymaps is set to `true` then `preserve_mappings` is assumed
-    to be false and omit is set to an empty list. When set_lsp_keymaps is
-    `false` then the keybindings will not be created.
-
-manage_nvim_cmp: ~
-    It can be a boolean or a lua table. When is set to a boolean every
-    supported property will have that value.
-
-    Supported properties:
-
-    * set_basic_mappings: ~
-        Boolean. When set to `true` it will create keybindings that emulate
-        Neovim's default completion.
-
-    * set_extra_mappings: ~
-        Boolean. When set to `true` it will setup tab completion, scrolling
-        through documentation window, and navigation between snippets.
-
-    * set_sources: ~
-        String or Boolean. When set to 'lsp' it will only setup cmp-nvim-lsp
-        as a source. When set to 'recommended' it will try to setup a few
-        recommended sources for |nvim-cmp|. When set to the Boolean false it
-        won't setup any sources.
-
-    * use_luasnip: ~
-        Boolean. When set to true it will setup luasnip to expand snippets.
-        This option does not include a collection of snippets.
-
-    * set_format: ~
-        Boolean. When set to `true` it modify the format of the
-        completion items.
-
-    * documentation_window: ~
-        Boolean. When set to `true` enables the documentation window.
-
-setup_servers_on_start: ~
-    Boolean. When set to `true` all servers installed with mason.nvim will be
-    initialized on startup. If the value is false servers will be initialized
-    when you call |lsp-zero.configure()| or |lsp-zero.setup_servers()|.
-
-call_servers: ~
-    String. When set to `'local'` it will use |mason.nvim| whenever possible.
-    When set to `'global'` any feature or support that dependes on mason.nvim
-    will be disabled.
-
-configure_diagnostics: ~
-    Boolean. When set to `true` adds borders to diagnostic floating window
-    and sorts the messages according to the "severity".
-
-float_border: ~
-    String. Shape of borders in floating windows. It can be one of the
-    following: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'`
-    or `'shadow'`.
-
-                                                   *lsp-zero-available-preset*
-
-minimal: ~
-    Enables the support for mason.nvim if it is installed. Configures the
-    diagnostics. Adds a basic setup to nvim-cmp. It doesn't add keybindings
-    for LSP or autocompletion. Doesn't setup the sources for |nvim-cmp|.
-
-    These are the settings it uses.
->lua
-    {
-      float_border = 'rounded',
-      call_servers = 'local',
-      configure_diagnostics = true,
-      setup_servers_on_start = true,
-      set_lsp_keymaps = false,
-      manage_nvim_cmp = {
-        set_sources = 'lsp',
-        set_basic_mappings = true,
-        set_extra_mappings = false,
-        use_luasnip = true,
-        set_format = true,
-        documentation_window = false,
-      },
-    }
-<
-recommended: ~
-    Creates keybindings bound to LSP actions. Configures diagnostics.
-    Adds a complete configuration to nvim-cmp. And enables support
-    for |mason.nvim|.
-
-    These are the settings it uses.
->lua
-    {
-      float_border = 'rounded',
-      call_servers = 'local',
-      configure_diagnostics = true,
-      setup_servers_on_start = true,
-      set_lsp_keymaps = {
-        preserve_mappings = false,
-        omit = {},
-      },
-      manage_nvim_cmp = {
-        set_sources = 'recommended',
-        set_basic_mappings = true,
-        set_extra_mappings = false,
-        use_luasnip = true,
-        set_format = true,
-        documentation_window = true,
-      },
-    }
-<
-lsp-only: ~
-    Is base on `recommended` preset but it disables the support for |nvim-cmp|.
-
-manual-setup: ~
-    Is based on `recommended` but it disables the automatic setup
-    of language servers.
-
-system-lsp: ~
-    Is based on recommended but it disables all the features that depends
-    on |mason.nvim|.
+the basic features of the autocompletion plugin.
 
 ==============================================================================
 Autocomplete                                           *lsp-zero-autocomplete*
 
-The plugin responsable for autocompletion is |nvim-cmp|. This plugin
-is designed to be unopinionated and modular. What this means for us (the users)
-is that we have to assemble various pieces to get a good experience.
-
-                                            *lsp-zero-recommended-cmp-sources*
-
-|nvim-cmp| has a concept of "sources", these provide the actual data
-displayed in neovim. If you set `manage_nvim_cmp.set_sources` to the
-string `'recommended'` lsp-zero will try to setup the following sources
-if they are installed:
-
-    cmp-buffer: ~
-        Provides suggestions based on the current file.
-        Url: https://github.com/hrsh7th/cmp-buffer
-
-    cmp-path: ~
-        Gives completions based on the filesystem.
-        Url: https://github.com/hrsh7th/cmp-path
-
-    cmp_luasnip: ~
-        It shows snippets in the suggestions.
-        Url: https://github.com/saadparwaiz1/cmp_luasnip
-
-    cmp-nvim-lsp: ~
-        Show data send by the language server.
-        Url: https://github.com/hrsh7th/cmp-nvim-lsp
-
-    cmp-nvim-lua: ~
-        Provides completions based on neovim's lua api.
-        Url: https://github.com/hrsh7th/cmp-nvim-lua
+The plugin responsable for autocompletion is |nvim-cmp|. This plugin is
+designed to be unopinionated and modular. What this means for us (the users)
+is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
-When you enable `manage_nvim_cmp.set_basic_mappings` lsp-zero creates
-the following keybindings.
+When you enable `set_basic_mappings` in the function |lsp-zero.extend_cmp()|
+lsp-zero creates the following keybindings.
 
     <Ctrl-y>: ~
         Confirms selection.
@@ -304,7 +70,7 @@ the following keybindings.
     <Ctrl-d>: ~
         Scroll down in the item's documentation.
 
-And when you enable `manage_nvim_cmp.set_basic_mappings` it creates these.
+And when you enable `set_extra_mappings` it creates these.
 
     <Ctrl-f>: ~
         Go to the next placeholder in the snippet.
@@ -332,8 +98,6 @@ Then it creates an autocommand on the event |LspAttach|. This autocommand will
 be triggered every time a language server is attached to a buffer. Is where
 all keybindings and commands are created.
 
-Finally it calls the .setup() of each language server.
-
 If you were to do it all by yourself, the code would look like this.
 >lua
   local lspconfig = require('lspconfig')
@@ -354,7 +118,7 @@ If you were to do it all by yourself, the code would look like this.
   })
 
   lspconfig.tsserver.setup({})
-  lspconfig.eslint.setup({})
+  lspconfig.rust_analyzer.setup({})
 <
                                                            *lsp-zero-commands*
 
@@ -449,120 +213,6 @@ gl: ~
     Move to the next diagnostic. See |vim.diagnostic.goto_next()|.
 
 ==============================================================================
-Server Installer                                          *lsp-zero-installer*
-
-Install and updates of language servers is done with |mason.nvim|.
-
-To install a server manually use the command `LspInstall` with the name of the
-server you want to install. If you don't provide a name the command will try
-to suggest a language server based on the filetype of the current buffer.
-
-To check for updates on the language servers use the command `Mason`.
-A floating window will open showing you all the packages mason.nvim can
-install. You can filter the packages by categories for example, language
-servers are in the second category, so if you press the number `2` it'll
-show only the language servers. The packages you have installed will appear
-at the top. If there is any update available, the item will display a message.
-Navigate to that item and press u to install the update.
-
-To uninstall a server use the command Mason. Navigate to the language server
-you want to delete and press X.
-
-To know more about the available bindings inside the floating window of
-`Mason` press `g?`.
-
-If you need to customize `mason.nvim` make sure you do it before
-calling the `lsp-zero` module.
->lua
-  require('mason.settings').set({
-    ui = {
-      border = 'rounded'
-    }
-  })
-
-  local lsp = require('lsp-zero').preset({})
-
-  lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({buffer = bufnr})
-  end)
-
-  lsp.setup()
-<
-Opt-out of mason.nvim                             *lsp-zero-installer-opt-out*
-
-Really all you need is to uninstall |mason.nvim| and |mason-lspconfig.nvim|.
-But the correct way to opt-out if you are using the `recommended` preset
-is to change it to `system-lsp`. Or use these settings:
->lua
-  setup_servers_on_start = false
-  call_servers = 'global'
-<
-Then you need to specify which language server you want to setup, for this
-use |lsp-zero.setup_servers()| or |lsp-zero.configure()|.
-
-==============================================================================
-Migrating away from lsp-zero                           *lsp-zero-migrate-away*
-
-There is a good chance the only thing you want from lsp-zero is the automatic
-setup of LSP servers. Let me tell you how to configure that.
-
-You'll need these plugins:
-
-* https://github.com/williamboman/mason.nvim
-* https://github.com/williamboman/mason-lspconfig.nvim
-* https://github.com/neovim/nvim-lspconfig
-* https://github.com/hrsh7th/cmp-nvim-lsp
-
-You need to configure them in this order.
->lua
-  require('mason').setup()
-
-  require('mason-lspconfig').setup({
-    ensure_installed = {
-      -- Replace these with whatever servers you want to install
-      'rust_analyzer',
-      'tsserver',
-    }
-  })
-
-  local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-  local lsp_attach = function(client, bufnr)
-    -- Create your keybindings here...
-  end
-
-  local lspconfig = require('lspconfig')
-  require('mason-lspconfig').setup_handlers({
-    function(server_name)
-      lspconfig[server_name].setup({
-        on_attach = lsp_attach,
-        capabilities = lsp_capabilities,
-      })
-    end,
-  })
-<
-In this example I have automatic install of servers using the option
-`ensure_installed` in `mason-lspconfig`. You can delete that list of servers
-and add your own.
-
-If you notice your LSP servers don't behave correctly, it might be because
-`.setup_handlers`. You can replace that function with a `for` loop.
->lua
-  local lspconfig = require('lspconfig')
-  local get_servers = require('mason-lspconfig').get_installed_servers
-
-  for _, server_name in ipairs(get_servers()) do
-    lspconfig[server_name].setup({
-      on_attach = lsp_attach,
-      capabilities = lsp_capabilities,
-    })
-  end
-<
-If you want to know how to recreate lsp-zero's autocomplete you can read
-this blogpost.
-
-https://vonheikemen.github.io/devlog/tools/setup-nvim-lspconfig-plus-nvim-cmp/#snippets
-
-==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
 
                                                            *lsp-zero.preset()*
@@ -570,13 +220,6 @@ Lua API                                                     *lsp-zero-lua-api*
 preset({opts}): ~
     This creates a combination of settings suitable for common use cases.
     For more details see |lsp-zero-presets|.
-
-                                                            *lsp-zero.setup()*
-
-setup(): ~
-    The one that coordinates the call to other setup functions. Handles
-    the configuration for |nvim-cmp| and the language servers during
-    startup. It is meant to be the last function you call.
 
                                                   *lsp-zero.default_keymaps()*
 
@@ -608,7 +251,9 @@ on_attach({callback}): ~
       -- more code  ...
     end)
 
-    lsp.setup()
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+    lsp.extend_cmp()
 <
                                                 *lsp-zero.set_server_config()*
 
@@ -640,13 +285,6 @@ setup_servers({list}): ~
     Will configure all the language servers you have on {list}.
 >lua
     lsp.setup_servers({'html', 'cssls'})
-<
-                                                *lsp-zero.skip_server_setup()*
-
-skip_server_setup({list}): ~
-    All the language servers in {list} will be ignored during setup.
->lua
-    lsp.skip_server_setup({'eslint', 'rust_analyzer'})
 <
                                                     *lsp-zero.build_options()*
 
@@ -685,9 +323,8 @@ use({name}, {opts}): ~
       single_file_support = false,
     })
 
-    lsp.setup()
+    lsp.extend_cmp()
 <
-
     And then in your local config you can tweak the server options even more.
 >lua
     -- local config
@@ -725,7 +362,7 @@ nvim_lua_ls({opts}): ~
 
     require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
-    lsp.setup()
+    lsp.extend_cmp()
 <
                                                    *lsp-zero.format_on_save()*
 format_on_save({opts}): ~
@@ -758,12 +395,14 @@ format_on_save({opts}): ~
 
     lsp.format_on_save({
       servers = {
-        ['lua_ls'] = {'lua'},
         ['rust_analyzer'] = {'rust'},
+        ['tsserver'] = {'javascript', 'typescript'},
       }
     })
 
-    lsp.setup()
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+    lsp.extend_cmp()
 <
                                                *lsp-zero.buffer_autoformat()*
 
@@ -790,7 +429,9 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
       lsp.buffer_autoformat()
     end)
 
-    lsp.setup()
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+    lsp.extend_cmp()
 <
                                                *lsp-zero.async_autoformat()*
 
@@ -834,7 +475,9 @@ async_autoformat({client}, {bufnr}, {opts}): ~
       end
     })
 
-    lsp.setup()
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+    lsp.extend_cmp()
 <
                                                    *lsp-zero.format_mapping()*
 format_mapping({key}, {opts}): ~
@@ -866,12 +509,14 @@ format_mapping({key}, {opts}): ~
 
     lsp.format_mapping('gq', {
       servers = {
-        ['lua_ls'] = {'lua'},
         ['rust_analyzer'] = {'rust'},
+        ['tsserver'] = {'javascript', 'typescript'},
       }
     })
 
-    lsp.setup()
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+
+    lsp.extend_cmp()
 <
                                                    *lsp-zero.set_sign_icons()*
 
@@ -949,6 +594,8 @@ new_server({opts}): ~
         return lsp.dir.find_first({'package.json'})
       end
     })
+
+    lsp.extend_cmp()
 <
                                                    *lsp-zero.dir.find_first()*
 
@@ -980,7 +627,7 @@ dir.find_first({list}): ~
       end
     })
 
-    lsp.setup()
+    lsp.extend_cmp()
 <
                                                      *lsp-zero.dir.find_all()*
 
@@ -1012,7 +659,7 @@ dir.find_all({list}): ~
       end
     })
 
-    lsp.setup()
+    lsp.extend_cmp()
 <
                                                        *lsp-zero.cmp_action()*
 
@@ -1194,186 +841,10 @@ extend_cmp({opts}): ~
       trigger = '<C-Space>',
     })
 <
-
-==============================================================================
-Deprecated                                     *lsp-zero-deprecated-functions*
-
-The following functions will be remove in the future, whenever I feel forced
-to create a `v3.x` branch (I have no plans for this yet).
-
-                                                  *lsp-zero.set_preferences()*
-
-set_preferences({opts}): ~
-    Allows you to override any configuration created by a preset.
-
-                                                   *lsp-zero.setup_nvim_cmp()*
-
-setup_nvim_cmp({opts}): ~
-    {opts} allows you to override some of `nvim-cmp` defaults:
-
-        completion: ~
-            Configures the behavior of the completion menu. You can find
-            more details about its properties if you start typing the
-            command `:help cmp-config.completion`.
-
-        sources: ~
-            List of configurations for "data sources".
-            See |cmp-config.sources| to know more.
-
-        documentation: ~
-            Modifies the look of the documentation window. You can find
-            more details about its properities if you start typing the
-            command `:help cmp-config.window`.
-
-        formatting: ~
-            Modifies the look of the completion menu. You can find more
-            details about its properities if you start typing the
-            command `:help cmp-config.formatting`.
-
-        preselect: ~
-            By default, the first item in the completion menu is preselected.
-            Disable this behaviour by setting this to `cmp.PreselectMode.None`.
-            See |cmp-config.preselect| to know more.
-
-        mapping: ~
-            Sets the keybindings. See |cmp-mapping|.
-
-        select_behavior: ~
-            Configure behavior when selecting items from completion menu.
-            It can be set to the values `'insert'` or `'select'`. With the
-            value 'select' nothing happens when you move between items. With
-            the value 'insert' it'll put the text from the selection in the
-            buffer.
-
-            Is worth mention these values are available as "types" in the
-            `cmp` module: `require('cmp').SelectBehavior`.
-
-                                                   *lsp-zero.nvim_workspace()*
-
-nvim_workspace({opts}): ~
-    Configures the language server for lua with all the options needed
-    to provide completions specific to neovim.
-
-    {opts} supports two properties:
-
-        root_dir: ~
-            A function that determines the working directory of
-            the language server.
-
-        library: ~
-            A list of paths that the server should analyze.
-
-            By default only the runtime files of neovim and
-            `vim.stdpath('config')` will be included. To add the path to
-            every plugin you'll need to do this.
->lua
-            lsp.nvim_workspace({
-              library = vim.api.nvim_get_runtime_file('', true)
-            })
-<
-                                             *lsp-zero.defaults.diagnostics()*
-
-defaults.diagnostics({opts}): ~
-    Returns the configuration for diagnostics. If you provide the {opts}
-    table it'll merge it with the defaults, this way you can extend
-    or change the values easily.
-
-                                             *lsp-zero.defaults.cmp_sources()*
-
-defaults.cmp_sources(): ~
-    Returns the list of "sources" used in nvim-cmp.
-
-                                            *lsp-zero.defaults.cmp_mappings()*
-
-defaults.cmp_mappings({opts}): ~
-    Returns a table with the default keybindings for nvim-cmp. If you provide
-    the {opts} table it'll merge it with the defaults, this way you can
-    extend or change the values easily.
-
-                                              *lsp-zero.defaults.cmp_config()*
-
-defaults.cmp_config({opts}): ~
-    Returns the entire configuration table for nvim-cmp. If you provide
-    the {opts} table it'll merge it with the defaults, this way you can
-    extend or change the values easily.
-
-                                          *lsp-zero.defaults.nvim_workspace()*
-
-defaults.nvim_workspace({opts}): ~
-    Returns the neovim specific settings for `lua_ls` language server.
-
-                                                 *lsp-zero.ensure_installed()*
-
-ensure_installed({list}): ~
-    Installs all the servers in {list} if they are missing.
->lua
-      lsp.ensure_installed({
-        'html',
-        'cssls',
-        'tsserver'
-      })
-<
-                                                 *lsp-zero.extend_lspconfig()*
-
-.extend_lspconfig({opts}): ~
-    The purpose of this function is to allow you to interact with lspconfig
-    directly and still get some features lsp-zero offers.
-
-    It adds the capabilities provided by cmp_nvim_lsp to the default
-    configuration in lspconfig. It also creates an autocommand that
-    executes a function everytime a language server is attached
-    to a buffer.
-
-    Note: don't use it along side |lsp-zero.setup()|. This function
-    is independent of any settings provided by presets.
-
-    This is the intended usage:
->lua
-    require('mason').setup()
-    require('mason-lspconfig').setup()
-    require('lsp-zero').extend_lspconfig()
-
-    require('lspconfig').tsserver.setup({})
-<
-    Notice here it can coexists with other plugins. Allowing you to have
-    full control of your configuration.
-
-    {opts} table supports the following properties:
-
-        set_lsp_keymaps: ~
-            It supports the same properties as the preset counter part.
-
-        capabilities: ~
-            These are the "client capabilities" a language server expects.
-            This argument will be merge nvim-cmp's default capabilities
-            if you have it installed.
-
-        on_attach: ~
-            This must be a function. Think of it as "global" on_attach
-            so you don't have to keep passing a function to each
-            server's setup function.
-
-    Here's an example that showcase each option.
->lua
-    require('lsp-zero').extend_lspconfig({
-      set_lsp_keymaps = {omit = {'<C-k>', 'gl'}},
-      on_attach = function(client, bufnr)
-        print('hello there')
-      end,
-      capabilities = {
-        textDocument = {
-          foldingRange = {
-            dynamicRegistration = false,
-            lineFoldingOnly = true
-          }
-        }
-      }
-    })
-<
 ==============================================================================
 Version                                                     *lsp-zero-version*
 
-Current version: `dev-v3`
+Current version: `v3-dev`
 
 The code on this version requires Neovim v0.8 or greater. If you need support
 for Neovim v0.7 or lower use the `v1.x` branch of lsp.zero.
