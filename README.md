@@ -206,7 +206,7 @@ end)
 require('lspconfig').lua_ls.setup({})
 
 -- Replace the language servers listed here
--- with servers you want to install
+-- with the ones you want to install
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
