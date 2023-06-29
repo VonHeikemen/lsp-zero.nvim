@@ -47,6 +47,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Use Enter to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#use-enter-to-confirm-completion)
   * [Adding a source](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#adding-a-source)
   * [Add an external collection of snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)
+  * [Editing already existing snippets].(https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#editing_already_existing_snippets)
   * [Preselect first item](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#preselect-first-item)
   * [Basic completions for Neovim's lua api](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#basic-completions-for-neovims-lua-api)
   * [Enable "Super Tab"](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#enable-super-tab)
