@@ -174,8 +174,6 @@ function M.new_server(opts)
 
   local Server = require('lsp-zero.server')
 
-  Server.setup_installer()
-
   local name = opts.name or ''
   local config = M.build_options(name, opts)
 
