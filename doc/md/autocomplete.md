@@ -247,6 +247,17 @@ If you want to use [honza/vim-snippets](https://github.com/honza/vim-snippets), 
 ```lua
 require('luasnip.loaders.from_snipmate').lazy_load()
 ```
+> Note: If you want to make changes to already downloaded language servers, here's how you edit them:
+
+# Making changes to already existing language server snippets
+How do you make a changes to already existing snippets?
+# Find the language file
+1. If you're using Packer, simply open packer_compiled.lua from your /.config/nvim/plugin ,
+   and search for the directory of friendly-snippets
+   (ex. /home/user/.local/share/nvim/site/pack/packer/start/friendly-snippets/snippets )
+2. Once you have found it, cd into it and search for the json of your desired language ex:. html.json
+3. Edit snippets or create new ones :)
+
 
 ### Preselect first item
 
