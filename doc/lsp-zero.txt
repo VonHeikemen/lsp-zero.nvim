@@ -32,12 +32,12 @@ With this configuration lsp-zero will create keymaps to take advantage of some
 features like jump to definition, rename variables, etc. It will also setup
 the basic features of the autocompletion plugin.
 
-==============================================================================
-Autocomplete                                           *lsp-zero-autocomplete*
+=============================================================================
+utocomplete                                           *lsp-zero-autocomplete*
 
-The plugin responsable for autocompletion is |nvim-cmp|. This plugin is
-designed to be unopinionated and modular. What this means for us (the users)
-is that we have to assemble various pieces to get the behavior we want.
+he plugin responsible for autocompletion is |nvim-cmp|. This plugin is
+esigned to be unopinionated and modular. What this means for us (the users)
+s that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 

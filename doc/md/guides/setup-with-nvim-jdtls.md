@@ -444,7 +444,5 @@ local jdtls_install = '/path/to/my/jdtls'
 
 Setup a debugger, probably. You'll want to install the plugins [nvim-dap](https://github.com/mfussenegger/nvim-dap) and [nvim-dap-ui](https://github.com/rcarriga/nvim-dap-ui). Install `java-debug-adapter` and `java-test`. Then enable the debugger setup function in `jdtls.lua`, search for the variable `features` and set `debugger` to `true`.
 
-I didn't test the debugger so I can't tell you how it works, but I believe it should work.
-
 To learn about nvim-dap and nvim-dap-ui watch this video [Debugging In Neovim (ft TJ DeVries and BashBunni)](https://www.youtube.com/watch?v=0moS8UHupGc). Sadly is not about java, but it should teach you the basics of nvim-dap and how to use it.
 
