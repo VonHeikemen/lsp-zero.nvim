@@ -6,6 +6,11 @@ local s = {
 }
 
 M.setup = noop
+M.ensure_installed = function()
+  local msg = '[lsp-zero] The function .ensure_installed() has been removed. '
+    .. 'Use the module mason-lspconfig. See :help lsp-zero-guide:ensure-installed'
+  vim.notify(msg, vim.log.levels.WARN)
+end
 
 function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
@@ -39,11 +44,11 @@ function M.preset(opts)
     float_border = opts.float_border,
     set_signcolumn = opts.set_signcolumn,
   })
-  
+
   local Server = require('lsp-zero.server')
 
   Server.setup_autocmd()
-  
+
   if opts.extend_lspconfig then
     Server.extend_lspconfig()
   end
@@ -175,8 +180,6 @@ function M.new_server(opts)
   if type(opts) ~= 'table' then
     return
   end
-
-  local Server = require('lsp-zero.server')
 
   local name = opts.name or ''
   local config = M.build_options(name, opts)
