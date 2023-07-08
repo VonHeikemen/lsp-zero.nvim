@@ -33,11 +33,11 @@ features like jump to definition, rename variables, etc. It will also setup
 the basic features of the autocompletion plugin.
 
 =============================================================================
-utocomplete                                           *lsp-zero-autocomplete*
+autocomplete                                          *lsp-zero-autocomplete*
 
-he plugin responsible for autocompletion is |nvim-cmp|. This plugin is
-esigned to be unopinionated and modular. What this means for us (the users)
-s that we have to assemble various pieces to get the behavior we want.
+The plugin responsable for autocompletion is |nvim-cmp|. This plugin is
+designed to be unopinionated and modular. What this means for us (the users)
+is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
