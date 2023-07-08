@@ -32,7 +32,7 @@ Create the keybindings bound to built-in LSP functions.
 
 The `{opts}` table supports the same properties as [set_lsp_keymaps](#set_lsp_keymaps) and adds the following:
 
-* buffer: Number. The "id" of an open buffer. If the number `0` is provided then the keymaps will be effective in the current buffer.
+  * buffer: Number. The "id" of an open buffer. If the number `0` is provided then the keymaps will be effective in the current buffer.
 
 #### LSP Actions
 
@@ -136,9 +136,17 @@ lsp.configure('tsserver', {
 })
 ```
 
-### `.setup_servers({list})`
+### `.setup_servers({list}, {opts})`
 
 Will configure all the language servers you have on `{list}`.
+
+The `{opts}` table supports the following properties:
+
+  * exclude: (optional) Table. List of names of LSP servers you **don't** want to setup.
+
+  * defer: (optinal) Boolean, default value is `false`. Delay the setup of language servers.
+
+Here is the basic usage.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -149,6 +157,27 @@ lsp.extend_cmp()
 -- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
+
+When you mix [.setup_servers()](#setup_servers(list-opts)) with explict calls to `lspconfig`, order matters. [.setup_servers()](#setup_servers(list-opts)) will not setup a server that was already initialized by lspconfig.
+
+If you plan to use the function [.installed()](#installed) to get an automatic setup is best that you place [.setup_servers()](#setup_servers(list-opts)) after the calls to lspconfig.
+
+```lua
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver'}
+})
+
+local lsp = require('lsp-zero').preset({})
+
+require('lspconfig').tsserver.setup({
+  single_file_support = false,
+})
+
+lsp.setup_servers(lsp.installed())
+```
+
+In this case [.setup_servers()](#setup_servers(list-opts)) will skip the setup of `tsserver`.
 
 ### `.build_options({name}, {opts})`
 
@@ -317,12 +346,31 @@ lsp.format_mapping('gq', {
 
 ### `.installed()`
 
-Returns the list of language servers installed by mason.nvim. This function depends on the plugin mason-lspconfig.nvim.
+Returns the list of language servers installed by mason.nvim. This function depends on the plugin mason-lspconfig.nvim, so if you use this make sure to setup mason.nvim before lsp-zero.
+
+The common usecase for this function is to create an automatic setup of language servers when using lsp-zero and mason.nvim.
+
+```lua
+require('mason').setup({})
+require('mason-lspconfig').setup({})
+
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function()
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.setup_servers(lsp.installed())
+```
+
+Note that the servers will not be configured immediately after installion. You'll need to restart Neovim after you install a server with mason.nvim.
 
 To get the list of servers quickly from command mode you can execute this command.
 
 ```lua
-:lua require('lsp-zero').installed()
+:lua = require('lsp-zero').installed()
 ```
 
 ### `.new_server({opts})`

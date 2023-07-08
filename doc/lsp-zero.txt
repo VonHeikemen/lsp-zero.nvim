@@ -559,7 +559,27 @@ set_sign_icons({opts}): ~
 
 installed(): ~
     Returns the list of language servers installed by |mason.nvim|. This
-    function depends on the plugin |mason-lspconfig.nvim|.
+    function depends on the plugin |mason-lspconfig.nvim|, , so if you use
+    this make sure to setup mason.nvim before lsp-zero.
+
+    The common usecase for this function is to create an automatic setup of
+    language servers when using lsp-zero and mason.nvim.
+>lua
+    require('mason').setup({})
+    require('mason-lspconfig').setup({})
+
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
+    lsp.on_attach(function()
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    lsp.setup_servers(lsp.installed())
+<
+    Note that the servers will not be configured immediately after installion.
+    You'll need to restart Neovim after you install a server with mason.nvim.
 
     To get the list of servers quickly from command mode you can execute this
     command.
