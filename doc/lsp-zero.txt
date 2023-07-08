@@ -25,7 +25,7 @@ the |lsp-zero.setup()| function.
   end)
   
   -- Replace the language servers listed here
-  -- with the ones you want to install
+  -- with the ones you have installed
   lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
 With this configuration lsp-zero will create keymaps to take advantage of some
@@ -254,7 +254,7 @@ on_attach({callback}): ~
     end)
 
     -- Replace the language servers listed here
-    -- with the ones you want to install
+    -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                 *lsp-zero.set_server_config()*
@@ -405,7 +405,7 @@ format_on_save({opts}): ~
     })
 
     -- Replace the language servers listed here
-    -- with the ones you want to install
+    -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                *lsp-zero.buffer_autoformat()*
@@ -436,7 +436,7 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     end)
 
     -- Replace the language servers listed here
-    -- with the ones you want to install
+    -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                *lsp-zero.async_autoformat()*
@@ -484,7 +484,7 @@ async_autoformat({client}, {bufnr}, {opts}): ~
     })
 
     -- Replace the language servers listed here
-    -- with the ones you want to install
+    -- with the ones you have installed
     lsp.setup_servers({'rust_analyzer'})
 <
                                                    *lsp-zero.format_mapping()*
@@ -525,7 +525,7 @@ format_mapping({key}, {opts}): ~
     })
 
     -- Replace the language servers listed here
-    -- with the ones you want to install
+    -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                    *lsp-zero.set_sign_icons()*
