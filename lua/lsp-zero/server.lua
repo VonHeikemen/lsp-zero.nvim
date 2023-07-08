@@ -8,7 +8,8 @@ local s = {}
 local state = {
   exclude = {},
   autocmd = false,
-  lspconfig = false,
+  has_lspconfig = false,
+  extend_lspconfig = false,
   capabilities = nil,
   omit_keys = {n = {}, i = {}, x = {}},
 }
@@ -45,12 +46,10 @@ function M.setup_autocmd()
 end
 
 function M.extend_lspconfig()
-  local runtime_file = vim.api.nvim_get_runtime_file
+  local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
+  state.has_lspconfig = #lsp_txt > 0
 
-  local lsp_txt = runtime_file('doc/lspconfig.txt', 0) or {}
-  state.lspconfig = #lsp_txt > 0
-
-  if state.lspconfig == false then
+  if state.has_lspconfig == false or state.extend_lspconfig then
     return
   end
 
@@ -63,6 +62,8 @@ function M.extend_lspconfig()
       s.apply_global_config(config, user_config, M.default_config)
     end
   end)
+
+  state.extend_lspconfig = true
 end
 
 function M.setup(name, opts)
@@ -286,7 +287,7 @@ function s.set_capabilities(current)
     local cmp_default_capabilities = {}
     local base = {}
 
-    if state.lspconfig then
+    if state.has_lspconfig then
       base = require('lspconfig.util').default_config.capabilities
     else
       base = vim.lsp.protocol.make_client_capabilities()

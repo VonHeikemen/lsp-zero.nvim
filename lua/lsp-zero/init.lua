@@ -15,6 +15,10 @@ function M.extend_cmp(opts)
   require('lsp-zero.cmp').extend(opts)
 end
 
+function M.extend_lspconfig()
+  require('lsp-zero.server').extend_lspconfig()
+end
+
 function M.installed()
   local ok, mason = pcall(require, 'mason-lspconfig')
   if not ok then
