@@ -121,7 +121,7 @@ end
 function M.default_keymaps(opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
-  local buffer = opts.buffer or 0
+  local buffer = opts.buffer or vim.api.nvim_get_current_buf()
   local keep_defaults = true
   local exclude = {}
 
