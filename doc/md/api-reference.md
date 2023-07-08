@@ -315,6 +315,16 @@ lsp.format_mapping('gq', {
 })
 ```
 
+### `.installed()`
+
+Returns the list of language servers installed by mason.nvim. This function depends on the plugin mason-lspconfig.nvim.
+
+To get the list of servers quickly from command mode you can execute this command.
+
+```lua
+:lua require('lsp-zero').installed()
+```
+
 ### `.new_server({opts})`
 
 lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.

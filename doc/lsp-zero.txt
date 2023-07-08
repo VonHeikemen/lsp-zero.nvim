@@ -555,6 +555,17 @@ set_sign_icons({opts}): ~
       info = '»'
     })
 <
+                                                        *lsp-zero.installed()*
+
+installed(): ~
+    Returns the list of language servers installed by |mason.nvim|. This
+    function depends on the plugin |mason-lspconfig.nvim|.
+
+    To get the list of servers quickly from command mode you can execute this
+    command.
+>lua
+    :lua require('lsp-zero').installed()
+<
                                                        *lsp-zero.new_server()*
 
 new_server({opts}): ~
@@ -850,6 +861,47 @@ extend_cmp({opts}): ~
       update_on_delete = true,
       trigger = '<C-Space>',
     })
+<
+==============================================================================
+Guides                                                       *lsp-zero-guides*
+
+                                             *lsp-zero-guide:ensure-installed*
+
+Automatic installation of LSP servers
+
+We can use the module `mason-lspconfig` to list the LSP servers we want to
+install using |mason.nvim|. Here is an example.
+>lua
+  require('mason').setup({})
+  require('mason-lspconfig').setup({
+    ensure_installed = {
+      -- Replace these with whatever servers you want to install
+      'tsserver',
+      'eslint',
+      'rust_analyzer',
+    }
+  })
+
+  local lsp = require('lsp-zero').preset({})
+
+  lsp.extend_cmp()
+
+  lsp.on_attach(function(client, bufnr)
+    lsp.default_keymaps({buffer = bufnr})
+  end)
+
+  lsp.setup_servers(lsp.installed())
+<
+Notice here we use the function |lsp-zero.installed()|, we do that to get the
+complete list of installed servers. If you install more LSP servers in the
+future you don't have to add it in the function |lsp-zero.setup_servers()|.
+
+If you need to setup a set of LSP servers manually, you can use the property
+`exclude` in the second argument of |lsp-zero.setup_servers()|.
+>lua
+  lsp.setup_servers(lsp.installed(), {
+    exclude = {'rust_analyzer', 'jdtls'}
+  })
 <
 ==============================================================================
 Version                                                     *lsp-zero-version*
