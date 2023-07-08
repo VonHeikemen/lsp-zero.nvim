@@ -218,21 +218,29 @@ Lua API                                                     *lsp-zero-lua-api*
                                                            *lsp-zero.preset()*
 
 preset({opts}): ~
-    This creates a combination of settings suitable for common use cases.
-    For more details see |lsp-zero-presets|.
+    Here is where you can add settings specific to lsp-zero.
 
-                                                  *lsp-zero.default_keymaps()*
+    The {opts} table supports the following properties.
 
-default_keymaps({opts}): ~
-    Create the keybindings bound to built-in LSP functions.
+        float_border: ~
+            (optional) String, default value is `'rounded'`. Can have one of
+            these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
+            `'shadow'`.
 
-    The {opts} table supports the same properties as `set_lsp_keymaps` and
-    adds the following:
+        set_signcolumn: ~
+            (optional) Boolean, default value is `true`. When set to `true` it
+            will reserve a space in the gutter for the diagnostic signs.
 
-        buffer: ~
-            Number. The "id" of an open buffer. If the number 0 is provided
-            then the keymaps will be effective in the current buffer.
-
+        extend_lspconfig: ~
+            (optional) Boolean, default value is `true`. When set to `true` it
+            will integrate nvim-cmp with lspconfig.
+>lua
+    local lsp = require('lsp-zero').preset({
+      float_border = 'rounded',
+      set_signcolumn = true,
+      extend_lspconfig = true,
+    })
+<
                                                         *lsp-zero.on_attach()*
 
 on_attach({callback}): ~
@@ -251,6 +259,36 @@ on_attach({callback}): ~
 
       bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
       -- more code  ...
+    end)
+
+    -- Replace the language servers listed here
+    -- with the ones you have installed
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+<
+                                                  *lsp-zero.default_keymaps()*
+
+default_keymaps({opts}): ~
+    Create the keybindings bound to built-in LSP functions.
+
+    The {opts} table supports the same properties as `set_lsp_keymaps` and
+    adds the following:
+
+        buffer: ~
+            (optional) Number. The "id" of an open buffer. If the number 0 is
+            provided then the keymaps will be effective in the current buffer.
+
+        preserve_mappings: ~
+            (optional) Boolean, default value is `true`. When set to `true`
+            lsp-zero will not override your existing keybindings.
+
+        exclude: ~
+            (optional) Table. List of string, must be valid keybindings.
+            lsp-zero will preserve the behavior of these keybindings.
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
     end)
 
     -- Replace the language servers listed here

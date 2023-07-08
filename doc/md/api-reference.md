@@ -18,6 +18,14 @@
 
 Here is where you can add settings specific to lsp-zero.
 
+The `{opts}` table supports the following properties.
+
+  * float_border: (optional) String, default value is `'rounded'`. Can have one of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`.
+
+  * set_signcolumn: (optional) Boolean, default value is `true`. When set to `true` it will reserve a space in the gutter for the diagnostic signs.
+
+  * extend_lspconfig: (optional) Boolean, default value is `true`. When set to `true` it will integrate nvim-cmp with lspconfig.
+
 ```lua
 local lsp = require('lsp-zero').preset({
   float_border = 'rounded',
@@ -30,9 +38,25 @@ local lsp = require('lsp-zero').preset({
 
 Create the keybindings bound to built-in LSP functions. 
 
-The `{opts}` table supports the same properties as [set_lsp_keymaps](#set_lsp_keymaps) and adds the following:
+The {opts} table supports the same properties as `set_lsp_keymaps` and adds the following:
 
-  * buffer: Number. The "id" of an open buffer. If the number `0` is provided then the keymaps will be effective in the current buffer.
+  * buffer: (optional) Number. The "id" of an open buffer. If the number 0 is provided then the keymaps will be effective in the current buffer.
+
+  * preserve_mappings: (optional) Boolean, default value is `true`. When set to `true` lsp-zero will not override your existing keybindings.
+
+  * exclude: (optional) Table. List of string, must be valid keybindings. lsp-zero will preserve the behavior of these keybindings.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+-- Replace the language servers listed here
+-- with the ones you have installed
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+```
 
 #### LSP Actions
 
@@ -65,6 +89,16 @@ The `{opts}` table supports the same properties as [set_lsp_keymaps](#set_lsp_ke
 ### `.set_sign_icons({opts})`
 
 Defines the sign icons that appear in the gutter.
+
+`{opts}` table supports these properties:
+
+  * error: Text for the error signs.
+
+  * warn: Text for the warning signs.
+
+  * hint: Text for the hint signs.
+
+  * info: Text for the information signs.
 
 ```lua
 local lsp = require('lsp-zero')
