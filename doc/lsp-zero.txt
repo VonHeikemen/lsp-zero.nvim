@@ -23,7 +23,7 @@ the |lsp-zero.setup()| function.
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
   end)
-  
+
   -- Replace the language servers listed here
   -- with the ones you have installed
   lsp.setup_servers({'tsserver', 'rust_analyzer'})
@@ -222,18 +222,15 @@ preset({opts}): ~
 
     The {opts} table supports the following properties.
 
-        float_border: ~
-            (optional) String, default value is `'rounded'`. Can have one of
-            these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
-            `'shadow'`.
+        *• float_border: (String, Optional) Defaults to `'rounded'`. Can have one
+        of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
+        `'shadow'`.
 
-        set_signcolumn: ~
-            (optional) Boolean, default value is `true`. When set to `true` it
-            will reserve a space in the gutter for the diagnostic signs.
+        *• set_signcolumn: (Boolean, Optional) Defaults to `true`. When set to
+        `true` it will reserve a space in the gutter for the diagnostic signs.
 
-        extend_lspconfig: ~
-            (optional) Boolean, default value is `true`. When set to `true` it
-            will integrate nvim-cmp with lspconfig.
+        *• extend_lspconfig: (Boolean, Optional) Defaults to `true`. When set
+        to `true` it will integrate nvim-cmp with lspconfig.
 >lua
     local lsp = require('lsp-zero').preset({
       float_border = 'rounded',
@@ -273,17 +270,18 @@ default_keymaps({opts}): ~
     The {opts} table supports the same properties as `set_lsp_keymaps` and
     adds the following:
 
-        buffer: ~
-            (optional) Number. The "id" of an open buffer. If the number 0 is
-            provided then the keymaps will be effective in the current buffer.
+        • buffer: (Number, Optional) Defaults to 0. The "id" of an open buffer.
+        If the number 0 is provided then the keymaps will be effective in the
+        current buffer.
 
-        preserve_mappings: ~
-            (optional) Boolean, default value is `true`. When set to `true`
-            lsp-zero will not override your existing keybindings.
+        • preserve_mappings: (Boolean, Optional) Defaults to `true`. When set to
+        `true` lsp-zero will not override your existing keybindings.
 
-        exclude: ~
-            (optional) Table. List of string, must be valid keybindings.
-            lsp-zero will preserve the behavior of these keybindings.
+        • exclude: (Table, Optional) List of valid keybindings. lsp-zero will
+        preserve the behavior of these keybindings.
+
+    The best place to add this function is the callback of
+    |lsp-zero.on_attach()|.
 >lua
     local lsp = require('lsp-zero').preset({})
 
@@ -323,9 +321,48 @@ configure({name}, {opts}): ~
 
 setup_servers({list}): ~
     Will configure all the language servers you have on {list}.
+
+    The {opts} table supports the following properties:
+
+        • exclude: (Table, Optional). List of names of LSP servers you don't
+        want to setup.
+
+        • defer: (Boolean, Optional) Defaults to `false`. Delay the setup of
+        language servers.
+
+    Here is the basic usage.
 >lua
-    lsp.setup_servers({'html', 'cssls'})
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
+    -- Replace the language servers listed here
+    -- with the ones you have installed
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
+    When you mix this function with explict calls to `lspconfig`, order
+    matters. |lsp-zero.setup_servers()| will not configure a server that was
+    already initialized by lspconfig.
+
+    If you plan to use the function |lsp-zero.installed()| to get an automatic
+    setup is best that you place |lsp-zero.setup_servers()| after the calls to
+    lspconfig.
+>lua
+    require('mason').setup({})
+    require('mason-lspconfig').setup({
+      ensure_installed = {'tsserver'}
+    })
+
+    local lsp = require('lsp-zero').preset({})
+
+    require('lspconfig').tsserver.setup({
+      single_file_support = false,
+    })
+
+    lsp.setup_servers(lsp.installed())
+<
+    In this case |lsp-zero.setup_servers()| will skip the setup of `tsserver`.
+
                                                     *lsp-zero.build_options()*
 
 build_options({server}, {opts}): ~
@@ -412,20 +449,19 @@ format_on_save({opts}): ~
     Keep in mind it's only meant to allow one LSP server per filetype,
     this is so the formatting is consistent.
 
-    `{opts}` supports the following properties:
+    {opts} supports the following properties:
 
-        * servers: (Table) Key/value pair list. On the left hand side you must
+        • servers: (Table) Key/value pair list. On the left hand side you must
         specify the name of a language server. On the right hand side you must
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        * format_opts: (Table). These are the same options you can pass to
+        • format_opts: (Table, Optional). These are the same options you can pass to
         |vim.lsp.buf.format()|.
 
     When you enable async formatting the only arguments in `format_opts` that
     will have any effect are `formatting_options` and `timeout_ms`, the rest
     will be ignored.
-
 >lua
     local lsp = require('lsp-zero').preset({})
 
@@ -451,17 +487,15 @@ format_on_save({opts}): ~
 buffer_autoformat({client}, {bufnr}, {opts}): ~
     Format the current buffer using the active language servers.
 
-    If {client} argument is provided it will only use the LSP server
-    associated with that client.
+    • {client}: (Table, Optional) if provided it must be a lua table with a
+    `name` property or an instance of |vim.lsp.client|. If provided it will
+    only use the LSP server associated with that client.
 
-        * {client} (Table, Optional) if provided it must be a lua table
-        with a `name` property or an instance of |vim.lsp.client|.
+    *• {bufnr}: (Number, Optional) if provided it must be the id
+    of an open buffer.
 
-        * {bufnr} (Number, Optional) if provided it must be the id
-        of an open buffer.
-
-        * {opts}: (Table). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
+    • {opts}: (Table). These are the same options you can pass to
+    |vim.lsp.buf.format()|.
 
 >lua
     local lsp = require('lsp-zero').preset({})
@@ -488,18 +522,18 @@ async_autoformat({client}, {bufnr}, {opts}): ~
     {client}, when it gets the response it will apply the formatting and
     save the file again.
 
-      * client: (Table) It must be an instance of |vim.lsp.client|.
+    • {client}: (Table) It must be an instance of |vim.lsp.client|.
 
-      * bufnr: (Number, Optional) if provided it must be the id of an open
-      buffer.
+    • {bufnr}: (Number, Optional) if provided it must be the id of an open
+    buffer.
 
-      * opts: (Table, Optional). Supports the following properties: 
+    • {opts}: (Table, Optional). Supports the following properties:
 
-        * formatting_options: Settings send to the language server. These
+        • formatting_options: Settings send to the language server. These
         are the same settings as the `formatting_options` argument in
         |vim.lsp.buf.format()|.
 
-        * timeout_ms: (Number, Optional) Defaults to 10000. Time in
+        • timeout_ms: (Number, Optional) Defaults to 10000. Time in
         milliseconds to ignore the current format request.
 
     Do not use this in the global `on_attach`, call this function
@@ -527,22 +561,22 @@ async_autoformat({client}, {bufnr}, {opts}): ~
 <
                                                    *lsp-zero.format_mapping()*
 format_mapping({key}, {opts}): ~
-    Configure {key} to format the current buffer.   
+    Configure {key} to format the current buffer.
 
     The idea here is that you associate a language server with a list of
     filetypes, so {key} can format the buffer using only one LSP server.
 
-    `{opts}` supports the following properties:
+    {opts} supports the following properties:
 
-        * servers: (Table) Key/value pair list. On the left hand side you must
+        • servers: (Table) Key/value pair list. On the left hand side you must
         specify the name of a language server. On the right hand side you must
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        * format_opts: (Table). These are the same options you can pass to
+        • format_opts: (Table). These are the same options you can pass to
         |vim.lsp.buf.format()|.
 
-        * mode: (Table). The list of modes where the keybinding will be active.
+        • mode: (Table). The list of modes where the keybinding will be active.
         By default is set to `{'n', 'x'}`, which means normal mode and visual
         mode.
 
@@ -573,19 +607,16 @@ set_sign_icons({opts}): ~
 
     {opts} table supports these properties:
 
-        * error: ~
-            Text for the error signs.
+        • error: (String, Optional) Text for the error signs.
 
-        * warn: ~
-            Text for the warning signs.
+        • warn: (String, Optional) Text for the warning signs.
 
-        * hint: ~
-            Text for the hint signs.
+        • hint: (String, Optional) Text for the hint signs.
 
-        * info: ~
-            Text for the information signs.
+        • info: (String, Optional) Text for the information signs. >lua
 
->lua
+    local lsp = require('lsp-zero')
+
     lsp.set_sign_icons({
       error = '✘',
       warn = '▲',
@@ -635,24 +666,24 @@ new_server({opts}): ~
     This function does not depend on `lspconfig`, it's a thin wrapper
     around a Neovim function called |vim.lsp.start()|.
 
-    `{opts}` supports every property `vim.lsp.start` supports with
+    {opts} supports every property |vim.lsp.start()| supports with
     a few changes:
 
-        * `filestypes`: (Table) Can be list filetype names. This can be
+        • filestypes: (Table) Can be list filetype names. This can be
         any pattern the `FileType` autocommand accepts.
 
-        * `root_dir`: Can be a function, it'll be executed after Neovim
+        • root_dir: Can be a function, it'll be executed after Neovim
         assigns the file type for a buffer. If it returns a string
         that will be considered the root directory for the project.
 
     Other important properties are:
 
-        * `cmd`: (Table) A lua table with the arguments necessary to start
+        • cmd: (Table) A lua table with the arguments necessary to start
         the language server.
 
-        * `name`: (String) The name Neovim will assign to the client object.
+        • name: (String) The name Neovim will assign to the client object.
 
-        * `on_attach`: (Function) A function that will be executed after
+        • on_attach: (Function) A function that will be executed after
         the language server gets attached to a buffer.
 
     Here is an example that starts the typescript language server on
@@ -686,12 +717,11 @@ dir.find_first({list}): ~
 
     {list} supports the following properties:
 
-      * path: (String) The path from where it should start looking for
+      • path: (String) The path from where it should start looking for
       the files in {list}.
 
-      * buffer: (Boolean) When enabled use the path of the current buffer.
+      • buffer: (Boolean) When enabled use the path of the current buffer. >lua
 
->lua
     local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
@@ -718,12 +748,12 @@ dir.find_all({list}): ~
 
     {list} supports the following properties:
 
-      * path: (String) The path from where it should start looking for
-      the files in {list}.
+      • path: (String, Optional) The path from where it should start looking
+      for the files in {list}.
 
-      * buffer: (Boolean) When enabled use the path of the current buffer.
+      • buffer: (Boolean, Optional) When enabled use the path of the current
+      buffer. >lua
 
->lua
     local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
@@ -747,38 +777,37 @@ cmp_action(): ~
 
     These are the supported methods:
 
-        tab_complete: ~
-            Enables completion when the cursor is inside a word.
-            If the completion menu is visible it will navigate
-            to the next item in the list. If the line is empty
-            it uses the fallback.
+        • tab_complete: ~
+            Enables completion when the cursor is inside a word. If the
+            completion menu is visible it will navigate to the next item in
+            the list. If the line is empty it uses the fallback.
 
-        select_prev_or_fallback: ~
+        • select_prev_or_fallback: ~
             If the completion menu is visible navigate to the
             previous item in the list. Else, uses the fallback.
 
-        toggle_completion: ~
+        • toggle_completion: ~
             If the completion menu is visible it cancels the process.
             Else, it triggers the completion menu.
 
-        luasnip_jump_forward: ~
+        • luasnip_jump_forward: ~
             Go to the next placeholder in the snippet.
 
-        luasnip_jump_backward: ~
+        • luasnip_jump_backward: ~
             Go to the previous placeholder in the snippet.
 
-        luasnip_next: ~
+        • luasnip_next: ~
             If completion menu is visible it will navigate to the item in the
             list. If the cursor can jump to a snippet placeholder, it moves to
             it. Else, it uses the fallback.
 
-        luasnip_next_or_expand: ~
+        • luasnip_next_or_expand: ~
             If completion menu is visible it will navigate to the item in the
             list. If cursor is on top of the trigger of a snippet it'll expand
             it. If the cursor can jump to a snippet placeholder, it moves to
             it. Else, it uses the fallback.
 
-        luasnip_supertab: ~
+        • luasnip_supertab: ~
             If the completion menu is visible it will navigate to the
             next item in the list. If cursor is on top of the trigger
             of a snippet it'll expand it. If the cursor can jump to a
@@ -786,7 +815,7 @@ cmp_action(): ~
             the middle of a word that doesn't trigger a snippet it
             displays the completion menu. Else, it uses the fallback.
 
-        luasnip_shift_supertab: ~
+        • luasnip_shift_supertab: ~
             If the completion menu is visible it'll navigate to previous item
             in the list. If the cursor can navigate to a previous snippet
             placeholder, it moves to it. Else, it uses the fallback.
@@ -838,66 +867,65 @@ extend_cmp({opts}): ~
 
     {opts} supports the following properties:
 
-      * autocomplete: (String) Default value is `false`. When enabled it
+      • autocomplete: (String, Optional) Defaults to `false`. When enabled it
       triggers the completion menu if the character under the cursor matches
       `opts.keyword_pattern`. Completions will be disabled when you are
-      recording a macro. Do note, the implementation here is extremely
-      simple, there isn't any kind of optimizations in place. Is literally
-      like pressing `<Ctrl-x><Ctrl-o>` after you insert a character in a
-      word.
-      
-      * tabcomplete: (Boolean) Default value is `false`. When enabled `<Tab>`
-      will trigger the completion menu if the cursor is in the middle of a
-      word. When the completion menu is visible it will navigate to the next
-      item in the menu. If there is a blank character under the cursor it
+      recording a macro. Do note, the implementation here is extremely simple,
+      there isn't any kind of optimizations in place. Is literally like
+      pressing `<Ctrl-x><Ctrl-o>` after you insert a character in a word.
+
+      • tabcomplete: (Boolean, Optional) Defaults to `false`. When enabled
+      `<Tab>` will trigger the completion menu if the cursor is in the middle
+      of a word. When the completion menu is visible it will navigate to the
+      next item in the menu. If there is a blank character under the cursor it
       inserts a `Tab` character. `<Shift-Tab>` will navigate to the previous
       item in the menu, and if the menu is not visible it'll insert a `Tab`
       character.
 
-      * trigger: (String) It must be a valid keyboard shortcut. This will be
-      used as a keybinding to trigger the completion menu manually.
-      Actually, it will be able to toggle the completion menu. You'll be
-      able to show and hide the menu with the same keybinding.
+      • trigger: (String, Optional) It must be a valid keyboard shortcut. This
+      will be used as a keybinding to trigger the completion menu manually.
+      Actually, it will be able to toggle the completion menu. You'll be able
+      to show and hide the menu with the same keybinding.
 
-      * use_fallback: (Boolean) Default value is `false`. When enabled
+      • use_fallback: (Boolean, Optional) Defaults to `false`. When enabled
       lsp-zero will try to complete using the words in the current buffer. And
       when an LSP server is attached to the buffer, it will replace the
       fallback completion with the LSP completions.
 
-      * keyword_pattern: (String) Regex pattern used by the autocomplete
-      implementation. Default value is `"[[:keyword:]]"`.
+      • keyword_pattern: (String, Optional) Defaults to `"[[:keyword:]]"`.
+      Regex pattern used by the autocomplete implementation.
 
-      * update_on_delete: (Boolean) Default value is `false`. Turns out Neovim
-      will hide the completion menu when you delete a character, so when you
-      enable this option lsp-zero will trigger the menu again after you press
-      `<backspace>`. This will only happen with LSP completions, the fallback
-      completion updates automatically (again, this is Neovim's default
-      behavior). This option is disabled by default because it requires
-      lsp-zero to bind the backspace key, which may cause conflicts with other
-      plugins.
+      • update_on_delete: (Boolean, Optional) Defaults to `false`. Turns out
+      Neovim will hide the completion menu when you delete a character, so
+      when you enable this option lsp-zero will trigger the menu again after
+      you press `<backspace>`. This will only happen with LSP completions, the
+      fallback completion updates automatically (again, this is Neovim's
+      default behavior). This option is disabled by default because it
+      requires lsp-zero to bind the backspace key, which may cause conflicts
+      with other plugins.
 
-      * select_behavior: (String) Default value is `"select"`. Configures what
-      happens when you select an item in the completion menu. When the value
-      is `"insert"` Neovim will insert the text of the item in the buffer.
-      When the value is `"select"` nothing happens, Neovim will only highlight
-      the item in the menu, the text in the buffer will not change.
+      • select_behavior: (String, Optional) Defaults to `"select"`. Configures
+      what happens when you select an item in the completion menu. When the
+      value is `"insert"` Neovim will insert the text of the item in the
+      buffer. When the value is `"select"` nothing happens, Neovim will only
+      highlight the item in the menu, the text in the buffer will not change.
 
-      * preselect: (Boolean) Default value is `true`. When enabled the first
-      item in the completion menu will be selected automatically.
+      • preselect: (Boolean, Optional) Defaults to `true`. When enabled the
+      first item in the completion menu will be selected automatically.
 
-      * verbose: (Boolean) Default value is `false`. When enabled Neovim will
-      show the state of the completion in message area.
+      • verbose: (Boolean, Optional) Defaults to `false`. When enabled Neovim
+      will show the state of the completion in message area.
 
-      * mapping: (Table) Defaults to an empty table. With this you can
-      configure the keybinding for common actions.
+      • mapping: (Table, Optional) Defaults to an empty table. With this you
+      can configure the keybinding for common actions.
 
-          * confirm: Accept the selected completion item.
+          • confirm: Accept the selected completion item.
 
-          * abort: Cancel current completion.
+          *• abort: Cancel current completion.
 
-          * next_item: Navigate to next item in the completion menu.
+          *• next_item: Navigate to next item in the completion menu.
 
-          * prev_item: Navigate to previous item in the completion menu.
+          • prev_item: Navigate to previous item in the completion menu.
 
     You can configure a basic "tab completion" behavior using these settings.
 >lua
@@ -965,6 +993,8 @@ If you need to setup a set of LSP servers manually, you can use the property
 Version                                                     *lsp-zero-version*
 
 Current version: `v3-dev`
+
+This is a development branch, breaking changes can happen. 
 
 The code on this version requires Neovim v0.8 or greater. If you need support
 for Neovim v0.7 or lower use the `v1.x` branch of lsp.zero.
