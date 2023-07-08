@@ -222,15 +222,18 @@ preset({opts}): ~
 
     The {opts} table supports the following properties.
 
-        *• float_border: (String, Optional) Defaults to `'rounded'`. Can have one
+        • float_border: (String, Optional) Defaults to `'rounded'`. Can have one
         of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
         `'shadow'`.
 
-        *• set_signcolumn: (Boolean, Optional) Defaults to `true`. When set to
+        • set_signcolumn: (Boolean, Optional) Defaults to `true`. When set to
         `true` it will reserve a space in the gutter for the diagnostic signs.
 
-        *• extend_lspconfig: (Boolean, Optional) Defaults to `true`. When set
+        • extend_lspconfig: (Boolean, Optional) Defaults to `true`. When set
         to `true` it will integrate nvim-cmp with lspconfig.
+    
+    Note that the return value is the same as the module `lsp-zero`, so this
+    is valid (and encouraged).
 >lua
     local lsp = require('lsp-zero').preset({
       float_border = 'rounded',
@@ -491,7 +494,7 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     `name` property or an instance of |vim.lsp.client|. If provided it will
     only use the LSP server associated with that client.
 
-    *• {bufnr}: (Number, Optional) if provided it must be the id
+    • {bufnr}: (Number, Optional) if provided it must be the id
     of an open buffer.
 
     • {opts}: (Table). These are the same options you can pass to
@@ -613,8 +616,10 @@ set_sign_icons({opts}): ~
 
         • hint: (String, Optional) Text for the hint signs.
 
-        • info: (String, Optional) Text for the information signs. >lua
+        • info: (String, Optional) Text for the information signs.
 
+    Here is an example with basic icons (doesn't require a nerd fonts).
+>lua
     local lsp = require('lsp-zero')
 
     lsp.set_sign_icons({
@@ -713,15 +718,16 @@ dir.find_first({list}): ~
     Checks the parent directories and returns the path to the first folder
     that has a file in {list}. Useful to detect the root directory.
 
-    Note: search will stop once it gets to your "HOME" folder.
-
     {list} supports the following properties:
 
-      • path: (String) The path from where it should start looking for
+      • path: (String, Optional) The path from where it should start looking for
       the files in {list}.
 
-      • buffer: (Boolean) When enabled use the path of the current buffer. >lua
+      • buffer: (Boolean, Optional) When enabled it will use the path of the
+      current buffer.
 
+    Note: search will stop once it gets to your "HOME" folder.
+>lua
     local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
@@ -744,16 +750,16 @@ dir.find_all({list}): ~
     Checks the parent directories and returns the path to the first folder
     that has all the files in {list}. Useful to detect the root directory.
 
-    Note: search will stop once it gets to your "HOME" folder.
-
     {list} supports the following properties:
 
       • path: (String, Optional) The path from where it should start looking
       for the files in {list}.
 
       • buffer: (Boolean, Optional) When enabled use the path of the current
-      buffer. >lua
+      buffer.
 
+    Note: search will stop once it gets to your "HOME" folder.
+>lua
     local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
@@ -867,65 +873,67 @@ extend_cmp({opts}): ~
 
     {opts} supports the following properties:
 
-      • autocomplete: (String, Optional) Defaults to `false`. When enabled it
-      triggers the completion menu if the character under the cursor matches
-      `opts.keyword_pattern`. Completions will be disabled when you are
-      recording a macro. Do note, the implementation here is extremely simple,
-      there isn't any kind of optimizations in place. Is literally like
-      pressing `<Ctrl-x><Ctrl-o>` after you insert a character in a word.
+        • autocomplete: (String, Optional) Defaults to `false`. When enabled
+        it triggers the completion menu if the character under the cursor
+        matches `opts.keyword_pattern`. Completions will be disabled when you
+        are recording a macro. Do note, the implementation here is extremely
+        simple, there isn't any kind of optimizations in place. Is literally
+        like pressing `<Ctrl-x><Ctrl-o>` after you insert a character in a
+        word.
 
-      • tabcomplete: (Boolean, Optional) Defaults to `false`. When enabled
-      `<Tab>` will trigger the completion menu if the cursor is in the middle
-      of a word. When the completion menu is visible it will navigate to the
-      next item in the menu. If there is a blank character under the cursor it
-      inserts a `Tab` character. `<Shift-Tab>` will navigate to the previous
-      item in the menu, and if the menu is not visible it'll insert a `Tab`
-      character.
+        • tabcomplete: (Boolean, Optional) Defaults to `false`. When enabled
+        `<Tab>` will trigger the completion menu if the cursor is in the
+        middle of a word. When the completion menu is visible it will navigate
+        to the next item in the menu. If there is a blank character under the
+        cursor it inserts a `Tab` character. `<Shift-Tab>` will navigate to
+        the previous item in the menu, and if the menu is not visible it'll
+        insert a `Tab` character.
 
-      • trigger: (String, Optional) It must be a valid keyboard shortcut. This
-      will be used as a keybinding to trigger the completion menu manually.
-      Actually, it will be able to toggle the completion menu. You'll be able
-      to show and hide the menu with the same keybinding.
+        • trigger: (String, Optional) It must be a valid keyboard shortcut.
+        This will be used as a keybinding to trigger the completion menu
+        manually. Actually, it will be able to toggle the completion menu.
+        You'll be able to show and hide the menu with the same keybinding.
 
-      • use_fallback: (Boolean, Optional) Defaults to `false`. When enabled
-      lsp-zero will try to complete using the words in the current buffer. And
-      when an LSP server is attached to the buffer, it will replace the
-      fallback completion with the LSP completions.
+        • use_fallback: (Boolean, Optional) Defaults to `false`. When enabled
+        lsp-zero will try to complete using the words in the current buffer.
+        And when an LSP server is attached to the buffer, it will replace the
+        fallback completion with the LSP completions.
 
-      • keyword_pattern: (String, Optional) Defaults to `"[[:keyword:]]"`.
-      Regex pattern used by the autocomplete implementation.
+        • keyword_pattern: (String, Optional) Defaults to `"[[:keyword:]]"`.
+        Regex pattern used by the autocomplete implementation.
 
-      • update_on_delete: (Boolean, Optional) Defaults to `false`. Turns out
-      Neovim will hide the completion menu when you delete a character, so
-      when you enable this option lsp-zero will trigger the menu again after
-      you press `<backspace>`. This will only happen with LSP completions, the
-      fallback completion updates automatically (again, this is Neovim's
-      default behavior). This option is disabled by default because it
-      requires lsp-zero to bind the backspace key, which may cause conflicts
-      with other plugins.
+        • update_on_delete: (Boolean, Optional) Defaults to `false`. Turns out
+        Neovim will hide the completion menu when you delete a character, so
+        when you enable this option lsp-zero will trigger the menu again after
+        you press `<backspace>`. This will only happen with LSP completions,
+        the fallback completion updates automatically (again, this is Neovim's
+        default behavior). This option is disabled by default because it
+        requires lsp-zero to bind the backspace key, which may cause conflicts
+        with other plugins.
 
-      • select_behavior: (String, Optional) Defaults to `"select"`. Configures
-      what happens when you select an item in the completion menu. When the
-      value is `"insert"` Neovim will insert the text of the item in the
-      buffer. When the value is `"select"` nothing happens, Neovim will only
-      highlight the item in the menu, the text in the buffer will not change.
+        • select_behavior: (String, Optional) Defaults to `"select"`.
+        Configures what happens when you select an item in the completion
+        menu. When the value is `"insert"` Neovim will insert the text of the
+        item in the buffer. When the value is `"select"` nothing happens,
+        Neovim will only highlight the item in the menu, the text in the
+        buffer will not change.
 
-      • preselect: (Boolean, Optional) Defaults to `true`. When enabled the
-      first item in the completion menu will be selected automatically.
+        • preselect: (Boolean, Optional) Defaults to `true`. When enabled the
+        first item in the completion menu will be selected automatically.
 
-      • verbose: (Boolean, Optional) Defaults to `false`. When enabled Neovim
-      will show the state of the completion in message area.
+        • verbose: (Boolean, Optional) Defaults to `false`. When enabled
+        Neovim will show the state of the completion in message area.
 
-      • mapping: (Table, Optional) Defaults to an empty table. With this you
-      can configure the keybinding for common actions.
+        • mapping: (Table, Optional) Defaults to an empty table. With this you
+        can configure the keybinding for common actions.
 
-          • confirm: Accept the selected completion item.
+            • confirm: Accept the selected completion item.
 
-          *• abort: Cancel current completion.
+            • abort: Cancel current completion.
 
-          *• next_item: Navigate to next item in the completion menu.
+            • next_item: Navigate to next item in the completion menu.
 
-          • prev_item: Navigate to previous item in the completion menu.
+            • prev_item: Navigate to previous item in the completion menu.
 
     You can configure a basic "tab completion" behavior using these settings.
 >lua
