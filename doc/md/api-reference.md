@@ -192,9 +192,9 @@ lsp.extend_cmp()
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
-When you mix [.setup_servers()](#setup_servers(list-opts)) with explict calls to `lspconfig`, order matters. [.setup_servers()](#setup_servers(list-opts)) will not setup a server that was already initialized by lspconfig.
+When you mix [.setup_servers()](#setup_serverslist-opts)) with explict calls to `lspconfig`, order matters. [.setup_servers()](#setup_serverslist-opts) will not setup a server that was already initialized by lspconfig.
 
-If you plan to use the function [.installed()](#installed) to get an automatic setup is best that you place [.setup_servers()](#setup_servers(list-opts)) after the calls to lspconfig.
+If you plan to use the function [.installed()](#installed) to get an automatic setup is best that you place [.setup_servers()](#setup_serverslist-opts) after the calls to lspconfig.
 
 ```lua
 require('mason').setup({})
@@ -505,6 +505,11 @@ require('lspconfig').vuels.setup({
   end
 })
 ```
+
+### `.extend_lspconfig()`
+Takes care of the integration between lspconfig and nvim-cmp.
+
+It extends the `capabilities` option in lspconfig's defaults, using the plugin `cmp_nvim_lsp`. And it creates a "hook" so users can provide their own default config using [.set_server_config()](#set_server_configopts)).
 
 ### `.cmp_action()`
 

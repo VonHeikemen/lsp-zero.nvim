@@ -787,6 +787,16 @@ dir.find_all({list}): ~
       end
     })
 <
+
+                                                 *lsp-zero.extend_lspconfig()*
+
+extend_lspconfig(): ~
+    Takes care of the integration between lspconfig and nvim-cmp.
+
+    It extends the `capabilities` option in lspconfig's defaults, using the
+    plugin `cmp_nvim_lsp`. And it creates a "hook" so users can provide their
+    own default config using |lsp-zero.set_server_config()|.
+
                                                        *lsp-zero.cmp_action()*
 
 cmp_action(): ~
