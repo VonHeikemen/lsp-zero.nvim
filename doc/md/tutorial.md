@@ -214,20 +214,26 @@ require('lazy').setup({
 })
 ```
 
-Then you would need to add these two functions in your lua config.
+Then you would need to add these two functions in your lua config. `mason.nvim` will make sure we have access to the LSP servers, so we need to add them before lsp-zero's setup.
 
 ```lua
 require('mason').setup({})
 require('mason-lspconfig').setup({})
+
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
 ```
 
 Once you have `mason.nvim` setup you will have access to a command called `:LspInstall`. If you execute that command while you have a file opened `mason-lspconfig.nvim` will suggest a language server compatible with that type of file.
 
-Keep in mind the setup for `mason.nvim` should always go before the config of lsp-zero.
-
 #### LSP setup
 
-You can setup all the language servers using the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist). Like this.
+At this point you can setup the available language servers using the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts). That function expects a list of the language server, so you can list all available servers.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -243,7 +249,7 @@ end)
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
-And if you need to configure a particular language server I recommend you use the module `lspconfig`. Call the setup function of the language server.
+If you need to configure a particular language server I recommend you use the module `lspconfig`. Call the setup function of the language server.
 
 For example, if you install the language server for `lua` you would do something like this.
 
