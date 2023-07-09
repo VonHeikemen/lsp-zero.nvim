@@ -366,6 +366,17 @@ setup_servers({list}): ~
 <
     In this case |lsp-zero.setup_servers()| will skip the setup of `tsserver`.
 
+                                                 *lsp-zero.get_capabilities()*
+
+get_capabilities(): ~
+    Returns Neovim's default capabilities mixed with the capabilities provided
+    by the `cmp_nvim_lsp` plugin.
+
+    This is useful when you want to configure a language using a specialized
+    plugin. See the examples in quick-recipes.md:
+
+    https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md
+
                                                     *lsp-zero.build_options()*
 
 build_options({server}, {opts}): ~
