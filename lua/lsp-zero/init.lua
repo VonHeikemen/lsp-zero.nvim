@@ -7,8 +7,9 @@ local s = {
 
 M.setup = noop
 M.ensure_installed = function()
-  local msg = '[lsp-zero] The function .ensure_installed() has been removed. '
-    .. 'Use the module mason-lspconfig. See :help lsp-zero-guide:ensure-installed'
+  local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
+    .. 'Use the module mason-lspconfig to install your LSP servers.\n'
+    .. 'See :help lsp-zero-guide:ensure-installed'
   vim.notify(msg, vim.log.levels.WARN)
 end
 
