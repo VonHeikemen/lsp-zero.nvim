@@ -6,6 +6,7 @@ local s = {
 }
 
 M.setup = noop
+M.noop = noop
 M.ensure_installed = function()
   local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
     .. 'Use the module mason-lspconfig to install your LSP servers.\n'
@@ -68,15 +69,10 @@ function M.setup_servers(list, opts)
     local Server = require('lsp-zero.server')
     local exclude = opts.exclude or {}
     local autostart = not (vim.bo.filetype == '')
-    local bufnr = vim.api.nvim_get_current_buf()
 
     for _, name in ipairs(list) do
       if not vim.tbl_contains(exclude, name) then
-        local ok = Server.setup(name, {})
-
-        if autostart and ok then
-          require('lspconfig')[name].manager.try_add_wrapper(bufnr)
-        end
+        Server.setup(name, {}, autostart)
       end
     end
   end
@@ -93,7 +89,11 @@ function M.configure(name, opts)
   local Server = require('lsp-zero.server')
 
   M.store_config(name, opts)
-  Server.setup(name, opts)
+  Server.setup(name, opts, false)
+end
+
+function M.default_setup(name)
+  require('lsp-zero.server').setup(name, {}, false)
 end
 
 function M.on_attach(fn)
@@ -142,7 +142,8 @@ function M.use(servers, opts)
   end
 
   local bufnr = vim.api.nvim_get_current_buf()
-  local has_filetype = vim.bo.filetype ~= ''
+  local has_filetype = not (vim.bo.filetype == '')
+  local buffer = vim.api.nvim_get_current_buf()
 
   for _, name in ipairs(servers) do
     local config = vim.tbl_deep_extend(
@@ -155,7 +156,7 @@ function M.use(servers, opts)
     lsp.setup(config)
 
     if lsp.manager and has_filetype then
-      lsp.manager.try_add_wrapper(bufnr)
+      pcall(lsp.manager.try_add_wrapper, buffer)
     end
   end
 end
