@@ -288,6 +288,8 @@ default_keymaps({opts}): ~
 >lua
     local lsp = require('lsp-zero').preset({})
 
+    lsp.extend_cmp()
+
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -302,9 +304,21 @@ set_server_config({opts}): ~
     Share a configuration for all LSP servers configured with |lspconfig|.
     You can find more details about {opts} see |lspconfig-setup|.
 >lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
     lsp.set_server_config({
       single_file_support = false,
     })
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    -- Replace the language servers listed here
+    -- with the ones you have installed
+    lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                         *lsp-zero.configure()*
 
@@ -313,6 +327,14 @@ configure({name}, {opts}): ~
     language server. Takes the same options as `nvim-lspconfig`'s
     setup function. For more details go to |lspconfig-setup|.
 >lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
     lsp.configure('tsserver', {
       single_file_support = false,
       on_attach = function(client, bufnr)
@@ -339,33 +361,14 @@ setup_servers({list}): ~
 
     lsp.extend_cmp()
 
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
     -- Replace the language servers listed here
     -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
-    When you mix this function with explict calls to `lspconfig`, order
-    matters. |lsp-zero.setup_servers()| will not configure a server that was
-    already initialized by lspconfig.
-
-    If you plan to use the function |lsp-zero.installed()| to get an automatic
-    setup is best that you place |lsp-zero.setup_servers()| after the calls to
-    lspconfig.
->lua
-    require('mason').setup({})
-    require('mason-lspconfig').setup({
-      ensure_installed = {'tsserver'}
-    })
-
-    local lsp = require('lsp-zero').preset({})
-
-    require('lspconfig').tsserver.setup({
-      single_file_support = false,
-    })
-
-    lsp.setup_servers(lsp.installed())
-<
-    In this case |lsp-zero.setup_servers()| will skip the setup of `tsserver`.
-
                                                  *lsp-zero.get_capabilities()*
 
 get_capabilities(): ~
@@ -647,29 +650,10 @@ installed(): ~
     function depends on the plugin |mason-lspconfig.nvim|, , so if you use
     this make sure to setup mason.nvim before lsp-zero.
 
-    The common usecase for this function is to create an automatic setup of
-    language servers when using lsp-zero and mason.nvim.
->lua
-    require('mason').setup({})
-    require('mason-lspconfig').setup({})
-
-    local lsp = require('lsp-zero').preset({})
-
-    lsp.extend_cmp()
-
-    lsp.on_attach(function()
-      lsp.default_keymaps({buffer = bufnr})
-    end)
-
-    lsp.setup_servers(lsp.installed())
-<
-    Note that the servers will not be configured immediately after installion.
-    You'll need to restart Neovim after you install a server with mason.nvim.
-
     To get the list of servers quickly from command mode you can execute this
     command.
 >lua
-    :lua require('lsp-zero').installed()
+    :lua = require('lsp-zero').installed()
 <
                                                        *lsp-zero.new_server()*
 
@@ -739,7 +723,7 @@ dir.find_first({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero')
+    local lsp = require('lsp-zero').preset({})
 
     lsp.extend_cmp()
 
@@ -771,7 +755,7 @@ dir.find_all({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero')
+    local lsp = require('lsp-zero').preset({})
 
     lsp.extend_cmp()
 
