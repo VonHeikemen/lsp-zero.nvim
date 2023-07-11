@@ -88,7 +88,7 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
 <details>
 <summary>Expand lazy.nvim snippet: </summary>
 
-For a more advance config that lazy loads everything take a look these examples: [Lazy loading](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md).
+For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
 {
@@ -196,7 +196,7 @@ EOF
 
 ### Usage
 
-I will show the configuration code in sections.
+I will show the configuration code in sections. I'll show a basic config with a manual setup of LSP server, one with automatic setup of LSP server, and finally the configuration for autocomplete.
 
 #### Manual setup of LSP servers
 
