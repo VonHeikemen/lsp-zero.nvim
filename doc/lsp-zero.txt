@@ -369,6 +369,59 @@ setup_servers({list}): ~
     -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
+
+                                                   *lsp-zero.default_setup()*
+
+default_setup({server}): ~
+    Configures {server} with the default config provided by lspconfig.
+
+    This is meant to be used with |mason-lspconfig.nvim|, in order to help
+    configure automatic setup of language servers. It can be added as a
+    default handler in the setup function of the module `mason-lspconfig`.
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    require('mason').setup({})
+    require('mason-lspconfig').setup({
+      handlers = {lsp.default_setup},
+    })
+<
+                                                            *lsp-zero.noop()*
+
+noop(): ~
+    Doesn't do anything. Literally.
+
+    You can use think of this as "empty handler" for |mason-lspconfig.nvim|.
+    Consider this example.
+>lua
+    local lsp = require('lsp-zero').preset({})
+
+    lsp.extend_cmp()
+
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    require('mason').setup({})
+    require('mason-lspconfig').setup({
+      ensure_installed = {'tsserver', 'eslint', 'jdtls'},
+      handlers = {
+        lsp.default_setup,
+        jdtls = lsp.noop,
+      },
+    })
+<
+    In here `mason-lspconfig` will install all the servers in
+    `ensure_installed`. Then it will try configure the servers but it will
+    ignore `jdtls` because the handler doesn't do anything. So you are free to
+    configure jdtls however you like.
+
                                                  *lsp-zero.get_capabilities()*
 
 get_capabilities(): ~
@@ -964,44 +1017,78 @@ extend_cmp({opts}): ~
 ==============================================================================
 Guides                                                       *lsp-zero-guides*
 
-                                             *lsp-zero-guide:ensure-installed*
+                                   *lsp-zero-guide:integrate-with-mason-nvim*
 
-Automatic installation of LSP servers
+Integrate with mason.nvim
 
-We can use the module `mason-lspconfig` to list the LSP servers we want to
-install using |mason.nvim|. Here is an example.
+We can use |mason.nvim| and |mason-lspconfig.nvim| to help us manage the
+installation of language servers. And then we can use lsp-zero to help with
+the automatic configuration.
+
+Here is a basic example.
 >lua
-  require('mason').setup({})
-  require('mason-lspconfig').setup({
-    ensure_installed = {
-      -- Replace these with whatever servers you want to install
-      'tsserver',
-      'eslint',
-      'rust_analyzer',
-    }
-  })
-
   local lsp = require('lsp-zero').preset({})
-
-  lsp.extend_cmp()
 
   lsp.on_attach(function(client, bufnr)
     lsp.default_keymaps({buffer = bufnr})
   end)
 
-  lsp.setup_servers(lsp.installed())
-<
-Notice here we use the function |lsp-zero.installed()|, we do that to get the
-complete list of installed servers. If you install more LSP servers in the
-future you don't have to add it in the function |lsp-zero.setup_servers()|.
-
-If you need to setup a set of LSP servers manually, you can use the property
-`exclude` in the second argument of |lsp-zero.setup_servers()|.
->lua
-  lsp.setup_servers(lsp.installed(), {
-    exclude = {'rust_analyzer', 'jdtls'}
+  require('mason').setup({})
+  require('mason-lspconfig').setup({
+    -- Replace the language servers listed here 
+    -- with the ones you want to install
+    ensure_installed = {'tsserver', 'rust_analyzer'},
+    handlers = {lsp.default_setup},
   })
 <
+
+This config will tell `mason-lspconfig` to install tsserver and rust_analyzer
+automatically if they are missing. And lsp-zero will handle the configuration
+of those servers.
+
+Note that after you install a language server you will need to restart Neovim
+so the language can be configured properly.
+
+If we need to add a custom configuration for a server, you'll need to add a
+property to `handlers`. This new property must have the same name as the
+language server you want to configure, and you need to assign a function to
+it.
+
+Lets use `tsserver` as an example.
+>lua
+  require('mason-lspconfig').setup({
+    ensure_installed = {'tsserver', 'rust_analyzer'},
+    handlers = {
+      lsp.default_setup,
+      tsserver = function()
+        require('lspconfig').tsserver.setup({
+          settings = {
+            completions = {
+              completeFunctionCalls = true
+            }
+          }
+        })
+      end,
+    },
+  })
+<
+Here we use the module `lspconfig` to setup the language server and we add our
+custom config in the first argument of `.tsserver.setup()`.
+
+On the other hand if we want to ignore a language server we can use the
+function |lsp-zero.noop()|.
+>lua
+  require('mason-lspconfig').setup({
+    ensure_installed = {'tsserver', 'rust_analyzer'},
+    handlers = {
+      lsp.default_setup,
+      tsserver = lsp.noop,
+    },
+  })
+<
+This will cause `mason-lspconfig` to exclude `tsserver` from the automatic
+setup.
+
 ==============================================================================
 Version                                                     *lsp-zero-version*
 

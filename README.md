@@ -167,9 +167,9 @@ EOF
 
 ### Usage
 
-I will show the configuration code in two sections, one for the LSP config and another for the autocompletion.
+I will show the configuration code in sections.
 
-#### LSP config
+#### Manual setup of LSP servers
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -191,28 +191,33 @@ require('lspconfig').lua_ls.setup({})
 
 Here `lua_ls` is the language server we want to configure. And inside the `{}` is where you place the config.
 
-If you want to use [mason.nvim](https://github.com/williamboman/mason.nvim) to handle the installation of the LSP servers, make sure you configure it before using lsp-zero.
+#### Automatic setup of LSP servers
+
+You can use [mason.nvim](https://github.com/williamboman/mason.nvim) to manage the installation of the LSP servers, and lsp-zero to handle the configuration of the servers.
+
+For more details about how to use mason.nvim see the guide [how to integrate with mason.nvim](#).
+
+Here a usage example.
 
 ```lua
-require('mason').setup({})
-require('mason-lspconfig').setup({automatic_installation = true})
-
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').lua_ls.setup({})
-
--- Replace the language servers listed here
--- with the ones you want to install
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  -- Replace the language servers listed here 
+  -- with the ones you want to install
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+  handlers = {lsp.default_setup},
+})
 ```
 
-In this example `mason-lspconfig` will install `lua_ls`, `tsserver` and `rust_analyzer` automatically.
-
 #### Autocompletion
+
+For your autocomplete needs you can get a working basic config using lsp-zero, and then add your custom config using the `cmp` module directly.
 
 ```lua
 require('lsp-zero').extend_cmp()

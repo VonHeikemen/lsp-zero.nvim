@@ -213,6 +213,55 @@ lsp.setup_servers(lsp.installed())
 
 In this case [.setup_servers()](#setup_servers(list-opts)) will skip the setup of `tsserver`.
 
+
+### `.default_setup({server})`
+
+Configures `{server}` with the default config provided by lspconfig.
+
+This is meant to be used with `mason-lspconfig.nvim`, in order to help configure automatic setup of language servers. It can be added as a default handler in the setup function of the module `mason-lspconfig`.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {lsp.default_setup},
+})
+```
+
+### `.noop()`
+
+Doesn't do anything. Literally.
+
+You can use think of this as "empty handler" for `mason-lspconfig.nvim`. Consider this example.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'eslint', 'jdtls'},
+  handlers = {
+    lsp.default_setup,
+    jdtls = lsp.noop,
+  },
+})
+```
+
+In here `mason-lspconfig` will install all the servers in `ensure_installed`. Then it will try configure the servers but it will ignore `jdtls` because the handler doesn't do anything. So you are free to configure jdtls however you like.
+
 ### `.get_capabilities()`
 
 Returns Neovim's default capabilities mixed with the capabilities provided by the `cmp_nvim_lsp` plugin.
