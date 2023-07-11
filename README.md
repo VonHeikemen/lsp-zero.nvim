@@ -88,18 +88,34 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
 <details>
 <summary>Expand lazy.nvim snippet: </summary>
 
+For a more advance config that lazy loads everything take a look these examples: [Lazy loading](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md).
+
 ```lua
 {
-  'VonHeikemen/lsp-zero.nvim',
-  branch = 'dev-v3',
-  dependencies = {
-    -- LSP Support
-    {'neovim/nvim-lspconfig'},
-    -- Autocompletion
-    {'hrsh7th/nvim-cmp'},
-    {'hrsh7th/cmp-nvim-lsp'},
-    {'L3MON4D3/LuaSnip'},
-  }
+  {
+    'VonHeikemen/lsp-zero.nvim',
+    branch = 'dev-v3',
+  },
+
+  --- Uncomment these if you want to manage LSP servers from neovim
+  -- {'williamboman/mason.nvim'},
+  -- {'williamboman/mason-lspconfig.nvim'},
+
+  -- LSP Support
+  {
+    'neovim/nvim-lspconfig',
+    dependencies = {
+      {'hrsh7th/cmp-nvim-lsp'},
+    },
+  },
+
+  -- Autocompletion
+  {
+    'hrsh7th/nvim-cmp',
+    dependencies = {
+      {'L3MON4D3/LuaSnip'},
+    }
+  },
 }
 ```
 
@@ -113,6 +129,10 @@ use {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'dev-v3',
   requires = {
+    --- Uncomment these if you want to manage LSP servers from neovim
+    -- {'williamboman/mason.nvim'},
+    -- {'williamboman/mason-lspconfig.nvim'},
+
     -- LSP Support
     {'neovim/nvim-lspconfig'},
     -- Autocompletion
@@ -130,6 +150,10 @@ use {
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'};
 
+--- Uncomment these if you want to manage LSP servers from neovim
+-- {'williamboman/mason.nvim'};
+-- {'williamboman/mason-lspconfig.nvim'};
+
 -- LSP Support
 {'neovim/nvim-lspconfig'};
 -- Autocompletion
@@ -144,6 +168,10 @@ use {
 <summary>Expand vim-plug snippet: </summary>
 
 ```vim
+"  Uncomment these if you want to manage LSP servers from neovim
+"  Plug 'williamboman/mason.nvim'
+"  Plug 'williamboman/mason-lspconfig.nvim'
+
 " LSP Support
 Plug 'neovim/nvim-lspconfig'
 " Autocompletion
@@ -194,11 +222,11 @@ Here `lua_ls` is the language server we want to configure. And inside the `{}` i
 
 #### Automatic setup of LSP servers
 
-You can use [mason.nvim](https://github.com/williamboman/mason.nvim) to manage the installation of the LSP servers, and lsp-zero to handle the configuration of the servers.
+If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) you can manage the installation of the LSP servers from inside Neovim, and then use lsp-zero to handle the configuration.
 
-For more details about how to use mason.nvim see the guide how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
+For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
-Here a usage example.
+Here a basic usage example.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
