@@ -63,6 +63,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/under-the-hood.md)
   * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#you-might-not-need-lsp-zero)
   * [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md)
+  * [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md)
   * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-null-ls.md)
   * [Enable folds with nvim-ufo](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#enable-folds-with-nvim-ufo)
   * [Enable inlay hints with inlay-hints.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#enable-inlay-hints-with-inlay-hintsnvim)
@@ -195,7 +196,7 @@ Here `lua_ls` is the language server we want to configure. And inside the `{}` i
 
 You can use [mason.nvim](https://github.com/williamboman/mason.nvim) to manage the installation of the LSP servers, and lsp-zero to handle the configuration of the servers.
 
-For more details about how to use mason.nvim see the guide [how to integrate with mason.nvim](#).
+For more details about how to use mason.nvim see the guide how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
 Here a usage example.
 
