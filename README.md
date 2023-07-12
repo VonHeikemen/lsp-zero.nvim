@@ -191,7 +191,7 @@ EOF
 
 </details>
 
-### LSP config
+### Usage
 
 If you prefer to install every language server using "traditional" methods then go for the [manual setup section](#manual-setup-of-lsp-servers).
 
@@ -209,6 +209,8 @@ local lsp = require('lsp-zero').preset({})
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
+
+lsp.extend_cmp()
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
@@ -236,6 +238,8 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
+lsp.extend_cmp()
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
@@ -246,31 +250,6 @@ require('mason-lspconfig').setup({
 ```
 
 For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
-
-### Autocompletion
-
-For your autocomplete needs you can get a working basic config using the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts), and then add your custom config using the `cmp` module directly.
-
-```lua
-require('lsp-zero').extend_cmp()
-
----
--- calling `cmp.setup` is optional I'm just showing
--- how you can customize nvim-cmp
----
-local cmp = require('cmp')
-
-cmp.setup({
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
-  mapping = {
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<Enter>'] = cmp.mapping.confirm({select = false}),
-  }
-})
-```
 
 ## Language servers
 
