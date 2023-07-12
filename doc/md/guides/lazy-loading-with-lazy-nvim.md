@@ -27,7 +27,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
-      local cmp_action = require('lsp-zero.cmp').action() 
+      local cmp_action = require('lsp-zero')cmp_action() 
 
       cmp.setup({
         mapping = {
@@ -100,7 +100,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
-      local cmp_action = require('lsp-zero.cmp').action() 
+      local cmp_action = require('lsp-zero').cmp_action() 
 
       cmp.setup({
         mapping = {
