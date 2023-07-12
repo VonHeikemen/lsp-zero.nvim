@@ -6,13 +6,13 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-Hello, there. This is the development branch for version 3 of lsp-zero. 
+Hello there. This is the development branch for version 3 of lsp-zero.
 
 This version requires Neovim v0.8 or greater. If have Neovim v0.7.2 or lower please use the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
 
 ## How to get started
 
-If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md). 
+If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md).
 
 If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
 
@@ -28,11 +28,11 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Disable keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#disable-keybindings)
   * [Install new language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#install-new-language-servers)
   * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#configure-language-servers)
-  * [Disable semantic highlights](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#disable-semantic-highlights) 
+  * [Disable semantic highlights](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#disable-semantic-highlights)
   * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#disable-a-language-server)
   * [Custom servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#custom-servers)
   * [Enable Format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#enable-format-on-save)
-  * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#format-buffer-using-a-keybinding) 
+  * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#format-buffer-using-a-keybinding)
   * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#troubleshooting)
   * [Diagnostics (a.k.a. error messages, warnings, etc.)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#diagnostics)
   * [Use icons in the sign column](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#use-icons-in-the-sign-column)
@@ -57,7 +57,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [lsp-kind](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#lsp-kind)
 
 * Reference and guides
-  
+
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md)
   * [Tutorial: Step by step setup from scratch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md)
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/under-the-hood.md)
@@ -72,10 +72,10 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Setup with rust-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-rust-tools)
   * [Setup with typescript.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-typescriptnvim)
   * [Setup with flutter-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-flutter-tools)
-  * [Setup with nvim-jdtls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/setup-with-nvim-jdtls.md) 
+  * [Setup with nvim-jdtls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/setup-with-nvim-jdtls.md)
   * [Setup with nvim-metals](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-nvim-metals)
   * [Setup with haskell-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-haskell-tools)
-  * [Setup with clangd_extensions.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-clangd_extensionsnvim) 
+  * [Setup with clangd_extensions.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-clangd_extensionsnvim)
 
 ## Quickstart (for the impatient)
 
@@ -86,16 +86,13 @@ This section will teach you how to create a basic configuration.
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
 
 <details>
-<summary>Expand lazy.nvim snippet: </summary>
+<summary>Expand: lazy.nvim snippet </summary>
 
 For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
 {
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
-  },
+  {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'},
 
   --- Uncomment these if you want to manage LSP servers from neovim
   -- {'williamboman/mason.nvim'},
@@ -122,7 +119,7 @@ For a more advance config that lazy loads everything take a look at the example 
 </details>
 
 <details>
-<summary>Expand packer.nvim snippet: </summary>
+<summary>Expand: packer.nvim snippet </summary>
 
 ```lua
 use {
@@ -145,7 +142,7 @@ use {
 </details>
 
 <details>
-<summary>Expand paq.nvim snippet: </summary>
+<summary>Expand: paq.nvim snippet </summary>
 
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'};
@@ -165,7 +162,7 @@ use {
 </details>
 
 <details>
-<summary>Expand vim-plug snippet: </summary>
+<summary>Expand: vim-plug snippet </summary>
 
 ```vim
 "  Uncomment these if you want to manage LSP servers from neovim
@@ -194,11 +191,17 @@ EOF
 
 </details>
 
-### Usage
+### LSP config
 
-I will show the configuration code in sections. I'll show a basic config with a manual setup of LSP server, one with automatic setup of LSP server, and finally the configuration for autocomplete.
+If you prefer to install every language server using "traditional" methods then go for the [manual setup section](#manual-setup-of-lsp-servers).
+
+If want to manage the install and update of LSP servers from within Neovim then go to the [automatic setup section](#automatic-setup-of-lsp-servers).
 
 #### Manual setup of LSP servers
+
+First thing you'll want to do is install the language servers you want to use. Visit nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
+
+Once you have the LSP servers in your system, add the config of lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -212,19 +215,17 @@ end)
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
-If you need to customize a language server use the module `lspconfig`. Call the `setup` function of the LSP server like this.
+If you want to customize a language server use the module `lspconfig`. Call the `setup` function of the LSP server like this.
 
 ```lua
 require('lspconfig').lua_ls.setup({})
 ```
 
-Here `lua_ls` is the language server we want to configure. And inside the `{}` is where you place the config.
+Here `lua_ls` is the language server we want to configure. And inside the `{}` is where you place the config. To get more details on the available options read the help page, use the command `:help lspconfig-setup`.
 
 #### Automatic setup of LSP servers
 
 If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) you can manage the installation of the LSP servers from inside Neovim, and then use lsp-zero to handle the configuration.
-
-For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
 Here a basic usage example.
 
@@ -237,16 +238,18 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  -- Replace the language servers listed here 
+  -- Replace the language servers listed here
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {lsp.default_setup},
 })
 ```
 
-#### Autocompletion
+For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
-For your autocomplete needs you can get a working basic config using lsp-zero, and then add your custom config using the `cmp` module directly.
+### Autocompletion
+
+For your autocomplete needs you can get a working basic config using the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts), and then add your custom config using the `cmp` module directly.
 
 ```lua
 require('lsp-zero').extend_cmp()
@@ -273,7 +276,7 @@ cmp.setup({
 
 Here are some things you need to know:
 
-* The configuration for the language servers are provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). 
+* The configuration for the language servers are provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig).
 * lsp-zero will create keybindings, commands, and will integrate nvim-cmp (the autocompletion plugin) with lspconfig if possible. You need to call lsp-zero's preset function before using lspconfig.
 
 ### Keybindings
@@ -413,7 +416,26 @@ cmp.setup({
 
 ## Breaking changes
 
-TODO
+### Preset settings
+
+* Named presets were removed. The remaining options in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts) function should configured explicitly.
+* `set_lsp_keymaps` was removed in favor of [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
+* `manage_nvim_cmp` was removed. All the options are now managed by the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts).
+* `setup_servers_on_start` was removed. LSP server setup is now explict.
+* `call_servers` was removed. lsp-zero no longer manage "local" servers. The user should setup mason.nvim, follow the guide [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md) to learn how.
+* `configure_diagnostics` was removed. lsp-zero just uses Neovim's defaults.
+
+### Functions
+
+* [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_preferencesopts) was removed in favor of overriding option directly in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetname).
+* [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_nvim_cmpopts) was be removed. Use the `cmp` module to customize nvim-cmp.
+* [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.
+* [.default.diagnostics()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#defaultsdiagnosticsopts) was removed. Diagnostics are not configured anymore.
+* [.defaults.cmp_sources()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#defaultscmp_sources) was removed. Sources for nvim-cmp should be handled by the user.
+* [.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#defaultscmp_mappingsopts) was removed. All nvim-cmp mappings can be overriden using the `cmp` module.
+* [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_workspaceopts) was removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts) to get the config for the lua language server.
+* [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#defaultsnvim_workspace) was replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts).
+* [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#ensure_installedlist) was removed. Use the module `mason-lspconfig` to install LSP servers.
 
 ## FAQ
 
