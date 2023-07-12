@@ -416,6 +416,8 @@ cmp.setup({
 
 ## Breaking changes
 
+Removed features from the `v2.x` branch.
+
 ### Preset settings
 
 * Named presets were removed. The remaining options in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts) function should configured explicitly.
