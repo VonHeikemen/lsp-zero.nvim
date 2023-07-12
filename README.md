@@ -6,11 +6,11 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-Hello, there. This is the new branch for version 2 of lsp-zero. This new version requires Neovim v0.8 or greater. If you need support for Neovim v0.7 or lower use the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
-
-If you are here to look at the documentation **and** you installed lsp-zero before `March 30th`, the docs you are looking for are in the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
+The [development branch for v3.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/dev-v3) has been created (and is basically done). There is no release date for this just yet. If you want to talk about the new changes [join the discussion about v3.x](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/286).
 
 ## How to get started
+
+First, make sure you have Neovim v0.8 or greater. If you are using Neovim v0.7.2 or lower you will need to download [lsp-zero v1.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
 
 If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md). 
 
