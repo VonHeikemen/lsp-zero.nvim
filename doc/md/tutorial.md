@@ -1,6 +1,6 @@
 # Tutorial
 
-Here we will learn enough about Neovim to configure lsp-zero version 3 (which right now is development phase). We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero version 3 (which right now is in the development phase). We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
 
 ## Requirements
 
@@ -171,9 +171,7 @@ First thing you would want to do is install a language server. There are two way
 
 #### Manual global install
 
-In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow, or at the very least it will have a link to the repository of the LSP server.
-
-Now to actually use the language server you can call the setup to initialiaze it.
+In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the LSP server.
 
 Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
 
@@ -190,6 +188,8 @@ require('lspconfig').tsserver.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
+We use the module `lspconfig` and call the setup function of each language server we installed.
+
 If you need to customize a language server, add your config inside the curly braces of the setup function. Here is an example.
 
 ```lua
@@ -203,7 +203,7 @@ require('lspconfig').tsserver.setup({
 })
 ```
 
-Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts) to configure them.
+Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -219,7 +219,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 #### Local installation with mason.nvim
 
-There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described a portable package manager. This plugin will give you a way of downloading language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
+There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described a portable package manager. This plugin will allow Neovim to download language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
 
 > Note: mason.nvim doesn't provide any "special integration" to the tools it downloads. It's only good for installing and updating tools.
 
@@ -231,12 +231,8 @@ Anyway, if you choose this method you will need to add these two plugins:
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {
-    'williamboman/mason-lspconfig.nvim',
-     dependencies = {
-      {'williamboman/mason.nvim'}
-    },
-  },
+  {'williamboman/mason.nvim'},
+  {'williamboman/mason-lspconfig.nvim'},
   -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
@@ -306,11 +302,20 @@ We can add the following config to the `.luarc.json` file located in our Neovim 
   ],
   "diagnostics.globals": ["vim"],
   "workspace.checkThirdParty": false,
-  "workspace.library": []
+  "workspace.library": [
+    "/usr/share/nvim/runtime/lua",
+    "./lua"
+  ]
 }
 ```
 
 In the `workspace.library` property you can add the path to Neovim's runtime files and the path to your Neovim config folder.
+
+Note that Neovim's runtime folder could be in a different location, it really depends on how you installed Neovim. If you want to know what is the correct path to Neovim' runtime execute this command.
+
+```vim
+:echo $VIMRUNTIME
+```
 
 * Fixed config
 
@@ -342,7 +347,7 @@ require('lspconfig').lua_ls.setup(
 ## Complete code
 
 <details>
-<summary>Expand manual setup of LSP servers: </summary>
+<summary>Expand: manual setup of LSP servers </summary>
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -365,13 +370,13 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'dev-v3',
     lazy = true,
     config = false,
   },
+  -- LSP Support
   {
     'neovim/nvim-lspconfig',
     dependencies = {
@@ -411,7 +416,7 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 </details>
 
 <details>
-<summary>Expand automatic setup of LSP servers: </summary>
+<summary>Expand: automatic setup of LSP servers </summary>
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -434,19 +439,15 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {
-    'williamboman/mason-lspconfig.nvim',
-     dependencies = {
-      {'williamboman/mason.nvim'}
-    },
-  },
-  -- LSP Support
+  {'williamboman/mason.nvim'},
+  {'williamboman/mason-lspconfig.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
     branch = 'dev-v3',
     lazy = true,
     config = false,
   },
+  -- LSP Support
   {
     'neovim/nvim-lspconfig',
     dependencies = {
