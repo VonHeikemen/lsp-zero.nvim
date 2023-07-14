@@ -41,8 +41,6 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 * Autocompletion
 
   * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#introduction)
-  * [Preset settings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#preset-settings)
-  * [Recommended sources](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#recommended-sources)
   * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#keybindings)
   * [Use Enter to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#use-enter-to-confirm-completion)
   * [Adding a source](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#adding-a-source)
@@ -342,51 +340,6 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
 
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
-})
-```
-
-### Adding extra sources
-
-In nvim-cmp a "source" is a neovim plugin that provides the actual data displayed in the completion menu.
-
-Here is a list of sources you might want to configure (and install) to get a better experience.
-
-* [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
-
-* [cmp-path](https://github.com/hrsh7th/cmp-path): gives completions based on the filesystem.
-
-* [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip): it shows snippets loaded by luasnip in the suggestions. This is useful when you install an external collection of snippets like [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) (See [autocomplete docs for more details](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#add-an-external-collection-of-snippets)).
-
-* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data sent by the language server.
-
-Quick note: when you configure the `source` option in nvim-cmp the previous config will be overriden. This means that is if you use it you need to add the source for LSP again.
-
-```lua
--- For this code to work you need to install these plugins:
--- hrsh7th/cmp-path
--- hrsh7th/cmp-nvim-lsp
--- hrsh7th/cmp-buffer
--- saadparwaiz1/cmp_luasnip
--- rafamadriz/friendly-snippets
-
-require('lsp-zero').extend_cmp()
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-require('luasnip.loaders.from_vscode').lazy_load()
-
-cmp.setup({
-  sources = {
-    {name = 'path'},
-    {name = 'nvim_lsp'},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
-  },
-  mapping = {
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }

@@ -6,7 +6,7 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 If you call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) lsp-zero will configure the basic features for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control the completion menu (following Neovim's default whenever possible). Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server. And finally, it will change the "formatting" of the completion items, it'll add a label that tells the name of the source for that item.
 
-And so [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) will apply the following settings to nvim-cmp.
+This is the code [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) will run for you.
 
 ```lua
 local cmp = require('cmp')
@@ -102,7 +102,7 @@ These are the keybindings you get when you enable `set_extra_mappings` in [.exte
 
 ## Customizing nvim-cmp
 
-You most use the module `cmp` to add any extra features you want. Let lsp-zero do the "basic" config then call the `.setup` function of nvim-cmp.
+You must use the module `cmp` to add any extra features you want. Let lsp-zero do the "basic" config then call the `.setup` function of nvim-cmp, like this.
 
 ```lua
 require('lsp-zero').extend_cmp()
@@ -142,13 +142,15 @@ If you want to confirm without selecting the item, use this.
 
 ### Adding a source
 
-For this you'll need to configure the `sources` option in nvim-cmp. Is worth mention that each time you configure this option the previous values are lost. So make you sure you include the LSP source in your custom config.
+If you don't know, each source that you add to your configuration is a Neovim plugin that you need to install. The purpose of a source is to extract data and then pass it to nvim-cmp.
 
-`sources` must be a list of lua tables, and each source must have a `name` property. This name must be the "id" of the source (is not the plugin name). When in doubt search the instructions of the source you want to install.
+Let say we want to install this one [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). `cmp-buffer` will extract suggestions from the current file. This will allow nvim-cmp to show completions even when we don't have an LSP server active in the current buffer.
 
-I know there is an option in lsp-zero that configures `sources` for you, but I don't recommend that anymore (is only there for backwards compatibility with the `v1.x` branch). There is no good way to adjust its behavior so is better if you setup the sources manually.
+So the first thing we need to do is install [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). I'm not going to show how to install a Neovim plugin, you should this by now.
 
-Here is an example configuration using the [recommended sources](#recommended-sources).
+Second step, figure out what is the name of the source. I don't mean the name of the plugin, this is different. Go to the github repo of [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer) and look for configuration instructions. Don't try to be smart, always check the documentation of the source you installed.
+
+Third step, tell nvim-cmp what sources you want to use. We will call the setup function of the `cmp` module, add the `sources` options and list every source we have installed.
 
 ```lua
 require('lsp-zero').extend_cmp()
@@ -157,19 +159,19 @@ local cmp = require('cmp')
 
 cmp.setup({
   sources = {
-    {name = 'path'},
     {name = 'nvim_lsp'},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
+    {name = 'buffer'},
   }
 })
 ```
 
-Once you have this you can adjust the priority by changing the order of the items in the list. You can delete sources or you can add more.
+Notice we have two sources. The first source, `{name = 'nvim_lsp'}`, belongs to this plugin [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). You installed that when you configured lsp-zero for the first time. We need to add this so we don't lose the LSP completions.
+
+Last step, restart Neovim. And you are done, you now have a new working source.
 
 ### Add an external collection of snippets
 
-By default luasnip is configured to expand snippets, and the only snippets you get will come from your LSP server. If you want to load **custom snippets** into the completion menu you need add [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) as a source in nvim-cmp.
+By default luasnip is configured to expand snippets, and the only snippets you get will come from your LSP server. If you want to load **custom snippets** into the completion menu you need add [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) as a source in nvim-cmp (if you don't know how to add a source, see [the previous section](#adding-a-source)).
 
 We don't need to write our own snippets, we can download a collection like [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) and then parse them using a luasnip loader.
 
@@ -220,7 +222,7 @@ cmp.setup({
 
 ### Basic completions for Neovim's lua api
 
-You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) to get completions based on Neovim's lua api.
+You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) to get completions based on Neovim's lua api. If you don't know how to install a source, see the section [Adding a source](#adding-a-source).
 
 ```lua
 require('lsp-zero').extend_cmp()

@@ -86,12 +86,12 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 To disable all keybindings just delete the call to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
 
-If you want lsp-zero to skip only a few keys you can add the `omit` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gs`, you would do this.
+If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gs`, you would do this.
 
 ```lua
 lsp.default_keymaps({
   buffer = bufnr,
-  omit = {'gs', 'K'},
+  exclude = {'gl', 'K'},
 })
 ```
 
@@ -107,12 +107,9 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 
 ### Automatic installs
 
-If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install every language server you initialize with `lspconfig`. 
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install the language servers you want. 
 
 ```lua
-require('mason').setup({})
-require('mason-lspconfig').setup({automatic_installation = true})
-
 local lsp = require('lsp-zero').preset({})
 
 lsp.extend_cmp()
@@ -121,20 +118,18 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
--- Replace the language servers listed here
--- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
-```
-
-In this case `tsserver` and `rust_analyzer` will be installed automatically if they are missing.
-
-Now, if you want to install a language server manually without `mason.nvim` you'll need to exclude it in your config.
-
-```lua
+require('mason').setup({})
 require('mason-lspconfig').setup({
-  automatic_installation = {exclude = {'rust_analyzer', 'jdtls'}}
+  -- Replace the language servers listed here
+  -- with the ones you want to install
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+  handlers = {lsp.default_setup}
 })
 ```
+
+Notice here we also use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver). We add this to the `handlers` so we can get automatic setup for all the language servers installed with `mason.nvim`.
+
+For more details on how to use mason.nvim with lsp-zero check out [this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
 ## Configure language servers
 
@@ -155,10 +150,6 @@ require('lspconfig').tsserver.setup({
     print('hello tsserver')
   end
 })
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp.setup_servers({'rust_analyzer'})
 ```
 
 ### Disable semantic highlights
@@ -293,9 +284,6 @@ lsp.format_on_save({
   servers = {
     ['tsserver'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
-    -- if you have a working setup with null-ls
-    -- you can specify filetypes it can format.
-    -- ['null-ls'] = {'lua', 'python'},
   }
 })
 
@@ -426,9 +414,6 @@ lsp.format_mapping('gq', {
   servers = {
     ['tsserver'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
-    -- if you have a working setup with null-ls
-    -- you can specify filetypes it can format.
-    -- ['null-ls'] = {'lua', 'python'},
   }
 })
 

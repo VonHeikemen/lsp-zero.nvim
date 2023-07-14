@@ -24,6 +24,8 @@ This config will tell `mason-lspconfig` to install tsserver and rust_analyzer au
 
 Note that after you install a language server you will need to restart Neovim so the language can be configured properly.
 
+## Configure a language server
+
 If we need to add a custom configuration for a server, you'll need to add a property to `handlers`. This new property must have the same name as the language server you want to configure, and you need to assign a function to it.
 
 Lets use `tsserver` as an example.
@@ -48,7 +50,9 @@ require('mason-lspconfig').setup({
 
 Here we use the module `lspconfig` to setup the language server and we add our custom config in the first argument of `.tsserver.setup()`.
 
-On the other hand if we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#noop).
+## Exclude a language server from the automatic setup
+
+If we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#noop), which is a function that doesn't do anything.
 
 ```lua
 require('mason-lspconfig').setup({
@@ -60,5 +64,5 @@ require('mason-lspconfig').setup({
 })
 ```
 
-This will cause `mason-lspconfig` to exclude `tsserver` from the automatic setup.
+When the time comes for `mason-lspconfig` to setup `tsserver` it will execute an empty function.
 
