@@ -222,7 +222,7 @@ cmp.setup({
 
 ### Basic completions for Neovim's lua api
 
-You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) to get completions based on Neovim's lua api. If you don't know how to install a source, see the section [Adding a source](#adding-a-source).
+You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua) to get completions based on Neovim's lua api. If you don't know what is a source in nvim-cmp, see the section "[Adding a source](#adding-a-source)" for more details.
 
 ```lua
 require('lsp-zero').extend_cmp()
