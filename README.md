@@ -208,6 +208,9 @@ end)
 
 lsp.extend_cmp()
 
+-- (Optional) Configure lua language server for neovim
+-- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
 -- Replace the language servers listed here
 -- with the ones installed in your system
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
@@ -241,7 +244,13 @@ require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
-  handlers = {lsp.default_setup},
+  handlers = {
+    lsp.default_setup
+    lua_ls = function()
+      -- (Optional) Configure lua language server for neovim
+      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+    end,
+  },
 })
 ```
 
