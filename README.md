@@ -22,7 +22,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 * LSP
 
-  * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#introduction)
+  * [How does it work?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#how-does-it-work)
   * [Commands](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#commands)
   * [Creating new keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#creating-new-keybindings)
   * [Disable keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#disable-keybindings)
@@ -33,14 +33,12 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Custom servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#custom-servers)
   * [Enable Format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#enable-format-on-save)
   * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#format-buffer-using-a-keybinding)
-  * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#troubleshooting)
-  * [Diagnostics (a.k.a. error messages, warnings, etc.)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#diagnostics)
   * [Use icons in the sign column](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#use-icons-in-the-sign-column)
-  * [Language servers and mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#language-servers-and-masonnvim)
+  * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#troubleshooting)
 
 * Autocompletion
 
-  * [Introduction](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#introduction)
+  * [How does it work?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#how-does-it-work)
   * [Keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#keybindings)
   * [Use Enter to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#use-enter-to-confirm-completion)
   * [Adding a source](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/autocomplete.md#adding-a-source)
@@ -110,7 +108,7 @@ For a more advance config that lazy loads everything take a look at the example 
     dependencies = {
       {'L3MON4D3/LuaSnip'},
     }
-  },
+  }
 }
 ```
 
@@ -197,9 +195,9 @@ If want to manage the install and update of LSP servers from within Neovim then 
 
 #### Manual setup of LSP servers
 
-First thing you'll want to do is install the language servers you want to use. Visit nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
+First thing you'll want to do is install the language servers you want to use. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
 
-Once you have the LSP servers in your system, add the config of lsp-zero.
+Once you have the LSP servers installed in your system, add the config of lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -296,6 +294,42 @@ lsp.default_keymaps({
   preserve_mappings = false
 })
 ```
+
+### Troubleshooting
+
+If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
+
+What do I mean with a minimal example? Configure the language just using `lspconfig` and increase the log level. Here is a minimal config using `tsserver` as an example.
+
+```lua
+vim.lsp.set_log_level('debug')
+
+local lsp_zero = require('lsp-zero')
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+require('lspconfig').tsserver.setup({
+  capabilities = lsp_capabilities,
+  on_attach = function(client, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
+  end,
+})
+
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {{name = 'nvim_lsp'}},
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+  }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+})
+```
+
+Then you can test the language and inspect the log file using the command `:LspLog`.
 
 ## Autocomplete
 
