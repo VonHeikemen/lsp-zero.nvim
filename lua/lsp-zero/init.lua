@@ -5,14 +5,7 @@ local s = {
   lsp_project_configs = {},
 }
 
-M.setup = noop
 M.noop = noop
-M.ensure_installed = function()
-  local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
-    .. 'Use the module mason-lspconfig to install your LSP servers.\n'
-    .. 'See :help lsp-zero-guide:integrate-with-mason-nvim'
-  vim.notify(msg, vim.log.levels.WARN)
-end
 
 function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
@@ -219,6 +212,43 @@ M.omnifunc = {}
 
 function M.omnifunc.setup(opts)
   require('lsp-zero.omnifunc').setup(opts)
+end
+
+---
+-- Handle removed functions
+---
+
+M.setup = noop
+M.set_preferences = noop
+M.defaults = {
+  cmp_mappings = function() return {} end,
+  cmp_config = function() return {} end,
+}
+
+M.ensure_installed = function()
+  local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
+    .. 'Use the module mason-lspconfig to install your LSP servers.\n'
+    .. 'See :help lsp-zero-guide:integrate-with-mason-nvim'
+  vim.notify(msg, vim.log.levels.WARN)
+end
+
+M.setup_nvim_cmp = function()
+  local msg = '[lsp-zero] The function .setup_nvim_cmp() has been removed.\n'
+    .. 'Learn how to customize nvim-cmp reading the guide in the help page\n'
+    .. ':help lsp-zero-guide:customize-nvim-cmp'
+  vim.notify(msg, vim.log.levels.WARN)
+end
+
+M.skip_server_setup = function()
+  local msg = '[lsp-zero] The function .skip_server_setup() has been removed.'
+  vim.notify(msg, vim.log.levels.WARN)
+end
+
+M.nvim_workspace = function()
+  local msg = '[lsp-zero] The function .nvim_workspace() has been removed.\n'
+    .. 'Learn how to configure lua_ls reading the guide in the help page\n'
+    .. ':help lsp-zero-guide:lua-lsp-for-neovim'
+  vim.notify(msg, vim.log.levels.WARN)
 end
 
 return M
