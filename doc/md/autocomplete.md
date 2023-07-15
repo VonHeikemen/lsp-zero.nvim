@@ -1,6 +1,6 @@
 # Autocompletion
 
-## Introduction
+## How does it work?
 
 The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). This plugin is designed to be unopinionated and modular. What this means for us (the users) is that we have to assemble various pieces to get the behavior we want.
 

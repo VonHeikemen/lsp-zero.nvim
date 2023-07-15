@@ -1,12 +1,10 @@
 # LSP
 
-## Introduction
+## How does it work?
 
 Language servers are configured and initialized using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/).
 
-Ever wondered what lsp-zero does under the hood? Let me tell you.
-
-First it adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). It tells the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
+lsp-zero first adds data to an option called `capabilities` in lspconfig's defaults. This new data comes from [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). It tells the language server what features [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) adds to the editor.
 
 Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. This is where all keybindings and commands are created.
 
@@ -482,11 +480,11 @@ root_pattern('somefile.json', '.somefile' , '.git')
 
 `root_pattern` is a function inside `lspconfig`, it tries to look for one of those files/folders in the current folder or any of the parent folders. Make sure you have at least one of the files/folders listed in the arguments of the function.
 
-Now, sometimes the documentation in lspconfig just says `see source file`. This means you need to go the source code to figure out what lspconfig looks for. You need to go to the [server config folder](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/server_configurations), click in the file for the language server, look for the `root_dir` property that is inside a "lua table" called `default_config`.
+Sometimes the documentation in lspconfig just says `see source file`. This means you need to go the source code to figure out what lspconfig looks for. You need to go to the [server config folder](https://github.com/neovim/nvim-lspconfig/tree/master/lua/lspconfig/server_configurations), click in the file for the language server, look for the `root_dir` property that is inside a "lua table" called `default_config`.
 
 ### Inspect server settings
 
-Let say that you added some "settings" to a server... something like this.
+Let's say that you added some "settings" to a server... something like this.
 
 ```lua
 lsp.configure('tsserver', {
