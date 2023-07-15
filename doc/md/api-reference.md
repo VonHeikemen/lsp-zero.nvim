@@ -590,11 +590,23 @@ Quick note: "the fallback" is the default behavior of the key you assign to a me
 
 ### `.extend_cmp({opts})`
 
-In case you don't want to use lsp-zero to actually setup any LSP servers, or want to lazy load nvim-cmp, you can use `.extend_cmp` to setup nvim-cmp.
+Creates a minimal working config for nvim-cmp.
 
-When you invoke this function it is assumed you want a "minimal" configuration. Meaning that if you call it without `{opts}` it will use the same config the [minimal](#minimal) preset uses in the setting [manage_nvim_cmp](#manage_nvim_cmp).
+`{opts}` supports the following properties:
 
-This is completely valid.
+  * set_lsp_source: (Boolean, Optional) Defaults to `true`. When enabled it adds `cmp-nvim-lsp` as a source.
+
+  * set_basic_mappings: (Boolean, Optional) Defaults to `true`. When enabled it will create keybindings that emulate Neovim's default completions bindings.
+
+  * set_extra_mappings: (Boolean, Optional) Defaults to `false`. When enabled it will setup tab completion, scrolling through documentation window, and navigation between snippets.
+
+  * use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it will setup luasnip to expand snippets. This option does not include a collection of snippets.
+
+  * set_format: (Boolean, Optional) Defaults to `true`. When enabled it will the completion items will show a label that identifies the source they come from. 
+
+  * documentation_window: (Boolean, Optional) Defaults to `true`. When enabled it will configure the max height and width of the documentation window.
+
+After you use this function you can customize nvim-cmp using the module `cmp`. Here is an example that adds some keybindings.
 
 ```lua
 require('lsp-zero').extend_cmp()
@@ -603,25 +615,13 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'},
-  },
-  window = {
-    completion = cmp.config.window.bordered(),
-    documentation = cmp.config.window.bordered(),
-  },
   mapping = {
     ['<C-Space>'] = cmp.mapping.complete(),
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }
 })
 ```
-
-`{opts}` supports the same properties [manage_nvim_cmp](#manage_nvim_cmp) has.
 
 ### `.omnifunc.setup({opts})`
 
