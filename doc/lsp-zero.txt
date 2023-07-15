@@ -1094,6 +1094,63 @@ function |lsp-zero.noop()|.
 This will cause `mason-lspconfig` to exclude `tsserver` from the automatic
 setup.
 
+                                          *lsp-zero-guide:lua-lsp-for-neovim*
+
+Configure lua language server for Neovim
+
+There are two ways you can do this:
+
+• Project specific config
+
+We can create a file called .luarc.json file in Neovim's config folder and the
+following config.
+>
+  {
+    "runtime.version": "LuaJIT",
+    "runtime.path": [
+      "lua/?.lua",
+      "lua/?/init.lua"
+    ],
+    "diagnostics.globals": ["vim"],
+    "workspace.checkThirdParty": false,
+    "workspace.library": [
+      "/usr/share/nvim/runtime/lua",
+      "./lua"
+    ]
+  }
+<
+The first path in the `workspace.library` property is the path to Neovim's
+runtime files. This might be different for you, so make sure to check using
+this command `:echo $VIMRUNTIME`
+
+• Fixed config
+
+If your Neovim config is the only lua project you have in your system, use the
+function |lsp-zero.nvim_lua_ls()| to get the config and then setup `lua_ls`
+with lspconfig.
+>lua
+  local lsp = require('lsp-zero').preset({})
+
+  lsp.on_attach(function(client, bufnr)
+    lsp.default_keymaps({buffer = bufnr})
+  end)
+
+  lsp.extend_cmp()
+
+  require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+<
+If you used |mason-lspconfig.nvim| to setup your language servers, add
+`lua_ls` to your handlers config.
+>lua
+  require('mason-lspconfig').setup({
+    handlers = {
+      lsp.default_setup,
+      lua_ls = function()
+        require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      end,
+    },
+  })
+<
 ==============================================================================
 Version                                                     *lsp-zero-version*
 
