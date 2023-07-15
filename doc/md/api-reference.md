@@ -359,7 +359,9 @@ If {client} argument is provided it will only use the LSP server associated with
 
   * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
 
-  * opts: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+  * opts: (Table). Additional options. It supports the following properties:
+
+    * format_opts: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
 
 ```lua
 local lsp = require('lsp-zero')

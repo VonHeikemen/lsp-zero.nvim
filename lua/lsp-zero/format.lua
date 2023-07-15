@@ -83,14 +83,16 @@ function M.format_on_save(opts)
   })
 end
 
-function M.buffer_autoformat(client, bufnr, format_opts)
+function M.buffer_autoformat(client, bufnr, opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
   local format_id = augroup(format_group, {clear = false})
 
+  opts = opts or {}
   client = client or {}
-  format_opts = format_opts or {}
   bufnr = bufnr or vim.api.nvim_get_current_buf()
+
+  local format_opts = opts.format_opts or {}
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 

@@ -564,8 +564,11 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     • {bufnr}: (Number, Optional) if provided it must be the id
     of an open buffer.
 
-    • {opts}: (Table). These are the same options you can pass to
-    |vim.lsp.buf.format()|.
+    • {opts}: (Table). Additional options. It supports the following
+    properties:
+
+        • format_opts: (Table). These are the same options you can pass to
+        |vim.lsp.buf.format()|.
 
 >lua
     local lsp = require('lsp-zero').preset({})
