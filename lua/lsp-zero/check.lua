@@ -1,11 +1,12 @@
 local M = {}
+local s = {}
 
 function M.run(name)
   local report = 'LSP server: ' .. name
   local concat = function(msg) return string.format('%s\n%s', report, msg) end
 
   do
-    local result = M.configured(name)
+    local result = s.configured(name)
     local msg = "- hasn't been configured with lspconfig"
     if result then
       msg = '+ was configured using lspconfig'
@@ -14,7 +15,7 @@ function M.run(name)
   end
 
   do
-    local result = M.is_executable(name)
+    local result = s.is_executable(name, true)
 
     if result.cmd == '' then
       print(report)
@@ -40,28 +41,24 @@ function M.run(name)
   print(report)
 end
 
-function M.configured(name)
-  local util = require('lspconfig.util')
-  local servers = util.available_servers()
+function M.executable(name)
+  local header = 'LSP server: ' .. name
+  local result = s.is_executable(name, false)
 
-  return vim.tbl_contains(servers, name)
-end
-
-function M.is_executable(name)
-  local configs = require('lspconfig.configs')
-  local lsp = configs[name]
-
-  if lsp == nil then
-    return {cmd = '', result = false}
+  if result.cmd == '' then
+    local msg = '- "%s" is not supported by lspconfig'
+    print(msg:format(name))
+    return
   end
 
-  local cmd = lsp.cmd[1]
+  local msg = string.format('- "%s" was not found.', result.cmd)
 
-  if cmd == 'cmd.exe' and lsp.cmd[2] == '/C' then
-    cmd = lsp.cmd[3]
+  if result.result then
+    msg = string.format('+ "%s" is executable', result.cmd)
   end
 
-  return {cmd = cmd, result = vim.fn.executable(cmd) == 1}
+  print(header)
+  print(msg)
 end
 
 function M.inspect_settings(name)
@@ -88,6 +85,40 @@ function M.inspect_server_config(name)
   end
 
   print(vim.inspect(client.config))
+end
+
+function s.configured(name)
+  local util = require('lspconfig.util')
+  local servers = util.available_servers()
+
+  return vim.tbl_contains(servers, name)
+end
+
+function s.is_executable(name, check_available)
+  local configs = require('lspconfig.configs')
+  local lsp = configs[name]
+
+  if lsp == nil and check_available then
+    return {cmd = '', result = false}
+  end
+
+  if lsp == nil then
+    local mod = string.format('lspconfig.server_configurations.%s', name)
+    local ok, server = pcall(require, mod)
+    if ok == false or not server.default_config then
+      return {cmd = '', result = false}
+    end
+
+    lsp = server.default_config
+  end
+
+  local cmd = lsp.cmd[1]
+
+  if cmd == 'cmd.exe' and lsp.cmd[2] == '/C' then
+    cmd = lsp.cmd[3]
+  end
+
+  return {cmd = cmd, result = vim.fn.executable(cmd) == 1}
 end
 
 return M
