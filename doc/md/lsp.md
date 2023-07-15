@@ -86,7 +86,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 To disable all keybindings just delete the call to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
 
-If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gs`, you would do this.
+If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gl`, you would do this.
 
 ```lua
 lsp.default_keymaps({
@@ -99,7 +99,7 @@ lsp.default_keymaps({
 
 ### Manual install
 
-You can find the instruction for each language server in lspconfig's documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+You can find install instructions for each language server in lspconfig's documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
 ### Via command
 
@@ -107,7 +107,7 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 
 ### Automatic installs
 
-If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install the language servers you want. 
+If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install the language servers you want using the option `ensure_installed`. Keep in mind the name of the language server must be [on this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -129,11 +129,11 @@ require('mason-lspconfig').setup({
 
 Notice here we also use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver). We add this to the `handlers` so we can get automatic setup for all the language servers installed with `mason.nvim`.
 
-For more details on how to use mason.nvim with lsp-zero check out [this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
+For more details on how to use mason.nvim with lsp-zero [read this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
 
 ## Configure language servers
 
-To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the require of lsp-zero.
+To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the call to [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -313,9 +313,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
-Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function.
-
-If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
+Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -422,57 +420,64 @@ lsp.format_mapping('gq', {
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
+## Diagnostics
+
+## Use icons in the sign column
+
+If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_sign_iconsopts). 
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+lsp.set_sign_icons({
+  error = '✘',
+  warn = '▲',
+  hint = '⚑',
+  info = '»'
+})
+
+-- Replace the language servers listed here
+-- with the ones you have installed
+lsp.setup_servers({'tsserver', 'rust_analyzer'})
+```
+
 ## Troubleshooting
 
 ### Automatic setup failed
 
-To figure out what happened use the function `require('lsp-zero.check').run()` in command mode, pass a string with the name of the language server.
-
-Here is an example with `lua_ls`.
+First check that Neovim can find the executable of the language server, use the function `require('lsp-zero.check').executable()`. The first argument of the function must be the name of language server on [this list](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
-:lua require('lsp-zero.check').run('lua_ls')
+:lua require('lsp-zero.check').executable('lua_ls')
 ```
 
-> The name of the language server must match with one in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
-
-If the language server is not being configured you'll get a message like this.
+If Neovim can't find the executable for the language server you'll get a message like this.
 
 ```
 LSP server: lua_ls
-- was not installed with mason.nvim
-- hasn't been configured with lspconfig
+- "lua-language-server" was not found.
 ```
 
-This means `mason.nvim` doesn't have the server listed as "available" and that's why the automatic setup failed. Try re-install with the command `:LspInstall`.
-
-When everything is fine the report should be this.
-
-```
-LSP server: lua_ls
-+ was installed with mason.nvim
-+ was configured using lspconfig
-+ "lua-language-server" is executable
-```
-
-If it says `- "lua-language-server" was not found` it means Neovim could not find the executable in the "PATH".
-
-You can inspect your PATH using this command.
+Make sure your language was installed using `mason.nvim`. You can use the module `mason-lspconfig` to list all avaible servers.
 
 ```lua
-:lua vim.tbl_map(print, vim.split(vim.env.PATH, ':'))
+:lua = require('mason-lspconfig').get_installed_servers()
 ```
 
-> Note: if you use windows replace ':' with ';' in the second argument of `vim.split`. 
-
-The executable for your language server should be in one of those folders. Make sure it is present and the file itself is executable.
+If your language is not listed there then install it using the command `:LspInstall`.
 
 ### Root directory not found
 
 You used the command `:LspInfo` and it showed `root directory: Not found.` This means [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig/) couldn't figure out what is the "root" folder of your project. In this case you should go to `lspconfig`'s github repo and browse the [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file, look for the language server then search for `root_dir`, it'll have something like this.
 
 ```lua
-root_pattern("somefile.json", ".somefile" , ".git")
+root_pattern('somefile.json', '.somefile' , '.git')
 ```
 
 `root_pattern` is a function inside `lspconfig`, it tries to look for one of those files/folders in the current folder or any of the parent folders. Make sure you have at least one of the files/folders listed in the arguments of the function.
@@ -514,31 +519,4 @@ Here is an example.
 ```
 
 > The name of the language server must match with one in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
-
-## Diagnostics
-
-## Use icons in the sign column
-
-If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_sign_iconsopts). 
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.set_sign_icons({
-  error = '✘',
-  warn = '▲',
-  hint = '⚑',
-  info = '»'
-})
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
-```
 
