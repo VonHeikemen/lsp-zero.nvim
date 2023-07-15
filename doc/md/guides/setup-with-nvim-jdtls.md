@@ -38,9 +38,6 @@ You can still follow this guide if you are using another operating system.
 Setup lsp-zero and mason.nvim like you usually do. But don't setup `jdtls` with lsp-zero, we want `nvim-jdtls` to handle that LSP server.
 
 ```lua
-require('mason').setup({})
-require('mason-lspconfig').setup({})
-
 local lsp = require('lsp-zero').preset({})
 
 lsp.extend_cmp()
@@ -49,9 +46,14 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {'jdtls'},
+  handlers = {
+    lsp.default_setup,
+    jdtls = lsp.noop,
+  }
+})
 ```
 
 ## Working with nvim-jdtls
