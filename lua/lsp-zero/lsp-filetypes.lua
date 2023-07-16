@@ -202,7 +202,24 @@ return {
   ember = {
     handlebars = true,
     javascript = true,
-    typescript = true
+    ["javascript.glimmer"] = true,
+    typescript = true,
+    ["typescript.glimmer"] = true
+  },
+  emmet_language_server = {
+    astro = true,
+    css = true,
+    eruby = true,
+    html = true,
+    htmldjango = true,
+    javascriptreact = true,
+    less = true,
+    pug = true,
+    sass = true,
+    scss = true,
+    svelte = true,
+    typescriptreact = true,
+    vue = true
   },
   emmet_ls = {
     astro = true,
@@ -210,6 +227,7 @@ return {
     eruby = true,
     html = true,
     htmldjango = true,
+    javascript = true,
     javascriptreact = true,
     less = true,
     pug = true,
@@ -593,6 +611,9 @@ return {
   reason_ls = {
     reason = true
   },
+  regols = {
+    rego = true
+  },
   relay_lsp = {
     javascript = true,
     ["javascript.jsx"] = true,
@@ -623,6 +644,9 @@ return {
     typescript = true,
     ["typescript.tsx"] = true,
     typescriptreact = true
+  },
+  rubocop = {
+    ruby = true
   },
   ruby_ls = {
     ruby = true
