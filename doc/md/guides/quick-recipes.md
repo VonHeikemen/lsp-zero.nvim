@@ -102,9 +102,9 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ## Setup with rust-tools
 
-Using [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
+Use [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
 
-Here you need to setup `rust-tools` after lsp-zero.
+`rust-tools` will use `lspconfig` to initialize the rust language server, so you need to setup rust-tools after lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -114,10 +114,6 @@ lsp.extend_cmp()
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver'})
 
 local rust_tools = require('rust-tools')
 
@@ -130,11 +126,26 @@ rust_tools.setup({
 })
 ```
 
+Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    rust_analyzer = function()
+      ---
+      -- here you will setup rust-tools
+      ---
+    end,
+  }
+})
+```
+
 ## Setup with typescript.nvim
 
-Using [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) to configure [tsserver](https://github.com/typescript-language-server/typescript-language-server).
+Use [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) to configure [tsserver](https://github.com/typescript-language-server/typescript-language-server).
 
-Here you need to setup `typescript.nvim` after lsp-zero.
+`typescript.nvim` will use `lspconfig` to initialize the typescript language server, so you need to setup typescript.nvim after lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -144,10 +155,6 @@ lsp.extend_cmp()
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'rust_analyzer'})
 
 require('typescript').setup({
   server = {
@@ -161,9 +168,24 @@ require('typescript').setup({
 })
 ```
 
+Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    tsserver = function()
+      ---
+      -- here you will setup typescript.nvim
+      ---
+    end,
+  }
+})
+```
+
 ## Setup with flutter-tools
 
-The language server for dartls can't be installed with mason.nvim, because is already bundled in the dart sdk. [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) doesn't depend on lspconfig (according to the documentation), so the only thing that make sense to do is add the "capabilities" options to `flutter-tools`.
+With [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) the only thing that make sense to do is share the "capabilities" option. So, let flutter-tools initialize the language server, and have lsp-zero just configure the capabilities option.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -173,10 +195,6 @@ lsp.extend_cmp()
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 require('flutter-tools').setup({
   lsp = {
@@ -189,7 +207,7 @@ require('flutter-tools').setup({
 
 The following is based on the [example configuration](https://github.com/scalameta/nvim-metals/discussions/39) found in [nvim-metals](https://github.com/scalameta/nvim-metals) discussion section.
 
-If I understand correctly, `nvim-metals` is the one that needs to configure the [metals lsp](https://scalameta.org/metals/). So if you installed the LSP server with mason.nvim you need to tell lsp-zero to ignore it. Then add the "capabilities" option to the `metals` config.
+If I understand correctly, `nvim-metals` is the one that needs to configure the [metals lsp](https://scalameta.org/metals/). The only thing that you need to do share is the "capabilities" option with the `metals` config.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -199,10 +217,6 @@ lsp.extend_cmp()
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ---
 -- Create the configuration for metals
@@ -223,11 +237,24 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
+Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    tsserver = function()
+      ---
+      -- here you will setup typescript.nvim
+      ---
+    end,
+  }
+})
+```
+
 ## Setup with haskell-tools
 
-Here you need to disable the automatic configuration for `hls` and then setup [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) after lsp-zero.
-
-The only option that makes sense to share from lsp-zero is the "capabilities" options.
+The only option that makes sense to share between [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) and lsp-zero is the "capabilities" option. So, let haskell-tools initialize the language server, and have lsp-zero just configure the capabilities option.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -237,10 +264,6 @@ lsp.extend_cmp()
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ---
 -- Setup haskell LSP
@@ -287,6 +310,21 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
+Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    hls = function()
+      ---
+      -- here you will setup haskell-tools
+      ---
+    end,
+  }
+})
+```
+
 ### Setup with clangd_extensions.nvim
 
 [clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is use it after lsp-zero.
@@ -300,10 +338,21 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
 require('clangd_extensions').setup()
+```
+
+Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    clangd = function()
+      ---
+      -- here you will setup clangd_extensions
+      ---
+    end,
+  }
+})
 ```
 
