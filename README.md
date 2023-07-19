@@ -243,28 +243,6 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 ```
 
-### What to do if you suspect lsp-zero is doing something wrong?
-
-If you check the introduction in the [LSP documentation](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#introduction) you'll find a quick explanation of what lsp-zero is doing to setup your LSP servers. TL;DR is nothing special.
-
-If you still want to rule out (or confirm) lsp-zero as the source of whatever issue you have, use a minimal configuration. Delete or comment out your original config. Then make a new one with just the functions you need.
-
-Here is an example with a manual setup of `tsserver`.
-
-```lua
-require('mason').setup()
-require('mason-lspconfig').setup()
-
-local lsp = require('lsp-zero')
-lsp.extend_cmp()
-
-require('lspconfig').tsserver.setup({
-  on_attach = function(client, bufnr)
-    lsp.default_keymaps({buffer = bufnr})
-  end
-})
-```
-
 ## Language servers
 
 Here are some things you need to know:
@@ -314,6 +292,42 @@ lsp.default_keymaps({
   preserve_mappings = false
 })
 ```
+
+### Troubleshooting
+
+If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
+
+What do I mean with minimal? Configure the language server using just `lspconfig` and increase the log level. Here is an example test with `tsserver`.
+
+```lua
+vim.lsp.set_log_level('debug')
+
+local lsp_zero = require('lsp-zero')
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {{name = 'nvim_lsp'}},
+  mapping = cmp.mapping.preset.insert({
+    ['<C-Space>'] = cmp.mapping.complete(),
+  }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
+})
+
+require('lspconfig').tsserver.setup({
+  capabilities = lsp_capabilities,
+  on_attach = function(client, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
+  end,
+})
+```
+
+Then you can test the language server and inspect the log file using the command `:LspLog`.
 
 ## Autocomplete
 
@@ -457,7 +471,7 @@ I would like to get rid of named preset in the future. It's better if you use th
 * [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_workspaceopts) will be removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_lua_lsopts) to get the config and then use [.configure()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#configurename-opts) to setup the server.
 * [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#defaultsnvim_workspace) will be replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_lua_lsopts).
 * [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#ensure_installedlist) will be removed. Use the module `mason-lspconfig` to install LSP servers. 
-* [.extend_lspconfig()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#extend_lspconfigopts) will be removed. 
+* [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#setup) will be removed.
 
 ## FAQ
 
