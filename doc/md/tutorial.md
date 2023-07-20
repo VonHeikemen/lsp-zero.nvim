@@ -155,6 +155,8 @@ Then we add the configuration at the end of the file.
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -244,6 +246,8 @@ vim.cmd.colorscheme('tokyonight')
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 

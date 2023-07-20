@@ -211,6 +211,8 @@ Inside your configuration file add this piece of lua code.
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -230,6 +232,8 @@ If you don't install `mason.nvim` then you'll need to list the LSP servers you h
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -361,6 +365,8 @@ Here is an example configuration.
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -405,6 +411,8 @@ Quick note: when you configure the `source` option in nvim-cmp the previous conf
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
