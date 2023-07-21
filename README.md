@@ -391,59 +391,6 @@ cmp.setup({
 })
 ```
 
-### Adding extra sources
-
-In nvim-cmp a "source" is a neovim plugin that provides the actual data displayed in the completion menu.
-
-Here is a list of sources you might want to configure (and install) to get a better experience.
-
-* [cmp-buffer](https://github.com/hrsh7th/cmp-buffer): provides suggestions based on the current file.
-
-* [cmp-path](https://github.com/hrsh7th/cmp-path): gives completions based on the filesystem.
-
-* [cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip): it shows snippets loaded by luasnip in the suggestions. This is useful when you install an external collection of snippets like [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) (See [autocomplete docs for more details](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)).
-
-* [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp): show data sent by the language server.
-
-Quick note: when you configure the `source` option in nvim-cmp the previous config will be overriden. This means that is if you use it you need to add the source for LSP again.
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.setup()
-
--- For this to work you need to install these plugins:
--- hrsh7th/cmp-path
--- hrsh7th/cmp-nvim-lsp
--- hrsh7th/cmp-buffer
--- saadparwaiz1/cmp_luasnip
--- rafamadriz/friendly-snippets
-
-local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
-
-require('luasnip.loaders.from_vscode').lazy_load()
-
-cmp.setup({
-  sources = {
-    {name = 'path'},
-    {name = 'nvim_lsp'},
-    {name = 'buffer', keyword_length = 3},
-    {name = 'luasnip', keyword_length = 2},
-  },
-  mapping = {
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
-})
-```
-
 ## Breaking changes
 
 * `sign_icons` was removed. If you want the icons you can configure them using [.set_sign_icons()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#set_sign_iconsopts).
