@@ -55,7 +55,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       {
         'williamboman/mason.nvim',
         build = function()
-          pcall(vim.cmd, 'MasonUpdate')
+          pcall(vim.api.nvim_command, 'MasonUpdate')
         end,
       },
     },

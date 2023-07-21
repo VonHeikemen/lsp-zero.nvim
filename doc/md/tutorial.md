@@ -135,7 +135,7 @@ require('lazy').setup({
       {                                      -- Optional
         'williamboman/mason.nvim',
         build = function()
-          pcall(vim.cmd, 'MasonUpdate')
+          pcall(vim.api.nvim_command, 'MasonUpdate')
         end,
       },
       {'williamboman/mason-lspconfig.nvim'}, -- Optional
@@ -225,7 +225,7 @@ require('lazy').setup({
       {                                      -- Optional
         'williamboman/mason.nvim',
         build = function()
-          pcall(vim.cmd, 'MasonUpdate')
+          pcall(vim.api.nvim_command, 'MasonUpdate')
         end,
       },
       {'williamboman/mason-lspconfig.nvim'}, -- Optional
