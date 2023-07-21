@@ -107,7 +107,9 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
     {'neovim/nvim-lspconfig'},             -- Required
     {                                      -- Optional
       'williamboman/mason.nvim',
-      build = ':MasonUpdate',
+      build = function()
+        pcall(vim.cmd, 'MasonUpdate')
+      end,
     },
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
@@ -133,7 +135,9 @@ use {
     {'neovim/nvim-lspconfig'},             -- Required
     {                                      -- Optional
       'williamboman/mason.nvim',
-      run = ':MasonUpdate',
+      run = function()
+        pcall(vim.cmd, 'MasonUpdate')
+      end,
     },
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
@@ -156,7 +160,9 @@ use {
 {'neovim/nvim-lspconfig'};             -- Required
 {                                      -- Optional
   'williamboman/mason.nvim',
-  run = ':MasonUpdate',
+  run = function()
+    pcall(vim.cmd, 'MasonUpdate')
+  end,
 };
 {'williamboman/mason-lspconfig.nvim'}; -- Optional
 
