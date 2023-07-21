@@ -299,7 +299,7 @@ lsp.default_keymaps({
 
 ### Troubleshooting
 
-If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
+If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server (use the command `:LspLog`).
 
 What do I mean with minimal? Configure the language server using just `lspconfig` and increase the log level. Here is an example test with `tsserver`.
 
