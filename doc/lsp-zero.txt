@@ -352,9 +352,6 @@ setup_servers({list}): ~
         • exclude: (Table, Optional). List of names of LSP servers you don't
         want to setup.
 
-        • defer: (Boolean, Optional) Defaults to `false`. Delay the setup of
-        language servers.
-
     Here is the basic usage.
 >lua
     local lsp = require('lsp-zero').preset({})
@@ -369,7 +366,6 @@ setup_servers({list}): ~
     -- with the ones you have installed
     lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
-
                                                    *lsp-zero.default_setup()*
 
 default_setup({server}): ~
@@ -698,18 +694,6 @@ set_sign_icons({opts}): ~
       hint = '⚑',
       info = '»'
     })
-<
-                                                        *lsp-zero.installed()*
-
-installed(): ~
-    Returns the list of language servers installed by |mason.nvim|. This
-    function depends on the plugin |mason-lspconfig.nvim|, , so if you use
-    this make sure to setup mason.nvim before lsp-zero.
-
-    To get the list of servers quickly from command mode you can execute this
-    command.
->lua
-    :lua = require('lsp-zero').installed()
 <
                                                        *lsp-zero.new_server()*
 

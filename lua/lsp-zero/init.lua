@@ -19,15 +19,6 @@ function M.extend_lspconfig()
   require('lsp-zero.server').extend_lspconfig()
 end
 
-function M.installed()
-  local ok, mason = pcall(require, 'mason-lspconfig')
-  if not ok then
-    return {}
-  end
-
-  return mason.get_installed_servers()
-end
-
 function M.preset(opts)
   opts = opts or {}
 
@@ -58,24 +49,14 @@ function M.setup_servers(list, opts)
 
   opts = opts or {}
 
-  local setup = function()
-    local Server = require('lsp-zero.server')
-    local exclude = opts.exclude or {}
-    local autostart = not (vim.bo.filetype == '')
+  local Server = require('lsp-zero.server')
+  local exclude = opts.exclude or {}
 
-    for _, name in ipairs(list) do
-      if not vim.tbl_contains(exclude, name) then
-        Server.setup(name, {}, autostart)
-      end
+  for _, name in ipairs(list) do
+    if not vim.tbl_contains(exclude, name) then
+      Server.setup(name, {}, false)
     end
   end
-
-  if opts.defer then
-    vim.schedule(setup)
-    return
-  end
-
-  setup()
 end
 
 function M.configure(name, opts)
@@ -137,15 +118,17 @@ function M.use(servers, opts)
   local bufnr = vim.api.nvim_get_current_buf()
   local has_filetype = not (vim.bo.filetype == '')
   local buffer = vim.api.nvim_get_current_buf()
+  local lspconfig = require('lspconfig')
+  local user_opts = opts or {}
 
   for _, name in ipairs(servers) do
     local config = vim.tbl_deep_extend(
       'force',
       s.lsp_project_configs[name] or {},
-      opts or {}
+      user_opts
     )
 
-    local lsp = require('lspconfig')[name]
+    local lsp = lspconfig[name]
     lsp.setup(config)
 
     if lsp.manager and has_filetype then
