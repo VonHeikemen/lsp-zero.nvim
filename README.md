@@ -60,6 +60,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md)
   * [Tutorial: Step by step setup from scratch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/tutorial.md)
+  * [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/migrate-from-v1-branch.md)
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/under-the-hood.md)
   * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/lsp.md#you-might-not-need-lsp-zero)
   * [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/guides/lazy-loading-with-lazy-nvim.md)
