@@ -144,7 +144,7 @@ if not ok then
 end
 
 lazy.setup({
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v2.x'}
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v2.x'},
 
   -- LSP Support
   {'williamboman/mason.nvim'},
@@ -231,8 +231,8 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
     -- scroll documention window
-    ['<C-f>'] = cmp.mapping.scroll_docs(-5),
-    ['<C-d>'] = cmp.mapping.scroll_docs(5),
+    ['<C-f>'] = cmp.mapping.scroll_docs(5),
+    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
   },
 })
 ```
