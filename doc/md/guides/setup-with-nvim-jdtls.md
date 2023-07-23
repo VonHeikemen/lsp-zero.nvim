@@ -6,7 +6,7 @@ Here we will focus on getting a working configuration using [nvim-jdtls](https:/
 
 * A working environment with Java 17 or greater
 * Python 3.9 or greater
-* A working configuration for Neovim (If you don't have one, follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md))
+* A working configuration for Neovim (If you don't have one, follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/tutorial.md))
 
 The code on this guide assumes you will be using [mason.nvim](https://github.com/williamboman/mason.nvim) to install the following packages:
 

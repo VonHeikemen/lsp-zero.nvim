@@ -9,7 +9,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },
@@ -76,7 +76,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },

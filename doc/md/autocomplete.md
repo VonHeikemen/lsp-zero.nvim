@@ -4,9 +4,9 @@
 
 The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). This plugin is designed to be unopinionated and modular. What this means for us (the users) is that we have to assemble various pieces to get the behavior we want.
 
-If you call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) lsp-zero will configure the basic features for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control the completion menu (following Neovim's default whenever possible). Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server. And finally, it will change the "formatting" of the completion items, it'll add a label that tells the name of the source for that item.
+If you call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts) lsp-zero will configure the basic features for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control the completion menu (following Neovim's default whenever possible). Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server. And finally, it will change the "formatting" of the completion items, it'll add a label that tells the name of the source for that item.
 
-This is the code [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) will run for you.
+This is the code [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts) will run for you.
 
 ```lua
 local cmp = require('cmp')
@@ -70,7 +70,7 @@ cmp.setup({
 
 ### Basic mappings
 
-These are the keybindings you get when you enable `set_basic_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
+These are the keybindings you get when you enable `set_basic_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
 
 * `<Ctrl-y>`: Confirms selection.
 
@@ -90,7 +90,7 @@ These are the keybindings you get when you enable `set_basic_mappings` in [.exte
 
 ### Extra mappings
 
-These are the keybindings you get when you enable `set_extra_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). These enable tab completion and navigation between snippet placeholders.
+These are the keybindings you get when you enable `set_extra_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts). These enable tab completion and navigation between snippet placeholders.
 
 * `<Ctrl-f>`: Go to the next placeholder in the snippet.
 

@@ -427,7 +427,7 @@ get_capabilities(): ~
     This is useful when you want to configure a language using a specialized
     plugin. See the examples in quick-recipes.md:
 
-    https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md
+    https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/quick-recipes.md
 
                                                     *lsp-zero.build_options()*
 

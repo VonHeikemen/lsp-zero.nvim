@@ -129,7 +129,7 @@ require('lazy').setup({
   -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },
@@ -203,7 +203,7 @@ require('lspconfig').tsserver.setup({
 })
 ```
 
-Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts).
+Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#setup_serverslist-opts).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -236,7 +236,7 @@ require('lazy').setup({
   -- LSP Support
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },
@@ -372,7 +372,7 @@ require('lazy').setup({
   {'folke/tokyonight.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },
@@ -443,7 +443,7 @@ require('lazy').setup({
   {'williamboman/mason-lspconfig.nvim'},
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'compat-07',
     lazy = true,
     config = false,
   },

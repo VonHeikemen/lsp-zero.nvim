@@ -60,7 +60,7 @@ lspconfig.rust_analyzer.setup({})
 
 ## Creating new keybindings
 
-Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
+Just like the default keybindings the idea here is to create them only when a language server is active in a buffer. For this use the [.on_attach()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#on_attachcallback) function, and then use neovim's built-in functions create the keybindings.
 
 Here is an example that replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
@@ -82,9 +82,9 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ## Disable keybindings
 
-To disable all keybindings just delete the call to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
+To disable all keybindings just delete the call to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#default_keymapsopts).
 
-If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gl`, you would do this.
+If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gl`, you would do this.
 
 ```lua
 lsp.default_keymaps({
@@ -125,13 +125,13 @@ require('mason-lspconfig').setup({
 })
 ```
 
-Notice here we also use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver). We add this to the `handlers` so we can get automatic setup for all the language servers installed with `mason.nvim`.
+Notice here we also use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#default_setupserver). We add this to the `handlers` so we can get automatic setup for all the language servers installed with `mason.nvim`.
 
-For more details on how to use mason.nvim with lsp-zero [read this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md).
+For more details on how to use mason.nvim with lsp-zero [read this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-mason-nvim.md).
 
 ## Configure language servers
 
-To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the call to [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts).
+To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the call to [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#presetopts).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -154,7 +154,7 @@ require('lspconfig').tsserver.setup({
 
 Neovim v0.9 allows an LSP server to define highlight groups, this is known as semantic tokens. This new feature is enabled by default. To disable it we need to modify the `server_capabilities` property of the language server, more specifically we need to "delete" the `semanticTokensProvider` property.
 
-We can disable this new feature in every server using the function [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_server_configopts). 
+We can disable this new feature in every server using the function [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#set_server_configopts). 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -176,7 +176,7 @@ lsp.set_server_config({
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
-Note that defining an `on_init` hook in a language server will override the one in [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_server_configopts). 
+Note that defining an `on_init` hook in a language server will override the one in [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#set_server_configopts). 
 
 If you just want to disable it for a particular server, use lspconfig to assign the `on_init` hook to that server.
 
@@ -232,7 +232,7 @@ require('lspconfig.configs').my_new_lsp = {
 require('lspconfig').my_new_lsp.setup({})
 ```
 
-### Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#new_serveropts)
+### Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#new_serveropts)
 
 If you don't need a "robust" solution you can use the function `.new_server()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()) in a `FileType` autocommand.
 
@@ -263,7 +263,7 @@ Note: When you enable format on save your LSP server is doing the formatting. Th
 
 ### Explicit setup
 
-If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
+If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -292,7 +292,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ### Always use the active servers
 
-If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) in the [.on_attach](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#on_attachcallback) hook.
+If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#buffer_autoformatclient-bufnr) in the [.on_attach](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#on_attachcallback) hook.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -311,7 +311,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
-Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
+Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -389,7 +389,7 @@ lsp.setup_servers({'tsserver', 'lua_ls', 'rust_analyzer'})
 
 ### Ensure only one LSP server per filetype
 
-If you want to control exactly what language server can format, use the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_mappingkey-opts). It will allow you to associate a list of filetypes to a particular language server.
+If you want to control exactly what language server can format, use the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#format_mappingkey-opts). It will allow you to associate a list of filetypes to a particular language server.
 
 Here is an example using `gq` as the keymap.
 
@@ -422,7 +422,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 
 ### Use icons in the sign column
 
-If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_sign_iconsopts). 
+If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#set_sign_iconsopts). 
 
 ```lua
 local lsp = require('lsp-zero').preset({})
