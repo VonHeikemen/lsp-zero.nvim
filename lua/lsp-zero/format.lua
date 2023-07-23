@@ -24,49 +24,33 @@ function M.format_on_save(opts)
     return
   end
 
-  local filetype_setup = function(event)
-    local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
-      -- I don't know how this would happen
-      -- but apparently it can happen
-      return
-    end
-
-    local client = vim.lsp.get_client_by_id(client_id)
-    local files = list[client.name] or {}
-
-    if type(files) == 'string' then
-      files = {list[client.name]}
-    end
-
-    if files == nil or vim.tbl_contains(files, vim.bo.filetype) == false then
-      return
-    end
-
+  local filetype_setup = function(name, event)
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
 
     local config = vim.tbl_deep_extend(
       'force',
-      {timeout_ms = timeout_ms},
+      {
+        timeout_ms = timeout_ms,
+        formatting_options = {},
+      },
       format_opts,
       {
-        async = false,
-        id = client.id,
-        bufnr = event.buf,
+        name = name,
+        verbose = false,
       }
     )
 
-    local apply_format = function()
+    local apply_format = function(e)
       local autoformat = vim.b.lsp_zero_enable_autoformat
       local enabled = (autoformat == nil or autoformat == 1 or autoformat == true)
       if not enabled then
         return
       end
 
-      vim.lsp.buf.format(config)
+      M.apply_sync(e.buf, config)
     end
 
-    local desc = string.format('Format buffer with %s', client.name)
+    local desc = string.format('Format buffer with %s', name)
 
     autocmd('BufWritePre', {
       group = format_id,
@@ -76,11 +60,14 @@ function M.format_on_save(opts)
     })
   end
 
-  autocmd('LspAttach', {
-    group = setup_id,
-    desc = 'Enable format on save',
-    callback = filetype_setup,
-  })
+  for name, files in pairs(list) do
+    autocmd('FileType', {
+      pattern = files,
+      group = setup_id,
+      desc = 'Enable format on save',
+      callback = function(e) filetype_setup(name, e) end,
+    })
+  end
 end
 
 function M.buffer_autoformat(client, bufnr, opts)
@@ -102,23 +89,29 @@ function M.buffer_autoformat(client, bufnr, opts)
 
   local config = vim.tbl_deep_extend(
     'force',
-    {timeout_ms = timeout_ms},
+    {
+      timeout_ms = timeout_ms,
+      formatting_options = {},
+    },
     format_opts,
     {
-      async = false,
       name = client.name,
-      bufnr = bufnr,
+      verbose = false
     }
   )
 
-  local apply_format = function()
+  local apply_format = function(e)
     local autoformat = vim.b.lsp_zero_enable_autoformat
     local enabled = (autoformat == 1 or autoformat == true)
     if not enabled then
       return
     end
 
-    vim.lsp.buf.format(config)
+    if config.name == nil then
+      vim.lsp.buf.formatting_sync(config.formatting_options)
+    else
+      M.apply_sync(e.buf, config)
+    end
   end
 
   local desc = 'Format current buffer'
@@ -194,50 +187,54 @@ function M.format_mapping(key, opts)
     return
   end
 
-  local filetype_setup = function(event)
-    local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
-      -- I don't know how this would happen
-      -- but apparently it can happen
-      return
-    end
-
-    local client = vim.lsp.get_client_by_id(client_id)
-    local files = list[client.name]
-
-    if type(files) == 'string' then
-      files = {list[client.name]}
-    end
-
-    if files == nil or vim.tbl_contains(files, vim.bo.filetype) == false then
-      return
-    end
-
+  local filetype_setup = function(name, event)
     local config = vim.tbl_deep_extend(
       'force',
-      {async = false, timeout_ms = timeout_ms},
+      {
+        async = false,
+        formatting_options = {},
+        timeout_ms = timeout_ms,
+      },
       format_opts,
-      {id = client.id, bufnr = event.buf}
+      {
+        name = name,
+        verbose = false
+      }
     )
 
-    local exec = function() vim.lsp.buf.format(config) end
-    local desc = string.format('Format buffer with %s', client.name)
+    local exec = function()
+      if config.async then
+        M.apply_async(event.buf, config)
+      else
+        M.apply_sync(event.buf, config)
+      end
+    end
+
+    local desc = string.format('Format buffer with %s', config.name)
 
     vim.keymap.set(mode, key, exec, {buffer = event.buf, desc = desc})
   end
 
-  local desc = string.format('Format buffer with %s', key)
 
-  autocmd('LspAttach', {
-    group = format_id,
-    desc = desc,
-    callback = filetype_setup,
-  })
+  for name, files in pairs(list) do
+    local desc = string.format('Setup buffer format with %s', name)
+
+    autocmd('FileType', {
+      pattern = files,
+      group = format_id,
+      desc = desc,
+      callback = function(e) filetype_setup(name, e) end,
+    })
+  end
 end
 
 function M.check(server)
   local buffer = vim.api.nvim_get_current_buf()
-  local client = vim.lsp.get_active_clients({bufnr = buffer, name = server})[1]
+
+  local client = vim.tbl_filter(
+    function(c) return c.name == server end,
+    vim.lsp.get_active_clients()
+  )[1]
 
   if client == nil then
     local msg = '[lsp-zero] %s is not active'
@@ -261,32 +258,177 @@ function M.check(server)
   vim.notify(msg:format(server))
 end
 
+function M.apply_sync(bufnr, opts)
+  local client = vim.tbl_filter(
+    function(c) return c.name == opts.name end,
+    vim.lsp.get_active_clients()
+  )[1]
+
+  if (
+    client == nil or
+    vim.lsp.buf_is_attached(bufnr, client.id) == false
+  ) then
+    local msg = 'Format request failed, no matching language servers'
+    if opts.verbose then vim.notify(msg) end
+    return
+  end
+
+  local params = vim.lsp.util.make_formatting_params(opts.formatting_options)
+  local result = client.request_sync(
+    'textDocument/formatting',
+    params,
+    opts.timeout_ms,
+    bufnr
+  )
+
+  if result and result.result then
+    vim.lsp.util.apply_text_edits(result.result, bufnr, client.offset_encoding)
+  end
+end
+
+function M.apply_async(bufnr, opts)
+  local client = vim.tbl_filter(
+    function(c) return c.name == opts.name end,
+    vim.lsp.get_active_clients()
+  )[1]
+
+  if (
+    client == nil or
+    vim.lsp.buf_is_attached(bufnr, client.id) == false
+  ) then
+    local msg = 'Format request failed, no matching language servers'
+    if opts.verbose then vim.notify(msg) end
+    return
+  end
+
+  local params = vim.lsp.util.make_formatting_params(opts.formatting_options)
+  local timer = vim.loop.new_timer()
+
+  local cleanup = function()
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+
+  local timeout = opts.timeout_ms
+  if timeout <= 0 then
+    timeout = timeout_ms
+  end
+
+  timer:start(timeout, 0, cleanup)
+
+  local encoding = client.offset_encoding
+  local handler = function(err, result, ctx)
+    if timer == nil or err ~= nil or result == nil  then
+      return
+    end
+
+    timer:stop()
+    timer:close()
+    timer = nil
+
+    if not vim.api.nvim_buf_is_loaded(ctx.bufnr) then
+      vim.fn.bufload(ctx.bufnr)
+    end
+
+    vim.lsp.util.apply_text_edits(result, ctx.bufnr, encoding)
+  end
+
+  client.request('textDocument/formatting', params, handler, bufnr)
+end
+
+function M.apply_range(bufnr, opts)
+  local client = vim.tbl_filter(
+    function(c) return c.name == opts.name end,
+    vim.lsp.get_active_clients()
+  )[1]
+
+  if (
+    client == nil or
+    vim.lsp.buf_is_attached(bufnr, client.id) == false
+  ) then
+    local msg = 'Format request failed, no matching language servers'
+    if opts.verbose then vim.notify(msg) end
+    return
+  end
+
+  local config = opts.formatting_options
+
+  local params = vim.lsp.util.make_given_range_params()
+
+  params.options = vim.lsp.util.make_formatting_params(config).options
+
+  local resp = client.request_sync(
+    'textDocument/rangeFormatting',
+    params,
+    opts.timeout_ms,
+    bufnr
+  )
+
+  if resp and resp.result then
+    vim.lsp.util.apply_text_edits(resp.result, bufnr, client.offset_encoding)
+  end
+end
+
+function M.apply_async_range(bufnr, opts)
+  local client = vim.tbl_filter(
+    function(c) return c.name == opts.name end,
+    vim.lsp.get_active_clients()
+  )[1]
+
+  if (
+    client == nil or
+    vim.lsp.buf_is_attached(bufnr, client.id) == false
+  ) then
+    local msg = 'Format request failed, no matching language servers'
+    if opts.verbose then vim.notify(msg) end
+    return
+  end
+
+  local params = vim.lsp.util.make_given_range_params()
+
+  local config = opts.formatting_options
+  params.options = vim.lsp.util.make_formatting_params(config).options
+
+  local timer = vim.loop.new_timer()
+
+  local cleanup = function()
+    timer:stop()
+    timer:close()
+    timer = nil
+  end
+
+  local timeout = opts.timeout_ms
+  if timeout <= 0 then
+    timeout = timeout_ms
+  end
+
+  timer:start(timeout, 0, cleanup)
+
+  local encoding = client.offset_encoding
+  local handler = function(err, result, ctx)
+    if timer == nil or err ~= nil or result == nil  then
+      return
+    end
+
+    timer:stop()
+    timer:close()
+    timer = nil
+
+    if not vim.api.nvim_buf_is_loaded(ctx.bufnr) then
+      vim.fn.bufload(ctx.bufnr)
+    end
+
+    vim.lsp.util.apply_text_edits(result, ctx.bufnr, encoding)
+  end
+
+  client.request('textDocument/rangeFormatting', params, handler, bufnr)
+end
+
 function s.setup_async_format(opts)
   local autocmd = vim.api.nvim_create_autocmd
 
-  local filetype_setup = function(event)
-    local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
-      -- I don't know how this would happen
-      -- but apparently it can happen
-      return
-    end
-
-    local client = vim.lsp.get_client_by_id(client_id)
-    local files = opts.servers[client.name] or {}
-
-    if type(files) == 'string' then
-      files = {opts.servers[client.name]}
-    end
-
-    if files == nil or vim.tbl_contains(files, vim.bo.filetype) == false then
-      return
-    end
-
-    if client.supports_method('textDocument/formatting') == false then
-      return
-    end
-
+  local filetype_setup = function(name, event)
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
 
     if vim.b.lsp_zero_enable_autoformat == nil then
@@ -295,19 +437,35 @@ function s.setup_async_format(opts)
 
     autocmd('BufWritePost', {
       group = opts.format_augroup,
-      desc = string.format('Request format to %s', client.name),
+      desc = string.format('Request format to %s', name),
       buffer = event.buf,
       callback = function(e)
-        s.request_format(client_id, e.buf, opts.format_opts, opts.timeout_ms)
+        local client = vim.tbl_filter(
+          function(c) return c.name == name end,
+          vim.lsp.get_active_clients()
+        )[1]
+
+        if (
+          client == nil or
+          vim.lsp.buf_is_attached(e.buf, client.id) == false
+        ) then
+          return
+        end
+
+
+        s.request_format(client.id, e.buf, opts.format_opts, opts.timeout_ms)
       end,
     })
   end
 
-  autocmd('LspAttach', {
-    group = opts.setup_augroup,
-    desc = 'Setup non-blocking format on save',
-    callback = filetype_setup,
-  })
+  for name, files in pairs(opts.servers) do
+    autocmd('FileType', {
+      pattern = files,
+      group = opts.setup_augroup,
+      desc = 'Setup non-blocking format on save',
+      callback = function(e) filetype_setup(name, e) end,
+    })
+  end
 end
 
 function s.request_format(client_id, buffer, format_opts, timeout)

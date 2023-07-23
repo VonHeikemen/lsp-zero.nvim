@@ -1,5 +1,18 @@
 local M = {}
 
+local function dir_parents(start)
+  return function(_, dir)
+    local parent = vim.fn.fnamemodify(dir, ':h')
+    if parent == dir then
+      return
+    end
+
+    return parent
+  end,
+    nil,
+    start
+end
+
 local function scan_dir(list, dir)
   local match = 0
   local str = '%s/%s'
@@ -22,7 +35,7 @@ function M.find_all(list)
 
   if list.buffer then
     local ok, name = pcall(vim.api.nvim_buf_get_name, 0)
-    dir = ok and vim.fs.dirname(name) or dir
+    dir = ok and vim.fn.fnamemodify(name, ':h') or dir
   end
 
   if dir == nil then
@@ -33,10 +46,10 @@ function M.find_all(list)
     return dir
   end
 
-  local home = vim.env.HOME
+  local stop = list.stop or vim.env.HOME
 
-  for path in vim.fs.parents(dir) do
-    if path == home then
+  for path in dir_parents(dir) do
+    if path == stop then
       return
     end
 
@@ -51,27 +64,31 @@ function M.find_first(list)
 
   if list.buffer then
     local ok, name = pcall(vim.api.nvim_buf_get_name, 0)
-    dir = ok and vim.fs.dirname(name) or dir
+    dir = ok and vim.fn.fnamemodify(name, ':h') or dir
   end
 
-  local result = vim.fs.find(list, {
-    path = dir,
-    upward = true,
-    limit = 1,
-    stop = vim.env.HOME,
-  })
-
-  local path = result[1]
-
-  if path == nil then
-    return
+  if dir == nil then
+    dir = vim.fn.getcwd()
   end
 
-  if vim.fn.isdirectory(path) == 1 then
-    return path
+  local dirs = {dir}
+  local stop = list.stop or vim.env.HOME
+  for path in dir_parents(dir) do
+    if path == stop then
+      break
+    end
+
+    table.insert(dirs, path)
   end
 
-  return vim.fs.dirname(path)
+  local str = '%s/%s'
+  for _, path in ipairs(dirs) do
+    for _, file in ipairs(list) do
+      if vim.loop.fs_stat(str:format(path, file)) then
+        return path
+      end
+    end
+  end
 end
 
 return M

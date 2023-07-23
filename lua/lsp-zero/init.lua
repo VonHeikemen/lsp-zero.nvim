@@ -3,6 +3,7 @@ local noop = function() end
 local M = {}
 local s = {
   lsp_project_configs = {},
+  setup_lspconfig = true,
 }
 
 M.noop = noop
@@ -22,6 +23,8 @@ end
 function M.preset(opts)
   opts = opts or {}
 
+  s.setup_lspconfig = false
+
   if opts.extend_lspconfig == nil then
     opts.extend_lspconfig = true
   end
@@ -32,8 +35,6 @@ function M.preset(opts)
   })
 
   local Server = require('lsp-zero.server')
-
-  Server.setup_autocmd()
 
   if opts.extend_lspconfig then
     Server.extend_lspconfig()
@@ -72,11 +73,19 @@ end
 
 function M.on_attach(fn)
   local Server = require('lsp-zero.server')
-  Server.setup_autocmd()
+
+  if s.setup_lspconfig then
+    Server.extend_lspconfig()
+  end
 
   if type(fn) == 'function' then
     Server.common_attach = fn
   end
+end
+
+function M.attach(client, bufnr)
+  bufnr = bufnr or vim.api.nvim_get_current_buf()
+  require('lsp-zero.server').attach(client, bufnr)
 end
 
 function M.set_server_config(opts)
@@ -91,17 +100,25 @@ function M.build_options(name, opts)
 
   Server.skip_setup(name)
 
-  local defaults = {
-    capabilities = Server.client_capabilities(),
-    on_attach = function() end,
-  }
+  local defaults = {capabilities = Server.client_capabilities()}
 
-  return vim.tbl_deep_extend(
+  local config = vim.tbl_deep_extend(
     'force',
     defaults,
     Server.default_config or {},
     opts or {}
   )
+
+  local callback = config.on_attach
+  config.on_attach = function(client, bufnr)
+    Server.attach(client, bufnr)
+
+    if callback then
+      callback(client, bufnr)
+    end
+  end
+
+  return config
 end
 
 function M.store_config(name, opts)

@@ -10,6 +10,10 @@ if ok_cmp then
 end
 
 function M.extend(opts)
+  if setup_complete then
+    return
+  end
+
   local defaults = {
     set_lsp_source = true,
     set_basic_mappings = true,
@@ -22,6 +26,8 @@ function M.extend(opts)
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
   require('cmp').setup(M.get_config(opts))
+
+  setup_complete = true
 end
 
 function M.get_config(opts)

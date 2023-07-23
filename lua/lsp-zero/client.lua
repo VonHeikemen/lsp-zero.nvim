@@ -38,13 +38,19 @@ function M.setup(opts)
     desc = string.format('Attach LSP: %s', config.name)
   end
 
-  local start_client = function()
+  local id
+
+  local attach_client = function(input)
     if get_root then
       config.root_dir = get_root()
     end
 
-    if config.root_dir then
-      vim.lsp.start(config)
+    if id == nil then
+      id = vim.lsp.start_client(config)
+    end
+
+    if id and config.root_dir then
+      vim.lsp.buf_attach_client(input.buf, id)
     end
   end
 
@@ -52,8 +58,18 @@ function M.setup(opts)
     group = lsp_cmds,
     pattern = config.filetypes,
     desc = desc,
-    callback = start_client
+    callback = attach_client
   })
+
+  local ft = config.filetypes
+
+  if type(ft) == 'string' then
+    ft = {config.filetypes}
+  end
+
+  if vim.tbl_contains(ft, vim.bo.filetype) then
+    attach_client({buf = 0})
+  end
 end
 
 return M

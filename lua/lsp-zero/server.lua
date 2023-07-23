@@ -8,41 +8,32 @@ local s = {}
 local state = {
   exclude = {},
   autocmd = false,
+  capabilities = nil,
+  set_omnifunc = false,
   has_lspconfig = false,
   extend_lspconfig = false,
-  capabilities = nil,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
-function M.setup_autocmd()
-  if state.autocmd then
+function M.attach(client, bufnr)
+  local prev_clients = vim.b.lsp_zero_clients or {}
+
+  if client == nil or vim.tbl_contains(prev_clients, client.id) then
     return
+  else
+    table.insert(prev_clients, client.id)
+    vim.b.lsp_zero_clients = prev_clients
   end
 
-  state.autocmd = true
+  s.set_buf_commands(bufnr)
 
-  local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
+  if state.set_omnifunc then
+    require('lsp-zero.omnifunc').enable(bufnr)
+  end
 
-  vim.api.nvim_create_autocmd('LspAttach', {
-    group = lsp_cmds,
-    desc = 'lsp-zero on_attach',
-    callback = function(event)
-      local bufnr = event.buf
-
-      s.set_buf_commands(bufnr)
-
-      if M.common_attach then
-        local id = vim.tbl_get(event, 'data', 'client_id')
-        local client = {}
-
-        if id then
-          client = vim.lsp.get_client_by_id(id)
-        end
-
-        M.common_attach(client, bufnr)
-      end
-    end
-  })
+  if M.common_attach then
+    M.common_attach(client, bufnr)
+  end
 end
 
 function M.extend_lspconfig()
@@ -53,6 +44,8 @@ function M.extend_lspconfig()
     return
   end
 
+  M.set_global_commands()
+
   local util = require('lspconfig.util')
 
   util.default_config.capabilities = s.set_capabilities()
@@ -61,6 +54,8 @@ function M.extend_lspconfig()
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
     end
+
+    config.on_attach = util.add_hook_before(config.on_attach, M.attach)
   end)
 
   state.extend_lspconfig = true
@@ -119,10 +114,6 @@ function M.set_global_commands()
   )
 end
 
-function M.diagnostics_config()
-  return {severity_sort = true}
-end
-
 function M.default_keymaps(opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
@@ -162,15 +153,10 @@ function M.default_keymaps(opts)
   map('n', 'gr', lsp 'buf.references()')
   map('n', 'gs', lsp 'buf.signature_help()')
   map('n', '<F2>', lsp 'buf.rename()')
-  map('n', '<F3>', lsp 'buf.format({async = true})')
-  map('x', '<F3>', lsp 'buf.format({async = true})')
+  map('n', '<F3>', lsp 'buf.formatting()')
+  map('x', '<F3>', lsp 'buf.range_formatting()')
   map('n', '<F4>', lsp 'buf.code_action()')
-
-  if vim.lsp.buf.range_code_action then
-    map('x', '<F4>', lsp 'buf.range_code_action()')
-  else
-    map('x', '<F4>', lsp 'buf.code_action()')
-  end
+  map('x', '<F4>', lsp 'buf.range_code_action()')
 
   map('n', 'gl', diagnostic 'open_float()')
   map('n', '[d', diagnostic 'goto_prev()')
@@ -249,6 +235,7 @@ function s.set_buf_commands(bufnr)
       return
     end
 
+    local async = input.bang
     local server = input.fargs[1]
     local timeout = input.fargs[2]
 
@@ -263,11 +250,32 @@ function s.set_buf_commands(bufnr)
       server = input.fargs[2]
     end
 
-    vim.lsp.buf.format({
-      async = input.bang,
-      timeout_ms = timeout,
+    local has_range = input.line2 == input.count
+
+    local options = {
+      async = async,
       name = server,
-    })
+      verbose = true,
+      range = has_range,
+      formatting_options = {},
+      timeout_ms = timeout or 10000,
+    }
+
+    if server then
+      s.apply_format(vim.api.nvim_get_current_buf(), options)
+      return
+    end
+
+    if has_range then
+      vim.lsp.buf.range_formatting()
+      return
+    end
+
+    if async then
+      vim.lsp.buf.formatting()
+    else
+      vim.lsp.buf.formatting_sync(nil, options.timeout_ms)
+    end
   end
 
   bufcmd(bufnr, 'LspZeroFormat', format, {range = true, bang = true, nargs = '*'})
@@ -284,6 +292,10 @@ function M.skip_setup(name)
   if type(name) == 'string' then
     state.exclude[name] = true
   end
+end
+
+function M.enable_omnifunc()
+  state.set_omnifunc = true
 end
 
 function s.set_capabilities(current)
@@ -370,6 +382,26 @@ function s.tbl_merge(old_val, new_val)
     else
       old_val[k] = v
     end
+  end
+end
+
+function s.apply_format(bufnr, opts)
+  local format = require('lsp-zero.format')
+
+  if opts.range then
+    if opts.async then
+      format.apply_range_async(bufnr, opts)
+    else
+      format.apply_range(bufnr, opts)
+    end
+
+    return
+  end
+
+  if opts.async then
+    format.apply_async(bufnr, opts)
+  else
+    format.apply_sync(bufnr, opts)
   end
 end
 

@@ -23,6 +23,8 @@ local key = {
 local omni_code = t(key.omni)
 local buffer_code = t(key.buffer)
 
+function M.enable() return false end
+
 function M.setup(user_opts)
   if type(user_opts) ~= 'table' then
     user_opts = {}
@@ -113,27 +115,27 @@ function M.setup(user_opts)
     end
   end
 
-  autocmd('LspAttach', {
-    group = id,
-    desc = 'setup LSP omnifunc completion',
-    callback = function(event)
-      if set_autocomplete then
-        M.autocomplete(event.buf)
-      end
+  M.enable = function(bufnr)
+    vim.bo.omnifunc = 'v:lua.vim.lsp.omnifunc'
 
-      if set_tabcomplete then
-        M.tab_complete(event.buf)
-      end
-
-      if set_toggle then
-        M.toggle_menu(set_toggle, event.buf)
-      end
-
-      if map_backspace then
-        s.backspace(event.buf)
-      end
+    if set_autocomplete then
+      M.autocomplete(bufnr)
     end
-  })
+
+    if set_tabcomplete then
+      M.tab_complete(bufnr)
+    end
+
+    if set_toggle then
+      M.toggle_menu(set_toggle, bufnr)
+    end
+
+    if map_backspace then
+      s.backspace(bufnr)
+    end
+  end
+
+  require('lsp-zero.server').enable_omnifunc()
 end
 
 function M.autocomplete(buffer)
