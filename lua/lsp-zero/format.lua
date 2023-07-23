@@ -198,11 +198,26 @@ function M.format_mapping(key, opts)
       format_opts,
       {
         name = name,
-        verbose = false
+        verbose = true,
       }
     )
 
+    local exec_range = function(bufnr)
+      if config.async then
+        M.apply_async_range(bufnr, config)
+        return
+      end
+
+      M.apply_range(bufnr, config)
+    end
+
     local exec = function()
+      local m = vim.api.nvim_get_mode().mode
+      if m == 'v' or m == 'V' then
+        exec_range(event.buf)
+        return
+      end
+
       if config.async then
         M.apply_async(event.buf, config)
       else
