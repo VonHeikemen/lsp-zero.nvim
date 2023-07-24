@@ -38,7 +38,7 @@ local lsp = require('lsp-zero').preset({
 
 Create the keybindings bound to built-in LSP functions. 
 
-The {opts} table supports the same properties as `set_lsp_keymaps` and adds the following:
+The {opts} table supports the following properties:
 
   * buffer: (optional) Number. The "id" of an open buffer. If the number 0 is provided then the keymaps will be effective in the current buffer.
 
@@ -113,7 +113,7 @@ lsp.set_sign_icons({
 
 ### `.on_attach({callback})`
 
-Executes the `{callback}` function every time a server is attached to a buffer.
+Executes the `{callback}` function every time a language server is attached to a buffer.
 
 This is where you can declare your own keymaps and commands.
 
@@ -248,7 +248,32 @@ Returns all the parameters lsp-zero uses to initialize a language server. This i
 
 ### `.nvim_lua_ls({opts})`
 
-Returns settings specific to Neovim for the lua language server, `lua_ls`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+Returns settings specific to Neovim for the lua language server, `lua_ls`.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.extend_cmp()
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+```
+
+If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+
+```lua
+require('lspconfig').lua_ls.setup(
+  lsp.nvim_lua_ls({
+    single_file_support = false,
+    on_attach = function(client, bufnr)
+      print('hello there')
+    end,
+  })
+)
+```
 
 ### `.store_config({name}, {opts})`
 
@@ -304,9 +329,13 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
 
-  * format_opts: (Table). These are the options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+  * format_opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+    
+    * async: (Boolean, optional). If true it will send an asynchronous format request to the LSP server.
 
-When you enable async formatting the only argument in `format_opts` that will have any effect are `formatting_options` and `timeout_ms`, the rest will be ignored.
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Defaults to `10000`.
+
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
 local lsp = require('lsp-zero')
@@ -333,9 +362,11 @@ If {client} argument is provided it will only use the LSP server associated with
 
   * bufnr: (Number, Optional) if provided it must be the id of an open buffer.
 
-  * opts: (Table). Additional options. It supports the following properties:
+  * opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+    
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Defaults to `10000`.
 
-    * format_opts: (Table). These are the same options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
 local lsp = require('lsp-zero')
@@ -390,9 +421,15 @@ The idea here is that you associate a language server with a list of filetypes, 
 
   * servers: (Table) Key/value pair list. On the left hand side you must specify the name of a language server. On the right hand side you must provide a list of filetypes, this can be any pattern supported by the `FileType` autocommand.
 
-  * format_opts: (Table). These are the options you can pass to [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()).
-
   * mode: (Table). The list of modes where the keybinding will be active. By default is set to `{'n', 'x'}`, which means normal mode and visual mode.
+
+  * format_opts: (Table, optional). Configuration that will passed to the formatting function. It supports the following properties:
+    
+    * async: (Boolean, optional). If true it will send an asynchronous format request to the LSP server.
+
+    * timeout_ms: (Number, optional). Time in milliseconds to block for formatting requests. Defaults to `10000`.
+
+    * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
 local lsp = require('lsp-zero')
@@ -541,9 +578,7 @@ Creates a minimal working config for nvim-cmp.
 
   * set_lsp_source: (Boolean, Optional) Defaults to `true`. When enabled it adds `cmp-nvim-lsp` as a source.
 
-  * set_basic_mappings: (Boolean, Optional) Defaults to `true`. When enabled it will create keybindings that emulate Neovim's default completions bindings.
-
-  * set_extra_mappings: (Boolean, Optional) Defaults to `false`. When enabled it will setup tab completion, scrolling through documentation window, and navigation between snippets.
+  * set_mappings: (Boolean, Optional) Defaults to `true`. When enabled it will create keybindings that emulate Neovim's default completions bindings.
 
   * use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it will setup luasnip to expand snippets. This option does not include a collection of snippets.
 

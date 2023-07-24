@@ -68,8 +68,6 @@ cmp.setup({
 
 ## Keybindings
 
-### Basic mappings
-
 These are the keybindings you get when you enable `set_basic_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
 
 * `<Ctrl-y>`: Confirms selection.
@@ -87,18 +85,6 @@ These are the keybindings you get when you enable `set_basic_mappings` in [.exte
 * `<Ctrl-d>`: Scroll down in the item's documentation.
 
 * `<Ctrl-u>`: Scroll up in the item's documentation.
-
-### Extra mappings
-
-These are the keybindings you get when you enable `set_extra_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). These enable tab completion and navigation between snippet placeholders.
-
-* `<Ctrl-f>`: Go to the next placeholder in the snippet.
-
-* `<Ctrl-b>`: Go to the previous placeholder in the snippet.
-
-* `<Tab>`: Enables completion when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list.
-
-* `<Shift-Tab>`: When the completion menu is visible navigate to the previous item in the list.
 
 ## Customizing nvim-cmp
 

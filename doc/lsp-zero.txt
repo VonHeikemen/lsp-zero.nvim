@@ -512,8 +512,8 @@ format_on_save({opts}): ~
     Setup autoformat on save. This will to allow you to associate a language
     server with a list of filetypes.
 
-    Keep in mind it's only meant to allow one LSP server per filetype,
-    this is so the formatting is consistent.
+    This function was designed to allow one LSP server per filetype, this is
+    so the formatting is consistent.
 
     {opts} supports the following properties:
 
@@ -522,12 +522,24 @@ format_on_save({opts}): ~
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        • format_opts: (Table, Optional). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
+        • format_opts: (Table, optional). Configuration that will passed to
+        the formatting function. It supports the following properties:
 
-    When you enable async formatting the only arguments in `format_opts` that
-    will have any effect are `formatting_options` and `timeout_ms`, the rest
-    will be ignored.
+            • async: (Boolean, optional). If true it will send an
+              asynchronous format request to the LSP server.
+
+            • timeout_ms: (Number, optional). Time in milliseconds to block
+            for formatting requests. Defaults to `10000`.
+
+            • formatting_options: (Table, optional). Can be used to set
+            `FormattingOptions`, these options are sent to the language
+            server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
+
+    When you enable format on save your LSP server is doing the formatting.
+    The LSP server does not share the same style configuration as Neovim. Tabs
+    and indents can change after the LSP formats the code in the file. Read
+    the documentation of the LSP server you are using, figure out how to
+    configure it to your prefered style.
 >lua
     local lsp = require('lsp-zero').preset({})
 
@@ -538,6 +550,10 @@ format_on_save({opts}): ~
     end)
 
     lsp.format_on_save({
+      format_opts = {
+        async = false,
+        timeout_ms = 10000,
+      },
       servers = {
         ['rust_analyzer'] = {'rust'},
         ['tsserver'] = {'javascript', 'typescript'},
@@ -560,12 +576,19 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     • {bufnr}: (Number, Optional) if provided it must be the id
     of an open buffer.
 
-    • {opts}: (Table). Additional options. It supports the following
-    properties:
+    • {opts}: (Table, optional). Configuration that will passed to
+    the formatting function. It supports the following properties:
 
-        • format_opts: (Table). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
+        • timeout_ms: (Number, optional). Time in milliseconds to block
+        for formatting requests. Defaults to `10000`.
 
+        • formatting_options: (Table, optional). Can be used to set
+        `FormattingOptions`, these options are sent to the language
+        server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
+
+    Tabs and indents can change after the LSP formats the code in the file. Read
+    the documentation of the LSP servers you are using, figure out how to
+    configure it to your prefered style.
 >lua
     local lsp = require('lsp-zero').preset({})
 
@@ -642,13 +665,26 @@ format_mapping({key}, {opts}): ~
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        • format_opts: (Table). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
-
         • mode: (Table). The list of modes where the keybinding will be active.
         By default is set to `{'n', 'x'}`, which means normal mode and visual
         mode.
 
+        • format_opts: (Table, optional). Configuration that will passed to
+        the formatting function. It supports the following properties:
+
+            • async: (Boolean, optional). If true it will send an
+              asynchronous format request to the LSP server.
+
+            • timeout_ms: (Number, optional). Time in milliseconds to block
+            for formatting requests. Defaults to `10000`.
+
+            • formatting_options: (Table, optional). Can be used to set
+            `FormattingOptions`, these options are sent to the language
+            server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
+
+    Tabs and indents can change after the LSP formats the code in the file. Read
+    the documentation of the LSP servers you are using, figure out how to
+    configure it to your prefered style.
 >lua
     local lsp = require('lsp-zero').preset({})
 

@@ -45,16 +45,13 @@ function M.format_on_save(opts)
 
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
 
-    local config = vim.tbl_deep_extend(
-      'force',
-      {timeout_ms = timeout_ms},
-      format_opts,
-      {
-        async = false,
-        id = client.id,
-        bufnr = event.buf,
-      }
-    )
+    local config = {
+      async = false,
+      id = client.id,
+      bufnr = event.buf,
+      timeout_ms = format_opts.timeout_ms or timeout_ms,
+      formatting_options = format_opts.formatting_options,
+    }
 
     local apply_format = function()
       local autoformat = vim.b.lsp_zero_enable_autoformat
@@ -92,24 +89,20 @@ function M.buffer_autoformat(client, bufnr, opts)
   client = client or {}
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  local format_opts = opts.format_opts or {}
-
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 
   if vim.b.lsp_zero_enable_autoformat == nil then
     vim.b.lsp_zero_enable_autoformat = 1
   end
 
-  local config = vim.tbl_deep_extend(
-    'force',
-    {timeout_ms = timeout_ms},
-    format_opts,
-    {
-      async = false,
-      name = client.name,
-      bufnr = bufnr,
-    }
-  )
+  local config = {
+    async = false,
+    id = client.id,
+    name = client.name,
+    bufnr = bufnr,
+    timeout_ms = opts.timeout_ms or timeout_ms,
+    formatting_options = opts.formatting_options,
+  }
 
   local apply_format = function()
     local autoformat = vim.b.lsp_zero_enable_autoformat
@@ -154,12 +147,8 @@ function M.async_autoformat(client, bufnr, opts)
 
   local format_id = augroup(format_group, {clear = false})
   bufnr = bufnr or vim.api.nvim_get_current_buf()
-  local fmt_opts = {}
 
-  if type(opts) == 'table' then
-    fmt_opts = opts.formatting_options
-  end
-
+  local fmt_opts = opts.formatting_options or {}
   local timeout = opts.timeout_ms or timeout_ms
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
@@ -213,12 +202,13 @@ function M.format_mapping(key, opts)
       return
     end
 
-    local config = vim.tbl_deep_extend(
-      'force',
-      {async = false, timeout_ms = timeout_ms},
-      format_opts,
-      {id = client.id, bufnr = event.buf}
-    )
+    local config = {
+      id = client.id,
+      bufnr = event.buf,
+      async = format_opts.async == true or false,
+      timeout_ms = format_opts.timeout_ms or timeout_ms,
+      formatting_options = format_opts.formatting_options,
+    }
 
     local exec = function() vim.lsp.buf.format(config) end
     local desc = string.format('Format buffer with %s', client.name)
