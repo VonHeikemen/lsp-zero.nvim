@@ -13,8 +13,11 @@ working together.
 ==============================================================================
 Quickstart                                               *lsp-zero-quickstart*
 
-The fastest way to get started is by using a "preset" and immediately call
-the |lsp-zero.setup()| function.
+You can use lsp-zero to create keymaps that will allow you to access features
+like jump to definition, rename variables, etc. It also can help you setup
+the basic features of the autocompletion plugin.
+
+Here is a basic configuration to get started.
 >lua
   local lsp = require('lsp-zero').preset({})
 
@@ -28,9 +31,10 @@ the |lsp-zero.setup()| function.
   -- with the ones you have installed
   lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
-With this configuration lsp-zero will create keymaps to take advantage of some
-features like jump to definition, rename variables, etc. It will also setup
-the basic features of the autocompletion plugin.
+Note that you will need to install a language server for this to work. You can
+access the list of supported language servers using this command:
+
+:help lspconfig-all
 
 =============================================================================
 autocomplete                                          *lsp-zero-autocomplete*
@@ -41,7 +45,7 @@ is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
-When you enable `set_basic_mappings` in the function |lsp-zero.extend_cmp()|
+When you enable `set_mappings` in the function |lsp-zero.extend_cmp()|
 lsp-zero creates the following keybindings.
 
     <Ctrl-y>: ~
@@ -69,22 +73,6 @@ lsp-zero creates the following keybindings.
 
     <Ctrl-d>: ~
         Scroll down in the item's documentation.
-
-And when you enable `set_extra_mappings` it creates these.
-
-    <Ctrl-f>: ~
-        Go to the next placeholder in the snippet.
-
-    <Ctrl-b>: ~
-        Go to the previous placeholder in the snippet.
-
-    <Tab>: ~
-        Enables completion when the cursor is inside a word. If the completion
-        menu is visible it will navigate to the next item in the list.
-
-    <Shift-Tab>: ~
-        When the completion menu is visible navigate to the previous
-        item in the list.
 
 ==============================================================================
 LSP                                                      *lsp-zero-lsp-config*
@@ -196,7 +184,7 @@ gs: ~
 
 <F3>: ~
     Format a buffer using the LSP servers attached to it.
-    See |vim.lsp.buf.rename()|.
+    See |vim.lsp.buf.format()|.
 
 <F4>: ~
     Selects a code action available at the current cursor position.
@@ -920,13 +908,9 @@ extend_cmp({opts}): ~
         • set_lsp_source: (Boolean, Optional) Defaults to `true`. When enabled
         it adds `cmp-nvim-lsp` as a source.
 
-        • set_basic_mappings: (Boolean, Optional) Defaults to `true`. When
+        • set_mappings: (Boolean, Optional) Defaults to `true`. When
         enabled it will create keybindings that emulate Neovim's default
         completions bindings.
-
-        • set_extra_mappings: (Boolean, Optional) Defaults to `false`. When
-        enabled it will setup tab completion, scrolling through documentation
-        window, and navigation between snippets.
 
         • use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it
         will setup luasnip to expand snippets. This option does not include a
