@@ -6,9 +6,7 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-Hello there. This is the development branch for version 3 of lsp-zero.
-
-This version requires Neovim v0.8 or greater. If have Neovim v0.7.2 or lower please use the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
+This is a special branch of lsp-zero, created specifically to be compatible with Neovim v0.7. Mainly because debian based OS still have Neovim v0.7.2 on their official repos. So this is a port of `v3.x` but compatible with that version of Neovim.
 
 ## How to get started
 
@@ -28,7 +26,6 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Disable keybindings](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#disable-keybindings)
   * [Install new language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#install-new-language-servers)
   * [Configure language servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#configure-language-servers)
-  * [Disable semantic highlights](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#disable-semantic-highlights)
   * [Disable a language server](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#disable-a-language-server)
   * [Custom servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#custom-servers)
   * [Enable Format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#enable-format-on-save)
@@ -57,7 +54,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md)
   * [Tutorial: Step by step setup from scratch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/tutorial.md)
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/under-the-hood.md)
-  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/lsp.md#you-might-not-need-lsp-zero)
+  * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/you-might-not-need-lsp-zero.md)
   * [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/lazy-loading-with-lazy-nvim.md)
   * [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-mason-nvim.md)
   * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-null-ls.md)
@@ -83,6 +80,8 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
 
 <details>
 <summary>Expand: lazy.nvim snippet </summary>
+
+Note: if you are using lazy nvim, you can use version `v3.x` of lsp-zero. There is no need to use this branch.
 
 For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 

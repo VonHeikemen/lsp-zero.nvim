@@ -13,8 +13,11 @@ working together.
 ==============================================================================
 Quickstart                                               *lsp-zero-quickstart*
 
-The fastest way to get started is by using a "preset" and immediately call
-the |lsp-zero.setup()| function.
+You can use lsp-zero to create keymaps that will allow you to access features
+like jump to definition, rename variables, etc. It also can help you setup
+the basic features of the autocompletion plugin.
+
+Here is a basic configuration to get started.
 >lua
   local lsp = require('lsp-zero').preset({})
 
@@ -28,10 +31,11 @@ the |lsp-zero.setup()| function.
   -- with the ones you have installed
   lsp.setup_servers({'tsserver', 'rust_analyzer'})
 <
-With this configuration lsp-zero will create keymaps to take advantage of some
-features like jump to definition, rename variables, etc. It will also setup
-the basic features of the autocompletion plugin.
-
+Note that you will need to install a language server for this to work. You can
+access the list of supported language servers using this command:
+>
+:help lspconfig-all
+<
 =============================================================================
 autocomplete                                          *lsp-zero-autocomplete*
 
@@ -41,7 +45,7 @@ is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
-When you enable `set_basic_mappings` in the function |lsp-zero.extend_cmp()|
+When you enable `set_mappings` in the function |lsp-zero.extend_cmp()|
 lsp-zero creates the following keybindings.
 
     <Ctrl-y>: ~
@@ -70,22 +74,6 @@ lsp-zero creates the following keybindings.
     <Ctrl-d>: ~
         Scroll down in the item's documentation.
 
-And when you enable `set_extra_mappings` it creates these.
-
-    <Ctrl-f>: ~
-        Go to the next placeholder in the snippet.
-
-    <Ctrl-b>: ~
-        Go to the previous placeholder in the snippet.
-
-    <Tab>: ~
-        Enables completion when the cursor is inside a word. If the completion
-        menu is visible it will navigate to the next item in the list.
-
-    <Shift-Tab>: ~
-        When the completion menu is visible navigate to the previous
-        item in the list.
-
 ==============================================================================
 LSP                                                      *lsp-zero-lsp-config*
 
@@ -94,9 +82,10 @@ Language servers are configured and initialized using |lspconfig|.
 lsp-zero adds some extra "capabilities" to lspconfig's defaults, they tell the
 language server what features |nvim-cmp| adds to the editor.
 
-Then it creates an autocommand on the event |LspAttach|. This autocommand will
-be triggered every time a language server is attached to a buffer. Is where
-all keybindings and commands are created.
+In order to create the keybindings and commands lsp-zero assigns a function to
+the "hook" called `on_attach`. This function will be triggered every time
+lspconfig attaches a language server to a buffer. Is where all keybindings and
+commands are created.
 
 If you were to do it all by yourself, the code would look like this.
 >lua
@@ -109,13 +98,11 @@ If you were to do it all by yourself, the code would look like this.
     require('cmp_nvim_lsp').default_capabilities()
   )
 
-  vim.api.nvim_create_autocmd('LspAttach', {
-    desc = 'LSP actions',
-    callback = function(event)
-      vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', {buffer = true})
-      -- More keybindings and commands....
-    end
-  })
+  lsp_defaults.on_attach = function(client, bufnr)
+    local opts = {buffer = bufnr}
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    -- More keybindings and commands....
+  end
 
   lspconfig.tsserver.setup({})
   lspconfig.rust_analyzer.setup({})
@@ -123,8 +110,7 @@ If you were to do it all by yourself, the code would look like this.
                                                            *lsp-zero-commands*
 
 LspZeroFormat {server} timeout={timeout}: ~
-    Formats the current buffer or range. Under the hood lsp-zero is using the
-    function |vim.lsp.buf.format()|.
+    Formats the current buffer or range.
 
     If the "bang" is provided formatting will be asynchronous
     (ex: `LspZeroFormat!`).
@@ -148,12 +134,9 @@ LspZeroWorkspaceList: ~
     List workspace folders. See |vim.lsp.buf.list_workspace_folders()|.
 
 LspZeroSetupServers [{server}]: ~
-    It takes a space separated list of servers and configures them.
-    It calls the function |lsp-zero.setup_servers()| under the hood.
-    If the `bang` is provided the root dir of the language server
-    will be the same as neovim. Note that this command for when you
-    decide to handle the configuration of servers manually, it will
-    only do something when `setup_servers_on_start` is disabled.
+    It takes a space separated list of servers and configures them. It calls
+    the function |lsp-zero.use()| under the hood. If the `bang` is provided
+    the root dir of the language server will be the same as neovim.
 
                                                         *lsp-zero-keybindings*
 
@@ -192,10 +175,6 @@ gs: ~
 
 <F2>: ~
     Renames all references to the symbol under the cursor.
-    See |vim.lsp.buf.rename()|.
-
-<F3>: ~
-    Format a buffer using the LSP servers attached to it.
     See |vim.lsp.buf.rename()|.
 
 <F4>: ~
@@ -244,8 +223,8 @@ preset({opts}): ~
                                                         *lsp-zero.on_attach()*
 
 on_attach({callback}): ~
-    Execute {callback} function every time a server is attached
-    to a buffer.
+    Execute {callback} function every time |lspconfig| attaches a language
+    server to a buffer.
 
     This is the place where you can create your own keybindings.
 >lua
@@ -270,8 +249,7 @@ on_attach({callback}): ~
 default_keymaps({opts}): ~
     Create the keybindings bound to built-in LSP functions.
 
-    The {opts} table supports the same properties as `set_lsp_keymaps` and
-    adds the following:
+    The {opts} table supports the following properties:
 
         • buffer: (Number, Optional) Defaults to 0. The "id" of an open buffer.
         If the number 0 is provided then the keymaps will be effective in the
@@ -352,7 +330,8 @@ setup_servers({list}): ~
         • exclude: (Table, Optional). List of names of LSP servers you don't
         want to setup.
 
-    Here is the basic usage.
+    Note: for this to work all the language server must be installed in your
+    system.
 >lua
     local lsp = require('lsp-zero').preset({})
 
@@ -429,6 +408,33 @@ get_capabilities(): ~
 
     https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/quick-recipes.md
 
+                                                           *lsp-zero.attach()*
+
+attach({client}, {bufnr}): ~
+    Executes the "global" on_attach hook and sets up the local commands. It
+    will also enable the omnifunc for LSP if you used
+    |lsp-zero.omnifunc.setup()|.
+
+    This is meant to help you setup a language server with a specialized
+    plugin.
+
+    Here is an example using the plugin `flutter-tools`.
+>lua
+    local lsp = require('lsp-zero').preset({})
+    
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+    end)
+
+    require('flutter-tools').setup({
+      lsp = {
+        on_attach = function(client, bufnr)
+          lsp.attach(client, bufnr)
+        end,
+        capabilities = lsp.get_capabilities(),
+      }
+    })
+<
                                                     *lsp-zero.build_options()*
 
 build_options({server}, {opts}): ~
@@ -522,8 +528,18 @@ format_on_save({opts}): ~
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        • format_opts: (Table, Optional). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
+        • format_opts: (Table, optional). Configuration that will passed to
+        the formatting function. It supports the following properties:
+
+            • async: (Boolean, optional). If true it will send an
+              asynchronous format request to the LSP server.
+
+            • timeout_ms: (Number, optional). Time in milliseconds to block
+            for formatting requests. Defaults to `10000`.
+
+            • formatting_options: (Table, optional). Can be used to set
+            `FormattingOptions`, these options are sent to the language
+            server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
     When you enable async formatting the only arguments in `format_opts` that
     will have any effect are `formatting_options` and `timeout_ms`, the rest
@@ -538,6 +554,10 @@ format_on_save({opts}): ~
     end)
 
     lsp.format_on_save({
+      format_opts = {
+        async = false,
+        timeout_ms = 10000,
+      },
       servers = {
         ['rust_analyzer'] = {'rust'},
         ['tsserver'] = {'javascript', 'typescript'},
@@ -560,11 +580,15 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     • {bufnr}: (Number, Optional) if provided it must be the id
     of an open buffer.
 
-    • {opts}: (Table). Additional options. It supports the following
-    properties:
+    • {opts}: (Table, optional). Configuration that will passed to
+    the formatting function. It supports the following properties:
 
-        • format_opts: (Table). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
+        • timeout_ms: (Number, optional). Time in milliseconds to block
+        for formatting requests. Defaults to `10000`.
+
+        • formatting_options: (Table, optional). Can be used to set
+        `FormattingOptions`, these options are sent to the language
+        server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >lua
     local lsp = require('lsp-zero').preset({})
@@ -642,12 +666,22 @@ format_mapping({key}, {opts}): ~
         provide a list of filetypes, this can be any pattern supported
         by the |FileType| autocommand.
 
-        • format_opts: (Table). These are the same options you can pass to
-        |vim.lsp.buf.format()|.
-
         • mode: (Table). The list of modes where the keybinding will be active.
         By default is set to `{'n', 'x'}`, which means normal mode and visual
         mode.
+
+        • format_opts: (Table, optional). Configuration that will passed to
+        the formatting function. It supports the following properties:
+
+            • async: (Boolean, optional). If true it will send an
+              asynchronous format request to the LSP server.
+
+            • timeout_ms: (Number, optional). Time in milliseconds to block
+            for formatting requests. Defaults to `10000`.
+
+            • formatting_options: (Table, optional). Can be used to set
+            `FormattingOptions`, these options are sent to the language
+            server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >lua
     local lsp = require('lsp-zero').preset({})
@@ -659,6 +693,10 @@ format_mapping({key}, {opts}): ~
     end)
 
     lsp.format_mapping('gq', {
+      format_opts = {
+        async = false,
+        timeout_ms = 10000,
+      },
       servers = {
         ['rust_analyzer'] = {'rust'},
         ['tsserver'] = {'javascript', 'typescript'},
@@ -704,9 +742,9 @@ new_server({opts}): ~
     attached to the file.
 
     This function does not depend on `lspconfig`, it's a thin wrapper
-    around a Neovim function called |vim.lsp.start()|.
+    around a Neovim function called |vim.lsp.start_client()|.
 
-    {opts} supports every property |vim.lsp.start()| supports with
+    {opts} supports every property |vim.lsp.start_client()| supports with
     a few changes:
 
         • filestypes: (Table) Can be list filetype names. This can be
@@ -884,13 +922,9 @@ extend_cmp({opts}): ~
         • set_lsp_source: (Boolean, Optional) Defaults to `true`. When enabled
         it adds `cmp-nvim-lsp` as a source.
 
-        • set_basic_mappings: (Boolean, Optional) Defaults to `true`. When
+        • set_mappings: (Boolean, Optional) Defaults to `true`. When
         enabled it will create keybindings that emulate Neovim's default
         completions bindings.
-
-        • set_extra_mappings: (Boolean, Optional) Defaults to `false`. When
-        enabled it will setup tab completion, scrolling through documentation
-        window, and navigation between snippets.
 
         • use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it
         will setup luasnip to expand snippets. This option does not include a
@@ -1190,12 +1224,11 @@ Always include `{name = 'nvim_lsp'}` in your sources.
 ==============================================================================
 Version                                                     *lsp-zero-version*
 
-Current version: `v3-dev`
+Current version: compat-07
 
-This is a development branch, breaking changes can happen. 
-
-The code on this version requires Neovim v0.8 or greater. If you need support
-for Neovim v0.7 or lower use the `v1.x` branch of lsp.zero.
+The code on this version based on the `v3.x` branch, and it requires Neovim
+v0.7 or greater. If you need support for Neovim v0.6.1 or lower use the `v1.x`
+branch of lsp.zero.
 
 ==============================================================================
 Support                                                    *lsp-zero-donation*

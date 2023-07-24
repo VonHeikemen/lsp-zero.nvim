@@ -75,11 +75,10 @@ function M.buffer_autoformat(client, bufnr, opts)
   local augroup = vim.api.nvim_create_augroup
   local format_id = augroup(format_group, {clear = false})
 
-  opts = opts or {}
   client = client or {}
   bufnr = bufnr or vim.api.nvim_get_current_buf()
 
-  local format_opts = opts.format_opts or {}
+  local format_opts = opts or {}
 
   vim.api.nvim_clear_autocmds({group = format_group, buffer = bufnr})
 

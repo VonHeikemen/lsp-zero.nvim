@@ -185,7 +185,7 @@ require('mason-lspconfig').setup({
 
 ## Setup with flutter-tools
 
-With [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) the only thing that make sense to do is share the "capabilities" option. So, let flutter-tools initialize the language server, and have lsp-zero just configure the capabilities option.
+With [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) the only thing that make sense to do is share the "capabilities" option and the `on_attach` hook. So, let flutter-tools initialize the language server, and have lsp-zero configure those two.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -198,7 +198,10 @@ end)
 
 require('flutter-tools').setup({
   lsp = {
-    capabilities = lsp.get_capabilities()
+    on_attach = function(client, bufnr)
+      lsp.attach(client, bufnr)
+    end,
+    capabilities = lsp.get_capabilities(),
   }
 })
 ```
@@ -207,7 +210,7 @@ require('flutter-tools').setup({
 
 The following is based on the [example configuration](https://github.com/scalameta/nvim-metals/discussions/39) found in [nvim-metals](https://github.com/scalameta/nvim-metals) discussion section.
 
-If I understand correctly, `nvim-metals` is the one that needs to configure the [metals lsp](https://scalameta.org/metals/). The only thing that you need to do share is the "capabilities" option with the `metals` config.
+If I understand correctly, `nvim-metals` is the one that needs to configure the [metals lsp](https://scalameta.org/metals/). The only thing that you need to do share is the "capabilities" option and the `on_attach` hook with the new `metals` config.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -222,7 +225,10 @@ end)
 -- Create the configuration for metals
 ---
 local metals_config = require('metals').bare_config()
-metals_config.capabilities = require('lsp-zero').get_capabilities()
+metals_config.capabilities = lsp.get_capabilities()
+metals_config.on_attach = function(client, bufnr)
+  lsp.attach(client, bufnr)
+end
 
 ---
 -- Autocmd that will actually be in charging of starting metals
@@ -254,7 +260,7 @@ require('mason-lspconfig').setup({
 
 ## Setup with haskell-tools
 
-The only option that makes sense to share between [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) and lsp-zero is the "capabilities" option. So, let haskell-tools initialize the language server, and have lsp-zero just configure the capabilities option.
+The only option that makes sense to share between [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) and lsp-zero is the "capabilities" option. So, let haskell-tools initialize the language server, and have lsp-zero configure the capabilities option and the `on_attach` hook.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -274,6 +280,7 @@ local hls_config = {
   hls = {
     capabilities = require('lsp-zero').get_capabilities(),
     on_attach = function(client, bufnr)
+      lsp.attach(client, bufnr)
       local opts = {buffer = bufnr}
 
       -- haskell-language-server relies heavily on codeLenses,

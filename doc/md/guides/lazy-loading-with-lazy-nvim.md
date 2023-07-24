@@ -1,5 +1,7 @@
 # Lazy loading with lazy.nvim
 
+Note: if you are using lazy nvim, you can use version `v3.x` of lsp-zero. There is no need to use this branch.
+
 Lots of you really like this lazy loading business. Let me show you how to defer everything in lsp-zero using [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 <details>

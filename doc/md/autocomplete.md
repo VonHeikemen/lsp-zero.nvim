@@ -68,9 +68,7 @@ cmp.setup({
 
 ## Keybindings
 
-### Basic mappings
-
-These are the keybindings you get when you enable `set_basic_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
+These are the keybindings you get when you enable `set_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
 
 * `<Ctrl-y>`: Confirms selection.
 
@@ -87,18 +85,6 @@ These are the keybindings you get when you enable `set_basic_mappings` in [.exte
 * `<Ctrl-d>`: Scroll down in the item's documentation.
 
 * `<Ctrl-u>`: Scroll up in the item's documentation.
-
-### Extra mappings
-
-These are the keybindings you get when you enable `set_extra_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#extend_cmpopts). These enable tab completion and navigation between snippet placeholders.
-
-* `<Ctrl-f>`: Go to the next placeholder in the snippet.
-
-* `<Ctrl-b>`: Go to the previous placeholder in the snippet.
-
-* `<Tab>`: Enables completion when the cursor is inside a word. If the completion menu is visible it will navigate to the next item in the list.
-
-* `<Shift-Tab>`: When the completion menu is visible navigate to the previous item in the list.
 
 ## Customizing nvim-cmp
 
@@ -118,15 +104,15 @@ cmp.setup({
 
 ### Adding a source
 
-If you don't know, each source that you add to your configuration is a Neovim plugin that you need to install. The purpose of a source is to extract data and then pass it to nvim-cmp.
+If you don't know, each source you add to your configuration is a Neovim plugin that you need to install. The purpose of a source is to extract data and then pass it to nvim-cmp.
 
 Let's say we want to use this source [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). `cmp-buffer` will extract suggestions from the current file. This will allow nvim-cmp to show completions even when we don't have an LSP server active in the current buffer.
 
 So the first thing we need to do is install the plugin [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). Use your favorite plugin manager to do it.
 
-Second step, figure out what is the name of the source. I don't mean the name of the plugin, this is different. Go to the github repo [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer) and look for configuration instructions.
+Second step, figure out what is the name of the source. I don't mean the name of the plugin, this is different. Go to the github repo [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer) and look for configuration instructions. You will notice the name we need is actually `buffer`.
 
-Third step, add the sources you want to use to nvim-cmp's config. For this we need to call the setup function of the `cmp` module, add the `sources` options and list every source we have installed.
+Third step, add (all) the sources you want to use to nvim-cmp's config. For this we need to call the setup function of the `cmp` module, add the `sources` options and list every source we have installed.
 
 ```lua
 require('lsp-zero').extend_cmp()
@@ -141,7 +127,7 @@ cmp.setup({
 })
 ```
 
-Notice we have two sources. The first source, `{name = 'nvim_lsp'}`, belongs to this plugin [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). You installed that when you configured lsp-zero for the first time. We need to add it here because nvim-cmp will override previous value of the `sources` option. In other words, we need so we don't lose the LSP completions.
+Notice we have two sources. The first source, `{name = 'nvim_lsp'}`, belongs to this plugin [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). You installed that when you configured lsp-zero for the first time. We need to add it here because nvim-cmp will override previous value of the `sources` option. In other words, we need it so we don't lose the LSP completions.
 
 `{name = 'buffer'}` is the new plugin [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). After adding this we can restart Neovim and test it.
 

@@ -1,11 +1,11 @@
 # Tutorial
 
-Here we will learn enough about Neovim to configure lsp-zero version 3 (which right now is in the development phase). We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
 
 ## Requirements
 
 * Basic knowledge about Neovim: what is `normal mode`, `insert mode`, `command mode` and how to navigate between them.
-* Neovim v0.8 or greater
+* Neovim v0.7 or greater
 * git
 
 ## The Entry Point
@@ -26,130 +26,101 @@ Once the configuration exists in your system you can access it from the terminal
 nvim -c 'edit $MYVIMRC'
 ```
 
-Now let's make sure Neovim is actually loading our file. We will change the colorscheme to a light theme. So, open your `init.lua` and add this line.
+Now let's make sure Neovim is actually loading our file. We will add a little message in our config. So, open your `init.lua` and add this line.
 
 ```lua
-vim.cmd.colorscheme('morning')
+vim.pretty_print('hello, world')
 ```
 
-Open Neovim again and you should notice the light theme. If you get an error it means your Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
+Open Neovim again and you should notice the message at the bottom of the screen. If you get an error it means your Neovim version does not meet the requirements.
 
 If you can't upgrade Neovim you can still install `v1.0` of lsp-zero, I have another tutorial for that:
 
 * [Getting started with neovim's native LSP client](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/tutorial.md)
 
-Assuming everything went well, you can now change the theme to something else.
-
-```lua
-vim.cmd.colorscheme('habamax')
-```
+Assuming everything went well, you can delete the message.
 
 ## Install the Plugin Manager
 
 > Note: We don't **need** a plugin manager but they make our lives easier.
 
-We are going to use [lazy.nvim](https://github.com/folke/lazy.nvim), only because that's what the cool kids are doing these days. You can do a lot with lazy.nvim but I'm just going to show the most basic usage.
+To download plugins we are going to use `packer`, only because is still compatible with Neovim v0.7.
 
-First step is to install it from github. It just so happens we can do this using lua. In lazy.nvim's documentation they show us how to do it.
+Go to packer.nvim's github repo, in the [quickstart section](https://github.com/wbthomason/packer.nvim#quickstart), grab the `git clone` command for your operating system, then execute it in your terminal. I'll use the linux one:
 
-Add this to your init.lua.
-
-```lua
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-
--- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
-  print('Installing lazy.nvim....')
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
-  print('Done.')
-end
-
-vim.opt.rtp:prepend(lazypath)
+```sh
+git clone --depth 1 https://github.com/wbthomason/packer.nvim\
+ ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 ```
 
-Notice in `lazypath` we use `stdpath('data')`, this will return the path to Neovim's data folder. So now we don't need to worry about changing our paths depending on the operating system, Neovim will do that for us. If you want to inspect the path, use this command inside Neovim.
-
-```vim
-:echo stdpath('data') . '/lazy/lazy.nvim'
-```
-
-To actually use lazy.nvim we need to call the `.setup()` function of the lua module called `lazy`. Like this.
+Now we return to our `init.lua`. At the end of the file we add.
 
 ```lua
-require('lazy').setup({
-  ---
-  -- List of plugins...
-  ---
-})
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
+end)
 ```
 
 ## Adding a new plugin
 
-Now let's use lazy.nvim for real this time. We are going to test it with a plugin called [tokyonight.nvim](https://github.com/folke/tokyonight.nvim), this is a colorscheme that will make Neovim look pretty.
+Now let's use packer for real this time. We are going to test it with a plugin called [onedark.vim](https://github.com/joshdick/onedark.vim), this is a colorscheme that will make Neovim look pretty.
 
 Ready? We are going to follow these steps.
 
-1. Add the plugin in lazy's setup.
+1. Add the plugin in packer's startup function.
 
 ```lua
-require('lazy').setup({
-  {'folke/tokyonight.nvim'},
-})
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
+
+  -- Colorscheme
+  use {'joshdick/onedark.vim'}
+end)
 ```
 
-2. We need to delete the old colorscheme line if it's still there.
-
-3. Call the new colorscheme at the end of the `init.lua` file.
+2. Call the new colorscheme at the end of the `init.lua` file.
 
 ```lua
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
+vim.cmd('colorscheme onedark')
 ```
 
-4. Save the file.
+3. Save the file.
 
-5. Restart Neovim.
+4. Execute your configuration using the command `:source %`.
 
-When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugin's download. After the plugins are installed they will be loaded.
+5. Install the plugin using the command `:PackerSync`
+
+6. Restart Neovim.
 
 ## Setup lsp-zero
 
-Now we need to add lsp-zero and all its dependencies in lazy's list of plugins.
+We need to add lsp-zero and all its dependencies in packer's plugins list.
 
 ```lua
-require('lazy').setup({
-  {'folke/tokyonight.nvim'},
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
+
+  -- Colorscheme
+  use {'joshdick/onedark.vim'}
+
   -- LSP Support
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'compat-07',
-    lazy = true,
-    config = false,
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
+  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
+  use {'neovim/nvim-lspconfig'}
+  use {'hrsh7th/cmp-nvim-lsp'}
+
   -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
-})
+  use {'hrsh7th/nvim-cmp'}
+  use {'L3MON4D3/LuaSnip'}
+end)
 ```
 
-Then we add the configuration at the end of the file.
+Save the file, "source" it, install the plugins and restart Neovim.
+
+Now we can add the configuration of lsp-zero at the end of the file.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -160,8 +131,6 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 ```
-
-Save the file, restart Neovim and wait for everything to be downloaded.
 
 Right now this setup won't do much. We don't have any language server installed just yet (and the code to use them is not there yet).
 
@@ -229,32 +198,27 @@ Anyway, if you choose this method you will need to add these two plugins:
 * `williamboman/mason-lspconfig.nvim`
 
 ```lua
-require('lazy').setup({
-  {'folke/tokyonight.nvim'},
-  {'williamboman/mason.nvim'},
-  {'williamboman/mason-lspconfig.nvim'},
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
+
+  -- Colorscheme
+  use {'joshdick/onedark.vim'}
+
   -- LSP Support
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'compat-07',
-    lazy = true,
-    config = false,
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
+  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
+  use {'neovim/nvim-lspconfig'}
+  use {'hrsh7th/cmp-nvim-lsp'}
+  use {'williamboman/mason.nvim'}
+  use {'williamboman/mason-lspconfig.nvim'}
+
   -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
-})
+  use {'hrsh7th/nvim-cmp'}
+  use {'L3MON4D3/LuaSnip'}
+end)
 ```
+
+Install the new plugins and restart Neovim.
 
 `mason.nvim` will make sure we have access to the LSP servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
@@ -273,7 +237,7 @@ require('mason-lspconfig').setup({
 })
 ```
 
-Now you will have access to a command called `:LspInstall`. If you execute that command while you have a file opened `mason-lspconfig.nvim` will suggest a language server compatible with that type of file.
+After doing this you will have access to a command called `:LspInstall`. If you execute that command while you have a file opened `mason-lspconfig.nvim` will suggest a language server compatible with that type of file.
 
 Note that after you install a language server you need to restart Neovim so it can be configured properly.
 
@@ -350,51 +314,26 @@ require('lspconfig').lua_ls.setup(
 <summary>Expand: manual setup of LSP servers </summary>
 
 ```lua
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
 
--- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
-  print('Installing lazy.nvim....')
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
-  print('Done.')
-end
+  -- Colorscheme
+  use {'joshdick/onedark.vim'}
 
-vim.opt.rtp:prepend(lazypath)
-
-require('lazy').setup({
-  {'folke/tokyonight.nvim'},
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'compat-07',
-    lazy = true,
-    config = false,
-  },
   -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
+  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
+  use {'neovim/nvim-lspconfig'}
+  use {'hrsh7th/cmp-nvim-lsp'}
+
   -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
-})
+  use {'hrsh7th/nvim-cmp'}
+  use {'L3MON4D3/LuaSnip'}
+end)
 
 -- Set colorscheme
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
+vim.cmd('colorscheme onedark')
 
 -- LSP
 local lsp = require('lsp-zero').preset({})
@@ -419,53 +358,28 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 <summary>Expand: automatic setup of LSP servers </summary>
 
 ```lua
-local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+require('packer').startup(function(use)
+  -- Packer can manage itself
+  use {'wbthomason/packer.nvim'}
 
--- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
-  print('Installing lazy.nvim....')
-  vim.fn.system({
-    'git',
-    'clone',
-    '--filter=blob:none',
-    'https://github.com/folke/lazy.nvim.git',
-    '--branch=stable', -- latest stable release
-    lazypath,
-  })
-  print('Done.')
-end
+  -- Colorscheme
+  use {'joshdick/onedark.vim'}
 
-vim.opt.rtp:prepend(lazypath)
-
-require('lazy').setup({
-  {'folke/tokyonight.nvim'},
-  {'williamboman/mason.nvim'},
-  {'williamboman/mason-lspconfig.nvim'},
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'compat-07',
-    lazy = true,
-    config = false,
-  },
   -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
+  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
+  use {'neovim/nvim-lspconfig'}
+  use {'hrsh7th/cmp-nvim-lsp'}
+  use {'williamboman/mason.nvim'}
+  use {'williamboman/mason-lspconfig.nvim'}
+
   -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
-})
+  use {'hrsh7th/nvim-cmp'}
+  use {'L3MON4D3/LuaSnip'}
+end)
 
 -- Set colorscheme
 vim.opt.termguicolors = true
-vim.cmd.colorscheme('tokyonight')
+vim.cmd('colorscheme onedark')
 
 -- LSP
 local lsp = require('lsp-zero').preset({})

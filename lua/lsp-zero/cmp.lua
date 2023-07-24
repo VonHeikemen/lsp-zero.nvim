@@ -16,8 +16,7 @@ function M.extend(opts)
 
   local defaults = {
     set_lsp_source = true,
-    set_basic_mappings = true,
-    set_extra_mappings = false,
+    set_mappings = true,
     use_luasnip = true,
     set_format = true,
     documentation_window = true,
@@ -34,12 +33,8 @@ function M.get_config(opts)
   local config = M.cmp_config()
   config.mapping = {}
 
-  if opts.set_basic_mappings then
+  if opts.set_mappings then
     config.mapping = s.merge(config.mapping, M.basic_mappings())
-  end
-
-  if opts.set_extra_mappings then
-    config.mapping = s.merge(config.mapping, M.extra_mappings())
   end
 
   if opts.set_lsp_source then
@@ -59,66 +54,6 @@ function M.get_config(opts)
   end
 
   return config
-end
-
-function M.extra_mappings()
-  local result = {
-    -- toggle completion
-    ['<C-e>'] = cmp.mapping(function()
-      if cmp.visible() then
-        cmp.abort()
-      else
-        cmp.complete()
-      end
-    end),
-
-    -- when menu is visible, navigate to next item
-    -- when line is empty, insert a tab character
-    -- else, activate completion
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item(select_opts)
-      elseif s.check_back_space() then
-        fallback()
-      else
-        cmp.complete()
-      end
-    end, {'i', 's'}),
-
-    -- when menu is visible, navigate to previous item on list
-    -- else, revert to default behavior
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item(select_opts)
-      else
-        fallback()
-      end
-    end, {'i', 's'}),
-  }
-
-  local ok_luasnip, luasnip = pcall(require, 'luasnip')
-
-  if ok_luasnip then
-    -- go to next placeholder in the snippet
-    result['<C-f>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(1) then
-        luasnip.jump(1)
-      else
-        fallback()
-      end
-    end, {'i', 's'})
-
-    -- go to previous placeholder in the snippet
-    result['<C-b>'] = cmp.mapping(function(fallback)
-      if luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, {'i', 's'})
-  end
-
-  return result
 end
 
 function M.basic_mappings()

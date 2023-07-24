@@ -26,45 +26,51 @@ Will turn into something very close to this.
 local lspconfig = require('lspconfig')
 local lsp_defaults = lspconfig.util.default_config
 
+lsp_defaults.on_attach = function(client , bufnr)
+  local map = function(m, lhs, rhs)
+    local opts = {buffer = bufnr}
+    vim.keymap.set(m, lhs, rhs, opts)
+  end
+
+  local buf_command = vim.api.nvim_buf_create_user_command
+
+  buf_command(bufnr, 'LspFormat', function()
+    local mode = vim.api.nvim_get_mode().mode
+    if mode == 'v' or mode == 'V' then
+      vim.lsp.buf.range_formatting()
+      return
+    end
+
+    vim.lsp.buf.formatting()
+  end, {
+    desc = 'Format buffer with language server',
+    range = true,
+  })
+
+  -- LSP actions
+  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+  map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+  map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+  map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+  map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+  map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+  map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+  map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
+  map({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+  map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+  map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
+
+  -- Diagnostics
+  map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+  map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+  map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>') 
+end
+
 lsp_defaults.capabilities = vim.tbl_deep_extend(
   'force',
   lsp_defaults.capabilities,
   require('cmp_nvim_lsp').default_capabilities()
 )
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
-  callback = function(event)
-    local map = function(m, lhs, rhs)
-      local opts = {buffer = bufnr}
-      vim.keymap.set(m, lhs, rhs, opts)
-    end
-
-    local buf_command = vim.api.nvim_buf_create_user_command
-
-    buf_command(bufnr, 'LspFormat', function()
-      vim.lsp.buf.format()
-    end, {desc = 'Format buffer with language server'})
-
-    -- LSP actions
-    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-    map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-    map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-    map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-    map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-    map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-    map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
-    map({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
-    map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
-
-    -- Diagnostics
-    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>') 
-  end
-})
 
 local function lsp_settings()
   vim.diagnostic.config({
