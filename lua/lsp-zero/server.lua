@@ -37,10 +37,14 @@ function M.attach(client, bufnr)
 end
 
 function M.extend_lspconfig()
+  if state.extend_lspconfig then
+    return
+  end
+
   local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
   state.has_lspconfig = #lsp_txt > 0
 
-  if state.has_lspconfig == false or state.extend_lspconfig then
+  if state.has_lspconfig == false then
     return
   end
 
@@ -49,13 +53,16 @@ function M.extend_lspconfig()
   local util = require('lspconfig.util')
 
   util.default_config.capabilities = s.set_capabilities()
+  util.default_config.on_attach = M.attach
 
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
     end
 
-    config.on_attach = util.add_hook_before(config.on_attach, M.attach)
+    if user_config.on_attach then
+      config.on_attach = util.add_hook_before(config.on_attach, M.attach)
+    end
   end)
 
   state.extend_lspconfig = true

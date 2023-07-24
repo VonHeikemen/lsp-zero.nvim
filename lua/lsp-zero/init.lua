@@ -89,9 +89,20 @@ function M.attach(client, bufnr)
 end
 
 function M.set_server_config(opts)
-  if type(opts) == 'table' then
-    local Server = require('lsp-zero.server')
-    Server.default_config = opts
+  if type(opts) ~= 'table' then
+    return
+  end
+
+  local Server = require('lsp-zero.server')
+  Server.default_config = opts
+
+  if type(opts.on_attach) == 'function' then
+    local callback = opts.on_attach
+    local attach = Server.attach
+    Server.default_config.on_attach = function(client, bufnr)
+      attach(client, bufnr)
+      callback(client, bufnr)
+    end
   end
 end
 
@@ -101,19 +112,20 @@ function M.build_options(name, opts)
   Server.skip_setup(name)
 
   local defaults = {capabilities = Server.client_capabilities()}
+  local user_opts = opts or {}
 
   local config = vim.tbl_deep_extend(
     'force',
     defaults,
     Server.default_config or {},
-    opts or {}
+    user_opts
   )
 
-  local callback = config.on_attach
-  config.on_attach = function(client, bufnr)
-    Server.attach(client, bufnr)
-
-    if callback then
+  if type(user_opts.on_attach) == 'function' then
+    local callback = user_opts.on_attach
+    local attach = Server.attach
+    config.on_attach = function(client, bufnr)
+      attach(client, bufnr)
       callback(client, bufnr)
     end
   end
