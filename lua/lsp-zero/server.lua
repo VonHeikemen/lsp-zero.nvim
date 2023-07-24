@@ -23,6 +23,8 @@ function M.setup_autocmd()
 
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
 
+  M.set_global_commands()
+
   vim.api.nvim_create_autocmd('LspAttach', {
     group = lsp_cmds,
     desc = 'lsp-zero on_attach',
