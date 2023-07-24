@@ -48,10 +48,14 @@ function M.setup_autocmd()
 end
 
 function M.extend_lspconfig()
+  if state.extend_lspconfig then
+    return
+  end
+
   local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
   state.has_lspconfig = #lsp_txt > 0
 
-  if state.has_lspconfig == false or state.extend_lspconfig then
+  if state.has_lspconfig == false then
     return
   end
 
@@ -119,10 +123,6 @@ function M.set_global_commands()
     'lua vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))',
     {}
   )
-end
-
-function M.diagnostics_config()
-  return {severity_sort = true}
 end
 
 function M.default_keymaps(opts)
