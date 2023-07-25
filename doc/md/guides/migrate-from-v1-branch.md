@@ -202,7 +202,7 @@ end
 packer.startup(function(use)
   use {'wbthomason/packer.nvim'}
 
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'}
+  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
 
   -- LSP Support
   use {'williamboman/mason.nvim'}
