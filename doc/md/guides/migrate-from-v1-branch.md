@@ -2,7 +2,7 @@
 
 Here you will find how to re-enable most of the features that were removed from the `v1.x` branch. If you want to see a complete config example, go to [example config](#example-config).
 
-## Configure diagnostic
+## Configure diagnostics
 
 In `v3.x` lsp-zero doesn't configure diagnostics anymore, you just get the default Neovim behaviour. If you want to get the icons and the config, add this code.
 
@@ -31,7 +31,7 @@ vim.diagnostic.config({
 
 ## Configure the lua language server
 
-Now you will need to setup `lua_ls` using lspconfig, and then add the configuration using the function [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts).
+You will need to setup `lua_ls` using lspconfig, and then add the configuration using the function [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts).
 
 ```lua
 local lsp = require('lsp-zero')
@@ -39,7 +39,57 @@ local lsp = require('lsp-zero')
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 ```
 
-## Configure autocomplete sources
+## Enable automatic setup of language servers
+
+This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {lsp.default_setup}
+})
+```
+
+To add a custom configuration to a server you need to add property to `handlers`, this property must be the name of the language server and you must assign a function. In this new function is where you will configure the language server.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    lua_ls = function()
+      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+    end,
+  }
+})
+```
+
+## Automatic install of language servers
+
+This can be done using the module `mason-lspconfig`. Use the `ensure_installed` property of their `.setup()` function. There you can list all the language servers you want to install.
+
+```lua
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+})
+```
+
+## Enable the autocomplete plugin
+
+In order to get the basic working configuration for nvim-cmp you must call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts).
+
+```lua
+require('lsp-zero').extend_cmp()
+```
+
+## Configure completion sources
 
 In `v3.x` only the source to get LSP completions is configured. If you want to use the previous recommended sources install these plugins in your Neovim config:
 
@@ -139,7 +189,7 @@ cmp.setup({
 
 ## Example config
 
-The following config recreates most of the features that were removed in `v1.x` branch.
+The following config recreates most of the features that were removed from the `v1.x` branch.
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -182,9 +232,16 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
-
-lsp.setup()
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {},
+  handlers = {
+    lsp.default_setup,
+    lua_ls = function()
+      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+    end,
+  }
+})
 
 lsp.set_sign_icons({
   error = '✘',
