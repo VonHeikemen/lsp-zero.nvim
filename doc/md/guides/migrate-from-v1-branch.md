@@ -4,7 +4,7 @@ Here you will find how to re-enable most of the features that were removed from 
 
 ## Configure diagnostics
 
-In `v3.x` lsp-zero doesn't configure diagnostics anymore, you just get the default Neovim behaviour. If you want to get the icons and the config, add this code.
+lsp-zero doesn't configure diagnostics anymore, you just get the default Neovim behaviour. If you want to get the icons and the config, add this code.
 
 ```lua
 local lsp = require('lsp-zero')
@@ -91,7 +91,7 @@ require('lsp-zero').extend_cmp()
 
 ## Configure completion sources
 
-In `v3.x` only the source to get LSP completions is configured. If you want to use the previous recommended sources install these plugins in your Neovim config:
+Now only the source to get LSP completions is configured. If you want to use the previous recommended sources install these plugins in your Neovim config:
 
 * [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
 * [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer)
