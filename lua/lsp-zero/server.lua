@@ -14,7 +14,8 @@ local state = {
 }
 
 function M.extend_lspconfig()
-  -- Set on_attach hook
+  M.set_global_commands()
+
   local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
   vim.api.nvim_create_autocmd('LspAttach', {
     group = lsp_cmds,
@@ -53,10 +54,8 @@ function M.extend_lspconfig()
 
   local util = require('lspconfig.util')
 
-  -- Set client capabilities
   util.default_config.capabilities = s.set_capabilities()
 
-  -- Ensure proper setup
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
