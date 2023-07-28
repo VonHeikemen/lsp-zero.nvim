@@ -74,12 +74,7 @@ use {
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
-    {                                      -- Optional
-      'williamboman/mason.nvim',
-      run = function()
-        pcall(vim.cmd, 'MasonUpdate')
-      end,
-    },
+    {'williamboman/mason.nvim'},           -- Optional
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
     -- Autocompletion
@@ -106,12 +101,7 @@ With `lazy.nvim`:
   dependencies = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
-    {                                      -- Optional
-      'williamboman/mason.nvim',
-      build = function()
-        pcall(vim.cmd, 'MasonUpdate')
-      end,
-    },
+    {'williamboman/mason.nvim'},           -- Optional
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
     -- Autocompletion
@@ -136,12 +126,7 @@ With `paq`:
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};             -- Required
-{                                      -- Optional
-  'williamboman/mason.nvim',
-  run = function()
-    pcall(vim.cmd, 'MasonUpdate')
-  end,
-};
+{'williamboman/mason.nvim'};           -- Optional
 {'williamboman/mason-lspconfig.nvim'}; -- Optional
 
 -- Autocompletion Engine
@@ -161,9 +146,9 @@ With `vim-plug`:
 
 ```vim
 " LSP Support
-Plug 'neovim/nvim-lspconfig'                           " Required
-Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
-Plug 'williamboman/mason-lspconfig.nvim'               " Optional
+Plug 'neovim/nvim-lspconfig'             " Required
+Plug 'williamboman/mason.nvim'           " Optional
+Plug 'williamboman/mason-lspconfig.nvim' " Optional
 
 " Autocompletion Engine
 Plug 'hrsh7th/nvim-cmp'         " Required
