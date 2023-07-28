@@ -391,7 +391,7 @@ cmp.setup({
 
 ## Breaking changes
 
-Removed features from the `v2.x` branch.
+Changed/Removed features from the `v2.x` branch.
 
 ### Preset settings
 
@@ -413,6 +413,7 @@ Removed features from the `v2.x` branch.
 * [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_workspaceopts) was removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#nvim_lua_lsopts) to get the config for the lua language server.
 * [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#defaultsnvim_workspace) was replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#nvim_lua_lsopts).
 * [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#ensure_installedlist) was removed. Use the module `mason-lspconfig` to install LSP servers.
+* [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts) was renamed to [.new_client()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#new_clientopts)
 
 ## FAQ
 

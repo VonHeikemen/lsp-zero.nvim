@@ -435,7 +435,7 @@ lsp.format_mapping('gq', {
 })
 ```
 
-### `.new_server({opts})`
+### `.new_client({opts})`
 
 lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.
 
@@ -466,7 +466,7 @@ lsp.on_attach(function()
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.new_server({
+lsp.new_client({
   name = 'tsserver',
   cmd = {'typescript-language-server', '--stdio'},
   filetypes = {'javascript', 'typescript'},

@@ -198,9 +198,9 @@ end
 require('lspconfig').my_new_lsp.setup({})
 ```
 
-### Use the function [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#new_serveropts)
+### Use the function [.new_client()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#new_clientopts)
 
-If you don't need a "robust" solution you can use the function `.new_server()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start_client()) in a `FileType` autocommand.
+If you don't need a "robust" solution you can use the function `.new_client()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start_client()) in a `FileType` autocommand.
 
 ```lua
 local lsp = require('lsp-zero').preset({})
@@ -211,7 +211,7 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.new_server({
+lsp.new_client({
   name = 'my-new-lsp',
   cmd = {'my-new-lsp'},
   filetypes = {'my-filetype'},
