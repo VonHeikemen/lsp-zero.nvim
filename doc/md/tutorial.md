@@ -181,17 +181,70 @@ Choose 1 for `lua_ls`, then press enter. A floating window will show up. When th
 
 At the moment the language server can't start automatically, restart Neovim so the language server can be configured properly. Once the server starts you'll notice warning signs in the global variable vim, that means everything is well and good.
 
-To make sure `lua_ls` can detect the "root directory" of our config we need to create a file called `.luarc.json` in the Neovim config folder. This file can be empty, it just need to exists.
+#### Configure lua language server
 
-If you wanted to, you could setup `lua_ls` specifically for Neovim, all with one line of code.
+At this point you are probably getting a lots of warnings in your Neovim config, most of them should be about the global variable `vim`. That is a Neovim specific variable, the lua language server doesn't know anything about it. There are a couple of ways we can fix this.
+
+* Workspace specific config
+
+We can add the following config to the `.luarc.json` file located in our Neovim config folder.
+
+```json
+{
+  "runtime.version": "LuaJIT",
+  "runtime.path": [
+    "lua/?.lua",
+    "lua/?/init.lua"
+  ],
+  "diagnostics.globals": ["vim"],
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "/usr/share/nvim/runtime/lua",
+    "./lua"
+  ]
+}
+```
+
+In the `workspace.library` property you can add the path to Neovim's runtime files.
+
+Note that Neovim's runtime folder could be in a different location, it really depends on how you installed Neovim. If you want to know what is the correct path to Neovim' runtime execute this command.
+
+```vim
+:echo $VIMRUNTIME
+```
+
+* Fixed config
+
+You should only use this method if your Neovim config is the only lua project you will ever manage with `lua_ls`.
+
+lsp-zero has a function that returns a basic config for `lua_ls`, this is how you use it.
 
 ```lua
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 ```
 
-Add this before the setup function of lsp-zero.
+Add that line before the `.setup()` function of lsp-zero.
 
-That's it. You are all set. Exit and open neovim again, you should have better support for neovim's lua api.
+If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
+
+```lua
+require('lspconfig').lua_ls.setup(
+  lsp.nvim_lua_ls({
+    single_file_support = false,
+    on_attach = function(client, bufnr)
+      print('hello world')
+    end,
+  })
+)
+```
+
+#### Root directory
+
+This is a very important concept you need to keep in mind. The "root directory" is the path where your code is. Think of it as your project folder. When you open a file compatible with a language server `lspconfig` will search for a set of files in the current folder (your working directory) or any of the parent folders. If it finds them, the language server will start analyzing that folder.
+
+Some language servers have "single file support" enabled, this means if `lspconfig` can't determine the root directory then the current working directory becomes your root directory.
+
+If you want to know if `lspconfig` managed to find the root directory of your project execute the command `:LspInfo`.
 
 ## Complete Example
 
