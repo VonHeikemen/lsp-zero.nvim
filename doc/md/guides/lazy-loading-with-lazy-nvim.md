@@ -52,12 +52,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     dependencies = {
       {'hrsh7th/cmp-nvim-lsp'},
       {'williamboman/mason-lspconfig.nvim'},
-      {
-        'williamboman/mason.nvim',
-        build = function()
-          pcall(vim.api.nvim_command, 'MasonUpdate')
-        end,
-      },
+      {'williamboman/mason.nvim'},
     },
     config = function()
       -- This is where all the LSP shenanigans will live

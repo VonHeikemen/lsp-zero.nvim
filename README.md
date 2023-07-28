@@ -106,12 +106,7 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
   dependencies = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
-    {                                      -- Optional
-      'williamboman/mason.nvim',
-      build = function()
-        pcall(vim.api.nvim_command, 'MasonUpdate')
-      end,
-    },
+    {'williamboman/mason.nvim'},           -- Optional
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
     -- Autocompletion
@@ -134,12 +129,7 @@ use {
   requires = {
     -- LSP Support
     {'neovim/nvim-lspconfig'},             -- Required
-    {                                      -- Optional
-      'williamboman/mason.nvim',
-      run = function()
-        pcall(vim.api.nvim_command, 'MasonUpdate')
-      end,
-    },
+    {'williamboman/mason.nvim'},           -- Optional
     {'williamboman/mason-lspconfig.nvim'}, -- Optional
 
     -- Autocompletion
@@ -159,12 +149,7 @@ use {
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};             -- Required
-{                                      -- Optional
-  'williamboman/mason.nvim',
-  run = function()
-    pcall(vim.api.nvim_command, 'MasonUpdate')
-  end,
-};
+{'williamboman/mason.nvim'};           -- Optional
 {'williamboman/mason-lspconfig.nvim'}; -- Optional
 
 -- Autocompletion
@@ -180,9 +165,9 @@ use {
 
 ```vim
 " LSP Support
-Plug 'neovim/nvim-lspconfig'                           " Required
-Plug 'williamboman/mason.nvim', {'do': ':MasonUpdate'} " Optional
-Plug 'williamboman/mason-lspconfig.nvim'               " Optional
+Plug 'neovim/nvim-lspconfig'             " Required
+Plug 'williamboman/mason.nvim',          " Optional
+Plug 'williamboman/mason-lspconfig.nvim' " Optional
 
 " Autocompletion
 Plug 'hrsh7th/nvim-cmp'     " Required
