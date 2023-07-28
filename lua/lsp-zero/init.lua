@@ -154,7 +154,7 @@ function M.get_capabilities()
   return require('lsp-zero.server').client_capabilities()
 end
 
-function M.new_server(opts)
+function M.new_client(opts)
   if type(opts) ~= 'table' then
     return
   end
