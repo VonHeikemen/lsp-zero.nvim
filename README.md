@@ -389,7 +389,9 @@ cmp.setup({
 
 ## Future Changes/Deprecation notice
 
-Settings and functions that will change in case I feel forced to created a `v3.x` branch.
+Settings and functions that will change in the new `v3.x` branch.
+
+Version 3 will become the default branch on `September 20, 2023`.
 
 ### Preset settings
 
@@ -413,6 +415,7 @@ I would like to get rid of named preset in the future. It's better if you use th
 * [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#defaultsnvim_workspace) will be replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_lua_lsopts).
 * [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#ensure_installedlist) will be removed. Use the module `mason-lspconfig` to install LSP servers. 
 * [.setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#setup) will be removed.
+* [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts) will be renamed to `.new_client()`.
 
 ## FAQ
 
