@@ -27,18 +27,12 @@ function M.format_on_save(opts)
   local filetype_setup = function(name, event)
     vim.api.nvim_clear_autocmds({group = format_group, buffer = event.buf})
 
-    local config = vim.tbl_deep_extend(
-      'force',
-      {
-        timeout_ms = timeout_ms,
-        formatting_options = {},
-      },
-      format_opts,
-      {
-        name = name,
-        verbose = false,
-      }
-    )
+    local config = {
+      name = name,
+      verbose = false,
+      timeout_ms = format_opts.timeout_ms or timeout_ms,
+      formatting_options = format_opts.formatting_options or {},
+    }
 
     local apply_format = function(e)
       local autoformat = vim.b.lsp_zero_enable_autoformat
@@ -86,18 +80,12 @@ function M.buffer_autoformat(client, bufnr, opts)
     vim.b.lsp_zero_enable_autoformat = 1
   end
 
-  local config = vim.tbl_deep_extend(
-    'force',
-    {
-      timeout_ms = timeout_ms,
-      formatting_options = {},
-    },
-    format_opts,
-    {
-      name = client.name,
-      verbose = false
-    }
-  )
+  local config = {
+    name = client.name,
+    verbose = false,
+    timeout_ms = format_opts.timeout_ms or timeout_ms,
+    formatting_options = format_opts.formatting_options or {},
+  }
 
   local apply_format = function(e)
     local autoformat = vim.b.lsp_zero_enable_autoformat
@@ -187,19 +175,13 @@ function M.format_mapping(key, opts)
   end
 
   local filetype_setup = function(name, event)
-    local config = vim.tbl_deep_extend(
-      'force',
-      {
-        async = false,
-        formatting_options = {},
-        timeout_ms = timeout_ms,
-      },
-      format_opts,
-      {
-        name = name,
-        verbose = true,
-      }
-    )
+    local config = {
+      name = name,
+      verbose = true,
+      async = format_opts.async == true or false,
+      timeout_ms = format_opts.timeout_ms or timeout_ms,
+      formatting_options = format_opts.formatting_options or {},
+    }
 
     local exec_range = function(bufnr)
       if config.async then
