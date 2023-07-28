@@ -171,6 +171,8 @@ You can add the configuration to the module `lspconfig.configs` then you can cal
 
 You'll need to provide the command to start the LSP server, a list of filetypes where you want to attach the LSP server, and a function that detects the "root directory" of the project.
 
+Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported LSP servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
+
 ```lua
 local lsp = require('lsp-zero').preset({})
 
@@ -180,14 +182,18 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig.configs').my_new_lsp = {
-  default_config = {
-    name = 'my-new-lsp',
-    cmd = {'my-new-lsp'},
-    filetypes = {'my-filetype'},
-    root_dir = require('lspconfig.util').root_pattern({'some-config-file'})
+local lsp_configurations = require('lspconfig.configs')
+
+if not lsp_configurations.my_new_lsp then
+  lsp_configurations.my_new_lsp = {
+    default_config = {
+      name = 'my-new-lsp',
+      cmd = {'my-new-lsp'},
+      filetypes = {'my-filetype'},
+      root_dir = require('lspconfig.util').root_pattern('some-config-file')
+    }
   }
-}
+end
 
 require('lspconfig').my_new_lsp.setup({})
 ```
