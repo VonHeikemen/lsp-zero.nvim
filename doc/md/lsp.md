@@ -264,7 +264,7 @@ if not lsp_configurations.my_new_lsp then
       name = 'my-new-lsp',
       cmd = {'my-new-lsp'},
       filetypes = {'my-filetype'},
-      root_dir = require('lspconfig.util').root_pattern({'some-config-file'})
+      root_dir = require('lspconfig.util').root_pattern('some-config-file')
     }
   }
 end
