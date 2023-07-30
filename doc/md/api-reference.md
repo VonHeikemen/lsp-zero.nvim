@@ -345,7 +345,32 @@ Returns all the parameters lsp-zero uses to initialize a language server. This i
 
 ### `.nvim_lua_ls({opts})`
 
-Returns settings specific to Neovim for the lua language server, `lua_ls`. If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
+Returns settings specific to Neovim for the lua language server, lua_ls.
+
+```lua
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+
+lsp.setup()
+```
+
+```lua
+require('lspconfig').lua_ls.setup(
+  lsp.nvim_lua_ls({
+    single_file_support = false,
+    on_attach = function(client, bufnr)
+      print('hello there')
+    end,
+  })
+)
+```
+
+If you provide the {opts} table it'll merge it with the defaults, this way you can extend or change the values easily.
 
 ### `.store_config({name}, {opts})`
 
