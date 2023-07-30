@@ -359,6 +359,8 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 lsp.setup()
 ```
 
+If you provide the {opts} table it'll merge it with the defaults, this way you can extend or change the values easily.
+
 ```lua
 require('lspconfig').lua_ls.setup(
   lsp.nvim_lua_ls({
