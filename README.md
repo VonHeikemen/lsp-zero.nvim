@@ -393,6 +393,8 @@ cmp.setup({
 
 Changed/Removed features from the `v2.x` branch.
 
+Note: You can disable the warnings about removed functions by setting the global variable lsp_zero_api_warnings to 0. Before you require the module lsp-zero, put this `vim.g.lsp_zero_api_warnings = 0`.
+
 ### Preset settings
 
 * Named presets were removed. The remaining options in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#presetopts) function should configured explicitly.
