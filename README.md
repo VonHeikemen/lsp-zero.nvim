@@ -398,6 +398,8 @@ cmp.setup({
 
 Changed/Removed features from the `v2.x` branch.
 
+Note: You can disable the warnings about removed functions by setting the global variable `lsp_zero_api_warnings` to `0`. Before you require the module lsp-zero, put this `vim.g.lsp_zero_api_warnings = 0`.
+
 ### Preset settings
 
 * Named presets were removed. The remaining options in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts) function should configured explicitly.
@@ -421,10 +423,6 @@ Changed/Removed features from the `v2.x` branch.
 * [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts) was renamed to [.new_client()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#new_clientopts).
 
 ## FAQ
-
-### How do I disable lsp-zero warnings about removed functions?
-
-Set the global variable `lsp_zero_api_warnings` to `0`. Before you require the module lsp-zero, put this `vim.g.lsp_zero_api_warnings = 0`.
 
 ### How do I get rid warnings in my neovim lua config?
 
