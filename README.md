@@ -422,6 +422,10 @@ Changed/Removed features from the `v2.x` branch.
 
 ## FAQ
 
+### How do I disable lsp-zero warnings about removed functions?
+
+Set the global variable `lsp_zero_api_warnings` to `0`. Before you require the module lsp-zero, put this `vim.g.lsp_zero_api_warnings = 0`.
+
 ### How do I get rid warnings in my neovim lua config?
 
 lsp-zero has a function that will configure the lua language server for you: [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts)
