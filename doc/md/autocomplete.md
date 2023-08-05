@@ -231,6 +231,20 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 require('luasnip.loaders.from_vscode').lazy_load()
+-- OPTIONAL: friendly-snippets - enable standardized comments snippets
+require("luasnip").filetype_extend("typescript", { "tsdoc" })
+require("luasnip").filetype_extend("javascript", { "jsdoc" })
+require("luasnip").filetype_extend("lua", { "luadoc" })
+require("luasnip").filetype_extend("python", { "python-docstring" })
+require("luasnip").filetype_extend("rust", { "rustdoc" })
+require("luasnip").filetype_extend("cs", { "csharpdoc" })
+require("luasnip").filetype_extend("java", { "javadoc" })
+require("luasnip").filetype_extend("sh", { "shelldoc" })
+require("luasnip").filetype_extend("c", { "cdoc" })
+require("luasnip").filetype_extend("cpp", { "cppdoc" })
+require("luasnip").filetype_extend("php", { "phpdoc" })
+require("luasnip").filetype_extend("kotlin", { "kdoc" })
+require("luasnip").filetype_extend("ruby", { "rdoc" })
 
 cmp.setup({
   sources = {

@@ -35,6 +35,7 @@ require('lazy').setup({
       -- Autocompletion
       {'hrsh7th/nvim-cmp'},     -- Required
       {'hrsh7th/cmp-nvim-lsp'}, -- Required
+      {'saadparwaiz1/cmp_luasnip'} -- Required
       {'L3MON4D3/LuaSnip'},     -- Required
     }
   }
@@ -68,6 +69,7 @@ call plug#begin()
   " Autocompletion
   Plug 'hrsh7th/nvim-cmp'         " Required
   Plug 'hrsh7th/cmp-nvim-lsp'     " Required
+  Plug 'saadparwaiz1/cmp_luasnip' " Required
   Plug 'L3MON4D3/LuaSnip'         " Required
 
   Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
