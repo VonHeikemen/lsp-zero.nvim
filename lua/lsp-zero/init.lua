@@ -220,6 +220,8 @@ end
 M.setup = noop
 M.set_preferences = noop
 
+M.defaults = {}
+
 function M.defaults.cmp_config(opts)
   local config = require('lsp-zero.cmp').get_config({
     set_lsp_source = true,
