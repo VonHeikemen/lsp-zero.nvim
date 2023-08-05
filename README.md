@@ -88,11 +88,11 @@ For a more advance config that lazy loads everything take a look at the example 
 
 ```lua
 {
-  {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'},
-
   --- Uncomment these if you want to manage LSP servers from neovim
   -- {'williamboman/mason.nvim'},
   -- {'williamboman/mason-lspconfig.nvim'},
+
+  {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'},
 
   -- LSP Support
   {
@@ -141,11 +141,11 @@ use {
 <summary>Expand: paq.nvim snippet </summary>
 
 ```lua
-{'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'};
-
 --- Uncomment these if you want to manage LSP servers from neovim
 -- {'williamboman/mason.nvim'};
 -- {'williamboman/mason-lspconfig.nvim'};
+
+{'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'};
 
 -- LSP Support
 {'neovim/nvim-lspconfig'};
@@ -203,6 +203,8 @@ Once you have the LSP servers installed in your system, add the config of lsp-ze
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -234,6 +236,8 @@ Here a basic usage example.
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 

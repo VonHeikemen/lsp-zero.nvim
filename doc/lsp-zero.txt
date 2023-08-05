@@ -24,6 +24,8 @@ Here is a basic configuration to get started.
   lsp.extend_cmp()
 
   lsp.on_attach(function(client, bufnr)
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
     lsp.default_keymaps({buffer = bufnr})
   end)
 
@@ -1062,6 +1064,8 @@ Here is a basic example.
   local lsp = require('lsp-zero').preset({})
 
   lsp.on_attach(function(client, bufnr)
+    -- see :help lsp-zero-keybindings
+    -- to learn the available actions
     lsp.default_keymaps({buffer = bufnr})
   end)
 
