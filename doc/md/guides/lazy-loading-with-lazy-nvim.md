@@ -53,6 +53,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local lsp = require('lsp-zero').preset({})
 
       lsp.on_attach(function(client, bufnr)
+        -- see :help lsp-zero-keybindings
+        -- to learn the available actions
         lsp.default_keymaps({buffer = bufnr})
       end)
 
@@ -127,6 +129,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local lsp = require('lsp-zero').preset({})
 
       lsp.on_attach(function(client, bufnr)
+        -- see :help lsp-zero-keybindings
+        -- to learn the available actions
         lsp.default_keymaps({buffer = bufnr})
       end)
 

@@ -204,6 +204,8 @@ Once you have the LSP servers installed in your system, add the config of lsp-ze
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
@@ -235,6 +237,8 @@ Here a basic usage example.
 local lsp = require('lsp-zero').preset({})
 
 lsp.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
 
