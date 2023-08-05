@@ -239,7 +239,7 @@ end
 function M.ensure_installed()
   local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
     .. 'Use the module mason-lspconfig to install your LSP servers.\n'
-    .. 'See :help lsp-zero-guide:integrate-with-mason-nvim\n'
+    .. 'See :help lsp-zero-guide:integrate-with-mason-nvim\n\n'
   notify(msg)
 end
 
