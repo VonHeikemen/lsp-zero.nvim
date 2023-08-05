@@ -219,31 +219,41 @@ end
 
 M.setup = noop
 M.set_preferences = noop
-M.defaults = {
-  cmp_mappings = function() return {} end,
-  cmp_config = function() return {} end,
-}
 
-M.ensure_installed = function()
+function M.defaults.cmp_config(opts)
+  local config = require('lsp-zero.cmp').get_config({
+    set_lsp_source = true,
+    set_mappings = true,
+  })
+
+  return vim.tbl_deep_extend('force', config, opts or {})
+end
+
+function M.defaults.cmp_mappings(opts)
+  local defaults = require('lsp-zero.cmp').basic_mappings()
+  return vim.tbl_deep_extend('force', defaults, opts or {})
+end
+
+function M.ensure_installed()
   local msg = '[lsp-zero] The function .ensure_installed() has been removed.\n'
     .. 'Use the module mason-lspconfig to install your LSP servers.\n'
     .. 'See :help lsp-zero-guide:integrate-with-mason-nvim\n'
   notify(msg)
 end
 
-M.setup_nvim_cmp = function()
+function M.setup_nvim_cmp()
   local msg = '[lsp-zero] The function .setup_nvim_cmp() has been removed.\n'
     .. 'Learn how to customize nvim-cmp reading the guide in the help page\n'
     .. ':help lsp-zero-guide:customize-nvim-cmp\n\n'
   notify(msg)
 end
 
-M.skip_server_setup = function()
+function M.skip_server_setup()
   local msg = '[lsp-zero] The function .skip_server_setup() has been removed.\n\n'
   notify(msg)
 end
 
-M.nvim_workspace = function()
+function M.nvim_workspace()
   local msg = '[lsp-zero] The function .nvim_workspace() has been removed.\n'
     .. 'Learn how to configure lua_ls reading the guide in the help page\n'
     .. ':help lsp-zero-guide:lua-lsp-for-neovim\n\n'
