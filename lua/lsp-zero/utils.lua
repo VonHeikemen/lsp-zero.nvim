@@ -1,5 +1,5 @@
 local M = {}
-local uv = vim.loop
+local uv = vim.uv or vim.loop
 
 M.get_supported_filetypes = function(name)
   local fts = require('lsp-zero.lsp-filetypes')

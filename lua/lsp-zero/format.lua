@@ -1,6 +1,8 @@
 local M = {}
 local s = {}
 local timeout_ms = 10000
+local uv = vim.uv or vim.loop
+
 local format_group = 'lsp_zero_format'
 local autocmd = [[
   augroup %s
@@ -590,7 +592,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
 
   vim.b.lsp_zero_changedtick = vim.b.changedtick
   vim.b.lsp_zero_format_progress = 1
-  local timer = vim.loop.new_timer()
+  local timer = uv.new_timer()
 
   local client = vim.lsp.get_client_by_id(client_id)
   local encoding = client.offset_encoding
