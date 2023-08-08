@@ -1,4 +1,5 @@
 local M = {}
+local uv = vim.uv or vim.loop
 
 local function dir_parents(start)
   return function(_, dir)
@@ -19,7 +20,7 @@ local function scan_dir(list, dir)
 
   for _, name in ipairs(list) do
     local file = str:format(dir, name)
-    if vim.loop.fs_stat(file) then
+    if uv.fs_stat(file) then
       match = match + 1
       if match == #list then
         return true
@@ -84,7 +85,7 @@ function M.find_first(list)
   local str = '%s/%s'
   for _, path in ipairs(dirs) do
     for _, file in ipairs(list) do
-      if vim.loop.fs_stat(str:format(path, file)) then
+      if uv.fs_stat(str:format(path, file)) then
         return path
       end
     end

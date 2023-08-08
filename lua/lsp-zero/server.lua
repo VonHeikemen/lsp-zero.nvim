@@ -160,10 +160,21 @@ function M.default_keymaps(opts)
   map('n', 'gr', lsp 'buf.references()')
   map('n', 'gs', lsp 'buf.signature_help()')
   map('n', '<F2>', lsp 'buf.rename()')
-  map('n', '<F3>', lsp 'buf.formatting()')
-  map('x', '<F3>', lsp 'buf.range_formatting()')
+
+  if vim.lsp.buf.format then
+    map('n', '<F3>', lsp 'buf.format({async = true})')
+    map('x', '<F3>', lsp 'buf.format({async = true})')
+  else
+    map('n', '<F3>', lsp 'buf.formatting()')
+    map('x', '<F3>', lsp 'buf.range_formatting()')
+  end
+
   map('n', '<F4>', lsp 'buf.code_action()')
-  map('x', '<F4>', lsp 'buf.range_code_action()')
+  if vim.lsp.buf.range_code_action then
+    map('x', '<F4>', lsp 'buf.range_code_action()')
+  else
+    map('x', '<F4>', lsp 'buf.code_action()')
+  end
 
   map('n', 'gl', diagnostic 'open_float()')
   map('n', '[d', diagnostic 'goto_prev()')
@@ -267,6 +278,15 @@ function s.set_buf_commands(bufnr)
       formatting_options = {},
       timeout_ms = timeout or 10000,
     }
+
+    if vim.lsp.buf.format then
+      vim.lsp.buf.format({
+        async = options.async,
+        name = options.name,
+        timeout_ms = options.timeout_ms
+      })
+      return
+    end
 
     if server then
       s.apply_format(vim.api.nvim_get_current_buf(), options)

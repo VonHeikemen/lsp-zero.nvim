@@ -1,5 +1,6 @@
 local M = {}
 local s = {}
+local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
@@ -95,7 +96,14 @@ function M.buffer_autoformat(client, bufnr, opts)
     end
 
     if config.name == nil then
-      vim.lsp.buf.formatting_sync(config.formatting_options)
+      if vim.lsp.buf.format then
+        vim.lsp.buf.format({
+          async = false,
+          formatting_options = config.formatting_options
+        })
+      else
+        vim.lsp.buf.formatting_sync(config.formatting_options)
+      end
     else
       M.apply_sync(e.buf, config)
     end
@@ -298,7 +306,7 @@ function M.apply_async(bufnr, opts)
   end
 
   local params = vim.lsp.util.make_formatting_params(opts.formatting_options)
-  local timer = vim.loop.new_timer()
+  local timer = uv.new_timer()
 
   local cleanup = function()
     timer:stop()
@@ -386,7 +394,7 @@ function M.apply_async_range(bufnr, opts)
   local config = opts.formatting_options
   params.options = vim.lsp.util.make_formatting_params(config).options
 
-  local timer = vim.loop.new_timer()
+  local timer = uv.new_timer()
 
   local cleanup = function()
     timer:stop()
@@ -488,7 +496,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
 
   vim.b.lsp_zero_changedtick = vim.b.changedtick
   vim.b.lsp_zero_format_progress = 1
-  local timer = vim.loop.new_timer()
+  local timer = uv.new_timer()
 
   local client = vim.lsp.get_client_by_id(client_id)
   local encoding = client.offset_encoding
