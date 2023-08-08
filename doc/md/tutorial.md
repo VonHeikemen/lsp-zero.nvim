@@ -56,9 +56,10 @@ Add this to your init.lua.
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
+if not uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -359,9 +360,10 @@ require('lspconfig').lua_ls.setup(
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
+if not uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -430,9 +432,10 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
+if not uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',

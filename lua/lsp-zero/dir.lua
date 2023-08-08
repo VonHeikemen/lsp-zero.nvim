@@ -1,4 +1,5 @@
 local M = {}
+local uv = vim.uv or vim.loop
 
 local function scan_dir(list, dir)
   local match = 0
@@ -6,7 +7,7 @@ local function scan_dir(list, dir)
 
   for _, name in ipairs(list) do
     local file = str:format(dir, name)
-    if vim.loop.fs_stat(file) then
+    if uv.fs_stat(file) then
       match = match + 1
       if match == #list then
         return true
