@@ -56,9 +56,10 @@ Add this to your init.lua.
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
+if not uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -245,9 +246,10 @@ If you want to know if `lspconfig` managed to find the root directory of your pr
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
+local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not vim.loop.fs_stat(lazypath) then
+if not uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
