@@ -262,5 +262,15 @@ function M.nvim_workspace()
   notify(msg)
 end
 
+function M.new_server(opts)
+  local msg = '[lsp-zero] The function .new_server() has been renamed to .new_client().'
+  
+  if opts.name then
+    msg = msg .. '\nUse .new_client() to configure ' .. opts.name
+  end
+
+  notify(msg)
+end
+
 return M
 
