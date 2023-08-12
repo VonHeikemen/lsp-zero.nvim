@@ -16,7 +16,7 @@ If you are new to neovim and you don't have a configuration file (`init.lua`) fo
 
 If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
 
-Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/lsp.md#you-might-not-need-lsp-zero).
+Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/you-might-not-need-lsp-zero.md).
 
 ## Documentation
 
