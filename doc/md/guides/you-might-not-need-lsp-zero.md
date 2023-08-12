@@ -11,7 +11,7 @@ You are going to need these plugins:
 * [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) 
 * [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip) 
 
-The code I'm about to show does the following: Setup a few default options for lspconfig. Use mason.nvim to manage the all your LSP servers. And finally setup completions from the active LSP servers using nvim-cmp.
+The code I'm about to show does the following: Setup a few default options for lspconfig. Use mason.nvim and mason-lspconfig.nvim to manage all your LSP servers. And finally setup completions using nvim-cmp.
 
 ```lua
 local lspconfig = require('lspconfig')
@@ -62,7 +62,10 @@ cmp.setup({
     {name = 'nvim_lsp'},
   },
   mapping = cmp.mapping.preset.insert({
+    -- Enter key confirms completion item
     ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl + space triggers completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
   }),
   snippet = {
@@ -70,6 +73,51 @@ cmp.setup({
       require('luasnip').lsp_expand(args.body)
     end,
   },
+})
+```
+
+If you need a custom config for an LSP server, add a handler to `mason-lspconfig`. Like this.
+
+```lua
+require('mason-lspconfig').setup({
+  ensure_installed = {},
+  handlers = {
+    default_setup,
+    lua_ls = function()
+      require('lspconfig').lua_ls.setup({
+        ---
+        -- This is where you place
+        -- your custom config
+        ---
+      })
+    end,
+  },
+})
+```
+
+Here a "handler" is a lua function that we add to the `handlers` option. Notice the name of the handler is `lua_ls`, that is the name of the LSP server we want to configure. Now inside this lua function we can do whatever we want... but in this particular case what we need to do is use the `lspconfig` to configure `lua_ls`.
+
+Inside the `{}` of `lua_ls.setup()` is where you configure the LSP server. There are a few options that every LSP server has, these are documented in the help page of lspconfig, see `:help lspconfig-setup`. Some options are unique to each LSP server, these live under a property called `settings`. To know what settings are available you will need to visit the documentation of the LSP server you are using.
+
+Here an example using `lua_ls`. This config is specific to Neovim, so that you don't get annoying warnings in your code.
+
+```lua
+require('lspconfig').lua_ls.setup({
+  settings = {
+    Lua = {
+      runtime = {
+        version = 'LuaJIT'
+      },
+      diagnostics = {
+        globals = {'vim'},
+      },
+      workspace = {
+        library = {
+          vim.env.VIMRUNTIME,
+        }
+      }
+    }
+  }
 })
 ```
 
