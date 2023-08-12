@@ -152,6 +152,26 @@ require('lspconfig').tsserver.setup({
 })
 ```
 
+If you use `mason-lspconfig` to manage the setup of your language servers then you will need to add a custom handler. Here is an example.
+
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp.default_setup,
+    tsserver = function()
+      require('lspconfig').tsserver.setup({
+        single_file_support = false,
+        on_attach = function(client, bufnr)
+          print('hello tsserver')
+        end
+      })
+    end,
+  }
+})
+```
+
+Notice in `handlers` there is a new property with the name of the language server and it has a function assign to it. That is where you configure the language server.
+
 ### Disable semantic highlights
 
 Neovim v0.9 allows an LSP server to define highlight groups, this is known as semantic tokens. This new feature is enabled by default. To disable it we need to modify the `server_capabilities` property of the language server, more specifically we need to "delete" the `semanticTokensProvider` property.
