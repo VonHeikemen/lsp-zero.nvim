@@ -1,6 +1,6 @@
 # You might not need lsp-zero
 
-And that's ok. I'm just going to teach right here how you can setup all the things without lsp-zero.
+And that's ok. I'm just going to show you how to setup all the things without lsp-zero.
 
 You are going to need these plugins: 
 
@@ -11,9 +11,7 @@ You are going to need these plugins:
 * [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) 
 * [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip) 
 
-Here is what's going to happen: you will setup a few default options for lspconfig. Then use mason.nvim to manage the install, update and automatic setup of LSP servers. Finally get a basic setup to get completions from the active LSP servers using nvim-cmp.
-
-Anyway, here is the full config code:
+The code I'm about to show does the following: Setup a few default options for lspconfig. Use mason.nvim to manage the all your LSP servers. And finally setup completions from the active LSP servers using nvim-cmp.
 
 ```lua
 local lspconfig = require('lspconfig')
