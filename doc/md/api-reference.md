@@ -98,7 +98,7 @@ Supported properties:
 
 * `set_extra_mappings`. Boolean. When set to true it will setup tab completion, scrolling through documentation window, and navigation between snippets.
 
-* `set_sources`. String or Boolean. When set to `'lsp'` it will only setup [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) as a source. When set to `'recommended'` it will try to setup a few [recommended sources](autocomplete.md#recommended-sources) for nvim-cmp. When set to the Boolean `false` it won't setup any sources.
+* `set_sources`. String or Boolean. When set to `'lsp'` it will only setup [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) as a source. When set to `'recommended'` it will try to setup a few [recommended sources](#recommended-sources) for nvim-cmp. When set to the Boolean `false` it won't setup any sources.
 
 * `use_luasnip`. Boolean. When set to true it will setup luasnip to expand snippets. This option does not include a collection of snippets.
 
