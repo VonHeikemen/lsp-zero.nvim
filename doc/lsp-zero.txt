@@ -304,7 +304,7 @@ the following keybindings.
     <Ctrl-d>: ~
         Scroll down in the item's documentation.
 
-And when you enable `manage_nvim_cmp.set_basic_mappings` it creates these.
+And when you enable `manage_nvim_cmp.set_extra_mappings` it creates these.
 
     <Ctrl-f>: ~
         Go to the next placeholder in the snippet.
