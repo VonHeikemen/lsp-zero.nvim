@@ -113,6 +113,7 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
     {'L3MON4D3/LuaSnip'},     -- Required
+    {'saadparwaiz1/cmp_luasnip'},  -- Required
   }
 }
 ```
@@ -136,6 +137,7 @@ use {
     {'hrsh7th/nvim-cmp'},     -- Required
     {'hrsh7th/cmp-nvim-lsp'}, -- Required
     {'L3MON4D3/LuaSnip'},     -- Required
+    {'saadparwaiz1/cmp_luasnip'},  -- Required
   }
 }
 ```
@@ -156,6 +158,7 @@ use {
 {'hrsh7th/nvim-cmp'};     -- Required
 {'hrsh7th/cmp-nvim-lsp'}; -- Required
 {'L3MON4D3/LuaSnip'};     -- Required
+{'saadparwaiz1/cmp_luasnip'};  -- Required
 ```
 
 </details>
@@ -173,6 +176,7 @@ Plug 'williamboman/mason-lspconfig.nvim' " Optional
 Plug 'hrsh7th/nvim-cmp'     " Required
 Plug 'hrsh7th/cmp-nvim-lsp' " Required
 Plug 'L3MON4D3/LuaSnip'     " Required
+Plug 'saadparwaiz1/cmp_luasnip' " Required
 
 Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v2.x'}
 ```
