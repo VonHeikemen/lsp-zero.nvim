@@ -293,7 +293,9 @@ end)
 
 If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server (use the command `:LspLog`).
 
-What do I mean with minimal? Configure the language server using just `lspconfig` and increase the log level. Here is an example test with `tsserver`.
+What do I mean with minimal? Configure the language server using just `lspconfig` and increase the log level. Then you can test the language server and inspect the log file using the command `:LspLog`.
+
+Here is an example test with `tsserver`.
 
 ```lua
 vim.lsp.set_log_level('debug')
@@ -304,7 +306,9 @@ local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 local cmp = require('cmp')
 
 cmp.setup({
-  sources = {{name = 'nvim_lsp'}},
+  sources = {
+    {name = 'nvim_lsp'}
+  },
   mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
   }),
@@ -322,8 +326,6 @@ require('lspconfig').tsserver.setup({
   end,
 })
 ```
-
-Then you can test the language server and inspect the log file using the command `:LspLog`.
 
 ## Autocomplete
 
