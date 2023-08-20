@@ -291,7 +291,7 @@ end)
 
 ### Troubleshooting
 
-If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server (use the command `:LspLog`).
+If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
 
 What do I mean with minimal? Configure the language server using just `lspconfig` and increase the log level. Then you can test the language server and inspect the log file using the command `:LspLog`.
 
