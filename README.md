@@ -277,10 +277,16 @@ By default lsp-zero will not create a keybinding if its "taken". This means if y
 You can force lsp-zero's bindings by adding `preserve_mappings = false` to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#default_keymapsopts).
 
 ```lua
-lsp.default_keymaps({
-  buffer = bufnr,
-  preserve_mappings = false
-})
+local lsp = require('lsp-zero').preset({})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({
+    buffer = bufnr,
+    preserve_mappings = false
+  })
+end)
+
+--- .....
 ```
 
 ### Troubleshooting
