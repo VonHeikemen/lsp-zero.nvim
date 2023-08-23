@@ -72,7 +72,7 @@ function M.extend_lspconfig()
   state.extend_lspconfig = true
 end
 
-function M.setup(name, opts, autostart)
+function M.setup(name, opts)
   if type(name) ~= 'string' or state.exclude[name] then
     return false
   end
@@ -97,11 +97,6 @@ function M.setup(name, opts, autostart)
 
     vim.notify(msg:format(name), vim.log.levels.WARN)
     return false
-  end
-
-  if autostart then
-    local buffer = vim.api.nvim_get_current_buf()
-    pcall(lsp.manager.try_add_wrapper, buffer)
   end
 
   return true
