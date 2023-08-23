@@ -20,7 +20,7 @@ M.setup = function(server_name, user_opts)
   lsp.setup(opts)
 
   if vim.v.vim_did_enter == 1 then
-    s.autostart(lsp, opts.autostart)
+    pcall(s.autostart, lsp, opts.autostart)
   end
 end
 
