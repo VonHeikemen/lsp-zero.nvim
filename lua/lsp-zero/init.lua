@@ -83,7 +83,7 @@ function M.configure(name, opts)
 end
 
 function M.default_setup(name)
-  require('lsp-zero.server').setup(name, {}, false)
+  require('lsp-zero.server').setup(name, {})
 end
 
 function M.on_attach(fn)
