@@ -126,7 +126,7 @@ function M.use(servers, opts)
     lsp.setup(config)
 
     if lsp.manager and has_filetype then
-      lsp.manager.try_add_wrapper(bufnr)
+      pcall(function() lsp.manager:try_add_wrapper(bufnr) end)
     end
   end
 end
