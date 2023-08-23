@@ -63,7 +63,7 @@ function M.setup_servers(list, opts)
 
   for _, name in ipairs(list) do
     if not vim.tbl_contains(exclude, name) then
-      Server.setup(name, {}, false)
+      Server.setup(name, {})
     end
   end
 end
@@ -72,11 +72,11 @@ function M.configure(name, opts)
   local Server = require('lsp-zero.server')
 
   M.store_config(name, opts)
-  Server.setup(name, opts, false)
+  Server.setup(name, opts)
 end
 
 function M.default_setup(name)
-  require('lsp-zero.server').setup(name, {}, false)
+  require('lsp-zero.server').setup(name, {})
 end
 
 function M.on_attach(fn)
@@ -169,7 +169,7 @@ function M.use(servers, opts)
     lsp.setup(config)
 
     if lsp.manager and has_filetype then
-      pcall(lsp.manager.try_add_wrapper, buffer)
+      pcall(function() lsp.manager:try_add_wrapper(buffer) end)
     end
   end
 end
