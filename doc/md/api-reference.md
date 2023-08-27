@@ -24,6 +24,18 @@
 
 * `lsp_zero_api_warnings`: When set to `0` it will supress the warning messages from deprecated functions. (Note: if you get one of those warnings, know that showing that message is the only thing they do. They are "empty" functions.)
 
+Now, when I say global variable I mean a vim global variable. So to modify them from lua you would do something like this
+
+```lua
+vim.g.lsp_zero_extend_lspconfig = 0
+```
+
+But if you are using vimscript, you can do something like this
+
+```vim
+let g:lsp_zero_extend_lspconfig = 0
+```
+
 ## Lua api
 
 ### `.default_keymaps({opts})`
