@@ -12,27 +12,17 @@
 
 * `LspZeroSetupServers`: It takes a space separated list of servers and configures them.
 
+## Global variables
+
+* `lsp_zero_extend_lspconfig`: When set to `0` then lsp-zero will not try to integrate with lspconfig automatically.
+
+* `lsp_zero_ui_float_border`: Set the style of border of diagnostic floating window, hover window and signature help window. Can have one of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is `rounded`. If set to `0` then lsp-zero will not configure the border style.
+
+* `lsp_zero_ui_signcolumn`: When set to `0` the lsp-zero will not configure the space in the gutter for diagnostics.
+
+* `lsp_zero_api_warnings`: When set to `0` it will supress the warning messages from deprecated functions.
+
 ## Lua api
-
-### `.preset({opts})`
-
-Here is where you can add settings specific to lsp-zero.
-
-The `{opts}` table supports the following properties.
-
-  * float_border: (optional) String, default value is `'rounded'`. Can have one of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`.
-
-  * set_signcolumn: (optional) Boolean, default value is `true`. When set to `true` it will reserve a space in the gutter for the diagnostic signs.
-
-  * extend_lspconfig: (optional) Boolean, default value is `true`. When set to `true` it will integrate nvim-cmp with lspconfig.
-
-```lua
-local lsp = require('lsp-zero').preset({
-  float_border = 'rounded',
-  set_signcolumn = true,
-  extend_lspconfig = true,
-})
-```
 
 ### `.default_keymaps({opts})`
 
@@ -47,7 +37,7 @@ The {opts} table supports the following properties:
   * exclude: (optional) Table. List of string, must be valid keybindings. lsp-zero will preserve the behavior of these keybindings.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -158,7 +148,7 @@ lsp.set_server_config({
 Gathers the arguments for a particular language server. `{name}` must be a string with the name of language server in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations). And `{opts}` is a lua table with the options for that server. These options are the same nvim-lspconfig uses in their setup function, see [:help lspconfig-setup](https://github.com/neovim/nvim-lspconfig/blob/41dc4e017395d73af0333705447e858b7db1f75e/doc/lspconfig.txt#L68) for more details.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -179,7 +169,7 @@ The `{opts}` table supports the following properties:
   * exclude: (optional) Table. List of names of LSP servers you **don't** want to setup.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -195,7 +185,7 @@ Configures `{server}` with the default config provided by lspconfig.
 This is meant to be used with `mason-lspconfig.nvim`, in order to help configure automatic setup of language servers. It can be added as a default handler in the setup function of the module `mason-lspconfig`.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -216,7 +206,7 @@ Doesn't do anything. Literally.
 You can use think of this as "empty handler" for `mason-lspconfig.nvim`. Consider this example.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -251,7 +241,7 @@ Returns all the parameters lsp-zero uses to initialize a language server. This i
 Returns settings specific to Neovim for the lua language server, `lua_ls`.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -288,7 +278,7 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -396,7 +386,7 @@ Here is how it works: when you save the file Neovim will write your changes with
 Do not use this in the global `on_attach`, call this function with the specific language server you want to format with.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -469,7 +459,7 @@ Other important properties are:
 Here is an example that starts the [typescript language server](https://github.com/typescript-language-server/typescript-language-server) on javascript and typescript, but only in a project that package.json in the current directory or any of its parent folders.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -500,7 +490,7 @@ Note: search will stop once it gets to your "HOME" folder.
   * buffer: (Boolean) When set to `true` use the path of the current buffer.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -526,7 +516,7 @@ Note: search will stop once it gets to your "HOME" folder.
   * buffer: (Boolean) When set to `true` use the path of the current buffer.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 

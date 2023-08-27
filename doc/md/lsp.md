@@ -65,7 +65,7 @@ Just like the default keybindings the idea here is to create them only when a la
 Here is an example that replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -110,7 +110,7 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig](https://github.com/williamboman/mason-lspconfig.nvim), you can instruct `mason-lspconfig` to install the language servers you want using the option `ensure_installed`. Keep in mind the name of the language server must be [on this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -133,10 +133,10 @@ For more details on how to use mason.nvim with lsp-zero [read this guide](https:
 
 ## Configure language servers
 
-To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the call to [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts).
+To pass arguments to a language server you can use the lspconfig directly.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -179,7 +179,7 @@ Neovim v0.9 allows an LSP server to define highlight groups, this is known as se
 We can disable this new feature in every server using the function [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_server_configopts). 
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -236,7 +236,7 @@ You'll need to provide the command to start the LSP server, a list of filetypes 
 Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported LSP servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -265,7 +265,7 @@ require('lspconfig').my_new_lsp.setup({})
 If you don't need a "robust" solution you can use the function `.new_client()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()) in a `FileType` autocommand.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -294,7 +294,7 @@ Note: When you enable format on save your LSP server is doing the formatting. Th
 If you want to control exactly what language server is used to format a file call the function [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_saveopts), this will allow you to associate a language server with a list of filetypes.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -323,7 +323,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) in the [.on_attach](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#on_attachcallback) hook.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -342,7 +342,7 @@ If you have multiple servers active in one file it'll try to format using all of
 Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -368,7 +368,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will create a keymap `gq` to format the current buffer using **all** active servers with formatting capabilities.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -389,7 +389,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -422,7 +422,7 @@ If you want to control exactly what language server can format, use the function
 Here is an example using `gq` as the keymap.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -453,7 +453,7 @@ lsp.setup_servers({'tsserver', 'rust_analyzer'})
 If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [.set_sign_icons](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_sign_iconsopts). 
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 

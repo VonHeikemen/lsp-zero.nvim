@@ -1,61 +1,20 @@
 local M = {
   default_config = false,
   common_attach = nil,
+  has_lspconfig = false,
+  setup_done = false
 }
 
 local s = {}
 
 local state = {
   exclude = {},
-  autocmd = false,
-  has_lspconfig = false,
-  extend_lspconfig = false,
   capabilities = nil,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
-function M.setup_autocmd()
-  if state.autocmd then
-    return
-  end
-
-  state.autocmd = true
-
-  local lsp_cmds = vim.api.nvim_create_augroup('lsp_zero_attach', {clear = true})
-
-  M.set_global_commands()
-
-  vim.api.nvim_create_autocmd('LspAttach', {
-    group = lsp_cmds,
-    desc = 'lsp-zero on_attach',
-    callback = function(event)
-      local bufnr = event.buf
-
-      s.set_buf_commands(bufnr)
-
-      if M.common_attach then
-        local id = vim.tbl_get(event, 'data', 'client_id')
-        local client = {}
-
-        if id then
-          client = vim.lsp.get_client_by_id(id)
-        end
-
-        M.common_attach(client, bufnr)
-      end
-    end
-  })
-end
-
 function M.extend_lspconfig()
-  if state.extend_lspconfig then
-    return
-  end
-
-  local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
-  state.has_lspconfig = #lsp_txt > 0
-
-  if state.has_lspconfig == false then
+  if M.setup_done then
     return
   end
 
@@ -69,7 +28,7 @@ function M.extend_lspconfig()
     end
   end)
 
-  state.extend_lspconfig = true
+  M.setup_done = true
 end
 
 function M.setup(name, opts)
@@ -105,18 +64,6 @@ end
 function M.set_default_capabilities(opts)
   local defaults = require('lspconfig').util.default_config
   defaults.capabilities = s.set_capabilities(opts)
-end
-
-function M.set_global_commands()
-  local command = vim.api.nvim_create_user_command
-
-  command('LspZeroWorkspaceAdd', 'lua vim.lsp.buf.add_workspace_folder()', {})
-
-  command(
-    'LspZeroWorkspaceList',
-    'lua vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))',
-    {}
-  )
 end
 
 function M.default_keymaps(opts)
@@ -237,7 +184,7 @@ function M.client_capabilities()
   return state.capabilities
 end
 
-function s.set_buf_commands(bufnr)
+function M.set_buf_commands(bufnr)
   local bufcmd = vim.api.nvim_buf_create_user_command
   local format = function(input)
     if #input.fargs > 2 then
@@ -288,7 +235,7 @@ function s.set_capabilities(current)
     local cmp_default_capabilities = {}
     local base = {}
 
-    if state.has_lspconfig then
+    if M.has_lspconfig then
       base = require('lspconfig.util').default_config.capabilities
     else
       base = vim.lsp.protocol.make_client_capabilities()

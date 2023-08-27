@@ -19,7 +19,7 @@ the basic features of the autocompletion plugin.
 
 Here is a basic configuration to get started.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp = require('lsp-zero')
 
   lsp.extend_cmp()
 
@@ -203,34 +203,30 @@ gl: ~
     Move to the next diagnostic. See |vim.diagnostic.goto_next()|.
 
 ==============================================================================
+Global variables                                   *lsp-zero-global-variables*
+
+lsp_zero_extend_lspconfig: ~
+    When set to `0` then lsp-zero will not try to integrate with lspconfig
+    automatically.
+
+lsp_zero_ui_float_border: ~
+    Set the style of border of diagnostic floating window, hover window and
+    signature help window. Can have one of these: `'none'`, `'single'`,
+    `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is
+    `rounded`. If set to `0` then lsp-zero will not configure the border
+    style.
+
+lsp_zero_ui_signcolumn: ~
+    When set to `0` the lsp-zero will not configure the space in the gutter
+    for diagnostics.
+
+lsp_zero_api_warnings: ~
+    When set to `0` it will supress the warning messages from deprecated
+    functions.
+
+==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
 
-                                                           *lsp-zero.preset()*
-
-preset({opts}): ~
-    Here is where you can add settings specific to lsp-zero.
-
-    The {opts} table supports the following properties.
-
-        • float_border: (String, Optional) Defaults to `'rounded'`. Can have one
-        of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
-        `'shadow'`.
-
-        • set_signcolumn: (Boolean, Optional) Defaults to `true`. When set to
-        `true` it will reserve a space in the gutter for the diagnostic signs.
-
-        • extend_lspconfig: (Boolean, Optional) Defaults to `true`. When set
-        to `true` it will integrate nvim-cmp with lspconfig.
-    
-    Note that the return value is the same as the module `lsp-zero`, so this
-    is valid (and encouraged).
->lua
-    local lsp = require('lsp-zero').preset({
-      float_border = 'rounded',
-      set_signcolumn = true,
-      extend_lspconfig = true,
-    })
-<
                                                         *lsp-zero.on_attach()*
 
 on_attach({callback}): ~
@@ -239,7 +235,7 @@ on_attach({callback}): ~
 
     This is the place where you can create your own keybindings.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -276,7 +272,7 @@ default_keymaps({opts}): ~
     The best place to add this function is the callback of
     |lsp-zero.on_attach()|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -296,7 +292,7 @@ set_server_config({opts}): ~
     Share a configuration for all LSP servers configured with |lspconfig|.
     You can find more details about {opts} see |lspconfig-setup|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -319,7 +315,7 @@ configure({name}, {opts}): ~
     language server. Takes the same options as `nvim-lspconfig`'s
     setup function. For more details go to |lspconfig-setup|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -346,7 +342,7 @@ setup_servers({list}): ~
 
     Here is the basic usage.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -367,7 +363,7 @@ default_setup({server}): ~
     configure automatic setup of language servers. It can be added as a
     default handler in the setup function of the module `mason-lspconfig`.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -388,7 +384,7 @@ noop(): ~
     You can use think of this as "empty handler" for |mason-lspconfig.nvim|.
     Consider this example.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -448,7 +444,7 @@ use({name}, {opts}): ~
 >lua
     -- init.lua
 
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -489,7 +485,7 @@ nvim_lua_ls({opts}): ~
     If you provide the {opts} table it'll merge it with the defaults,
     this way you can extend or change the values easily.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -533,7 +529,7 @@ format_on_save({opts}): ~
     the documentation of the LSP server you are using, figure out how to
     configure it to your prefered style.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -582,7 +578,7 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
     the documentation of the LSP servers you are using, figure out how to
     configure it to your prefered style.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -625,7 +621,7 @@ async_autoformat({client}, {bufnr}, {opts}): ~
 
     Here is an example.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -678,7 +674,7 @@ format_mapping({key}, {opts}): ~
     the documentation of the LSP servers you are using, figure out how to
     configure it to your prefered style.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -791,7 +787,7 @@ dir.find_first({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -823,7 +819,7 @@ dir.find_all({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp = require('lsp-zero')
 
     lsp.extend_cmp()
 
@@ -1049,7 +1045,7 @@ the automatic configuration.
 
 Here is a basic example.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp = require('lsp-zero')
 
   lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
@@ -1150,7 +1146,7 @@ If your Neovim config is the only lua project you have in your system, use the
 function |lsp-zero.nvim_lua_ls()| to get the config and then setup `lua_ls`
 with lspconfig.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp = require('lsp-zero')
 
   lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
@@ -1215,6 +1211,32 @@ completions.
 
 Always include `{name = 'nvim_lsp'}` in your sources.
 
+                                         *lsp-zero-guide:fix-extend-lspconfig*
+
+Fix lspconfig error
+
+You are probably here because you got this error message:
+>
+  [lsp-zero] Some language servers have been configured before
+  lsp-zero could finish its initial setup. Some features may fail.
+<
+Here is the solution: First, go to the place where you use `lspconfig` for the
+first time. Then call this function before you setup the language server
+>lua
+  require('lsp-zero').extend_lspconfig()
+<
+If you want to ignore error and supress the message, you can set the global
+variable `lsp_zero_extend_lspconfig` to `0`. And do it before you require the
+module `lsp-zero`.
+
+This is how you do it using lua.
+>lua
+  vim.g.lsp_zero_extend_lspconfig = 0
+<
+Or if you prefer vimscript.
+>vim
+  let g:lsp_zero_extend_lspconfig = 0
+<
 ==============================================================================
 Version                                                     *lsp-zero-version*
 

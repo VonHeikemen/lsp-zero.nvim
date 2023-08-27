@@ -1,11 +1,15 @@
 local M = {}
 
 function M.setup(opts)
-  local set_signcolumn = opts.set_signcolumn or true
-  local border = opts.border or 'rounded'
+  local set_signcolumn = opts.set_signcolumn
+  local border = opts.border
 
-  if set_signcolumn and vim.o.signcolumn == 'auto' then
+  if set_signcolumn then
     vim.opt.signcolumn = 'yes'
+  end
+
+  if border == nil then
+    return
   end
 
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(

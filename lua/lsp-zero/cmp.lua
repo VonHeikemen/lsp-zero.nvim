@@ -1,15 +1,14 @@
 local M = {}
 local s = {}
 
-local ok_cmp, cmp = pcall(require, 'cmp')
 local select_opts = {behavior = 'select'}
 local setup_complete = false
 
-if ok_cmp then
-  select_opts = {behavior = cmp.SelectBehavior.Select}
-end
-
 function M.extend(opts)
+  if setup_complete then
+    return
+  end
+
   local defaults = {
     set_lsp_source = true,
     set_mappings = true,
@@ -20,37 +19,62 @@ function M.extend(opts)
 
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
-  require('cmp').setup(M.get_config(opts))
-end
-
-function M.get_config(opts)
-  local config = M.cmp_config()
-  config.mapping = {}
-
-  if opts.set_mappings then
-    config.mapping = s.merge(config.mapping, M.basic_mappings())
-  end
+  local base = M.base_config()
+  local extra = M.extra_config()
+  local config = {window = {}}
 
   if opts.set_lsp_source then
-    config.sources = {{name = 'nvim_lsp'}}
+    config.sources = base.sources
   end
 
-  if opts.use_luasnip == false then
-    config.snippet = {}
+  if opts.set_mappings then
+    config.mapping = base.mapping
   end
 
-  if opts.set_format == false then
-    config.formatting = {}
+  if opts.use_luasnip then
+    config.snippet = base.snippet
   end
 
-  if opts.documentation_window == false then
-    config.window.documentation = nil
+  if opts.set_format then
+    config.formatting = extra.formatting
   end
 
-  return config
+  if opts.documentation_window then
+    config.window.documentation = extra.window.documentation
+  end
+
+  require('cmp').setup(config)
+
+  setup_complete = true
+end
+
+function M.base_config()
+  return {
+    mapping = M.basic_mappings(),
+    sources = {{name = 'nvim_lsp'}},
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
+  }
+end
+
+function M.extra_config()
+  return {
+    formatting = M.formatting(),
+    window = {
+      documentation = {
+        max_height = 15,
+        max_width = 60,
+      }
+    },
+  }
 end
 
 function M.basic_mappings()
+  local cmp = require('cmp')
+
   return {
     ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -75,41 +99,21 @@ function M.basic_mappings()
   }
 end
 
-function M.cmp_config()
-  local result = {
-    window = {
-      documentation = {
-        max_height = 15,
-        max_width = 60,
+function M.formatting()
+  return {
+    fields = {'abbr', 'menu', 'kind'},
+    format = function(entry, item)
+      local short_name = {
+        nvim_lsp = 'LSP',
+        nvim_lua = 'nvim'
       }
-    },
-    formatting = {
-      fields = {'abbr', 'menu', 'kind'},
-      format = function(entry, item)
-        local short_name = {
-          nvim_lsp = 'LSP',
-          nvim_lua = 'nvim'
-        }
 
-        local menu_name = short_name[entry.source.name] or entry.source.name
+      local menu_name = short_name[entry.source.name] or entry.source.name
 
-        item.menu = string.format('[%s]', menu_name)
-        return item
-      end,
-    }
+      item.menu = string.format('[%s]', menu_name)
+      return item
+    end,
   }
-
-  local ok_luasnip, luasnip = pcall(require, 'luasnip')
-
-  if ok_luasnip then
-    result.snippet = {
-      expand = function(args)
-        luasnip.lsp_expand(args.body)
-      end,
-    }
-  end
-
-  return result
 end
 
 function M.action()

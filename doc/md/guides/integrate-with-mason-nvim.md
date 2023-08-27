@@ -5,7 +5,7 @@ We can use [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-l
 Here is a basic example.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings

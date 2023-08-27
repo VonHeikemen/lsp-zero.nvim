@@ -201,7 +201,7 @@ First thing you'll want to do is install the language servers you want to use. G
 Once you have the LSP servers installed in your system, add the config of lsp-zero.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -234,7 +234,7 @@ If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvi
 Here a basic usage example.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -400,17 +400,9 @@ Changed/Removed features from the `v2.x` branch.
 
 Note: You can disable the warnings about removed functions by setting the global variable `lsp_zero_api_warnings` to `0`. Before you require the module lsp-zero, put this `vim.g.lsp_zero_api_warnings = 0`.
 
-### Preset settings
-
-* Named presets were removed. The remaining options in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetopts) function should configured explicitly.
-* `set_lsp_keymaps` was removed in favor of [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
-* `manage_nvim_cmp` was removed. All the options are now managed by the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts).
-* `setup_servers_on_start` was removed. LSP server setup is now explict.
-* `call_servers` was removed. lsp-zero no longer manage "local" servers. The user should setup mason.nvim, follow the guide [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md) to learn how.
-* `configure_diagnostics` was removed. lsp-zero just uses Neovim's defaults.
-
 ### Functions
 
+* [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#presetopts) was removed. Most settings were remove. The remaining settings can be changed using global variables, see [global variables](#).
 * [.set_preferences()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#set_preferencesopts) was removed in favor of overriding option directly in the [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#presetname).
 * [.setup_nvim_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#setup_nvim_cmpopts) was be removed. Use the `cmp` module to customize nvim-cmp.
 * [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#setup_serverslist) will no longer take an options argument. It'll only be a convenient way to initialize a list of servers.

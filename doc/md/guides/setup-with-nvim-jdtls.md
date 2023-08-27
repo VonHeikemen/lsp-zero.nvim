@@ -38,7 +38,7 @@ You can still follow this guide if you are using another operating system.
 Setup lsp-zero and mason.nvim like you usually do. But don't setup `jdtls` with lsp-zero, we want `nvim-jdtls` to handle that LSP server.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 

@@ -5,7 +5,7 @@
 null-ls isn't a real language server, you don't have to do anything to integrate it with lsp-zero. Just use it.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -39,7 +39,7 @@ You can assign a keyboard shortcut using the [.format_mapping()](https://github.
 Here is an example showing a setup focused on lua and javascript. We assign the keymap `gq` to format.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -80,7 +80,7 @@ null_ls.setup({
 This can be almost the same as the previous example, except here we replace the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_mappingkey-opts) with [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_save-opts).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -125,7 +125,7 @@ null_ls.setup({
 Ensure the tools you have listed in the `sources` option are installed automatically.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -162,7 +162,7 @@ require('mason-null-ls').setup({
 Make null-ls aware of the tools you installed using mason.nvim, and configure them automatically.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 

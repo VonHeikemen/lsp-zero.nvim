@@ -153,7 +153,7 @@ require('lazy').setup({
 Then we add the configuration at the end of the file.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -179,7 +179,7 @@ In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blo
 Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -211,7 +211,7 @@ require('lspconfig').tsserver.setup({
 Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -266,7 +266,7 @@ require('lazy').setup({
 `mason.nvim` will make sure we have access to the LSP servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -333,7 +333,7 @@ You should only use this method if your Neovim config is the only lua project yo
 lsp-zero has a function that returns a basic config for `lua_ls`, this is how you use it.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 ```
@@ -341,7 +341,7 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 require('lspconfig').lua_ls.setup(
   lsp.nvim_lua_ls({
@@ -407,7 +407,7 @@ vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
 -- LSP
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 
@@ -481,7 +481,7 @@ vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
 -- LSP
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.extend_cmp()
 

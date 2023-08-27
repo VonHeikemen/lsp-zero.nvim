@@ -3,7 +3,7 @@ I realize some people would want to know what happens under the hood when they u
 Okay, so this thing.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp = require('lsp-zero')
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings

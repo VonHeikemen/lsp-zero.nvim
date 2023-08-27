@@ -15,6 +15,51 @@ local function notify(msg)
   vim.notify(msg, vim.log.levels.WARN)
 end
 
+local function setup_lspconfig()
+  local extend = vim.g.lsp_zero_extend_lspconfig
+
+  if extend == false or extend == 0 then
+    return
+  end
+
+  local doc_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
+  if #doc_txt == 0 then
+    return
+  end
+
+  local configs = require('lspconfig.configs')
+  if #vim.tbl_keys(configs) > 0 then
+    local msg = '[lsp-zero] Some language servers have been configured before\n'
+     .. 'lsp-zero could finish its initial setup. Some features may fail.'
+     .. '\n\nDetails on how to solve this problem are in the help page.\n'
+     .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
+
+    local show_msg = function() vim.notify(msg, vim.log.levels.WARN) end
+    local event = 'LspAttach'
+
+    if vim.bo.filetype == '' then
+      event = 'FileType'
+    end
+
+    vim.api.nvim_create_autocmd(event, {
+      once = true,
+      desc = 'lsp-zero warning',
+      callback = show_msg
+    })
+    return
+  end
+
+  local Server = require('lsp-zero.server')
+  Server.has_lspconfig = true
+  Server.extend_lspconfig()
+end
+
+if vim.g.loaded_lsp_zero == nil then
+  require('lsp-zero.setup')
+end
+
+setup_lspconfig()
+
 function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
 end
@@ -24,38 +69,25 @@ function M.extend_cmp(opts)
 end
 
 function M.extend_lspconfig()
-  require('lsp-zero.server').extend_lspconfig()
-end
-
-function M.preset(opts)
-  opts = opts or {}
-
-  if type(opts) == 'string' then
-    local msg = '[lsp-zero] named presets are not supported.\n'
-      .. 'See the available options in the help page\n'
-      .. ':help lsp-zero.preset()\n\n'
-    notify(msg)
-    opts = {}
-  end
-
-  if opts.extend_lspconfig == nil then
-    opts.extend_lspconfig = true
-  end
-
-  require('lsp-zero.ui').setup({
-    float_border = opts.float_border,
-    set_signcolumn = opts.set_signcolumn,
-  })
-
   local Server = require('lsp-zero.server')
 
-  Server.setup_autocmd()
-
-  if opts.extend_lspconfig then
-    Server.extend_lspconfig()
+  if Server.setup_done then
+    return
   end
 
-  return M
+  local configs = require('lspconfig.configs')
+
+  if #vim.tbl_keys(configs) > 0 then
+    local msg = '[lsp-zero] Some language servers have been configured before\n'
+     .. 'you called the function .extened_lspconfig().\n\n'
+     .. 'Solution: Go to the place where you use lspconfig for the first time.\n'
+     .. 'Call the .extend_lspconfig() function before you setup the language server'
+
+     vim.notify(msg, vim.log.levels.WARN)
+     return
+   end
+
+  Server.extend_lspconfig()
 end
 
 function M.setup_servers(list, opts)
@@ -223,17 +255,19 @@ M.set_preferences = noop
 M.defaults = {}
 
 function M.defaults.cmp_config(opts)
-  local config = require('lsp-zero.cmp').get_config({
-    set_lsp_source = true,
-    set_mappings = true,
-  })
+  local base = require('lsp-zero.cmp').base_config()
+  local extra = require('lsp-zero.cmp').extra_config()
 
-  return vim.tbl_deep_extend('force', config, opts or {})
+  return vim.tbl_deep_extend('force', base, extra, opts or {})
 end
 
 function M.defaults.cmp_mappings(opts)
   local defaults = require('lsp-zero.cmp').basic_mappings()
   return vim.tbl_deep_extend('force', defaults, opts or {})
+end
+
+function M.preset(opts)
+  return M
 end
 
 function M.ensure_installed()

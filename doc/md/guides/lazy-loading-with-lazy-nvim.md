@@ -50,7 +50,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     config = function()
       -- This is where all the LSP shenanigans will live
 
-      local lsp = require('lsp-zero').preset({})
+      local lsp = require('lsp-zero')
 
       lsp.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
@@ -126,7 +126,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     config = function()
       -- This is where all the LSP shenanigans will live
 
-      local lsp = require('lsp-zero').preset({})
+      local lsp = require('lsp-zero')
 
       lsp.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
