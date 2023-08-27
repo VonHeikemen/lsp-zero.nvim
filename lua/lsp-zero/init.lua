@@ -120,7 +120,6 @@ end
 
 function M.on_attach(fn)
   local Server = require('lsp-zero.server')
-  Server.setup_autocmd()
 
   if type(fn) == 'function' then
     Server.common_attach = fn
