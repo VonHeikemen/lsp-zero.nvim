@@ -2,6 +2,7 @@ local M = {}
 local s = {}
 
 local select_opts = {behavior = 'select'}
+local base_setup = false
 local setup_complete = false
 
 function M.extend(opts)
@@ -45,7 +46,52 @@ function M.extend(opts)
 
   require('cmp').setup(config)
 
+  base_setup = true
   setup_complete = true
+end
+
+function M.apply_base()
+  if base_setup then
+    return
+  end
+
+  base_setup = true
+
+  local doc_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 0) or {}
+  if #doc_txt == 0 then
+    return
+  end
+
+  local cmp = require('cmp')
+  local cmp_config = cmp.get_config()
+  local base_config = M.base_config()
+  local new_config = {}
+
+  if vim.tbl_isempty(cmp_config.sources) then
+    new_config.sources = base_config.sources
+  end
+
+  if vim.tbl_isempty(cmp_config.mapping) then
+    new_config.mapping = base_config.mapping
+  end
+
+  local luasnip = vim.api.nvim_get_runtime_file('doc/luasnip.txt', 0) or {}
+  if #luasnip > 0 then
+    local current = cmp_config.snippet.expand
+    local lsp_expand = base_config.snippet.expand
+
+    new_config.snippet = {
+      expand = function(args)
+        local ok = pcall(current, args)
+        if not ok then
+          current = lsp_expand
+          current(args)
+        end
+      end,
+    }
+  end
+
+  cmp.setup(new_config)
 end
 
 function M.base_config()

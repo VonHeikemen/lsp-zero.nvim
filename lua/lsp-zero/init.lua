@@ -1,3 +1,9 @@
+if vim.g.loaded_lsp_zero == nil then
+  require('lsp-zero.setup')
+end
+
+vim.api.nvim_exec_autocmds('User', {pattern = 'LspZeroExtendPlugin'})
+
 local noop = function() end
 
 local M = {}
@@ -14,51 +20,6 @@ local function notify(msg)
 
   vim.notify(msg, vim.log.levels.WARN)
 end
-
-local function setup_lspconfig()
-  local extend = vim.g.lsp_zero_extend_lspconfig
-
-  if extend == false or extend == 0 then
-    return
-  end
-
-  local doc_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
-  if #doc_txt == 0 then
-    return
-  end
-
-  local configs = require('lspconfig.configs')
-  if #vim.tbl_keys(configs) > 0 then
-    local msg = '[lsp-zero] Some language servers have been configured before\n'
-     .. 'lsp-zero could finish its initial setup. Some features may fail.'
-     .. '\n\nDetails on how to solve this problem are in the help page.\n'
-     .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
-
-    local show_msg = function() vim.notify(msg, vim.log.levels.WARN) end
-    local event = 'LspAttach'
-
-    if vim.bo.filetype == '' then
-      event = 'FileType'
-    end
-
-    vim.api.nvim_create_autocmd(event, {
-      once = true,
-      desc = 'lsp-zero warning',
-      callback = show_msg
-    })
-    return
-  end
-
-  local Server = require('lsp-zero.server')
-  Server.has_lspconfig = true
-  Server.extend_lspconfig()
-end
-
-if vim.g.loaded_lsp_zero == nil then
-  require('lsp-zero.setup')
-end
-
-setup_lspconfig()
 
 function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
@@ -87,6 +48,7 @@ function M.extend_lspconfig()
      return
    end
 
+  Server.has_lspconfig = true
   Server.extend_lspconfig()
 end
 

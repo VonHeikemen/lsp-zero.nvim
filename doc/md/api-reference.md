@@ -14,13 +14,15 @@
 
 ## Global variables
 
-* `lsp_zero_extend_lspconfig`: When set to `0` then lsp-zero will not try to integrate with lspconfig automatically.
+* `lsp_zero_extend_cmp`: When set to `0` then lsp-zero will not integrate with nvim-cmp automatically.
+
+* `lsp_zero_extend_lspconfig`: When set to `0` then lsp-zero will not integrate with lspconfig automatically.
 
 * `lsp_zero_ui_float_border`: Set the style of border of diagnostic floating window, hover window and signature help window. Can have one of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is `rounded`. If set to `0` then lsp-zero will not configure the border style.
 
 * `lsp_zero_ui_signcolumn`: When set to `0` the lsp-zero will not configure the space in the gutter for diagnostics.
 
-* `lsp_zero_api_warnings`: When set to `0` it will supress the warning messages from deprecated functions.
+* `lsp_zero_api_warnings`: When set to `0` it will supress the warning messages from deprecated functions. (Note: if you get one of those warnings, know that showing that message is the only thing they do. They are "empty" functions.)
 
 ## Lua api
 

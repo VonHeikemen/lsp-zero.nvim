@@ -205,6 +205,10 @@ gl: ~
 ==============================================================================
 Global variables                                   *lsp-zero-global-variables*
 
+`lsp_zero_extend_cmp`: ~
+    When set to `0` then lsp-zero will not integrate with nvim-cmp
+    automatically.
+
 lsp_zero_extend_lspconfig: ~
     When set to `0` then lsp-zero will not try to integrate with lspconfig
     automatically.
@@ -222,7 +226,8 @@ lsp_zero_ui_signcolumn: ~
 
 lsp_zero_api_warnings: ~
     When set to `0` it will supress the warning messages from deprecated
-    functions.
+    functions. (Note: if you get one of those warnings, know that showing that
+    message is the only thing they do. They are "empty" functions.)
 
 ==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
