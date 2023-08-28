@@ -19,8 +19,6 @@ cmp.setup({
   mapping = {
     ['<C-y>'] = cmp.mapping.confirm({select = true}),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-d>'] = cmp.mapping.scroll_docs(4),
     ['<Up>'] = cmp.mapping.select_prev_item(cmp_select_opts),
     ['<Down>'] = cmp.mapping.select_next_item(cmp_select_opts),
     ['<C-p>'] = cmp.mapping(function()
@@ -68,7 +66,7 @@ cmp.setup({
 
 ## Keybindings
 
-These are the keybindings you get when you enable `set_basic_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
+These are the keybindings you get when you enable `set_mappings` in [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts). They are meant to follow Neovim's default whenever possible.
 
 * `<Ctrl-y>`: Confirms selection.
 
@@ -81,10 +79,6 @@ These are the keybindings you get when you enable `set_basic_mappings` in [.exte
 * `<Ctrl-n>`: Go to the next item in the completion menu, or trigger completion menu.
 
 * `<Ctrl-p>`: Go to the previous item in the completion menu, or trigger completion menu.
-
-* `<Ctrl-d>`: Scroll down in the item's documentation.
-
-* `<Ctrl-u>`: Scroll up in the item's documentation.
 
 ## Customizing nvim-cmp
 
@@ -152,10 +146,10 @@ cmp.setup({
     {name = 'nvim_lsp'},
     {name = 'luasnip'},
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
+  })
 })
 ```
 
@@ -175,9 +169,9 @@ require('lsp-zero').extend_cmp()
 local cmp = require('cmp')
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<CR>'] = cmp.mapping.confirm({select = false}),
-  }
+  })
 })
 ```
 
@@ -220,10 +214,10 @@ cmp.setup({
     {name = 'nvim_lsp'},
     {name = 'nvim_lua'},
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  }
+  })
 })
 ```
 
@@ -238,10 +232,10 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<Tab>'] = cmp_action.luasnip_supertab(),
     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-  }
+  })
 })
 ```
 
@@ -256,10 +250,10 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<Tab>'] = cmp_action.tab_complete(),
     ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-  }
+  })
 })
 ```
 
@@ -278,9 +272,9 @@ cmp.setup({
   completion = {
     autocomplete = false
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
-  }
+  })
 })
 ```
 

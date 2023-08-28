@@ -27,14 +27,16 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
-      local cmp_action = require('lsp-zero')cmp_action() 
+      local cmp_action = require('lsp-zero').cmp_action() 
 
       cmp.setup({
-        mapping = {
+        mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
           ['<C-f>'] = cmp_action.luasnip_jump_forward(),
           ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-        }
+        })
       })
     end
   },
@@ -105,11 +107,13 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local cmp_action = require('lsp-zero').cmp_action() 
 
       cmp.setup({
-        mapping = {
+        mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-f>'] = cmp_action.luasnip_jump_forward(),
           ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-        }
+          ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+          ['<C-d>'] = cmp.mapping.scroll_docs(4),
+        })
       })
     end
   },

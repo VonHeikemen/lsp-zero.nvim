@@ -131,7 +131,7 @@ local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     -- confirm completion item
     ['<CR>'] = cmp.mapping.confirm({select = false}),
 
@@ -149,7 +149,7 @@ cmp.setup({
     -- scroll documention window
     ['<C-f>'] = cmp.mapping.scroll_docs(-5),
     ['<C-d>'] = cmp.mapping.scroll_docs(5),
-  },
+  }),
 })
 ```
 
