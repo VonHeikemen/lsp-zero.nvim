@@ -318,6 +318,9 @@ What do I mean with a minimal example? Configure the language just using `lspcon
 ```lua
 vim.lsp.set_log_level('debug')
 
+vim.g.lsp_zero_extend_cmp = 0
+vim.g.lsp_zero_extend_lspconfig = 0
+
 local lsp_zero = require('lsp-zero')
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
@@ -331,7 +334,9 @@ require('lspconfig').tsserver.setup({
 local cmp = require('cmp')
 
 cmp.setup({
-  sources = {{name = 'nvim_lsp'}},
+  sources = {
+    {name = 'nvim_lsp'}
+  },
   mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
   }),
