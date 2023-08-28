@@ -105,14 +105,14 @@ function M.basic_mappings()
     ['<Down>'] = cmp.mapping.select_next_item(select_opts),
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_prev_item(select_opts)
+        cmp.select_prev_item({behavior = 'insert'})
       else
         cmp.complete()
       end
     end),
     ['<C-n>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_next_item(select_opts)
+        cmp.select_next_item({behavior = 'insert'})
       else
         cmp.complete()
       end
