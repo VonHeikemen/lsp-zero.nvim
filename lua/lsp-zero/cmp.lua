@@ -99,7 +99,7 @@ function M.basic_mappings()
   local cmp = require('cmp')
 
   return {
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-y>'] = cmp.mapping.confirm({select = false}),
     ['<C-e>'] = cmp.mapping.abort(),
     ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
     ['<Down>'] = cmp.mapping.select_next_item(select_opts),
