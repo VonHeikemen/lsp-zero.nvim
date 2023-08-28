@@ -81,19 +81,6 @@ require('mason-lspconfig').setup({
 })
 ```
 
-## Enable the autocomplete plugin
-
-In order to get the extra features for nvim-cmp you must call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts), and enable these settings.
-
-```lua
-require('lsp-zero').extend_cmp({
-  set_format = true,
-  documentation_window = true,
-})
-```
-
-If you want to customize nvim-cmp even further, you need to do it after using this function.
-
 ## Configure completion sources
 
 In `v3.x` only the source to get LSP completions is configured. If you want to use the previous recommended sources install these plugins in your Neovim config:
@@ -145,23 +132,23 @@ cmp.setup({
     ['<C-d>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
-    -- scroll documention window
+    -- scroll documentation window
     ['<C-f>'] = cmp.mapping.scroll_docs(-5),
     ['<C-d>'] = cmp.mapping.scroll_docs(5),
   }),
 })
 ```
 
-## Add borders to documention window in completion menu
+## Add borders to documentation window in completion menu
 
-Add nvim-cmp's preset to the `window.documention` property.
+Add nvim-cmp's preset to the `window.documentation` property.
 
 ```lua
 local cmp = require('cmp')
 
 cmp.setup({
   window = {
-    documention = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   }
 })
 ```
@@ -179,6 +166,19 @@ cmp.setup({
   completion = {
     completeopt = 'menu,menuone,noinsert',
   },
+})
+```
+
+## Completion item label
+
+In `v1.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
+
+```lua
+local cmp = require('cmp')
+local cmp_format = require('lsp-zero').cmp_format()
+
+cmp.setup({
+  formatting = cmp_format,
 })
 ```
 
@@ -219,26 +219,26 @@ lazy.setup({
   {'rafamadriz/friendly-snippets'},
 })
 
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
-    lsp.default_setup,
+    lsp_zero.default_setup,
     lua_ls = function()
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
     end,
   }
 })
 
-lsp.set_sign_icons({
+lsp_zero.set_sign_icons({
   error = '✘',
   warn = '▲',
   hint = '⚑',
@@ -257,25 +257,22 @@ vim.diagnostic.config({
   },
 })
 
-require('lsp-zero').extend_cmp({
-  set_format = true,
-  documentation_window = true,
-})
-
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
+local cmp_action = lsp_zero.cmp_action()
+local cmp_format = lsp_zero.cmp_format()
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 
 cmp.setup({
+  formatting = cmp_format,
   preselect = 'item',
   completion = {
     completeopt = 'menu,menuone,noinsert'
   },
   window = {
-    documention = cmp.config.window.bordered(),
+    documentation = cmp.config.window.bordered(),
   },
   sources = {
     {name = 'path'},
@@ -299,7 +296,7 @@ cmp.setup({
     ['<C-d>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
 
-    -- scroll documention window
+    -- scroll documentation window
     ['<C-f>'] = cmp.mapping.scroll_docs(5),
     ['<C-u>'] = cmp.mapping.scroll_docs(-5),
   }),

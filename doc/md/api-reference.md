@@ -554,6 +554,19 @@ These are the supported methods:
 
 Quick note: "the fallback" is the default behavior of the key you assign to a method.
 
+### `.cmp_format()`
+
+When used the completion items will show a label that identifies the source they come from.
+
+```lua
+local cmp = require('cmp')
+local cmp_format = require('lsp-zero').cmp_format()
+
+cmp.setup({
+  formatting = cmp_format
+})
+```
+
 ### `.extend_cmp({opts})`
 
 Creates a minimal working config for nvim-cmp.
@@ -566,14 +579,10 @@ Creates a minimal working config for nvim-cmp.
 
   * use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it will setup luasnip to expand snippets. This option does not include a collection of snippets.
 
-  * set_format: (Boolean, Optional) Defaults to `false`. When enabled it will the completion items will show a label that identifies the source they come from. 
-
-  * documentation_window: (Boolean, Optional) Defaults to `false`. When enabled it will configure the max height and width of the documentation window.
-
 After you use this function you can customize nvim-cmp using the module `cmp`. Here is an example that adds some keybindings.
 
 ```lua
-require('lsp-zero').extend_cmp({set_format = true})
+require('lsp-zero').extend_cmp()
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()

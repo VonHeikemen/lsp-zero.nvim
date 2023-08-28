@@ -28,13 +28,15 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     },
     config = function()
       -- Here is where you configure the autocompletion settings.
-      require('lsp-zero').extend_cmp()
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_cmp()
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
-      local cmp_action = require('lsp-zero').cmp_action() 
+      local cmp_action = lsp_zero.cmp_action()
 
       cmp.setup({
+        formatting = lsp_zero.cmp_format(),
         mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -57,21 +59,21 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     config = function()
       -- This is where all the LSP shenanigans will live
 
-      local lsp = require('lsp-zero')
-      lsp.extend_lspconfig()
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_lspconfig()
 
-      lsp.on_attach(function(client, bufnr)
+      lsp_zero.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
-        lsp.default_keymaps({buffer = bufnr})
+        lsp_zero.default_keymaps({buffer = bufnr})
       end)
 
       -- (Optional) Configure lua language server for neovim
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 
       -- Replace the language servers listed here
       -- with the ones installed in your system
-      lsp.setup_servers({'tsserver', 'rust_analyzer'})
+      lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
     end
   }
 }
@@ -111,19 +113,21 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     },
     config = function()
       -- Here is where you configure the autocompletion settings.
-      require('lsp-zero').extend_cmp()
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_cmp()
 
       -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
-      local cmp_action = require('lsp-zero').cmp_action() 
+      local cmp_action = lsp_zero.cmp_action()
 
       cmp.setup({
+        formatting = lsp_zero.cmp_format(),
         mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
-          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
+          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
         })
       })
     end
@@ -131,33 +135,32 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 
   -- LSP
   {
-    'williamboman/mason-lspconfig.nvim',
+    'neovim/nvim-lspconfig',
     cmd = {'LspInfo', 'LspInstall', 'LspStart'},
     event = {'BufReadPre', 'BufNewFile'},
     dependencies = {
-      {'neovim/nvim-lspconfig'},
       {'hrsh7th/cmp-nvim-lsp'},
+      {'williamboman/mason-lspconfig.nvim'},
     },
     config = function()
       -- This is where all the LSP shenanigans will live
 
-      local lsp = require('lsp-zero')
+      local lsp_zero = require('lsp-zero')
+      lsp_zero.extend_lspconfig()
 
-      lsp.extend_lspconfig()
-
-      lsp.on_attach(function(client, bufnr)
+      lsp_zero.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
-        lsp.default_keymaps({buffer = bufnr})
+        lsp_zero.default_keymaps({buffer = bufnr})
       end)
 
       require('mason-lspconfig').setup({
         ensure_installed = {'lua_ls'},
         handlers = {
-          lsp.default_setup,
+          lsp_zero.default_setup,
           lua_ls = function()
             -- (Optional) Configure lua language server for neovim
-            require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+            require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
           end,
         }
       })

@@ -14,14 +14,11 @@ function M.extend(opts)
     set_lsp_source = true,
     set_mappings = true,
     use_luasnip = true,
-    set_format = false,
-    documentation_window = false,
   }
 
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
   local base = M.base_config()
-  local extra = M.extra_config()
   local config = {window = {}}
 
   if opts.set_lsp_source then
@@ -34,14 +31,6 @@ function M.extend(opts)
 
   if opts.use_luasnip then
     config.snippet = base.snippet
-  end
-
-  if opts.set_format then
-    config.formatting = extra.formatting
-  end
-
-  if opts.documentation_window then
-    config.window.documentation = extra.window.documentation
   end
 
   require('cmp').setup(config)
@@ -106,18 +95,6 @@ function M.base_config()
   }
 end
 
-function M.extra_config()
-  return {
-    formatting = M.formatting(),
-    window = {
-      documentation = {
-        max_height = 15,
-        max_width = 60,
-      }
-    },
-  }
-end
-
 function M.basic_mappings()
   local cmp = require('cmp')
 
@@ -143,7 +120,7 @@ function M.basic_mappings()
   }
 end
 
-function M.formatting()
+function M.format()
   return {
     fields = {'abbr', 'menu', 'kind'},
     format = function(entry, item)
