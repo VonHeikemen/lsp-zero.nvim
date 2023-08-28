@@ -7,9 +7,9 @@ Here you will find how to re-enable most of the features that were removed from 
 In `v3.x` lsp-zero doesn't configure diagnostics anymore, you just get the default Neovim behaviour. If you want to get the icons and the config, add this code.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.set_sign_icons({
+lsp_zero.set_sign_icons({
   error = '✘',
   warn = '▲',
   hint = '⚑',
@@ -34,9 +34,9 @@ vim.diagnostic.config({
 You will need to setup `lua_ls` using lspconfig, and then add the configuration using the function [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts).
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 ```
 
 ## Enable automatic setup of language servers
@@ -44,17 +44,17 @@ require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  handlers = {lsp.default_setup}
+  handlers = {lsp_zero.default_setup}
 })
 ```
 
@@ -63,9 +63,9 @@ To add a custom configuration to a server you need to add property to `handlers`
 ```lua
 require('mason-lspconfig').setup({
   handlers = {
-    lsp.default_setup,
+    lsp_zero.default_setup,
     lua_ls = function()
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
     end,
   }
 })

@@ -201,20 +201,20 @@ First thing you'll want to do is install the language servers you want to use. G
 Once you have the LSP servers installed in your system, add the config of lsp-zero.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- (Optional) Configure lua language server for neovim
--- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+-- require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 If you want to customize a language server use the module `lspconfig`. Call the `setup` function of the LSP server like this.
@@ -232,12 +232,12 @@ If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvi
 Here a basic usage example.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
@@ -246,10 +246,10 @@ require('mason-lspconfig').setup({
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp.default_setup,
+    lsp_zero.default_setup,
     lua_ls = function()
       -- (Optional) Configure lua language server for neovim
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
     end,
   },
 })
@@ -299,10 +299,12 @@ By default lsp-zero will not create a keybinding if its "taken". This means if y
 You can force lsp-zero's bindings by adding `preserve_mappings = false` to [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts).
 
 ```lua
-lsp.default_keymaps({
-  buffer = bufnr,
-  preserve_mappings = false
-})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({
+    buffer = bufnr,
+    preserve_mappings = false
+  })
+end)
 ```
 
 ### Troubleshooting

@@ -51,15 +51,15 @@ The {opts} table supports the following properties:
   * exclude: (optional) Table. List of string, must be valid keybindings. lsp-zero will preserve the behavior of these keybindings.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
 -- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 #### LSP Actions
@@ -105,9 +105,9 @@ Defines the sign icons that appear in the gutter.
   * info: Text for the information signs.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.set_sign_icons({
+lsp_zero.set_sign_icons({
   error = '✘',
   warn = '▲',
   hint = '⚑',
@@ -122,10 +122,10 @@ Executes the `{callback}` function every time a language server is attached to a
 This is where you can declare your own keymaps and commands.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 
   local opts = {buffer = bufnr}
   local bind = vim.keymap.set
@@ -142,9 +142,9 @@ It will share the configuration options with all the language servers initialize
 Here is an example that enables the folding capabilities and disable single file support.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.set_server_config({
+lsp_zero.set_server_config({
   single_file_support = false,
   capabilities = {
     textDocument = {
@@ -162,9 +162,9 @@ lsp.set_server_config({
 Gathers the arguments for a particular language server. `{name}` must be a string with the name of language server in this list: [server_configurations](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations). And `{opts}` is a lua table with the options for that server. These options are the same nvim-lspconfig uses in their setup function, see [:help lspconfig-setup](https://github.com/neovim/nvim-lspconfig/blob/41dc4e017395d73af0333705447e858b7db1f75e/doc/lspconfig.txt#L68) for more details.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.configure('tsserver', {
+lsp_zero.configure('tsserver', {
   single_file_support = false,
   on_attach = function(client, bufnr)
     print('hello tsserver')
@@ -181,11 +181,11 @@ The `{opts}` table supports the following properties:
   * exclude: (optional) Table. List of names of LSP servers you **don't** want to setup.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
 -- Replace the language servers listed here
 -- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ### `.default_setup({server})`
@@ -195,15 +195,15 @@ Configures `{server}` with the default config provided by lspconfig.
 This is meant to be used with `mason-lspconfig.nvim`, in order to help configure automatic setup of language servers. It can be added as a default handler in the setup function of the module `mason-lspconfig`.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  handlers = {lsp.default_setup},
+  handlers = {lsp_zero.default_setup},
 })
 ```
 
@@ -214,18 +214,18 @@ Doesn't do anything. Literally.
 You can use think of this as "empty handler" for `mason-lspconfig.nvim`. Consider this example.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'eslint', 'jdtls'},
   handlers = {
-    lsp.default_setup,
-    jdtls = lsp.noop,
+    lsp_zero.default_setup,
+    jdtls = lsp_zero.noop,
   },
 })
 ```
@@ -247,20 +247,20 @@ Returns all the parameters lsp-zero uses to initialize a language server. This i
 Returns settings specific to Neovim for the lua language server, `lua_ls`.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 ```
 
 If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
 
 ```lua
 require('lspconfig').lua_ls.setup(
-  lsp.nvim_lua_ls({
+  lsp_zero.nvim_lua_ls({
     single_file_support = false,
     on_attach = function(client, bufnr)
       print('hello there')
@@ -282,9 +282,9 @@ Ideally, you would setup some default values for your servers in your neovim con
 ```lua
 -- init.lua
 
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.configure('pyright', {
+lsp_zero.configure('pyright', {
   single_file_support = false,
 })
 ```
@@ -294,9 +294,9 @@ And then in your local config you can tweak the server options even more.
 ```lua
 -- local config
 
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.use('pyright', {
+lsp_zero.use('pyright', {
   settings = {
     python = {
       analysis = {
@@ -330,9 +330,9 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
     * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.format_on_save({
+lsp_zero.format_on_save({
   format_opts = {
     async = false,
     timeout_ms = 10000,
@@ -361,11 +361,11 @@ If {client} argument is provided it will only use the LSP server associated with
     * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-  lsp.buffer_autoformat()
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+  lsp_zero.buffer_autoformat()
 end)
 ```
 
@@ -388,15 +388,15 @@ Here is how it works: when you save the file Neovim will write your changes with
 Do not use this in the global `on_attach`, call this function with the specific language server you want to format with.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('lspconfig').tsserver.setup({
   on_attach = function(client, bufnr)
-    lsp.async_autoformat(client, bufnr)
+    lsp_zero.async_autoformat(client, bufnr)
   end
 })
 ```
@@ -422,9 +422,9 @@ The idea here is that you associate a language server with a list of filetypes, 
     * formatting_options: (Table, optional). Can be used to set `FormattingOptions`, these options are sent to the language server. See [FormattingOptions Specification](https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions).  
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.format_mapping('gq', {
+lsp_zero.format_mapping('gq', {
   format_opts = {
     async = false,
     timeout_ms = 10000,
@@ -459,18 +459,18 @@ Other important properties are:
 Here is an example that starts the [typescript language server](https://github.com/typescript-language-server/typescript-language-server) on javascript and typescript, but only in a project that package.json in the current directory or any of its parent folders.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function()
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function()
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.new_client({
+lsp_zero.new_client({
   name = 'tsserver',
   cmd = {'typescript-language-server', '--stdio'},
   filetypes = {'javascript', 'typescript'},
   root_dir = function()
-    return lsp.dir.find_first({'package.json'})
+    return lsp_zero.dir.find_first({'package.json'})
   end
 })
 ```
@@ -488,13 +488,13 @@ Note: search will stop once it gets to your "HOME" folder.
   * buffer: (Boolean) When set to `true` use the path of the current buffer.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
 require('lspconfig').lua_ls.setup({
   root_dir = function()
     --- project root will be the first directory that has
     --- either .luarc.json or .stylua.toml
-    return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+    return lsp_zero.dir.find_first({'.luarc.json', '.stylua.toml'})
   end
 })
 ```
@@ -512,13 +512,13 @@ Note: search will stop once it gets to your "HOME" folder.
   * buffer: (Boolean) When set to `true` use the path of the current buffer.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
 require('lspconfig').vuels.setup({
   root_dir = function()
     --- project root will be the directory that has
     --- package.json + vetur config
-    return lsp.dir.find_all({'package.json', 'vetur.config.js'})
+    return lsp_zero.dir.find_all({'package.json', 'vetur.config.js'})
   end
 })
 ```
@@ -633,9 +633,9 @@ Configure the behavior of Neovim's completion mechanism. If for some reason you 
 You can configure a basic "tab completion" behavior using these settings.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.omnifunc.setup({
+lsp_zero.omnifunc.setup({
   tabcomplete = true,
   use_fallback = true,
   update_on_delete = true,
@@ -645,9 +645,9 @@ lsp.omnifunc.setup({
 And here is an example for autocomplete.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.omnifunc.setup({
+lsp_zero.omnifunc.setup({
   autocomplete = true,
   use_fallback = true,
   update_on_delete = true,

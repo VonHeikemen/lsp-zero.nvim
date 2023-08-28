@@ -5,12 +5,12 @@
 null-ls isn't a real language server, you don't have to do anything to integrate it with lsp-zero. Just use it.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
@@ -37,13 +37,13 @@ You can assign a keyboard shortcut using the [.format_mapping()](https://github.
 Here is an example showing a setup focused on lua and javascript. We assign the keymap `gq` to format.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.format_mapping('gq', {
+lsp_zero.format_mapping('gq', {
   format_opts = {
     async = false,
     timeout_ms = 10000,
@@ -56,7 +56,7 @@ lsp.format_mapping('gq', {
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -76,13 +76,13 @@ null_ls.setup({
 This can be almost the same as the previous example, except here we replace the function [.format_mapping()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_mappingkey-opts) with [.format_on_save()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#format_on_save-opts).
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.format_on_save({
+lsp_zero.format_on_save({
   format_opts = {
     async = false,
     timeout_ms = 10000,
@@ -95,7 +95,7 @@ lsp.format_on_save({
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -119,15 +119,15 @@ null_ls.setup({
 Ensure the tools you have listed in the `sources` option are installed automatically.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -143,6 +143,7 @@ null_ls.setup({
 
 -- See mason-null-ls.nvim's documentation for more details:
 -- https://github.com/jay-babu/mason-null-ls.nvim#setup
+require('mason').setup()
 require('mason-null-ls').setup({
   ensure_installed = nil,
   automatic_installation = true,
@@ -154,15 +155,15 @@ require('mason-null-ls').setup({
 Make null-ls aware of the tools you installed using mason.nvim, and configure them automatically.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
@@ -176,6 +177,7 @@ null_ls.setup({
 
 -- See mason-null-ls.nvim's documentation for more details:
 -- https://github.com/jay-babu/mason-null-ls.nvim#setup
+require('mason').setup()
 require('mason-null-ls').setup({
   ensure_installed = nil,
   automatic_installation = false, -- You can still set this to `true`

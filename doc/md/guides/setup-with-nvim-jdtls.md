@@ -38,20 +38,20 @@ You can still follow this guide if you are using another operating system.
 Setup lsp-zero and mason.nvim like you usually do. But don't setup `jdtls` with lsp-zero, we want `nvim-jdtls` to handle that LSP server.
 
 ```lua
-local lsp = require('lsp-zero')
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'jdtls'},
   handlers = {
-    lsp.default_setup,
-    jdtls = lsp.noop,
+    lsp_zero.default_setup,
+    jdtls = lsp_zero.noop,
   }
 })
 ```
