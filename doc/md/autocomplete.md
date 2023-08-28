@@ -147,6 +147,8 @@ cmp.setup({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   })
+  --- (Optional) Show source name in completion menu
+  formatting = require('lsp-zero').cmp_format()
 })
 ```
 
