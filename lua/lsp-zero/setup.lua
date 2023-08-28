@@ -81,18 +81,7 @@ local function setup_lspconfig()
      .. '\n\nDetails on how to solve this problem are in the help page.\n'
      .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
 
-    local show_msg = function() vim.notify(msg, vim.log.levels.WARN) end
-    local event = 'LspAttach'
-
-    if vim.bo.filetype == '' then
-      event = 'FileType'
-    end
-
-    vim.api.nvim_create_autocmd(event, {
-      once = true,
-      desc = 'lsp-zero warning',
-      callback = show_msg
-    })
+    vim.notify(msg, vim.log.levels.WARN)
     return
   end
 
@@ -123,23 +112,35 @@ vim.api.nvim_create_autocmd('User', {
 ---
 -- UI settings
 ---
-local ui_settings = {}
-
 local border_style = vim.g.lsp_zero_ui_float_border
 if border_style == nil then
-  ui_settings.border = 'rounded'
-elseif type(border_style) == 'string' then
-  ui_settings.border = border_style
+  border_style = 'rounded'
+end
+
+if type(border_style) == 'string' then
+  vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+    vim.lsp.handlers.hover,
+    {border = border_style}
+  )
+
+  vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+    vim.lsp.handlers.signature_help,
+    {border = border_style}
+  )
+  
+  vim.diagnostic.config({
+    float = {border = border_style}
+  })
 end
 
 local signs = vim.g.lsp_zero_ui_signcolumn
-if (signs == nil and vim.o.signcolumn == 'auto') or signs == 1 then
-  ui_settings.set_signcolumn = true
-elseif signs == 0 then
-  ui_settings.set_signcolumn = false
+if (
+  (signs == nil and vim.o.signcolumn == 'auto')
+  or signs == 1
+  or signs == true
+)then
+  vim.o.signcolumn = 'yes'
 end
-
-require('lsp-zero.ui').setup(ui_settings)
 
 vim.g.loaded_lsp_zero = 1
 
