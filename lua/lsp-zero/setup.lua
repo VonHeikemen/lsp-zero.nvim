@@ -33,6 +33,7 @@ vim.api.nvim_create_user_command(
   {}
 )
 
+
 ---
 -- Autocommands
 ---
@@ -109,6 +110,7 @@ vim.api.nvim_create_autocmd('User', {
   end,
 })
 
+
 ---
 -- UI settings
 ---
@@ -138,7 +140,7 @@ if (
   (signs == nil and vim.o.signcolumn == 'auto')
   or signs == 1
   or signs == true
-)then
+) then
   vim.o.signcolumn = 'yes'
 end
 
