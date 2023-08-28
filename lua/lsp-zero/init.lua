@@ -2,7 +2,10 @@ if vim.g.loaded_lsp_zero == nil then
   require('lsp-zero.setup')
 end
 
-vim.api.nvim_exec_autocmds('User', {pattern = 'LspZeroExtendPlugin'})
+vim.api.nvim_exec_autocmds('User', {
+  pattern = 'LspZeroExtendPlugin',
+  modeline = false
+})
 
 local noop = function() end
 
