@@ -7,8 +7,6 @@ Here what you need to do is call [nvim-navic](https://github.com/SmiteshP/nvim-n
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 
@@ -42,8 +40,6 @@ require('ufo').setup()
 
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -76,8 +72,6 @@ ih.setup()
 
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -108,8 +102,6 @@ Use [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -150,8 +142,6 @@ Use [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) to 
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -190,8 +180,6 @@ With [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) the only thi
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -211,8 +199,6 @@ If I understand correctly, `nvim-metals` is the one that needs to configure the 
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -258,8 +244,6 @@ The only option that makes sense to share between [haskell-tools](https://github
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -331,8 +315,6 @@ require('mason-lspconfig').setup({
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

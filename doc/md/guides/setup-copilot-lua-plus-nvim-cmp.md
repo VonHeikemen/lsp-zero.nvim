@@ -23,8 +23,6 @@ require('copilot_cmp').setup()
 4. Add the source in nvim-cmp
 
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 
 cmp.setup({
@@ -32,14 +30,14 @@ cmp.setup({
     {name = 'copilot'},
     {name = 'nvim_lsp'},
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     ['<CR>'] = cmp.mapping.confirm({
       -- documentation says this is important.
       -- I don't know why.
       behavior = cmp.ConfirmBehavior.Replace,
       select = false,
     })
-  }
+  })
 })
 ```
 

@@ -67,8 +67,6 @@ Here is an example that replaces the default keybinding `gr` with a [telescope](
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
@@ -112,8 +110,6 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -137,8 +133,6 @@ To pass arguments to a language server you can use the lspconfig directly.
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -180,8 +174,6 @@ We can disable this new feature in every server using the function [.set_server_
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -238,8 +230,6 @@ Note: before doing anything, make sure the server you want to add is **not** sup
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -266,8 +256,6 @@ If you don't need a "robust" solution you can use the function `.new_client()`. 
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -296,8 +284,6 @@ If you want to control exactly what language server is used to format a file cal
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -325,8 +311,6 @@ If you only ever have **one** language server attached in each file and you are 
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
   lsp.buffer_autoformat()
@@ -343,8 +327,6 @@ Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -370,8 +352,6 @@ You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/us
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
   local opts = {buffer = bufnr}
@@ -390,8 +370,6 @@ If you want to allow only a list of servers, use the `filter` option. You can cr
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 local function allow_format(servers)
   return function(client) return vim.tbl_contains(servers, client.name) end
@@ -424,8 +402,6 @@ Here is an example using `gq` as the keymap.
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -454,8 +430,6 @@ If you don't know, the "sign column" is a space in the gutter next to the line n
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})

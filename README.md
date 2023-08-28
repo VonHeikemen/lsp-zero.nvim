@@ -209,8 +209,6 @@ lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
 
-lsp.extend_cmp()
-
 -- (Optional) Configure lua language server for neovim
 -- require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 
@@ -241,8 +239,6 @@ lsp.on_attach(function(client, bufnr)
   -- to learn the available actions
   lsp.default_keymaps({buffer = bufnr})
 end)
-
-lsp.extend_cmp()
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
@@ -370,17 +366,11 @@ The default keybindings in lsp-zero are meant to emulate Neovim's default whenev
 
 * `<Ctrl-p>`: If the completion menu is visible, go to the previous item. Else, trigger completion menu.
 
-* `<Ctrl-d>`: Scroll down the documentation window.
-
-* `<Ctrl-u>`: Scroll up the documentation window.
-
 To add more keybindings I recommend you use [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) directly.
 
 Here is an example configuration.
 
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -395,6 +385,10 @@ cmp.setup({
     -- Navigate between snippet placeholder
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- Scroll up and down in the completion documentation
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
   })
 })
 ```

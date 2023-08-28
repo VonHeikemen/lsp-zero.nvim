@@ -14,8 +14,8 @@ function M.extend(opts)
     set_lsp_source = true,
     set_mappings = true,
     use_luasnip = true,
-    set_format = true,
-    documentation_window = true,
+    set_format = false,
+    documentation_window = false,
   }
 
   opts = vim.tbl_deep_extend('force', defaults, opts or {})

@@ -83,11 +83,16 @@ require('mason-lspconfig').setup({
 
 ## Enable the autocomplete plugin
 
-In order to get the basic working configuration for nvim-cmp you must call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts).
+In order to get the extra features for nvim-cmp you must call the function [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts), and enable these settings.
 
 ```lua
-require('lsp-zero').extend_cmp()
+require('lsp-zero').extend_cmp({
+  set_format = true,
+  documentation_window = true,
+})
 ```
+
+If you want to customize nvim-cmp even further, you need to do it after using this function.
 
 ## Configure completion sources
 
@@ -101,11 +106,7 @@ In `v3.x` only the source to get LSP completions is configured. If you want to u
 * [rafamadriz/friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
 * [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip) 
 
-Then you can configure nvim-cmp after lsp-zero's [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) function.
-
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 require('luasnip.loaders.from_vscode').lazy_load()
 
@@ -122,11 +123,9 @@ cmp.setup({
 
 ## Configure autocomplete mappings
 
-Make sure you configure nvim-cmp after lsp-zero's [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) function. Then you can add the mappings you want in your cmp setup. This config uses the old mappings from `v1.x`.
+You can add the mappings you want in your cmp setup. This config uses the old mappings from `v1.x`.
 
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
@@ -155,11 +154,9 @@ cmp.setup({
 
 ## Add borders to documention window in completion menu
 
-Make sure you configure nvim-cmp after lsp-zero's [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) function. Then you can add the config to the `window.documention` property in nvim-cmp.
+Add nvim-cmp's preset to the `window.documention` property.
 
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 
 cmp.setup({
@@ -171,11 +168,9 @@ cmp.setup({
 
 ## Preselect first completion item
 
-Make sure you configure nvim-cmp after lsp-zero's [.extend_cmp()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#extend_cmpopts) function. Then you can add the following settings to nvim-cmp.
+Add the following settings to nvim-cmp.
 
 ```lua
-require('lsp-zero').extend_cmp()
-
 local cmp = require('cmp')
 vim.opt.completeopt = {'menu', 'menuone', 'noselect'}
 
@@ -262,7 +257,10 @@ vim.diagnostic.config({
   },
 })
 
-require('lsp-zero').extend_cmp()
+require('lsp-zero').extend_cmp({
+  set_format = true,
+  documentation_window = true,
+})
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
@@ -286,7 +284,7 @@ cmp.setup({
     {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
   },
-  mapping = {
+  mapping = cmp.mapping.preset.insert({
     -- confirm completion item
     ['<CR>'] = cmp.mapping.confirm({select = false}),
 
@@ -304,7 +302,7 @@ cmp.setup({
     -- scroll documention window
     ['<C-f>'] = cmp.mapping.scroll_docs(5),
     ['<C-u>'] = cmp.mapping.scroll_docs(-5),
-  },
+  }),
 })
 ```
 

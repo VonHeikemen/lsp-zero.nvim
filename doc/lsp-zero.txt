@@ -21,8 +21,6 @@ Here is a basic configuration to get started.
 >lua
   local lsp = require('lsp-zero')
 
-  lsp.extend_cmp()
-
   lsp.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
@@ -47,8 +45,7 @@ is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
-When you enable `set_mappings` in the function |lsp-zero.extend_cmp()|
-lsp-zero creates the following keybindings.
+This are the keybindings lsp-zero enables by default.
 
     <Ctrl-y>: ~
         Confirms selection.
@@ -69,12 +66,6 @@ lsp-zero creates the following keybindings.
     <Ctrl-n>: ~
         If the completion menu is visible, go to the next item.
         Else, trigger completion menu.
-
-    <Ctrl-u>: ~
-        Scroll up in the item's documentation.
-
-    <Ctrl-d>: ~
-        Scroll down in the item's documentation.
 
 ==============================================================================
 LSP                                                      *lsp-zero-lsp-config*
@@ -251,8 +242,6 @@ on_attach({callback}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       local noremap = {buffer = bufnr}
       local bind = vim.keymap.set
@@ -288,8 +277,6 @@ default_keymaps({opts}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       -- see :help lsp-zero-keybindings
       -- to learn the available actions
@@ -307,8 +294,6 @@ set_server_config({opts}): ~
     You can find more details about {opts} see |lspconfig-setup|.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.set_server_config({
       single_file_support = false,
@@ -330,8 +315,6 @@ configure({name}, {opts}): ~
     setup function. For more details go to |lspconfig-setup|.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -358,8 +341,6 @@ setup_servers({list}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -379,8 +360,6 @@ default_setup({server}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -399,8 +378,6 @@ noop(): ~
     Consider this example.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -460,8 +437,6 @@ use({name}, {opts}): ~
 
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -500,8 +475,6 @@ nvim_lua_ls({opts}): ~
     this way you can extend or change the values easily.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -544,8 +517,6 @@ format_on_save({opts}): ~
     configure it to your prefered style.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -594,8 +565,6 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
       lsp.buffer_autoformat()
@@ -636,8 +605,6 @@ async_autoformat({client}, {bufnr}, {opts}): ~
     Here is an example.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -689,8 +656,6 @@ format_mapping({key}, {opts}): ~
     configure it to your prefered style.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -770,8 +735,6 @@ new_client({opts}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function()
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -803,8 +766,6 @@ dir.find_first({list}): ~
 >lua
     local lsp = require('lsp-zero')
 
-    lsp.extend_cmp()
-
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
     end)
@@ -834,8 +795,6 @@ dir.find_all({list}): ~
     Note: search will stop once it gets to your "HOME" folder.
 >lua
     local lsp = require('lsp-zero')
-
-    lsp.extend_cmp()
 
     lsp.on_attach(function(client, bufnr)
       lsp.default_keymaps({buffer = bufnr})
@@ -930,18 +889,18 @@ extend_cmp({opts}): ~
         will setup luasnip to expand snippets. This option does not include a
         collection of snippets.
 
-        • set_format: (Boolean, Optional) Defaults to `true`. When enabled it
+        • set_format: (Boolean, Optional) Defaults to `false`. When enabled it
         will the completion items will show a label that identifies the source
         they come from. 
 
-        • documentation_window: (Boolean, Optional) Defaults to `true`. When
+        • documentation_window: (Boolean, Optional) Defaults to `false`. When
         enabled it will configure the max height and width of the
         documentation window.
 
     After you use this function you can customize nvim-cmp using the module
     `cmp`. Here is an example that adds some keybindings.
 >lua
-    require('lsp-zero').extend_cmp()
+    require('lsp-zero').extend_cmp({set_format = true})
 
     local cmp = require('cmp')
     local cmp_action = require('lsp-zero').cmp_action()
@@ -1067,8 +1026,6 @@ Here is a basic example.
     lsp.default_keymaps({buffer = bufnr})
   end)
 
-  lsp.extend_cmp()
-
   require('mason').setup({})
   require('mason-lspconfig').setup({
     -- Replace the language servers listed here 
@@ -1168,8 +1125,6 @@ with lspconfig.
     lsp.default_keymaps({buffer = bufnr})
   end)
 
-  lsp.extend_cmp()
-
   require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
 <
 If you used |mason-lspconfig.nvim| to setup your language servers, add
@@ -1188,12 +1143,8 @@ If you used |mason-lspconfig.nvim| to setup your language servers, add
 
 Customize nvim-cmp
 
-To setup a basic working config for nvim-cmp you can use the function
-|lsp-zero.extend_cmp()|. And after that you can call the setup function of the
-`cmp` module. Here is a quick example.
+You can call the setup function of the `cmp` module. Here is a quick example.
 >lua
-  require('lsp-zero').extend_cmp()
-
   local cmp = require('cmp')
   local cmp_action = require('lsp-zero').cmp_action()
 
@@ -1212,8 +1163,6 @@ To setup a basic working config for nvim-cmp you can use the function
 When configuring the `sources` option make sure to add the source for the LSP
 completions.
 >lua
-  require('lsp-zero').extend_cmp()
-
   local cmp = require('cmp')
 
   cmp.setup({

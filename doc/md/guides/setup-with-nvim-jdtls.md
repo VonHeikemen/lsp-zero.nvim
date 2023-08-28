@@ -40,8 +40,6 @@ Setup lsp-zero and mason.nvim like you usually do. But don't setup `jdtls` with 
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions

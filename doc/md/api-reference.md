@@ -164,8 +164,6 @@ Gathers the arguments for a particular language server. `{name}` must be a strin
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.configure('tsserver', {
   single_file_support = false,
   on_attach = function(client, bufnr)
@@ -185,8 +183,6 @@ The `{opts}` table supports the following properties:
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 -- Replace the language servers listed here
 -- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
@@ -200,8 +196,6 @@ This is meant to be used with `mason-lspconfig.nvim`, in order to help configure
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -221,8 +215,6 @@ You can use think of this as "empty handler" for `mason-lspconfig.nvim`. Conside
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -256,8 +248,6 @@ Returns settings specific to Neovim for the lua language server, `lua_ls`.
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
@@ -293,8 +283,6 @@ Ideally, you would setup some default values for your servers in your neovim con
 -- init.lua
 
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.configure('pyright', {
   single_file_support = false,
@@ -402,8 +390,6 @@ Do not use this in the global `on_attach`, call this function with the specific 
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -475,8 +461,6 @@ Here is an example that starts the [typescript language server](https://github.c
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function()
   lsp.default_keymaps({buffer = bufnr})
 end)
@@ -506,8 +490,6 @@ Note: search will stop once it gets to your "HOME" folder.
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 require('lspconfig').lua_ls.setup({
   root_dir = function()
     --- project root will be the first directory that has
@@ -531,8 +513,6 @@ Note: search will stop once it gets to your "HOME" folder.
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 require('lspconfig').vuels.setup({
   root_dir = function()
@@ -586,14 +566,14 @@ Creates a minimal working config for nvim-cmp.
 
   * use_luasnip: (Boolean, Optional) Defaults to `true`. When enabled it will setup luasnip to expand snippets. This option does not include a collection of snippets.
 
-  * set_format: (Boolean, Optional) Defaults to `true`. When enabled it will the completion items will show a label that identifies the source they come from. 
+  * set_format: (Boolean, Optional) Defaults to `false`. When enabled it will the completion items will show a label that identifies the source they come from. 
 
-  * documentation_window: (Boolean, Optional) Defaults to `true`. When enabled it will configure the max height and width of the documentation window.
+  * documentation_window: (Boolean, Optional) Defaults to `false`. When enabled it will configure the max height and width of the documentation window.
 
 After you use this function you can customize nvim-cmp using the module `cmp`. Here is an example that adds some keybindings.
 
 ```lua
-require('lsp-zero').extend_cmp()
+require('lsp-zero').extend_cmp({set_format = true})
 
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()

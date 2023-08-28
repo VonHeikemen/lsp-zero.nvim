@@ -155,8 +155,6 @@ Then we add the configuration at the end of the file.
 ```lua
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
@@ -180,8 +178,6 @@ Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we w
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -212,8 +208,6 @@ Now, if none of your language server need a special config you can use the funct
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -267,8 +261,6 @@ require('lazy').setup({
 
 ```lua
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -409,8 +401,6 @@ vim.cmd.colorscheme('tokyonight')
 -- LSP
 local lsp = require('lsp-zero')
 
-lsp.extend_cmp()
-
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
@@ -482,8 +472,6 @@ vim.cmd.colorscheme('tokyonight')
 
 -- LSP
 local lsp = require('lsp-zero')
-
-lsp.extend_cmp()
 
 lsp.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings

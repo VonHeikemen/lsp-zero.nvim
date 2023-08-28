@@ -12,6 +12,11 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     branch = 'dev-v3',
     lazy = true,
     config = false,
+    init = function()
+      -- Disable automatic setup, we are doing it manually
+      vim.g.lsp_zero_extend_cmp = 0
+      vim.g.lsp_zero_extend_lspconfig = 0
+    end,
   },
 
   -- Autocompletion
@@ -53,6 +58,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       -- This is where all the LSP shenanigans will live
 
       local lsp = require('lsp-zero')
+      lsp.extend_lspconfig()
 
       lsp.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
@@ -83,6 +89,11 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     branch = 'dev-v3',
     lazy = true,
     config = false,
+    init = function()
+      -- Disable automatic setup, we are doing it manually
+      vim.g.lsp_zero_extend_cmp = 0
+      vim.g.lsp_zero_extend_lspconfig = 0
+    end,
   },
   {
     'williamboman/mason.nvim',
@@ -131,6 +142,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       -- This is where all the LSP shenanigans will live
 
       local lsp = require('lsp-zero')
+
+      lsp.extend_lspconfig()
 
       lsp.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings

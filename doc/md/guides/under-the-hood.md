@@ -14,8 +14,6 @@ end)
 -- Replace the language servers listed here
 -- with the ones you have installed
 lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-lsp.extend_cmp()
 ```
 
 Will turn into something very close to this.
@@ -124,10 +122,6 @@ local cmp_config = {
     -- cancel completion
     ['<C-e>'] = cmp.mapping.abort(),
 
-    -- scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
-    ['<C-d>'] = cmp.mapping.scroll_docs(5),
-
     -- navigate items on the list
     ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
     ['<Down>'] = cmp.mapping.select_next_item(select_opts),
@@ -155,20 +149,6 @@ local cmp_config = {
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
-    end,
-  },
-  formatting = {
-    fields = {'abbr', 'menu', 'kind'},
-    format = function(entry, item)
-      local short_name = {
-        nvim_lsp = 'LSP',
-        nvim_lua = 'nvim'
-      }
-
-      local menu_name = short_name[entry.source.name] or entry.source.name
-
-      item.menu = string.format('[%s]', menu_name)
-      return item
     end,
   },
 }
