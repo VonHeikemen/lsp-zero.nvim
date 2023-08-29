@@ -68,7 +68,6 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 local function lsp_settings()
   vim.diagnostic.config({
-    severity_sort = true,
     float = {border = 'rounded'},
   })
 
@@ -109,7 +108,6 @@ require('lspconfig').rust_analyzer.setup({})
 ---
 
 local cmp = require('cmp')
-local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
 
 local cmp_config = {
   sources = {
@@ -117,20 +115,20 @@ local cmp_config = {
   },
   mapping = {
     -- confirm selection
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-y>'] = cmp.mapping.confirm({select = false}),
 
     -- cancel completion
     ['<C-e>'] = cmp.mapping.abort(),
 
     -- navigate items on the list
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
 
     -- if completion menu is visible, go to the previous item
     -- else, trigger completion menu
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_prev_item(select_opts)
+        cmp.select_prev_item({behavior = 'insert'})
       else
         cmp.complete()
       end
@@ -140,7 +138,7 @@ local cmp_config = {
     -- else, trigger completion menu
     ['<C-n>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_next_item(select_opts)
+        cmp.select_next_item({behavior = 'insert'})
       else
         cmp.complete()
       end

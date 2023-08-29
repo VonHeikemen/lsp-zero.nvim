@@ -10,27 +10,26 @@ This is the code lsp-zero will run for you.
 
 ```lua
 local cmp = require('cmp')
-local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
 
 cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
   },
   mapping = {
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-y>'] = cmp.mapping.confirm({select = false}),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<Up>'] = cmp.mapping.select_prev_item(cmp_select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(cmp_select_opts),
+    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_prev_item(cmp_select_opts)
+        cmp.select_prev_item({behavior = 'insert'})
       else
         cmp.complete()
       end
     end),
     ['<C-n>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_next_item(cmp_select_opts)
+        cmp.select_next_item({behavior = 'insert'})
       else
         cmp.complete()
       end
@@ -74,7 +73,7 @@ cmp.setup({
 })
 ```
 
-Is important to note lsp-zero's automatic configuration works as a backup. It will only configure the "essential" options¹ if you forget to set them up yourself.
+Is important to note lsp-zero's automatic configuration works as a backup. It will only configure the essential options¹ if you forget to set them up yourself.
 
 ¹ The essential options are `sources`, `mapping` and `snippet`.
 
@@ -92,6 +91,7 @@ Third step, add the sources you want to use to nvim-cmp's config. For this we ne
 
 ```lua
 local cmp = require('cmp')
+local cmp_format = require('lsp-zero').cmp_format()
 
 cmp.setup({
   sources = {
@@ -99,7 +99,7 @@ cmp.setup({
     {name = 'buffer'},
   },
   --- (Optional) Show source name in completion menu
-  formatting = require('lsp-zero').cmp_format()
+  formatting = cmp_format,
 })
 ```
 
@@ -137,6 +137,7 @@ Here is the code you would need to load `friendly-snippets` into nvim-cmp.
 ```lua
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
+local cmp_format = require('lsp-zero').cmp_format()
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
@@ -150,7 +151,7 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   })
   --- (Optional) Show source name in completion menu
-  formatting = require('lsp-zero').cmp_format()
+  formatting = cmp_format,
 })
 ```
 
@@ -203,6 +204,7 @@ You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim
 
 ```lua
 local cmp = require('cmp')
+local cmp_format = require('lsp-zero').cmp_format()
 
 cmp.setup({
   sources = {
@@ -214,7 +216,7 @@ cmp.setup({
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   })
   --- (Optional) Show source name in completion menu
-  formatting = require('lsp-zero').cmp_format()
+  formatting = cmp_format,
 })
 ```
 

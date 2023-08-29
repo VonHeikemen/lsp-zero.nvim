@@ -345,6 +345,42 @@ require('lspconfig').lua_ls.setup(
 )
 ```
 
+## Customizing the autocompletion menu
+
+Last thing we are going to do is add some keybindings to the autocomplete menu. lsp-zero already has some defaults in place but they all meant to emulate Neovim's default, so I will suggest a few keybindings that you can add to your config.
+
+Before we start you need to know two things:
+
+1. To customize nvim-cmp you need to use the lua module called `cmp`.
+2. To make sure we don't lose the default keybindings we need to use nvim-cmp's preset. That is a function called `.mapping.preset.insert()`.
+
+Here are some common keybindings you might want to add.
+
+```lua
+local cmp = require('cmp')
+local cmp_action = require('lsp-zero').cmp_action()
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    -- `Enter` key to confirm completion
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl+Space to trigger completion menu
+    ['<C-Space>'] = cmp.mapping.complete(),
+
+    -- Navigate between snippet placeholder
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- Scroll up and down in the completion documentation
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+  })
+})
+```
+
+Note that here I'm showing a function called [.cmp_action()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#cmp_action), other extra mappings that people requested. There is a function for tab complete, one for a "supertab" behavior and a few others.
+
 ## Complete code
 
 <details>
@@ -398,7 +434,9 @@ require('lazy').setup({
 vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
--- LSP
+---
+-- LSP setup
+---
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
@@ -413,6 +451,30 @@ lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 -- (Optional) configure lua language server
 require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+
+---
+-- Autocompletion config
+---
+local cmp = require('cmp')
+local cmp_action = lsp_zero.cmp_action()
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    -- `Enter` key to confirm completion
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl+Space to trigger completion menu
+    ['<C-Space>'] = cmp.mapping.complete(),
+
+    -- Navigate between snippet placeholder
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- Scroll up and down in the completion documentation
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+  })
+})
 ```
 
 </details>
@@ -470,7 +532,9 @@ require('lazy').setup({
 vim.opt.termguicolors = true
 vim.cmd.colorscheme('tokyonight')
 
--- LSP
+---
+-- LSP setup
+---
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
@@ -488,6 +552,30 @@ require('mason-lspconfig').setup({
       require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
     end,
   }
+})
+
+---
+-- Autocompletion config
+---
+local cmp = require('cmp')
+local cmp_action = lsp_zero.cmp_action()
+
+cmp.setup({
+  mapping = cmp.mapping.preset.insert({
+    -- `Enter` key to confirm completion
+    ['<CR>'] = cmp.mapping.confirm({select = false}),
+
+    -- Ctrl+Space to trigger completion menu
+    ['<C-Space>'] = cmp.mapping.complete(),
+
+    -- Navigate between snippet placeholder
+    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
+    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+
+    -- Scroll up and down in the completion documentation
+    ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-d>'] = cmp.mapping.scroll_docs(4),
+  })
 })
 ```
 
