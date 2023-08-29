@@ -223,10 +223,9 @@ M.set_preferences = noop
 M.defaults = {}
 
 function M.defaults.cmp_config(opts)
-  local base = require('lsp-zero.cmp').base_config()
-  local extra = require('lsp-zero.cmp').extra_config()
+  local defaults = require('lsp-zero.cmp').base_config()
 
-  return vim.tbl_deep_extend('force', base, extra, opts or {})
+  return vim.tbl_deep_extend('force', defaults, opts or {})
 end
 
 function M.defaults.cmp_mappings(opts)
