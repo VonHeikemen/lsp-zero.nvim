@@ -160,7 +160,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
           lsp_zero.default_setup,
           lua_ls = function()
             -- (Optional) Configure lua language server for neovim
-            require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+            local opts = lsp_zero.nvim_lua_ls()
+            require('lspconfig').lua_ls.setup(opts)
           end,
         }
       })

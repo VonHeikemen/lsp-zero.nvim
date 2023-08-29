@@ -445,12 +445,12 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
+-- (Optional) configure lua language server
+require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+
 -- Replace the language servers listed here
 -- with the ones you have installed
 lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
-
--- (Optional) configure lua language server
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 
 ---
 -- Autocompletion config
