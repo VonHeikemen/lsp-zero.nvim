@@ -304,18 +304,10 @@ We can add the following config to the `.luarc.json` file located in our Neovim 
   "diagnostics.globals": ["vim"],
   "workspace.checkThirdParty": false,
   "workspace.library": [
-    "/usr/share/nvim/runtime/lua",
+    "$VIMRUNTIME",
     "./lua"
   ]
 }
-```
-
-In the `workspace.library` property you can add the path to Neovim's runtime files and the path to your Neovim config folder.
-
-Note that Neovim's runtime folder could be in a different location, it really depends on how you installed Neovim. If you want to know what is the correct path to Neovim' runtime execute this command.
-
-```vim
-:echo $VIMRUNTIME
 ```
 
 * Fixed config

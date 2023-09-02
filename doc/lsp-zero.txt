@@ -1106,15 +1106,11 @@ following config.
     "diagnostics.globals": ["vim"],
     "workspace.checkThirdParty": false,
     "workspace.library": [
-      "/usr/share/nvim/runtime/lua",
+      "$VIMRUNTIME",
       "./lua"
     ]
   }
 <
-The first path in the `workspace.library` property is the path to Neovim's
-runtime files. This might be different for you, so make sure to check using
-this command `:echo $VIMRUNTIME`
-
 • Fixed config
 
 If your Neovim config is the only lua project you have in your system, use the
