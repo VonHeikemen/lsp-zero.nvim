@@ -1,3 +1,5 @@
+vim.g.loaded_lsp_zero = 1
+
 ---
 -- Commands
 ---
@@ -143,6 +145,4 @@ if (
 ) then
   vim.o.signcolumn = 'yes'
 end
-
-vim.g.loaded_lsp_zero = 1
 
