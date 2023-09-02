@@ -87,10 +87,12 @@ To disable all keybindings just delete the call to [.default_keymaps()](https://
 If you want lsp-zero to skip only a few keys you can add the `exclude` property to the [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) call. Say you want to keep the default behavior of `K` and `gl`, you would do this.
 
 ```lua
-lsp_zero.default_keymaps({
-  buffer = bufnr,
-  exclude = {'gl', 'K'},
-})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({
+    buffer = bufnr,
+    exclude = {'gl', 'K'},
+  })
+end)
 ```
 
 ## Install new language servers

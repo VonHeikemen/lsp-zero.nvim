@@ -209,21 +209,10 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- (Optional) Configure lua language server for neovim
--- require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
-
 -- Replace the language servers listed here
 -- with the ones installed in your system
 lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
-
-If you want to customize a language server use the module `lspconfig`. Call the `setup` function of the LSP server like this.
-
-```lua
-require('lspconfig').lua_ls.setup({})
-```
-
-Here `lua_ls` is the language server we want to configure. And inside the `{}` is where you place the config. To get more details on the available options read the help page, use the command `:help lspconfig-setup`.
 
 #### Automatic setup of LSP servers
 
@@ -242,16 +231,9 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  -- Replace the language servers listed here
-  -- with the ones you want to install
-  ensure_installed = {'tsserver', 'rust_analyzer'},
+  ensure_installed = {},
   handlers = {
     lsp_zero.default_setup,
-    lua_ls = function()
-      -- (Optional) Configure lua language server for neovim
-      local opts = lsp_zero.nvim_lua_ls()
-      require('lspconfig').lua_ls.setup(opts)
-    end,
   },
 })
 ```
@@ -260,14 +242,39 @@ For more details about how to use mason.nvim with lsp-zero see the guide on how 
 
 ## Language servers
 
-Here are some things you need to know:
+### Configure a language server
 
-* The configuration for the language servers are provided by [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig).
-* lsp-zero will create keybindings, commands, and will integrate nvim-cmp (the autocompletion plugin) with lspconfig if possible. You need to call lsp-zero's preset function before using lspconfig.
+In order to customize a language server you should use the module `lspconfig`. Like this.
+
+```lua
+require('lspconfig').lua_ls.setup({})
+```
+
+Here `lua_ls` is the name of the language server we want to configure. We call its setup function and inside the `{}` is where we should place our configuration options.
+
+Is important to note the name of the language server must be in [this list](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
+
+To get more details on the available options read the help page, use the command `:help lspconfig-setup`.
+
+Now, if you choose to use `mason-lspconfig`, you should add a handler with the name of the language server. Here is an example.
+
+```lua
+require('mason-lspconfig').setup({
+  ensure_installed = {},
+  handlers = {
+    lsp_zero.default_setup,
+    lua_ls = function()
+      require('lspconfig').lua_ls.setup({})
+    end,
+  },
+})
+```
+
+This "handler" I'm talking about must be a lua function. Inside this function is where you configure the language server.
 
 ### Keybindings
 
-When a language server gets attached to a buffer you gain access to some keybindings and commands. All of these shortcuts are bound to built-in functions, so you can get more details using the `:help` command.
+If you choose to use the function [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_keymapsopts) you gain access to some keybindings. All of these shortcuts are bound to built-in functions, so you can get more details using the `:help` command.
 
 * `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
 

@@ -1,7 +1,7 @@
 ==============================================================================
 *lsp-zero.txt*
 
-A starting point to setup some lsp related features in neovim.
+A starting point to setup some LSP related features in Neovim.
 
 ==============================================================================
 Introduction                                                  *lsp-zero-intro*
@@ -138,9 +138,9 @@ LspZeroSetupServers [{server}]: ~
 
                                                         *lsp-zero-keybindings*
 
-When a language server gets attached to a buffer you gain access to some
-keybindings and commands. All of these are bound to a built-in function
-so you can get more details using the `:help` command.
+If you choose to use the function |lsp-zero.default_keymaps()|, you gain
+access to some keybindings. All of these are bound to a built-in
+function so you can get more details using the `:help` command.
 
 K: ~
     Displays hover information about the symbol under the cursor in a
@@ -196,19 +196,19 @@ gl: ~
 ==============================================================================
 Global variables                                   *lsp-zero-global-variables*
 
-`lsp_zero_extend_cmp`: ~
+lsp_zero_extend_cmp: ~
     When set to `0` then lsp-zero will not integrate with nvim-cmp
     automatically.
 
 lsp_zero_extend_lspconfig: ~
-    When set to `0` then lsp-zero will not try to integrate with lspconfig
+    When set to `0` then lsp-zero will not integrate with lspconfig
     automatically.
 
 lsp_zero_ui_float_border: ~
     Set the style of border of diagnostic floating window, hover window and
     signature help window. Can have one of these: `'none'`, `'single'`,
     `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is
-    `rounded`. If set to `0` then lsp-zero will not configure the border
+    `'rounded'`. If set to `0` then lsp-zero will not configure the border
     style.
 
 lsp_zero_ui_signcolumn: ~
@@ -244,9 +244,8 @@ on_attach({callback}): ~
 
     lsp_zero.on_attach(function(client, bufnr)
       local opts = {buffer = bufnr}
-      local bind = vim.keymap.set
 
-      bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+      vim.keymap.set('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
       -- more code  ...
     end)
 
@@ -1139,7 +1138,8 @@ If you used |mason-lspconfig.nvim| to setup your language servers, add
     handlers = {
       lsp_zero.default_setup,
       lua_ls = function()
-        require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+        local opts = lsp_zero.nvim_lua_ls()
+        require('lspconfig').lua_ls.setup(opts)
       end,
     },
   })
@@ -1162,6 +1162,8 @@ You can call the setup function of the `cmp` module. Here is a quick example.
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-f>'] = cmp_action.luasnip_jump_forward(),
       ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
     })
   })
 <
