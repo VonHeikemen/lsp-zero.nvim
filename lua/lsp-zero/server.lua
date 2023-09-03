@@ -95,11 +95,6 @@ function M.setup(name, opts)
   return true
 end
 
-function M.set_default_capabilities(opts)
-  local defaults = require('lspconfig').util.default_config
-  defaults.capabilities = s.set_capabilities(opts)
-end
-
 function M.default_keymaps(opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
@@ -218,6 +213,8 @@ end
 
 function M.client_capabilities()
   if state.capabilities == nil then
+    local doc_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
+    M.has_lspconfig = #doc_txt > 0
     return s.set_capabilities()
   end
 
