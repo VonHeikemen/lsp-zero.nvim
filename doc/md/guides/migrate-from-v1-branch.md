@@ -193,33 +193,29 @@ cmp.setup({
 The following config recreates most of the features that were removed from the `v1.x` branch.
 
 ```lua
-local ok, packer = pcall(require, 'packer')
+-- You need to install the plugin manager vim-plug
 
-if not ok then
-  print('You need to install the plugin manager packer.nvim')
-  return
-end
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-packer.startup(function(use)
-  use {'wbthomason/packer.nvim'}
+-- LSP Support
+Plug('williamboman/mason.nvim')
+Plug('williamboman/mason-lspconfig.nvim')
+Plug('neovim/nvim-lspconfig')
 
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
+-- Autocompletion
+Plug('hrsh7th/nvim-cmp')
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('hrsh7th/cmp-buffer')
+Plug('hrsh7th/cmp-path')
+Plug('saadparwaiz1/cmp_luasnip')
+Plug('hrsh7th/cmp-nvim-lua')
+Plug('L3MON4D3/LuaSnip')
+Plug('rafamadriz/friendly-snippets')
 
-  -- LSP Support
-  use {'williamboman/mason.nvim'}
-  use {'williamboman/mason-lspconfig.nvim'}
-  use {'neovim/nvim-lspconfig'}
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 
-  -- Autocompletion
-  use {'hrsh7th/nvim-cmp'}
-  use {'hrsh7th/cmp-nvim-lsp'}
-  use {'hrsh7th/cmp-buffer'}
-  use {'hrsh7th/cmp-path'}
-  use {'saadparwaiz1/cmp_luasnip'}
-  use {'hrsh7th/cmp-nvim-lua'}
-  use {'L3MON4D3/LuaSnip'}
-  use {'rafamadriz/friendly-snippets'}
-end)
+vim.call('plug#end')
 
 local lsp_zero = require('lsp-zero').preset({})
 
