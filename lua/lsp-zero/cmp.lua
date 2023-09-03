@@ -17,7 +17,7 @@ function M.extend(opts)
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
   local base = M.base_config()
-  local config = {window = {}}
+  local config = {}
 
   if opts.set_lsp_source then
     config.sources = base.sources
