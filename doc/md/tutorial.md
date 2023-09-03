@@ -206,7 +206,6 @@ vim.call('plug#begin')
 Plug('joshdick/onedark.vim')
 
 -- LSP Support
-Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('williamboman/mason.nvim')
@@ -215,6 +214,8 @@ Plug('williamboman/mason-lspconfig.nvim')
 -- Autocompletion
 Plug('hrsh7th/nvim-cmp')
 Plug('L3MON4D3/LuaSnip')
+
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 
 vim.call('plug#end')
 ```
@@ -312,13 +313,14 @@ vim.call('plug#begin')
 Plug('joshdick/onedark.vim')
 
 -- LSP Support
-Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/cmp-nvim-lsp')
 
 -- Autocompletion
 Plug('hrsh7th/nvim-cmp')
 Plug('L3MON4D3/LuaSnip')
+
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 
 vim.call('plug#end')
 
@@ -356,7 +358,6 @@ vim.call('plug#begin')
 Plug('joshdick/onedark.vim')
 
 -- LSP Support
-Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 Plug('neovim/nvim-lspconfig')
 Plug('hrsh7th/cmp-nvim-lsp')
 Plug('williamboman/mason.nvim')
@@ -365,6 +366,8 @@ Plug('williamboman/mason-lspconfig.nvim')
 -- Autocompletion
 Plug('hrsh7th/nvim-cmp')
 Plug('L3MON4D3/LuaSnip')
+
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 
 vim.call('plug#end')
 
