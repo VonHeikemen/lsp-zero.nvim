@@ -133,46 +133,6 @@ require('mason-lspconfig').setup({
 })
 ```
 
-## Setup with typescript.nvim
-
-Use [typescript.nvim](https://github.com/jose-elias-alvarez/typescript.nvim) to configure [tsserver](https://github.com/typescript-language-server/typescript-language-server).
-
-`typescript.nvim` will use `lspconfig` to initialize the typescript language server, so you need to setup typescript.nvim after lsp-zero.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({buffer = bufnr})
-end)
-
-require('typescript').setup({
-  server = {
-    on_attach = function(client, bufnr)
-      -- You can find more commands in the documentation:
-      -- https://github.com/jose-elias-alvarez/typescript.nvim#commands
-
-      vim.keymap.set('n', '<leader>ci', '<cmd>TypescriptAddMissingImports<cr>', {buffer = bufnr})
-    end
-  }
-})
-```
-
-Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
-
-```lua
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp_zero.default_setup,
-    tsserver = function()
-      ---
-      -- here you will setup typescript.nvim
-      ---
-    end,
-  }
-})
-```
-
 ## Setup with flutter-tools
 
 With [flutter-tools](https://github.com/akinsho/flutter-tools.nvim) the only thing that make sense to do is share the "capabilities" option. So, let flutter-tools initialize the language server, and have lsp-zero just configure the capabilities option.

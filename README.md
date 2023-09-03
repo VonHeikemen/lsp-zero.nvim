@@ -61,18 +61,15 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/you-might-not-need-lsp-zero.md)
   * [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/lazy-loading-with-lazy-nvim.md)
   * [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md)
-  * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-null-ls.md)
   * [Enable folds with nvim-ufo](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#enable-folds-with-nvim-ufo)
   * [Enable inlay hints with inlay-hints.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#enable-inlay-hints-with-inlay-hintsnvim)
   * [Setup copilot.lua + nvim-cmp](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/setup-copilot-lua-plus-nvim-cmp.md#setup-copilotlua--nvim-cmp)
   * [Setup with nvim-navic](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-nvim-navic)
   * [Setup with rust-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-rust-tools)
-  * [Setup with typescript.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-typescriptnvim)
   * [Setup with flutter-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-flutter-tools)
   * [Setup with nvim-jdtls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/setup-with-nvim-jdtls.md)
   * [Setup with nvim-metals](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-nvim-metals)
   * [Setup with haskell-tools](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-haskell-tools)
-  * [Setup with clangd_extensions.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md#setup-with-clangd_extensionsnvim)
 
 ## Quickstart (for the impatient)
 
