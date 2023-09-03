@@ -36,7 +36,8 @@ function M.select_prev_or_fallback(select_opts)
   end, {'i', 's'})
 end
 
-function M.toggle_completion()
+function M.toggle_completion(opts)
+  opts = opts or {}
   local cmp = get_cmp()
   return cmp.mapping(function()
     if cmp.visible() then
@@ -44,7 +45,7 @@ function M.toggle_completion()
     else
       cmp.complete()
     end
-  end)
+  end, opts.modes)
 end
 
 function M.luasnip_jump_forward()
