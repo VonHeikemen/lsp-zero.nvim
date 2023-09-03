@@ -1,3 +1,12 @@
+if vim.g.loaded_lsp_zero == nil then
+  require('lsp-zero.setup')
+end
+
+vim.api.nvim_exec_autocmds('User', {
+  pattern = 'LspZeroExtendPlugin',
+  modeline = false
+})
+
 local noop = function() end
 
 local M = {}
@@ -26,29 +35,6 @@ end
 
 function M.extend_lspconfig()
   require('lsp-zero.server').extend_lspconfig()
-end
-
-function M.preset(opts)
-  opts = opts or {}
-
-  s.setup_lspconfig = false
-
-  if opts.extend_lspconfig == nil then
-    opts.extend_lspconfig = true
-  end
-
-  require('lsp-zero.ui').setup({
-    float_border = opts.float_border,
-    set_signcolumn = opts.set_signcolumn,
-  })
-
-  local Server = require('lsp-zero.server')
-
-  if opts.extend_lspconfig then
-    Server.extend_lspconfig()
-  end
-
-  return M
 end
 
 function M.setup_servers(list, opts)
@@ -244,17 +230,17 @@ M.set_preferences = noop
 M.defaults = {}
 
 function M.defaults.cmp_config(opts)
-  local config = require('lsp-zero.cmp').get_config({
-    set_lsp_source = true,
-    set_mappings = true,
-  })
-
-  return vim.tbl_deep_extend('force', config, opts or {})
+  local defaults = require('lsp-zero.cmp').base_config()
+  return vim.tbl_deep_extend('force', defaults, opts or {})
 end
 
 function M.defaults.cmp_mappings(opts)
   local defaults = require('lsp-zero.cmp').basic_mappings()
   return vim.tbl_deep_extend('force', defaults, opts or {})
+end
+
+function M.preset(opts)
+  return M
 end
 
 function M.ensure_installed()
@@ -280,6 +266,16 @@ function M.nvim_workspace()
   local msg = '[lsp-zero] The function .nvim_workspace() has been removed.\n'
     .. 'Learn how to configure lua_ls reading the guide in the help page\n'
     .. ':help lsp-zero-guide:lua-lsp-for-neovim\n\n'
+  notify(msg)
+end
+
+function M.new_server(opts)
+  local msg = '[lsp-zero] The function .new_server() has been renamed to .new_client().'
+  
+  if opts.name then
+    msg = msg .. '\nUse .new_client() to configure ' .. opts.name
+  end
+
   notify(msg)
 end
 

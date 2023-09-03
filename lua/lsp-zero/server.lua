@@ -1,6 +1,7 @@
 local M = {
-  default_config = false,
   common_attach = nil,
+  has_lspconfig = false,
+  default_config = false,
 }
 
 local s = {}
@@ -10,15 +11,18 @@ local state = {
   autocmd = false,
   capabilities = nil,
   set_omnifunc = false,
-  has_lspconfig = false,
   extend_lspconfig = false,
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
 function M.attach(client, bufnr)
+  if client == nil then
+    return
+  end
+
   local prev_clients = vim.b.lsp_zero_clients or {}
 
-  if client == nil or vim.tbl_contains(prev_clients, client.id) then
+  if vim.tbl_contains(prev_clients, client.id) then
     return
   else
     table.insert(prev_clients, client.id)
@@ -40,15 +44,6 @@ function M.extend_lspconfig()
   if state.extend_lspconfig then
     return
   end
-
-  local lsp_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
-  state.has_lspconfig = #lsp_txt > 0
-
-  if state.has_lspconfig == false then
-    return
-  end
-
-  M.set_global_commands()
 
   local util = require('lspconfig.util')
 
@@ -102,18 +97,6 @@ end
 function M.set_default_capabilities(opts)
   local defaults = require('lspconfig').util.default_config
   defaults.capabilities = s.set_capabilities(opts)
-end
-
-function M.set_global_commands()
-  local command = vim.api.nvim_create_user_command
-
-  command('LspZeroWorkspaceAdd', 'lua vim.lsp.buf.add_workspace_folder()', {})
-
-  command(
-    'LspZeroWorkspaceList',
-    'lua vim.notify(vim.inspect(vim.lsp.buf.list_workspace_folders()))',
-    {}
-  )
 end
 
 function M.default_keymaps(opts)
@@ -326,7 +309,7 @@ function s.set_capabilities(current)
     local cmp_default_capabilities = {}
     local base = {}
 
-    if state.has_lspconfig then
+    if M.has_lspconfig then
       base = require('lspconfig.util').default_config.capabilities
     else
       base = vim.lsp.protocol.make_client_capabilities()
