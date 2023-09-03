@@ -1,4 +1,5 @@
 local M = {
+  setup_done = false,
   common_attach = nil,
   has_lspconfig = false,
   default_config = false,
@@ -41,7 +42,7 @@ function M.attach(client, bufnr)
 end
 
 function M.extend_lspconfig()
-  if state.extend_lspconfig then
+  if M.setup_done then
     return
   end
 
@@ -60,7 +61,7 @@ function M.extend_lspconfig()
     end
   end)
 
-  state.extend_lspconfig = true
+  M.setup_done = true
 end
 
 function M.setup(name, opts)
