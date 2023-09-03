@@ -1158,12 +1158,9 @@ If you used |mason-lspconfig.nvim| to setup your language servers, add
 
 Customize nvim-cmp
 
-To setup a basic working config for nvim-cmp you can use the function
-|lsp-zero.extend_cmp()|. And after that you can call the setup function of the
-`cmp` module. Here is a quick example.
+To configure nvim-cmp you can use you can call the setup function of the `cmp`
+module. Here is a quick example.
 >lua
-  require('lsp-zero').extend_cmp()
-
   local cmp = require('cmp')
   local cmp_action = require('lsp-zero').cmp_action()
 
@@ -1178,7 +1175,7 @@ To setup a basic working config for nvim-cmp you can use the function
       ['<C-b>'] = cmp_action.luasnip_jump_backward(),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    })
+    }),
   })
 <
 When configuring the `sources` option make sure to add the source for the LSP
