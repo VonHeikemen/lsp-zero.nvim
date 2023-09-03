@@ -8,9 +8,9 @@ If you have any question about a feature or configuration feel free to open a ne
 
 Hello there. This is the development branch for version 3 of lsp-zero.
 
-This version requires Neovim v0.8 or greater. If have Neovim v0.7.2 or lower please use the [v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v1.x).
-
 ## How to get started
+
+This version requires Neovim v0.8 or greater. If you need support for Neovim v0.7 use the [compat-07 branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
 
 If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/tutorial.md).
 
