@@ -132,7 +132,7 @@ For more details on how to use mason.nvim with lsp-zero [read this guide](https:
 
 ## Configure language servers
 
-To pass arguments to a language server you can use the lspconfig directly. Just make sure you call lspconfig after the call to [.preset()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#presetopts).
+To pass arguments to a language server you can use the lspconfig directly.
 
 ```lua
 local lsp_zero = require('lsp-zero')

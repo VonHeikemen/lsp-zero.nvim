@@ -217,7 +217,7 @@ Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 
 vim.call('plug#end')
 
-local lsp_zero = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
