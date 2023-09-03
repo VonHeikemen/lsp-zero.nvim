@@ -44,40 +44,40 @@ Assuming everything went well, you can delete the message.
 
 > Note: We don't **need** a plugin manager but they make our lives easier.
 
-To download plugins we are going to use `packer`, only because is still compatible with Neovim v0.7.
+To download plugins we are going to use [vim-plug](https://github.com/junegunn/vim-plug), only because is still compatible with Neovim v0.7.
 
-Go to packer.nvim's github repo, in the [quickstart section](https://github.com/wbthomason/packer.nvim#quickstart), grab the `git clone` command for your operating system, then execute it in your terminal. I'll use the linux one:
+Go to vim-plug's github repo, in the [Installation section](https://github.com/junegunn/vim-plug#neovim), grab the command for your operating system, then execute it in your terminal. I'll use the linux one:
 
 ```sh
-git clone --depth 1 https://github.com/wbthomason/packer.nvim\
- ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+sh -c 'curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs \
+       https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 ```
 
 Now we return to our `init.lua`. At the end of the file we add.
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
-end)
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
+
+vim.call('plug#end')
 ```
 
 ## Adding a new plugin
 
-Now let's use packer for real this time. We are going to test it with a plugin called [onedark.vim](https://github.com/joshdick/onedark.vim), this is a colorscheme that will make Neovim look pretty.
+Now let's use vim-plug for real this time. We are going to test it with a plugin called [onedark.vim](https://github.com/joshdick/onedark.vim), this is a colorscheme that will make Neovim look pretty.
 
 Ready? We are going to follow these steps.
 
-1. Add the plugin in packer's startup function.
+1. Add the plugin to vim-plug's list. Use the `Plug` function in between the `vim.call` functions.
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-  -- Colorscheme
-  use {'joshdick/onedark.vim'}
-end)
+-- Colorscheme
+Plug('joshdick/onedark.vim')
+
+vim.call('plug#end')
 ```
 
 2. Call the new colorscheme at the end of the `init.lua` file.
@@ -91,31 +91,32 @@ vim.cmd('colorscheme onedark')
 
 4. Execute your configuration using the command `:source %`.
 
-5. Install the plugin using the command `:PackerSync`
+5. Install the plugin using the command `:PlugInstall`
 
 6. Restart Neovim.
 
 ## Setup lsp-zero
 
-We need to add lsp-zero and all its dependencies in packer's plugins list.
+We need to add lsp-zero and all its dependencies in vim-plug's list.
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-  -- Colorscheme
-  use {'joshdick/onedark.vim'}
+-- Colorscheme
+Plug('joshdick/onedark.vim')
 
-  -- LSP Support
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
-  use {'neovim/nvim-lspconfig'}
-  use {'hrsh7th/cmp-nvim-lsp'}
+-- LSP Support
+Plug('neovim/nvim-lspconfig')
+Plug('hrsh7th/cmp-nvim-lsp')
 
-  -- Autocompletion
-  use {'hrsh7th/nvim-cmp'}
-  use {'L3MON4D3/LuaSnip'}
-end)
+-- Autocompletion
+Plug('hrsh7th/nvim-cmp')
+Plug('L3MON4D3/LuaSnip')
+
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
+
+vim.call('plug#end')
 ```
 
 Save the file, "source" it, install the plugins and restart Neovim.
@@ -172,7 +173,7 @@ require('lspconfig').tsserver.setup({
 })
 ```
 
-Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#setup_serverslist-opts).
+Now, if none of your language server need a special config you can use the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#setup_serverslist-opts).
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -188,9 +189,9 @@ lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 #### Local installation with mason.nvim
 
-There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described a portable package manager. This plugin will allow Neovim to download language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
+There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described as a portable package manager. This plugin will allow Neovim to download language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
 
-> Note: mason.nvim doesn't provide any "special integration" to the tools it downloads. It's only good for installing and updating tools.
+> Note: mason.nvim doesn't provide any "special integration" with the tools it downloads. It's only good for installing and updating tools.
 
 Anyway, if you choose this method you will need to add these two plugins:
 
@@ -198,24 +199,24 @@ Anyway, if you choose this method you will need to add these two plugins:
 * `williamboman/mason-lspconfig.nvim`
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-  -- Colorscheme
-  use {'joshdick/onedark.vim'}
+-- Colorscheme
+Plug('joshdick/onedark.vim')
 
-  -- LSP Support
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
-  use {'neovim/nvim-lspconfig'}
-  use {'hrsh7th/cmp-nvim-lsp'}
-  use {'williamboman/mason.nvim'}
-  use {'williamboman/mason-lspconfig.nvim'}
+-- LSP Support
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
+Plug('neovim/nvim-lspconfig')
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('williamboman/mason.nvim')
+Plug('williamboman/mason-lspconfig.nvim')
 
-  -- Autocompletion
-  use {'hrsh7th/nvim-cmp'}
-  use {'L3MON4D3/LuaSnip'}
-end)
+-- Autocompletion
+Plug('hrsh7th/nvim-cmp')
+Plug('L3MON4D3/LuaSnip')
+
+vim.call('plug#end')
 ```
 
 Install the new plugins and restart Neovim.
@@ -304,22 +305,22 @@ require('lspconfig').lua_ls.setup(
 <summary>Expand: manual setup of LSP servers </summary>
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-  -- Colorscheme
-  use {'joshdick/onedark.vim'}
+-- Colorscheme
+Plug('joshdick/onedark.vim')
 
-  -- LSP Support
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
-  use {'neovim/nvim-lspconfig'}
-  use {'hrsh7th/cmp-nvim-lsp'}
+-- LSP Support
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
+Plug('neovim/nvim-lspconfig')
+Plug('hrsh7th/cmp-nvim-lsp')
 
-  -- Autocompletion
-  use {'hrsh7th/nvim-cmp'}
-  use {'L3MON4D3/LuaSnip'}
-end)
+-- Autocompletion
+Plug('hrsh7th/nvim-cmp')
+Plug('L3MON4D3/LuaSnip')
+
+vim.call('plug#end')
 
 -- Set colorscheme
 vim.opt.termguicolors = true
@@ -348,24 +349,24 @@ require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 <summary>Expand: automatic setup of LSP servers </summary>
 
 ```lua
-require('packer').startup(function(use)
-  -- Packer can manage itself
-  use {'wbthomason/packer.nvim'}
+local Plug = vim.fn['plug#']
+vim.call('plug#begin')
 
-  -- Colorscheme
-  use {'joshdick/onedark.vim'}
+-- Colorscheme
+Plug('joshdick/onedark.vim')
 
-  -- LSP Support
-  use {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'}
-  use {'neovim/nvim-lspconfig'}
-  use {'hrsh7th/cmp-nvim-lsp'}
-  use {'williamboman/mason.nvim'}
-  use {'williamboman/mason-lspconfig.nvim'}
+-- LSP Support
+Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
+Plug('neovim/nvim-lspconfig')
+Plug('hrsh7th/cmp-nvim-lsp')
+Plug('williamboman/mason.nvim')
+Plug('williamboman/mason-lspconfig.nvim')
 
-  -- Autocompletion
-  use {'hrsh7th/nvim-cmp'}
-  use {'L3MON4D3/LuaSnip'}
-end)
+-- Autocompletion
+Plug('hrsh7th/nvim-cmp')
+Plug('L3MON4D3/LuaSnip')
+
+vim.call('plug#end')
 
 -- Set colorscheme
 vim.opt.termguicolors = true
