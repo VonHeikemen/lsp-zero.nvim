@@ -203,7 +203,9 @@ end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  handlers = {lsp_zero.default_setup},
+  handlers = {
+    lsp_zero.default_setup,
+  },
 })
 ```
 
