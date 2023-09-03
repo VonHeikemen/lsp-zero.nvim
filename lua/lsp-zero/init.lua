@@ -34,7 +34,26 @@ function M.extend_cmp(opts)
 end
 
 function M.extend_lspconfig()
-  require('lsp-zero.server').extend_lspconfig()
+  local Server = require('lsp-zero.server')
+
+  if Server.setup_done then
+    return
+  end
+
+  local configs = require('lspconfig.configs')
+
+  if #vim.tbl_keys(configs) > 0 then
+    local msg = '[lsp-zero] Some language servers have been configured before\n'
+     .. 'you called the function .extened_lspconfig().\n\n'
+     .. 'Solution: Go to the place where you use lspconfig for the first time.\n'
+     .. 'Call the .extend_lspconfig() function before you setup the language server'
+
+     vim.notify(msg, vim.log.levels.WARN)
+     return
+   end
+
+  Server.has_lspconfig = true
+  Server.extend_lspconfig()
 end
 
 function M.setup_servers(list, opts)
