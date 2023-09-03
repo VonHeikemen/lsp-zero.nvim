@@ -207,7 +207,7 @@ vim.api.nvim_create_autocmd('FileType', {
 
 ## Setup with haskell-tools
 
-Here you need to disable the automatic configuration for `hls` and then setup [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) after lsp-zero.
+Here you need to disable the automatic configuration for `hls` and then setup [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) after lsp-zero. Note these instructions are for haskell-tools version 2 (from the branch `2.x.x`).
 
 The only option that makes sense to share from lsp-zero is the "capabilities" options.
 
@@ -225,21 +225,11 @@ lsp.setup()
 ---
 -- Setup haskell LSP
 ---
-local haskell_tools = require('haskell-tools')
 local hls_lsp = require('lsp-zero').build_options('hls', {})
 
-local hls_config = {
+vim.g.haskell_tools = {
   hls = {
     capabilities = hls_lsp.capabilities,
-    on_attach = function(client, bufnr)
-      local opts = {buffer = bufnr}
-
-      -- haskell-language-server relies heavily on codeLenses,
-      -- so auto-refresh (see advanced configuration) is enabled by default
-      vim.keymap.set('n', '<leader>ca', vim.lsp.codelens.run, opts)
-      vim.keymap.set('n', '<leader>hs', haskell_tools.hoogle.hoogle_signature, opts)
-      vim.keymap.set('n', '<leader>ea', haskell_tools.lsp.buf_eval_all, opts)
-    end
   }
 }
 
@@ -249,40 +239,29 @@ vim.api.nvim_create_autocmd('FileType', {
   group = hls_augroup,
   pattern = {'haskell'},
   callback = function()
-    haskell_tools.start_or_attach(hls_config)
-
     ---
-    -- Suggested keymaps that do not depend on haskell-language-server:
+    -- Suggested keymaps from the quick setup section:
+    -- https://github.com/mrcjkb/haskell-tools.nvim#quick-setup
     ---
 
+    local ht = require('haskell-tools')
+    local bufnr = vim.api.nvim_get_current_buf()
+    local def_opts = { noremap = true, silent = true, buffer = bufnr, }
+    -- haskell-language-server relies heavily on codeLenses,
+    -- so auto-refresh (see advanced configuration) is enabled by default
+    vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
+    -- Hoogle search for the type signature of the definition under the cursor
+    vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
+    -- Evaluate all code snippets
+    vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
     -- Toggle a GHCi repl for the current package
-    vim.keymap.set('n', '<leader>rr', haskell_tools.repl.toggle, opts)
-
+    vim.keymap.set('n', '<leader>rr', ht.repl.toggle, opts)
     -- Toggle a GHCi repl for the current buffer
     vim.keymap.set('n', '<leader>rf', function()
-      haskell_tools.repl.toggle(vim.api.nvim_buf_get_name(0))
+      ht.repl.toggle(vim.api.nvim_buf_get_name(0))
     end, def_opts)
-
-    vim.keymap.set('n', '<leader>rq', haskell_tools.repl.quit, opts)
+    vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
   end
 })
-```
-
-### Setup with clangd_extensions.nvim
-
-[clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is tell lsp-zero to ignore the `clangd` server.
-
-```lua
-local lsp = require('lsp-zero').preset({})
-
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
-end)
-
-lsp.skip_server_setup({'clangd'})
-
-lsp.setup()
-
-require('clangd_extensions').setup()
 ```
 
