@@ -173,6 +173,8 @@ end
 
 function M.client_capabilities()
   if state.capabilities == nil then
+    local doc_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
+    M.has_lspconfig = #doc_txt > 0
     return s.set_capabilities()
   end
 
