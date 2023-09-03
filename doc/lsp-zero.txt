@@ -1,7 +1,7 @@
 ==============================================================================
 *lsp-zero.txt*
 
-A starting point to setup some lsp related features in neovim.
+A starting point to setup some LSP related features in neovim.
 
 ==============================================================================
 Introduction                                                  *lsp-zero-intro*
@@ -19,19 +19,17 @@ the basic features of the autocompletion plugin.
 
 Here is a basic configuration to get started.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp_zero = require('lsp-zero')
 
-  lsp.extend_cmp()
-
-  lsp.on_attach(function(client, bufnr)
+  lsp_zero.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
-    lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.default_keymaps({buffer = bufnr})
   end)
 
   -- Replace the language servers listed here
   -- with the ones you have installed
-  lsp.setup_servers({'tsserver', 'rust_analyzer'})
+  lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
 Note that you will need to install a language server for this to work. You can
 access the list of supported language servers using this command:
@@ -47,8 +45,7 @@ is that we have to assemble various pieces to get the behavior we want.
 
                                              *lsp-zero-completion-keybindings*
 
-When you enable `set_mappings` in the function |lsp-zero.extend_cmp()|
-lsp-zero creates the following keybindings.
+This are the keybindings lsp-zero enables by default.
 
     <Ctrl-y>: ~
         Confirms selection.
@@ -69,12 +66,6 @@ lsp-zero creates the following keybindings.
     <Ctrl-n>: ~
         If the completion menu is visible, go to the next item.
         Else, trigger completion menu.
-
-    <Ctrl-u>: ~
-        Scroll up in the item's documentation.
-
-    <Ctrl-d>: ~
-        Scroll down in the item's documentation.
 
 ==============================================================================
 LSP                                                      *lsp-zero-lsp-config*
@@ -142,9 +133,9 @@ LspZeroSetupServers [{server}]: ~
 
                                                         *lsp-zero-keybindings*
 
-When a language server gets attached to a buffer you gain access to some
-keybindings and commands. All of these are bound to a built-in function
-so you can get more details using the `:help` command.
+If you choose to use the function |lsp-zero.default_keymaps()|, you gain
+access to some keybindings. All of these are bound to a built-in
+function so you can get more details using the `:help` command.
 
 K: ~
     Displays hover information about the symbol under the cursor in a
@@ -194,34 +185,44 @@ gl: ~
     Move to the next diagnostic. See |vim.diagnostic.goto_next()|.
 
 ==============================================================================
+Global variables                                   *lsp-zero-global-variables*
+
+lsp_zero_extend_cmp: ~
+    When set to `0` then lsp-zero will not integrate with nvim-cmp
+    automatically.
+
+lsp_zero_extend_lspconfig: ~
+    When set to `0` then lsp-zero will not integrate with lspconfig
+    automatically.
+
+lsp_zero_ui_float_border: ~
+    Set the style of border of diagnostic floating window, hover window and
+    signature help window. Can have one of these: `'none'`, `'single'`,
+    `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is
+    `'rounded'`. If set to `0` then lsp-zero will not configure the border
+    style.
+
+lsp_zero_ui_signcolumn: ~
+    When set to `0` the lsp-zero will not configure the space in the gutter
+    for diagnostics.
+
+lsp_zero_api_warnings: ~
+    When set to `0` it will supress the warning messages from deprecated
+    functions. (Note: if you get one of those warnings, know that showing that
+    message is the only thing they do. They are "empty" functions.)
+
+Now, when I say global variable I mean a vim global variable. So to modify
+them from lua you would do something like this
+>lua
+  vim.g.lsp_zero_extend_lspconfig = 0
+<
+But if you are using vimscript, you can do something like this
+>vim
+  let g:lsp_zero_extend_lspconfig = 0
+<
+==============================================================================
 Lua API                                                     *lsp-zero-lua-api*
 
-                                                           *lsp-zero.preset()*
-
-preset({opts}): ~
-    Here is where you can add settings specific to lsp-zero.
-
-    The {opts} table supports the following properties.
-
-        • float_border: (String, Optional) Defaults to `'rounded'`. Can have one
-        of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or
-        `'shadow'`.
-
-        • set_signcolumn: (Boolean, Optional) Defaults to `true`. When set to
-        `true` it will reserve a space in the gutter for the diagnostic signs.
-
-        • extend_lspconfig: (Boolean, Optional) Defaults to `true`. When set
-        to `true` it will integrate nvim-cmp with lspconfig.
-    
-    Note that the return value is the same as the module `lsp-zero`, so this
-    is valid (and encouraged).
->lua
-    local lsp = require('lsp-zero').preset({
-      float_border = 'rounded',
-      set_signcolumn = true,
-      extend_lspconfig = true,
-    })
-<
                                                         *lsp-zero.on_attach()*
 
 on_attach({callback}): ~
@@ -230,21 +231,18 @@ on_attach({callback}): ~
 
     This is the place where you can create your own keybindings.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
+    lsp_zero.on_attach(function(client, bufnr)
+      local opts = {buffer = bufnr}
 
-    lsp.on_attach(function(client, bufnr)
-      local noremap = {buffer = bufnr}
-      local bind = vim.keymap.set
-
-      bind('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
+      vim.keymap.set('n', '<leader>r', '<cmd>lua vim.lsp.buf.rename()<cr>', noremap)
       -- more code  ...
     end)
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                   *lsp-zero.default_keymaps()*
 
@@ -266,17 +264,15 @@ default_keymaps({opts}): ~
     The best place to add this function is the callback of
     |lsp-zero.on_attach()|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                 *lsp-zero.set_server_config()*
 
@@ -284,21 +280,19 @@ set_server_config({opts}): ~
     Share a configuration for all LSP servers configured with |lspconfig|.
     You can find more details about {opts} see |lspconfig-setup|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.set_server_config({
+    lsp_zero.set_server_config({
       single_file_support = false,
     })
 
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                         *lsp-zero.configure()*
 
@@ -307,15 +301,13 @@ configure({name}, {opts}): ~
     language server. Takes the same options as `nvim-lspconfig`'s
     setup function. For more details go to |lspconfig-setup|.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.configure('tsserver', {
+    lsp_zero.configure('tsserver', {
       single_file_support = false,
       on_attach = function(client, bufnr)
         print('hello tsserver')
@@ -335,17 +327,15 @@ setup_servers({list}): ~
     Note: for this to work all the language server must be installed in your
     system.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                    *lsp-zero.default_setup()*
 
@@ -356,17 +346,17 @@ default_setup({server}): ~
     configure automatic setup of language servers. It can be added as a
     default handler in the setup function of the module `mason-lspconfig`.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('mason').setup({})
     require('mason-lspconfig').setup({
-      handlers = {lsp.default_setup},
+      handlers = {
+        lsp_zero.default_setup,
+      },
     })
 <
                                                             *lsp-zero.noop()*
@@ -377,20 +367,18 @@ noop(): ~
     You can use think of this as "empty handler" for |mason-lspconfig.nvim|.
     Consider this example.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('mason').setup({})
     require('mason-lspconfig').setup({
       ensure_installed = {'tsserver', 'eslint', 'jdtls'},
       handlers = {
-        lsp.default_setup,
-        jdtls = lsp.noop,
+        lsp_zero.default_setup,
+        jdtls = lsp_zero.noop,
       },
     })
 <
@@ -422,18 +410,18 @@ attach({client}, {bufnr}): ~
 
     Here is an example using the plugin `flutter-tools`.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
     
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('flutter-tools').setup({
       lsp = {
         on_attach = function(client, bufnr)
-          lsp.attach(client, bufnr)
+          lsp_zero.attach(client, bufnr)
         end,
-        capabilities = lsp.get_capabilities(),
+        capabilities = lsp_zero.get_capabilities(),
       }
     })
 <
@@ -464,15 +452,13 @@ use({name}, {opts}): ~
 >lua
     -- init.lua
 
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.configure('pyright', {
+    lsp_zero.configure('pyright', {
       single_file_support = false,
     })
 <
@@ -480,9 +466,9 @@ use({name}, {opts}): ~
 >lua
     -- local config
 
-    local lsp = require('lsp-zero')
+    local lsp_zero = require('lsp-zero')
 
-    lsp.use('pyright', {
+    lsp_zero.use('pyright', {
       settings = {
         python = {
           analysis = {
@@ -505,15 +491,13 @@ nvim_lua_ls({opts}): ~
     If you provide the {opts} table it'll merge it with the defaults,
     this way you can extend or change the values easily.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+    require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 <
                                                    *lsp-zero.format_on_save()*
 format_on_save({opts}): ~
@@ -547,15 +531,13 @@ format_on_save({opts}): ~
     will have any effect are `formatting_options` and `timeout_ms`, the rest
     will be ignored.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.format_on_save({
+    lsp_zero.format_on_save({
       format_opts = {
         async = false,
         timeout_ms = 10000,
@@ -568,7 +550,7 @@ format_on_save({opts}): ~
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                *lsp-zero.buffer_autoformat()*
 
@@ -593,18 +575,16 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
         server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
-      lsp.buffer_autoformat()
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
+      lsp_zero.buffer_autoformat()
     end)
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                *lsp-zero.async_autoformat()*
 
@@ -636,23 +616,21 @@ async_autoformat({client}, {bufnr}, {opts}): ~
 
     Here is an example.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('lspconfig').tsserver.setup({
       on_attach = function(client, bufnr)
-        lsp.async_autoformat(client, bufnr)
+        lsp_zero.async_autoformat(client, bufnr)
       end
     })
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'rust_analyzer'})
+    lsp_zero.setup_servers({'rust_analyzer'})
 <
                                                    *lsp-zero.format_mapping()*
 format_mapping({key}, {opts}): ~
@@ -686,15 +664,13 @@ format_mapping({key}, {opts}): ~
             server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.format_mapping('gq', {
+    lsp_zero.format_mapping('gq', {
       format_opts = {
         async = false,
         timeout_ms = 10000,
@@ -707,7 +683,7 @@ format_mapping({key}, {opts}): ~
 
     -- Replace the language servers listed here
     -- with the ones you have installed
-    lsp.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 <
                                                    *lsp-zero.set_sign_icons()*
 
@@ -726,9 +702,9 @@ set_sign_icons({opts}): ~
 
     Here is an example with basic icons (doesn't require a nerd fonts).
 >lua
-    local lsp = require('lsp-zero')
+    local lsp_zero = require('lsp-zero')
 
-    lsp.set_sign_icons({
+    lsp_zero.set_sign_icons({
       error = '✘',
       warn = '▲',
       hint = '⚑',
@@ -770,20 +746,18 @@ new_client({opts}): ~
     javascript and typescript, but only in a project that package.json
     in the current directory or any of its parent folders.
 >lua
-    local lsp = require('lsp-zero')
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function()
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function()
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
-    lsp.new_client({
+    lsp_zero.new_client({
       name = 'tsserver',
       cmd = {'typescript-language-server', '--stdio'},
       filetypes = {'javascript', 'typescript'},
       root_dir = function()
-        return lsp.dir.find_first({'package.json'})
+        return lsp_zero.dir.find_first({'package.json'})
       end
     })
 <
@@ -803,19 +777,17 @@ dir.find_first({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('lspconfig').lua_ls.setup({
       root_dir = function()
         --- project root will be the first directory that has
         --- either .luarc.json or .stylua.toml
-        return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+        return lsp_zero.dir.find_first({'.luarc.json', '.stylua.toml'})
       end
     })
 <
@@ -835,23 +807,20 @@ dir.find_all({list}): ~
 
     Note: search will stop once it gets to your "HOME" folder.
 >lua
-    local lsp = require('lsp-zero').preset({})
+    local lsp_zero = require('lsp-zero')
 
-    lsp.extend_cmp()
-
-    lsp.on_attach(function(client, bufnr)
-      lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
     end)
 
     require('lspconfig').lua_ls.setup({
       root_dir = function()
         --- project root will be the first directory that has
-        --- either .luarc.json or .stylua.toml
-        return lsp.dir.find_first({'.luarc.json', '.stylua.toml'})
+        --- .luarc.json and .stylua.toml
+        return lsp_zero.dir.find_all({'.luarc.json', '.stylua.toml'})
       end
     })
 <
-
                                                  *lsp-zero.extend_lspconfig()*
 
 extend_lspconfig(): ~
@@ -914,6 +883,19 @@ cmp_action(): ~
     Quick note: "the fallback" is the default behavior of the key
     you assign to a method.
 
+                                                       *lsp-zero.cmp_format()*
+
+cmp_format(): ~
+    When used the completion items will show a label that identifies the
+    source they come from.
+>lua
+    local cmp = require('cmp')
+    local cmp_format = require('lsp-zero').cmp_format()
+
+    cmp.setup({
+      formatting = cmp_format
+    })
+<
                                                        *lsp-zero.extend_cmp()*
 
 extend_cmp({opts}): ~
@@ -932,14 +914,6 @@ extend_cmp({opts}): ~
         will setup luasnip to expand snippets. This option does not include a
         collection of snippets.
 
-        • set_format: (Boolean, Optional) Defaults to `true`. When enabled it
-        will the completion items will show a label that identifies the source
-        they come from. 
-
-        • documentation_window: (Boolean, Optional) Defaults to `true`. When
-        enabled it will configure the max height and width of the
-        documentation window.
-
     After you use this function you can customize nvim-cmp using the module
     `cmp`. Here is an example that adds some keybindings.
 >lua
@@ -949,11 +923,13 @@ extend_cmp({opts}): ~
     local cmp_action = require('lsp-zero').cmp_action()
 
     cmp.setup({
-      mapping = {
+      mapping = cmp.mapping.preset.insert({
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-f>'] = cmp_action.luasnip_jump_forward(),
         ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-      }
+        ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+        ['<C-d>'] = cmp.mapping.scroll_docs(4),
+      })
     })
 <
                                                    *lsp-zero.omnifunc.setup()*
@@ -1029,9 +1005,9 @@ extend_cmp({opts}): ~
 
     You can configure a basic "tab completion" behavior using these settings.
 >lua
-    local lsp = require('lsp-zero')
+    local lsp_zero = require('lsp-zero')
 
-    lsp.omnifunc.setup({
+    lsp_zero.omnifunc.setup({
       tabcomplete = true,
       use_fallback = true,
       update_on_delete = true,
@@ -1039,9 +1015,9 @@ extend_cmp({opts}): ~
 <
     And here is an example for autocomplete.
 >lua
-    local lsp = require('lsp-zero')
+    local lsp_zero = require('lsp-zero')
 
-    lsp.omnifunc.setup({
+    lsp_zero.omnifunc.setup({
       autocomplete = true,
       use_fallback = true,
       update_on_delete = true,
@@ -1061,22 +1037,22 @@ the automatic configuration.
 
 Here is a basic example.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp_zero = require('lsp-zero')
 
-  lsp.on_attach(function(client, bufnr)
+  lsp_zero.on_attach(function(client, bufnr)
     -- see :help lsp-zero-keybindings
     -- to learn the available actions
-    lsp.default_keymaps({buffer = bufnr})
+    lsp_zero.default_keymaps({buffer = bufnr})
   end)
-
-  lsp.extend_cmp()
 
   require('mason').setup({})
   require('mason-lspconfig').setup({
     -- Replace the language servers listed here 
     -- with the ones you want to install
     ensure_installed = {'tsserver', 'rust_analyzer'},
-    handlers = {lsp.default_setup},
+    handlers = {
+      lsp_zero.default_setup,
+    },
   })
 <
 
@@ -1097,7 +1073,7 @@ Lets use `tsserver` as an example.
   require('mason-lspconfig').setup({
     ensure_installed = {'tsserver', 'rust_analyzer'},
     handlers = {
-      lsp.default_setup,
+      lsp_zero.default_setup,
       tsserver = function()
         require('lspconfig').tsserver.setup({
           settings = {
@@ -1119,8 +1095,8 @@ function |lsp-zero.noop()|.
   require('mason-lspconfig').setup({
     ensure_installed = {'tsserver', 'rust_analyzer'},
     handlers = {
-      lsp.default_setup,
-      tsserver = lsp.noop,
+      lsp_zero.default_setup,
+      tsserver = lsp_zero.noop,
     },
   })
 <
@@ -1147,14 +1123,10 @@ following config.
     "diagnostics.globals": ["vim"],
     "workspace.checkThirdParty": false,
     "workspace.library": [
-      "/usr/share/nvim/runtime/lua",
+      "$VIMRUNTIME",
       "./lua"
     ]
   }
-<
-The first path in the `workspace.library` property is the path to Neovim's
-runtime files. This might be different for you, so make sure to check using
-this command `:echo $VIMRUNTIME`
 
 • Fixed config
 
@@ -1162,24 +1134,22 @@ If your Neovim config is the only lua project you have in your system, use the
 function |lsp-zero.nvim_lua_ls()| to get the config and then setup `lua_ls`
 with lspconfig.
 >lua
-  local lsp = require('lsp-zero').preset({})
+  local lsp_zero = require('lsp-zero')
 
-  lsp.on_attach(function(client, bufnr)
-    lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.on_attach(function(client, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
   end)
 
-  lsp.extend_cmp()
-
-  require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+  require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 <
 If you used |mason-lspconfig.nvim| to setup your language servers, add
 `lua_ls` to your handlers config.
 >lua
   require('mason-lspconfig').setup({
     handlers = {
-      lsp.default_setup,
+      lsp_zero.default_setup,
       lua_ls = function()
-        require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+        require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
       end,
     },
   })
@@ -1202,18 +1172,18 @@ To setup a basic working config for nvim-cmp you can use the function
       completion = cmp.config.window.bordered(),
       documentation = cmp.config.window.bordered(),
     },
-    mapping = {
+    mapping = cmp.mapping.preset.insert({
       ['<C-Space>'] = cmp.mapping.complete(),
       ['<C-f>'] = cmp_action.luasnip_jump_forward(),
       ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-    }
+      ['<C-u>'] = cmp.mapping.scroll_docs(-4),
+      ['<C-d>'] = cmp.mapping.scroll_docs(4),
+    })
   })
 <
 When configuring the `sources` option make sure to add the source for the LSP
 completions.
 >lua
-  require('lsp-zero').extend_cmp()
-
   local cmp = require('cmp')
 
   cmp.setup({
@@ -1221,10 +1191,35 @@ completions.
       {name = 'nvim_lsp'},
     }
   })
-<
 
 Always include `{name = 'nvim_lsp'}` in your sources.
 
+                                         *lsp-zero-guide:fix-extend-lspconfig*
+
+Fix lspconfig error
+
+You are probably here because you got this error message:
+>
+  [lsp-zero] Some language servers have been configured before
+  lsp-zero could finish its initial setup. Some features may fail.
+<
+Here is the solution: First, go to the place where you use `lspconfig` for the
+first time. Then call this function before you setup the language server
+>lua
+  require('lsp-zero').extend_lspconfig()
+<
+If you want to ignore error and supress the message, you can set the global
+variable `lsp_zero_extend_lspconfig` to `0`. And do it before you require the
+module `lsp-zero`.
+
+This is how you do it using lua.
+>lua
+  vim.g.lsp_zero_extend_lspconfig = 0
+<
+Or if you prefer vimscript.
+>vim
+  let g:lsp_zero_extend_lspconfig = 0
+<
 ==============================================================================
 Version                                                     *lsp-zero-version*
 

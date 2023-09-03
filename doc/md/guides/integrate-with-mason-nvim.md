@@ -5,20 +5,20 @@ We can use [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-l
 Here is a basic example.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
-
-lsp.extend_cmp()
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here 
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
-  handlers = {lsp.default_setup},
+  handlers = {
+    lsp_zero.default_setup,
+  },
 })
 ```
 
@@ -36,7 +36,7 @@ Lets use `tsserver` as an example.
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp.default_setup,
+    lsp_zero.default_setup,
     tsserver = function()
       require('lspconfig').tsserver.setup({
         settings = {
@@ -60,8 +60,8 @@ If we want to ignore a language server we can use the function [.noop()](https:/
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp.default_setup,
-    tsserver = lsp.noop,
+    lsp_zero.default_setup,
+    tsserver = lsp_zero.noop,
   },
 })
 ```

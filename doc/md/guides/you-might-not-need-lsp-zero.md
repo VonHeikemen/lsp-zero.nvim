@@ -45,14 +45,14 @@ lsp_defaults.on_attach = function(client, bufnr)
   vim.keymap.set('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', opts) 
 end
 
-local default_setup = function(server)
-  lspconfig[server].setup({})
-end
-
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
-  handlers = {default_setup},
+  handlers = {
+    function(server)
+      lspconfig[server].setup({})
+    end,
+  },
 })
 
 local cmp = require('cmp')

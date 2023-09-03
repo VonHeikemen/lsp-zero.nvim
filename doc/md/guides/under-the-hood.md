@@ -3,17 +3,15 @@ I realize some people would want to know what happens under the hood when they u
 Okay, so this thing.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.on_attach(function(client, bufnr)
-  lsp.default_keymaps({buffer = bufnr})
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
 -- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
-
-lsp.extend_cmp()
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 Will turn into something very close to this.
@@ -115,7 +113,6 @@ require('lspconfig').rust_analyzer.setup({})
 ---
 
 local cmp = require('cmp')
-local cmp_select_opts = {behavior = cmp.SelectBehavior.Select}
 
 local cmp_config = {
   sources = {
@@ -123,24 +120,20 @@ local cmp_config = {
   },
   mapping = {
     -- confirm selection
-    ['<C-y>'] = cmp.mapping.confirm({select = true}),
+    ['<C-y>'] = cmp.mapping.confirm({select = false}),
 
     -- cancel completion
     ['<C-e>'] = cmp.mapping.abort(),
 
-    -- scroll up and down in the completion documentation
-    ['<C-u>'] = cmp.mapping.scroll_docs(-5),
-    ['<C-d>'] = cmp.mapping.scroll_docs(5),
-
     -- navigate items on the list
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
 
     -- if completion menu is visible, go to the previous item
     -- else, trigger completion menu
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_prev_item(select_opts)
+        cmp.select_prev_item({behavior = 'insert'})
       else
         cmp.complete()
       end
@@ -150,7 +143,7 @@ local cmp_config = {
     -- else, trigger completion menu
     ['<C-n>'] = cmp.mapping(function()
       if cmp.visible() then
-        cmp.select_next_item(select_opts)
+        cmp.select_next_item({behavior = 'insert'})
       else
         cmp.complete()
       end
@@ -159,20 +152,6 @@ local cmp_config = {
   snippet = {
     expand = function(args)
       luasnip.lsp_expand(args.body)
-    end,
-  },
-  formatting = {
-    fields = {'abbr', 'menu', 'kind'},
-    format = function(entry, item)
-      local short_name = {
-        nvim_lsp = 'LSP',
-        nvim_lua = 'nvim'
-      }
-
-      local menu_name = short_name[entry.source.name] or entry.source.name
-
-      item.menu = string.format('[%s]', menu_name)
-      return item
     end,
   },
 }

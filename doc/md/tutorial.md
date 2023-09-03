@@ -123,14 +123,12 @@ Save the file, "source" it, install the plugins and restart Neovim.
 Now we can add the configuration of lsp-zero at the end of the file.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 ```
 
@@ -147,14 +145,12 @@ In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blo
 Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('lspconfig').tsserver.setup({})
@@ -179,17 +175,15 @@ require('lspconfig').tsserver.setup({
 Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#setup_serverslist-opts).
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 #### Local installation with mason.nvim
@@ -229,19 +223,19 @@ Install the new plugins and restart Neovim.
 `mason.nvim` will make sure we have access to the LSP servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
-  handlers = {lsp.default_setup},
+  handlers = {
+    lsp_zero.default_setup,
+  },
 })
 ```
 
@@ -275,18 +269,10 @@ We can add the following config to the `.luarc.json` file located in our Neovim 
   "diagnostics.globals": ["vim"],
   "workspace.checkThirdParty": false,
   "workspace.library": [
-    "/usr/share/nvim/runtime/lua",
+    "$VIMRUNTIME",
     "./lua"
   ]
 }
-```
-
-In the `workspace.library` property you can add the path to Neovim's runtime files and the path to your Neovim config folder.
-
-Note that Neovim's runtime folder could be in a different location, it really depends on how you installed Neovim. If you want to know what is the correct path to Neovim' runtime execute this command.
-
-```vim
-:echo $VIMRUNTIME
 ```
 
 * Fixed config
@@ -296,18 +282,14 @@ You should only use this method if your Neovim config is the only lua project yo
 lsp-zero has a function that returns a basic config for `lua_ls`, this is how you use it.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
-
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 ```
 
 If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
 
 ```lua
-local lsp = require('lsp-zero').preset({})
-
 require('lspconfig').lua_ls.setup(
-  lsp.nvim_lua_ls({
+  lsp_zero.nvim_lua_ls({
     single_file_support = false,
     on_attach = function(client, bufnr)
       print('hello world')
@@ -344,22 +326,20 @@ vim.opt.termguicolors = true
 vim.cmd('colorscheme onedark')
 
 -- LSP
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 -- Replace the language servers listed here
 -- with the ones you have installed
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 -- (Optional) configure lua language server
-require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
 ```
 
 </details>
@@ -392,23 +372,21 @@ vim.opt.termguicolors = true
 vim.cmd('colorscheme onedark')
 
 -- LSP
-local lsp = require('lsp-zero').preset({})
+local lsp_zero = require('lsp-zero')
 
-lsp.extend_cmp()
-
-lsp.on_attach(function(client, bufnr)
+lsp_zero.on_attach(function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
-  lsp.default_keymaps({buffer = bufnr})
+  lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp.default_setup,
+    lsp_zero.default_setup,
     lua_ls = function()
       -- (Optional) configure lua language server
-      require('lspconfig').lua_ls.setup(lsp.nvim_lua_ls())
+      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
     end,
   }
 })

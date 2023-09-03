@@ -56,7 +56,6 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/migrate-from-v1-branch.md)
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/under-the-hood.md)
   * [You might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/you-might-not-need-lsp-zero.md)
-  * [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/lazy-loading-with-lazy-nvim.md)
   * [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-mason-nvim.md)
   * [Integrate with null-ls](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-null-ls.md)
   * [Enable folds with nvim-ufo](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/quick-recipes.md#enable-folds-with-nvim-ufo)
@@ -78,41 +77,6 @@ This section will teach you how to create a basic configuration.
 ### Installing
 
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
-
-<details>
-<summary>Expand: lazy.nvim snippet </summary>
-
-Note: if you are using lazy nvim, you can use version `v3.x` of lsp-zero. There is no need to use this branch.
-
-For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/lazy-loading-with-lazy-nvim.md).
-
-```lua
-{
-  --- Uncomment these if you want to manage LSP servers from neovim
-  -- {'williamboman/mason.nvim'},
-  -- {'williamboman/mason-lspconfig.nvim'},
-
-  {'VonHeikemen/lsp-zero.nvim', branch = 'compat-07'},
-
-  -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    },
-  },
-
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'},
-    }
-  }
-}
-```
-
-</details>
 
 <details>
 <summary>Expand: packer.nvim snippet </summary>
