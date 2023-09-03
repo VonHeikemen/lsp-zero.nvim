@@ -32,11 +32,11 @@ vim.o.foldlevel = 99 -- Using ufo provider need a large value, feel free to decr
 vim.o.foldlevelstart = 99
 vim.o.foldenable = true
 
+require('ufo').setup()
+
 -- Using ufo provider need remap `zR` and `zM`.
 vim.keymap.set('n', 'zR', require('ufo').openAllFolds)
 vim.keymap.set('n', 'zM', require('ufo').closeAllFolds)
-
-require('ufo').setup()
 
 local lsp_zero = require('lsp-zero')
 
@@ -223,24 +223,9 @@ vim.api.nvim_create_autocmd('FileType', {
 })
 ```
 
-Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
-
-```lua
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp_zero.default_setup,
-    tsserver = function()
-      ---
-      -- here you will setup nvim-metal
-      ---
-    end,
-  }
-})
-```
-
 ## Setup with haskell-tools
 
-The only option that makes sense to share between [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) and lsp-zero is the "capabilities" option. So, let haskell-tools initialize the language server, and have lsp-zero just configure the capabilities option.
+The only option that makes sense to share between [haskell-tools](https://github.com/mrcjkb/haskell-tools.nvim) and lsp-zero is the "capabilities" option. So, let haskell-tools initialize the language server, and have lsp-zero just configure the capabilities option. Note these instructions are for haskell-tools version 2 (from the branch 2.x.x).
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -252,20 +237,10 @@ end)
 ---
 -- Setup haskell LSP
 ---
-local haskell_tools = require('haskell-tools')
 
-local hls_config = {
+vim.g.haskell_tools = {
   hls = {
-    capabilities = require('lsp-zero').get_capabilities(),
-    on_attach = function(client, bufnr)
-      local opts = {buffer = bufnr}
-
-      -- haskell-language-server relies heavily on codeLenses,
-      -- so auto-refresh (see advanced configuration) is enabled by default
-      vim.keymap.set('n', '<leader>ca', vim.lsp.codelens.run, opts)
-      vim.keymap.set('n', '<leader>hs', haskell_tools.hoogle.hoogle_signature, opts)
-      vim.keymap.set('n', '<leader>ea', haskell_tools.lsp.buf_eval_all, opts)
-    end
+    capabilities = lsp_zero.get_capabilities()
   }
 }
 
@@ -275,66 +250,29 @@ vim.api.nvim_create_autocmd('FileType', {
   group = hls_augroup,
   pattern = {'haskell'},
   callback = function()
-    haskell_tools.start_or_attach(hls_config)
-
     ---
-    -- Suggested keymaps that do not depend on haskell-language-server:
+    -- Suggested keymaps from the quick setup section:
+    -- https://github.com/mrcjkb/haskell-tools.nvim#quick-setup
     ---
 
+    local ht = require('haskell-tools')
+    local bufnr = vim.api.nvim_get_current_buf()
+    local def_opts = { noremap = true, silent = true, buffer = bufnr, }
+    -- haskell-language-server relies heavily on codeLenses,
+    -- so auto-refresh (see advanced configuration) is enabled by default
+    vim.keymap.set('n', '<space>ca', vim.lsp.codelens.run, opts)
+    -- Hoogle search for the type signature of the definition under the cursor
+    vim.keymap.set('n', '<space>hs', ht.hoogle.hoogle_signature, opts)
+    -- Evaluate all code snippets
+    vim.keymap.set('n', '<space>ea', ht.lsp.buf_eval_all, opts)
     -- Toggle a GHCi repl for the current package
-    vim.keymap.set('n', '<leader>rr', haskell_tools.repl.toggle, opts)
-
+    vim.keymap.set('n', '<leader>rr', ht.repl.toggle, opts)
     -- Toggle a GHCi repl for the current buffer
     vim.keymap.set('n', '<leader>rf', function()
-      haskell_tools.repl.toggle(vim.api.nvim_buf_get_name(0))
+      ht.repl.toggle(vim.api.nvim_buf_get_name(0))
     end, def_opts)
-
-    vim.keymap.set('n', '<leader>rq', haskell_tools.repl.quit, opts)
+    vim.keymap.set('n', '<leader>rq', ht.repl.quit, opts)
   end
-})
-```
-
-Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
-
-```lua
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp.default_setup,
-    hls = function()
-      ---
-      -- here you will setup haskell-tools
-      ---
-    end,
-  }
-})
-```
-
-### Setup with clangd_extensions.nvim
-
-[clangd_extensions.nvim](https://github.com/p00f/clangd_extensions.nvim) can be used to configure `clangd`, so all you have to do is use it after lsp-zero.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({buffer = bufnr})
-end)
-
-require('clangd_extensions').setup()
-```
-
-Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
-
-```lua
-require('mason-lspconfig').setup({
-  handlers = {
-    lsp_zero.default_setup,
-    clangd = function()
-      ---
-      -- here you will setup clangd_extensions
-      ---
-    end,
-  }
 })
 ```
 
