@@ -1,12 +1,14 @@
 # Tutorial
 
-Here we will learn enough about Neovim to configure lsp-zero version 3 (which right now is in the development phase). We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero version 3. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
 
 ## Requirements
 
 * Basic knowledge about Neovim: what is `normal mode`, `insert mode`, `command mode` and how to navigate between them.
 * Neovim v0.8 or greater
 * git
+
+> If you are using Neovim v0.7, the branch `compat-07` is compatible with that Neovim version. See the [tutorial in the compat-07 branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/tutorial.md).
 
 ## The Entry Point
 
