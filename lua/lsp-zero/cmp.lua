@@ -1,7 +1,5 @@
 local M = {}
-local s = {}
 
-local select_opts = {behavior = 'select'}
 local base_setup = false
 local setup_complete = false
 
@@ -101,8 +99,8 @@ function M.basic_mappings()
   return {
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item({behavior = 'insert'})
@@ -139,19 +137,6 @@ end
 
 function M.action()
   return require('lsp-zero.cmp-mapping')
-end
-
-function s.merge(a, b)
-  return vim.tbl_deep_extend('force', {}, a, b)
-end
-
-function s.check_back_space()
-  local col = vim.fn.col('.') - 1
-  if col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
-    return true
-  else
-    return false
-  end
 end
 
 return M

@@ -61,11 +61,6 @@ function M.setup(name, opts)
   return true
 end
 
-function M.set_default_capabilities(opts)
-  local defaults = require('lspconfig').util.default_config
-  defaults.capabilities = s.set_capabilities(opts)
-end
-
 function M.default_keymaps(opts)
   local fmt = function(cmd) return function(str) return cmd:format(str) end end
 
