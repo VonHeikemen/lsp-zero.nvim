@@ -63,7 +63,7 @@ require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
     lsp_zero.default_setup,
-    tsserver = lsp.noop,
+    tsserver = lsp_zero.noop,
   },
 })
 ```

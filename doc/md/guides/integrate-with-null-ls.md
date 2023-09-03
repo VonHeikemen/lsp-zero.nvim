@@ -15,7 +15,7 @@ end)
 
 -- Replace the language servers listed here
 -- with the ones installed in your system
-lsp.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 local null_ls = require('null-ls')
 
