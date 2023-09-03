@@ -540,7 +540,7 @@ These are the supported methods:
 
 * `select_prev_or_fallback`: If the completion menu is visible navigate to the previous item in the list. Else, uses the fallback.
 
-* `toggle_completion`: If the completion menu is visible it cancels the process. Else, it triggers the completion menu.
+* `toggle_completion`: If the completion menu is visible it cancels the process. Else, it triggers the completion menu. You can use the property `modes` in the first argument to specify where this mapping should active (the default is `{modes = {'i'}}`).
 
 * `luasnip_jump_forward`: Go to the next placeholder in the snippet.
 

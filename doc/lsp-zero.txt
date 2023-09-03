@@ -836,8 +836,10 @@ cmp_action(): ~
             previous item in the list. Else, uses the fallback.
 
         • toggle_completion: ~
-            If the completion menu is visible it cancels the process.
-            Else, it triggers the completion menu.
+            If the completion menu is visible it cancels the process. Else, it
+            triggers the completion menu. You can use the property `modes` in
+            the first argument to specify where this mapping should active
+            (the default is `{modes = {'i'}}`).
 
         • luasnip_jump_forward: ~
             Go to the next placeholder in the snippet.
