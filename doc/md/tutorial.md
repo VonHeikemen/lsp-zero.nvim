@@ -80,18 +80,18 @@ Plug('joshdick/onedark.vim')
 vim.call('plug#end')
 ```
 
-2. Call the new colorscheme at the end of the `init.lua` file.
+2. Save the file.
+
+3. Execute your configuration using the command `:source %`.
+
+4. Install the plugin using the command `:PlugInstall`
+
+5. Call the new colorscheme at the end of the `init.lua` file.
 
 ```lua
 vim.opt.termguicolors = true
 vim.cmd('colorscheme onedark')
 ```
-
-3. Save the file.
-
-4. Execute your configuration using the command `:source %`.
-
-5. Install the plugin using the command `:PlugInstall`
 
 6. Restart Neovim.
 
@@ -119,9 +119,7 @@ Plug('VonHeikemen/lsp-zero.nvim', {branch = 'compat-07'})
 vim.call('plug#end')
 ```
 
-Save the file, "source" it, install the plugins and restart Neovim.
-
-Now we can add the configuration of lsp-zero at the end of the file.
+Save the file, "source" it, install the plugins. Then add the configuration of lsp-zero at the end of the file.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -133,7 +131,9 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 ```
 
-Right now this setup won't do much. We don't have any language server installed just yet (and the code to use them is not there yet).
+Now you can restart Neovim.
+
+But this setup won't doesn't do much. We don't have any language server installed (and the code to use them is not there yet).
 
 ### Language servers and how to use them
 
