@@ -93,7 +93,7 @@ If you were to do it all by yourself, the code would look like this.
   vim.api.nvim_create_autocmd('LspAttach', {
     desc = 'LSP actions',
     callback = function(event)
-      vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', {buffer = true})
+      vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', {buffer = event.buf})
       -- More keybindings and commands....
     end
   })
