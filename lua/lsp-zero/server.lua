@@ -2,6 +2,7 @@ local M = {
   default_config = false,
   common_attach = nil,
   has_lspconfig = false,
+  cmp_capabilities = false,
   setup_done = false
 }
 
@@ -239,6 +240,7 @@ function s.set_capabilities(current)
 
     local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
     if ok then
+      M.cmp_capabilities = true
       cmp_default_capabilities = cmp_lsp.default_capabilities()
     end
 
