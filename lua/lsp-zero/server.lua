@@ -228,7 +228,6 @@ end
 
 function s.set_capabilities(current)
   if state.capabilities == nil then
-    local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 0)
     local cmp_default_capabilities = {}
     local base = {}
 
@@ -238,9 +237,9 @@ function s.set_capabilities(current)
       base = vim.lsp.protocol.make_client_capabilities()
     end
 
-    if #cmp_txt > 0 then
-      local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
-      cmp_default_capabilities = ok and cmp_lsp.default_capabilities() or {}
+    local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+    if ok then
+      cmp_default_capabilities = cmp_lsp.default_capabilities()
     end
 
     state.capabilities = vim.tbl_deep_extend(
