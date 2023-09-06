@@ -62,21 +62,18 @@ function M.apply_base()
     new_config.mapping = base_config.mapping
   end
 
-  local luasnip = vim.api.nvim_get_runtime_file('doc/luasnip.txt', 0) or {}
-  if #luasnip > 0 then
-    local current = cmp_config.snippet.expand
-    local lsp_expand = base_config.snippet.expand
+  local current = cmp_config.snippet.expand
+  local lsp_expand = base_config.snippet.expand
 
-    new_config.snippet = {
-      expand = function(args)
-        local ok = pcall(current, args)
-        if not ok then
-          current = lsp_expand
-          current(args)
-        end
-      end,
-    }
-  end
+  new_config.snippet = {
+    expand = function(args)
+      local ok = pcall(current, args)
+      if not ok then
+        current = lsp_expand
+        current(args)
+      end
+    end,
+  }
 
   cmp.setup(new_config)
 end

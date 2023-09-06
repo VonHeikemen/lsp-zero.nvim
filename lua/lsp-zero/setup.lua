@@ -80,12 +80,12 @@ local function setup_lspconfig()
     return
   end
 
-  local doc_txt = vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) or {}
-  if #doc_txt == 0 then
+  local ok, configs = pcall(require, 'lspconfig.configs')
+
+  if not ok then
     return
   end
 
-  local configs = require('lspconfig.configs')
   if #vim.tbl_keys(configs) > 0 then
     local msg = '[lsp-zero] Some language servers have been configured before\n'
      .. 'lsp-zero could finish its initial setup. Some features may fail.'
