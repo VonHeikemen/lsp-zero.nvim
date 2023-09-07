@@ -1,4 +1,14 @@
+if vim.g.loaded_lsp_zero == 1 then
+  local M = {}
+  M.extend_plugins = function() return false end
+  return M
+end
+
 vim.g.loaded_lsp_zero = 1
+
+local M = {}
+M.done = false
+
 
 ---
 -- Commands
@@ -75,18 +85,34 @@ local function setup_cmp()
     return
   end
 
-  require('lsp-zero.cmp').apply_base()
+  local loaded_cmp = vim.g.loaded_cmp
+  if loaded_cmp == true then
+    require('lsp-zero.cmp').apply_base()
+    return
+  end
+
+  if loaded_cmp == 0 or loaded_cmp == false then
+    return
+  end
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'CmpReady',
+    once = true,
+    callback = function() require('lsp-zero.cmp').apply_base() end,
+  })
 end
 
-vim.api.nvim_create_autocmd('User', {
-  once = true,
-  pattern = 'LspZeroExtendPlugin',
-  desc = 'lsp-zero extend lspconfig and nvim-cmp',
-  callback = function()
-    setup_lspconfig()
-    setup_cmp()
-  end,
-})
+function M.extend_plugins()
+  if M.done then
+    return false
+  end
+
+  M.done = true
+  setup_lspconfig()
+  setup_cmp()
+
+  return true
+end
 
 
 ---
@@ -121,4 +147,6 @@ if (
 ) then
   vim.o.signcolumn = 'yes'
 end
+
+return M
 

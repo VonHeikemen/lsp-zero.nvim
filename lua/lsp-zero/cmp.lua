@@ -1,7 +1,5 @@
 local M = {}
-local s = {}
 
-local select_opts = {behavior = 'select'}
 local base_setup = false
 local setup_complete = false
 
@@ -46,8 +44,8 @@ function M.apply_base()
 
   base_setup = true
 
-  local doc_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 0) or {}
-  if #doc_txt == 0 then
+  if package.loaded['cmp'] == nil then
+    require('cmp').setup(M.base_config())
     return
   end
 
@@ -64,21 +62,18 @@ function M.apply_base()
     new_config.mapping = base_config.mapping
   end
 
-  local luasnip = vim.api.nvim_get_runtime_file('doc/luasnip.txt', 0) or {}
-  if #luasnip > 0 then
-    local current = cmp_config.snippet.expand
-    local lsp_expand = base_config.snippet.expand
+  local current = cmp_config.snippet.expand
+  local lsp_expand = base_config.snippet.expand
 
-    new_config.snippet = {
-      expand = function(args)
-        local ok = pcall(current, args)
-        if not ok then
-          current = lsp_expand
-          current(args)
-        end
-      end,
-    }
-  end
+  new_config.snippet = {
+    expand = function(args)
+      local ok = pcall(current, args)
+      if not ok then
+        current = lsp_expand
+        current(args)
+      end
+    end,
+  }
 
   cmp.setup(new_config)
 end
@@ -101,8 +96,8 @@ function M.basic_mappings()
   return {
     ['<C-y>'] = cmp.mapping.confirm({select = false}),
     ['<C-e>'] = cmp.mapping.abort(),
-    ['<Up>'] = cmp.mapping.select_prev_item(select_opts),
-    ['<Down>'] = cmp.mapping.select_next_item(select_opts),
+    ['<Up>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<Down>'] = cmp.mapping.select_next_item({behavior = 'select'}),
     ['<C-p>'] = cmp.mapping(function()
       if cmp.visible() then
         cmp.select_prev_item({behavior = 'insert'})
