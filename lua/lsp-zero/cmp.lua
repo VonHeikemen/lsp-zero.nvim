@@ -44,8 +44,8 @@ function M.apply_base()
 
   base_setup = true
 
-  local doc_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 0) or {}
-  if #doc_txt == 0 then
+  if package.loaded['cmp'] == nil then
+    require('cmp').setup(M.base_config())
     return
   end
 

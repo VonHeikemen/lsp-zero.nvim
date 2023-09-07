@@ -26,7 +26,7 @@ vim.api.nvim_create_user_command(
   'LspZeroSetupServers',
   setup_server,
   {
-    bang = true, 
+    bang = true,
     nargs = '*',
   }
 )
@@ -107,7 +107,21 @@ local function setup_cmp()
     return
   end
 
-  require('lsp-zero.cmp').apply_base()
+  local loaded_cmp = vim.g.loaded_cmp
+  if loaded_cmp == true then
+    require('lsp-zero.cmp').apply_base()
+    return
+  end
+
+  if loaded_cmp == 0 or loaded_cmp == false then
+    return
+  end
+
+  vim.api.nvim_create_autocmd('User', {
+    pattern = 'CmpReady',
+    once = true,
+    callback = function() require('lsp-zero.cmp').apply_base() end,
+  })
 end
 
 function M.extend_plugins()
@@ -140,7 +154,7 @@ if type(border_style) == 'string' then
     vim.lsp.handlers.signature_help,
     {border = border_style}
   )
-  
+
   vim.diagnostic.config({
     float = {border = border_style}
   })
