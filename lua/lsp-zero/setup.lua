@@ -1,11 +1,11 @@
 if vim.g.loaded_lsp_zero == 1 then
-  local M = {}
-  M.extend_plugins = function() return false end
-  return M
+  return {ok = false}
 end
 
 vim.g.loaded_lsp_zero = 1
+
 local M = {}
+M.ok = true
 M.done = false
 
 ---
@@ -80,19 +80,50 @@ local function setup_lspconfig()
     return
   end
 
-  local ok, configs = pcall(require, 'lspconfig.configs')
+  local ok = false
+  local configs = false
 
-  if not ok then
+  if (
+    vim.g.lspconfig == 1
+    or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) > 0
+  ) then
+    ok = true
+    configs = require('lspconfig.configs')
+  else
+    local show_msg = function()
+      local ok, mod = pcall(require, 'lspconfig')
+      if not ok or vim.g.lspconfig ~= 1  then
+        return
+      end
+
+      local Server = require('lsp-zero.server')
+      if Server.setup_done then
+        return
+      end
+
+      local err_msg = '[lsp-zero] Could not configure lspconfig\n'
+       .. 'during initial setup. Some features may fail.'
+       .. '\n\nDetails on how to solve this problem are in the help page.\n'
+       .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
+
+      vim.notify(err_msg, vim.log.levels.WARN)
+    end
+
+    vim.api.nvim_create_autocmd('LspAttach', {once = true, callback = show_msg})
+    return
+  end
+
+  if ok == false or configs == false then
     return
   end
 
   if #vim.tbl_keys(configs) > 0 then
-    local msg = '[lsp-zero] Some language servers have been configured before\n'
+    local err_msg = '[lsp-zero] Some language servers have been configured before\n'
      .. 'lsp-zero could finish its initial setup. Some features may fail.'
      .. '\n\nDetails on how to solve this problem are in the help page.\n'
      .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
 
-    vim.notify(msg, vim.log.levels.WARN)
+    vim.notify(err_msg, vim.log.levels.WARN)
     return
   end
 

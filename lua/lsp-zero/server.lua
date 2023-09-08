@@ -29,6 +29,7 @@ function M.extend_lspconfig()
     end
   end)
 
+  M.has_lspconfig = true
   M.setup_done = true
 end
 
@@ -174,8 +175,10 @@ end
 
 function M.client_capabilities()
   if state.capabilities == nil then
-    local ok = pcall(require, 'lspconfig')
-    M.has_lspconfig = ok
+    if M.has_lspconfig == false then
+      local ok = pcall(require, 'lspconfig')
+      M.has_lspconfig = ok
+    end
     return s.set_capabilities()
   end
 
