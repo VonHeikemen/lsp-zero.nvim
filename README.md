@@ -4,10 +4,6 @@ The purpose of this plugin is to bundle all the "boilerplate code" necessary to 
 
 If you have any question about a feature or configuration feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
-## Announcement
-
-Hello there. This is the development branch for version 3 of lsp-zero.
-
 ## How to get started
 
 This version requires Neovim v0.8 or greater. If you need support for Neovim v0.7 use the [compat-07 branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
