@@ -56,10 +56,6 @@ local lsp_zero = require('lsp-zero')
 lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 #### LSP Actions
@@ -527,6 +523,7 @@ require('lspconfig').vuels.setup({
 ```
 
 ### `.extend_lspconfig()`
+
 Takes care of the integration between lspconfig and nvim-cmp.
 
 It extends the `capabilities` option in lspconfig's defaults, using the plugin `cmp_nvim_lsp`. And it creates a "hook" so users can provide their own default config using [.set_server_config()](#set_server_configopts)).
