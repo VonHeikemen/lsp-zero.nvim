@@ -323,7 +323,8 @@ lsp-zero has a function that returns a basic config for `lua_ls`, this is how yo
 ```lua
 local lsp_zero = require('lsp-zero')
 
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
@@ -331,14 +332,14 @@ If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
 ```lua
 local lsp_zero = require('lsp-zero')
 
-require('lspconfig').lua_ls.setup(
-  lsp_zero.nvim_lua_ls({
-    single_file_support = false,
-    on_attach = function(client, bufnr)
-      print('hello world')
-    end,
-  })
-)
+local lua_opts = lsp_zero.nvim_lua_ls({
+  single_file_support = false,
+  on_attach = function(client, bufnr)
+    print('hello world')
+  end,
+})
+
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 ## Customizing the autocompletion menu
@@ -442,7 +443,8 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 
 -- (Optional) configure lua language server
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 
 -- Replace the language servers listed here
 -- with the ones you have installed

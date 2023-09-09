@@ -36,7 +36,8 @@ You will need to setup `lua_ls` using lspconfig, and then add the configuration 
 ```lua
 local lsp_zero = require('lsp-zero')
 
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 ## Enable automatic setup of language servers

@@ -255,20 +255,21 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 If you provide the `{opts}` table it'll merge it with the defaults, this way you can extend or change the values easily.
 
 ```lua
-require('lspconfig').lua_ls.setup(
-  lsp_zero.nvim_lua_ls({
-    single_file_support = false,
-    on_attach = function(client, bufnr)
-      print('hello there')
-    end,
-  })
-)
+local lua_opts = lsp_zero.nvim_lua_ls({
+  single_file_support = false,
+  on_attach = function(client, bufnr)
+    print('hello there')
+  end,
+})
+
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 ### `.store_config({name}, {opts})`
