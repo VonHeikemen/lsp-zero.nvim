@@ -58,7 +58,6 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     },
     config = function()
       -- This is where all the LSP shenanigans will live
-
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
 
@@ -69,11 +68,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       end)
 
       -- (Optional) Configure lua language server for neovim
-      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
-
-      -- Replace the language servers listed here
-      -- with the ones installed in your system
-      lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+      local lua_opts = lsp_zero.nvim_lua_ls()
+      require('lspconfig').lua_ls.setup(lua_opts)
     end
   }
 }
@@ -99,8 +95,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
   },
   {
     'williamboman/mason.nvim',
-    cmd = {'Mason', 'MasonInstall', 'MasonUpdate'},
-    lazy = true,
+    lazy = false,
     config = true,
   },
 
@@ -144,7 +139,6 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     },
     config = function()
       -- This is where all the LSP shenanigans will live
-
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
 
@@ -155,7 +149,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       end)
 
       require('mason-lspconfig').setup({
-        ensure_installed = {'lua_ls'},
+        ensure_installed = {},
         handlers = {
           lsp_zero.default_setup,
           lua_ls = function()
