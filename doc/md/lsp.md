@@ -74,10 +74,6 @@ lsp_zero.on_attach(function(client, bufnr)
 
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = bufnr})
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Disable keybindings
@@ -188,10 +184,6 @@ lsp_zero.set_server_config({
     client.server_capabilities.semanticTokensProvider = nil
   end,
 })
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 Note that defining an `on_init` hook in a language server will override the one in [.set_server_config()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#set_server_configopts). 
@@ -302,10 +294,6 @@ lsp_zero.format_on_save({
     ['rust_analyzer'] = {'rust'},
   }
 })
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ### Always use the active servers
@@ -319,10 +307,6 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
   lsp_zero.buffer_autoformat()
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
@@ -341,10 +325,6 @@ lsp_zero.on_attach(function(client, bufnr)
     require('lsp-format').on_attach(client)
   end
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Format buffer using a keybinding
@@ -364,10 +344,6 @@ lsp_zero.on_attach(function(client, bufnr)
     vim.lsp.buf.format({async = false, timeout_ms = 10000})
   end, opts)
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
@@ -391,10 +367,6 @@ lsp_zero.on_attach(function(client, bufnr)
     })
   end, opts)
 end)
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'lua_ls', 'rust_analyzer'})
 ```
 
 ### Ensure only one LSP server per filetype
@@ -420,10 +392,6 @@ lsp_zero.format_mapping('gq', {
     ['rust_analyzer'] = {'rust'},
   }
 })
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Diagnostics
@@ -445,10 +413,6 @@ lsp_zero.set_sign_icons({
   hint = '⚑',
   info = '»'
 })
-
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Troubleshooting
