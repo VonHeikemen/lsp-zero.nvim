@@ -1197,19 +1197,23 @@ Always include `{name = 'nvim_lsp'}` in your sources.
 
 Fix lspconfig error
 
-You are probably here because you got this error message:
->
-  [lsp-zero] Some language servers have been configured before
-  lsp-zero could finish its initial setup. Some features may fail.
-<
-Here is the solution: First, go to the place where you use `lspconfig` for the
-first time. Then call this function before you setup the language server
+What you need to do is call the function `.extend_lspconfig()` before you
+setup any language server. I suggest you call it right after you require
+lsp-zero.
 >lua
-  require('lsp-zero').extend_lspconfig()
+  local lsp_zero = require('lsp-zero')
+  lsp_zero.extend_lspconfig()
+
+  lsp_zero.on_attach(function(client, bufnr)
+    lsp_zero.default_keymaps({buffer = bufnr})
+  end)
 <
-If you want to ignore error and supress the message, you can set the global
-variable `lsp_zero_extend_lspconfig` to `0`. And do it before you require the
-module `lsp-zero`.
+If you are using `mason-lspconfig`, call the function `.extend_lspconfig()`
+before you setup mason-lspconfig.
+<
+If you actually want to ignore error and supress the message, you can set the
+global variable `lsp_zero_extend_lspconfig` to `0`. And do it before you
+require the module `lsp-zero`.
 
 This is how you do it using lua.
 >lua
@@ -1224,7 +1228,7 @@ Version                                                     *lsp-zero-version*
 
 Current version: compat-07
 
-The code on this version based on the `v3.x` branch, and it requires Neovim
+The code on this version is based on the `v3.x` branch, and it requires Neovim
 v0.7 or greater. If you need support for Neovim v0.6.1 or lower use the `v1.x`
 branch of lsp.zero.
 

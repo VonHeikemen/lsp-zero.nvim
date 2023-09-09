@@ -1,4 +1,8 @@
-require('lsp-zero.setup').extend_plugins()
+local Setup = require('lsp-zero.setup')
+
+if Setup.ok then
+  Setup.extend_plugins()
+end
 
 local noop = function() end
 
