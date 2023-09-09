@@ -91,8 +91,7 @@ local function setup_lspconfig()
     configs = require('lspconfig.configs')
   else
     local show_msg = function()
-      local ok, mod = pcall(require, 'lspconfig')
-      if not ok or vim.g.lspconfig ~= 1  then
+      if vim.g.lspconfig ~= 1  then
         return
       end
 
