@@ -14,10 +14,6 @@ lsp_zero.on_attach(function(client, bufnr)
     require('nvim-navic').attach(client, bufnr)
   end
 end)
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Enable folds with nvim-ufo
@@ -54,10 +50,6 @@ lsp_zero.set_server_config({
     }
   }
 })
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Enable inlay hints with inlay-hints.nvim
@@ -88,10 +80,6 @@ require('lspconfig').lua_ls.setup({
     },
   },
 })
-
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
 
 ## Setup with rust-tools
