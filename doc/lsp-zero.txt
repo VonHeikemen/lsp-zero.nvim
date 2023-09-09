@@ -1187,15 +1187,9 @@ Always include `{name = 'nvim_lsp'}` in your sources.
 
 Fix lspconfig error
 
-What you need to do is call this function before you setup any language server
->lua
-  require('lsp-zero').extend_lspconfig()
-
-If you are using the module `lspconfig` manually, then you should call
-`.extend_lspconfig()` before using lspconfig.
-<
-If you are using `mason-lspconfig`, call the function `.extend_lspconfig()`
-before you setup mason-lspconfig.
+What you need to do is call the function `.extend_lspconfig()` before you
+setup any language server. I suggest you call it right after you require
+lsp-zero.
 >lua
   local lsp_zero = require('lsp-zero')
   lsp_zero.extend_lspconfig()
@@ -1203,13 +1197,9 @@ before you setup mason-lspconfig.
   lsp_zero.on_attach(function(client, bufnr)
     lsp_zero.default_keymaps({buffer = bufnr})
   end)
-
-  require('mason').setup({})
-  require('mason-lspconfig').setup({
-    handlers = {
-      lsp_zero.default_setup,
-    },
-  })
+<
+If you are using `mason-lspconfig`, call the function `.extend_lspconfig()`
+before you setup mason-lspconfig.
 <
 If you actually want to ignore error and supress the message, you can set the
 global variable `lsp_zero_extend_lspconfig` to `0`. And do it before you
