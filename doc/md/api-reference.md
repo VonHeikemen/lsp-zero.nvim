@@ -248,16 +248,19 @@ Returns settings specific to Neovim for the lua language server, `lua_ls`. If yo
 
 ```lua
 local lsp_zero = require('lsp-zero')
-
-require('lspconfig').lua_ls.setup(
-  lsp.nvim_lua_ls({
-    settings = {
-      Lua = {
-        completion = {keywordSnippet = 'Disable'}
-      }
+local lua_opts = lsp_zero.nvim_lua_ls({
+  single_file_support = false,
+  on_attach = function(client, bufnr)
+    print('hello world')
+  end,
+  settings = {
+    Lua = {
+      completion = {keywordSnippet = 'Disable'}
     }
-  })
-)
+  }
+})
+
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 ### `.store_config({name}, {opts})`

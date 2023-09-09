@@ -284,20 +284,21 @@ You should only use this method if your Neovim config is the only lua project yo
 lsp-zero has a function that returns a basic config for `lua_ls`, this is how you use it.
 
 ```lua
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
 
 ```lua
-require('lspconfig').lua_ls.setup(
-  lsp_zero.nvim_lua_ls({
-    single_file_support = false,
-    on_attach = function(client, bufnr)
-      print('hello world')
-    end,
-  })
-)
+local lua_opts = lsp_zero.nvim_lua_ls({
+  single_file_support = false,
+  on_attach = function(client, bufnr)
+    print('hello world')
+  end,
+})
+
+require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
 ## Customizing the autocompletion menu
@@ -378,7 +379,8 @@ end)
 lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 -- (Optional) configure lua language server
-require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+local lua_opts = lsp_zero.nvim_lua_ls()
+require('lspconfig').lua_ls.setup(lua_opts)
 
 -- Autocomplete
 local cmp = require('cmp')
@@ -448,7 +450,8 @@ require('mason-lspconfig').setup({
     lsp_zero.default_setup,
     lua_ls = function()
       -- (Optional) configure lua language server
-      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+      local lua_opts = lsp_zero.nvim_lua_ls()
+      require('lspconfig').lua_ls.setup(lua_opts)
     end,
   }
 })
