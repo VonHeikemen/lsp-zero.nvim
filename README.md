@@ -4,9 +4,13 @@ The purpose of this plugin is to bundle all the "boilerplate code" necessary to 
 
 If you have any question about a feature or configuration feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
-## How to get started
+## Requirements
 
-This version requires Neovim v0.8 or greater. If you need support for Neovim v0.7 use the [compat-07 branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
+Neovim v0.8 or greater. 
+
+If you need support for Neovim v0.7 use the branch [compat-07](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
+
+## How to get started
 
 If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/tutorial.md).
 
