@@ -9,7 +9,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'v3.x',
     lazy = true,
     config = false,
     init = function()
@@ -84,7 +84,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'dev-v3',
+    branch = 'v3.x',
     lazy = true,
     config = false,
     init = function()

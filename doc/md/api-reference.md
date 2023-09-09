@@ -234,7 +234,7 @@ In here `mason-lspconfig` will install all the servers in `ensure_installed`. Th
 
 Returns Neovim's default capabilities mixed with the capabilities provided by the `cmp_nvim_lsp` plugin.
 
-This is useful when you want to configure a language using a specialized plugin. See the examples in [quick-recipes.md](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md).
+This is useful when you want to configure a language using a specialized plugin. See the examples in [quick-recipes.md](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/quick-recipes.md).
 
 ### `.build_options({name}, {opts})`
 

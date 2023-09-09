@@ -17,7 +17,7 @@ require('mason-lspconfig').setup({
 
 To configure the language servers installed with `mason.nvim` automatically you should use the module `mason-lspconfig`.
 
-You'll need to use the option `handlers` in mason-lspconfig. You can use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver) as a default handler.
+You'll need to use the option `handlers` in mason-lspconfig. You can use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) as a default handler.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -31,7 +31,7 @@ require('mason-lspconfig').setup({
 })
 ```
 
-To get more details on how to use mason.nvim with lsp-zero read this guide: [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/integrate-with-mason-nvim.md)
+To get more details on how to use mason.nvim with lsp-zero read this guide: [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md)
 
 ## Setup lua_ls using mason-lspconfig
 
@@ -55,7 +55,7 @@ require('mason-lspconfig').setup({
 
 ## Completion item label
 
-In `v2.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
+In `v2.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
 
 ```lua
 local cmp = require('cmp')
@@ -101,7 +101,7 @@ if not ok then
 end
 
 lazy.setup({
-  {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
 
   -- LSP Support
   {'neovim/nvim-lspconfig'},

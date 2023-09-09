@@ -407,7 +407,7 @@ get_capabilities(): ~
     This is useful when you want to configure a language using a specialized
     plugin. See the examples in quick-recipes.md:
 
-    https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/guides/quick-recipes.md
+    https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/quick-recipes.md
 
                                                     *lsp-zero.build_options()*
 
@@ -1218,12 +1218,15 @@ Or if you prefer vimscript.
 ==============================================================================
 Version                                                     *lsp-zero-version*
 
-Current version: `v3-dev`
+Current version: `v3.x`
 
-This is a development branch, breaking changes can happen. 
+The code on this version requires Neovim v0.8 or greater.
 
-The code on this version requires Neovim v0.8 or greater. If you need support
-for Neovim v0.7 or lower use the `v1.x` branch of lsp-zero.
+If you need support for Neovim v0.7 use the `compat-07` branch. That will have
+the same api as v3.x.
+
+If you need support for Neovim v0.6.2 or lower use the `v1.x` branch of
+lsp-zero.
 
 ==============================================================================
 Support                                                    *lsp-zero-donation*

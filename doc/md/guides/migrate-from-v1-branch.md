@@ -31,7 +31,7 @@ vim.diagnostic.config({
 
 ## Configure the lua language server
 
-You will need to setup `lua_ls` using lspconfig, and then add the configuration using the function [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#nvim_lua_lsopts).
+You will need to setup `lua_ls` using lspconfig, and then add the configuration using the function [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#nvim_lua_lsopts).
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -42,7 +42,7 @@ require('lspconfig').lua_ls.setup(lua_opts)
 
 ## Enable automatic setup of language servers
 
-This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
+This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -175,7 +175,7 @@ cmp.setup({
 
 ## Completion item label
 
-In `v1.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
+In `v1.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
 
 ```lua
 local cmp = require('cmp')
@@ -205,7 +205,7 @@ if not ok then
 end
 
 lazy.setup({
-  {'VonHeikemen/lsp-zero.nvim', branch = 'dev-v3'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
 
   -- LSP Support
   {'williamboman/mason.nvim'},

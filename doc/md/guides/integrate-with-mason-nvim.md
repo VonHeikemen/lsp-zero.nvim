@@ -56,7 +56,7 @@ Here we use the module `lspconfig` to setup the language server and we add our c
 
 ## Exclude a language server from the automatic setup
 
-If we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#noop), which is a function that doesn't do anything.
+If we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#noop), which is a function that doesn't do anything.
 
 ```lua
 require('mason-lspconfig').setup({
