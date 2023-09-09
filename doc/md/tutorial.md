@@ -545,7 +545,8 @@ require('mason-lspconfig').setup({
     lsp_zero.default_setup,
     lua_ls = function()
       -- (Optional) configure lua language server
-      require('lspconfig').lua_ls.setup(lsp_zero.nvim_lua_ls())
+      local lua_opts = lsp_zero.nvim_lua_ls()
+      require('lspconfig').lua_ls.setup(lua_opts)
     end,
   }
 })
