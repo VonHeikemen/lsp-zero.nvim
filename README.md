@@ -229,7 +229,7 @@ require('lspconfig').lua_ls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
-If you don't need to customize the language servers you are using, you can call the function [.setup_servers()](#https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts) with a list of server names.
+If you don't need to customize the language servers you are using, you can call the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/dev-v3/doc/md/api-reference.md#setup_serverslist-opts) with a list of server names.
 
 ```lua
 lsp_zero.setup_servers({'lua_ls', 'rust_analyzer'})
