@@ -153,15 +153,29 @@ EOF
 
 ### Usage
 
-If you prefer to install every language server using "traditional" methods then go for the [manual setup section](#manual-setup-of-lsp-servers).
+First thing you will want to do setup some default keybindings. The common convention here is to setup these keybindings only when you have a language server active in the current file. Here is the code to achieve that.
 
-If want to manage the install and update of LSP servers from within Neovim then go to the [automatic setup section](#automatic-setup-of-lsp-servers).
+```lua
+local lsp_zero = require('lsp-zero')
 
-#### Manual setup of LSP servers
+lsp_zero.on_attach(function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
+  lsp_zero.default_keymaps({buffer = bufnr})
+end)
+```
 
-First thing you'll want to do is install the language servers you want to use. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
+Next step is to install a language server. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
 
-Once you have the LSP servers installed in your system, add the config of lsp-zero.
+Once you have a language server installed in your system, add the setup in your Neovim config. Use the module `lspconfig`, like this.
+
+```lua
+require('lspconfig').lua_ls.setup({})
+```
+
+Here `lua_ls` is the name of the language server we have installed. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
+
+You need to setup your language servers after you require lsp-zero.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -172,9 +186,18 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- Replace the language servers listed here
--- with the ones installed in your system
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+---
+-- Replace these language servers
+-- with the ones you have installed in your system
+---
+require('lspconfig').lua_ls.setup({})
+require('lspconfig').rust_analyzer.setup({})
+```
+
+If you don't need to customize the language servers you are using, you can call the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#setup_serverslist-opts) with a list of server names.
+
+```lua
+lsp_zero.setup_servers({'lua_ls', 'rust_analyzer'})
 ```
 
 #### Automatic setup of LSP servers
@@ -202,38 +225,6 @@ require('mason-lspconfig').setup({
 ```
 
 For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/guides/integrate-with-mason-nvim.md).
-
-## Language servers
-
-### Configure a language server
-
-In order to customize a language server you should use the module `lspconfig`. Like this.
-
-```lua
-require('lspconfig').lua_ls.setup({})
-```
-
-Here `lua_ls` is the name of the language server we want to configure. We call its setup function and inside the `{}` is where we should place our configuration options.
-
-Is important to note the name of the language server must be in [this list](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
-
-To get more details on the available options read the help page, use the command `:help lspconfig-setup`.
-
-Now, if you choose to use `mason-lspconfig`, you should add a handler with the name of the language server. Here is an example.
-
-```lua
-require('mason-lspconfig').setup({
-  ensure_installed = {},
-  handlers = {
-    lsp_zero.default_setup,
-    lua_ls = function()
-      require('lspconfig').lua_ls.setup({})
-    end,
-  },
-})
-```
-
-This "handler" I'm talking about must be a lua function. Inside this function is where you configure the language server.
 
 ### Keybindings
 
@@ -286,6 +277,8 @@ What do I mean with a minimal example? Configure the language just using `lspcon
 
 ```lua
 vim.lsp.set_log_level('debug')
+vim.g.lsp_zero_extend_cmp = 0
+vim.g.lsp_zero_extend_lspconfig = 0
 
 local lsp_zero = require('lsp-zero')
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
