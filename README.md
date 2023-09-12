@@ -6,7 +6,11 @@ If you have any question about a feature or configuration feel free to open a ne
 
 ## Announcement
 
-The [development branch for v3.x](https://github.com/VonHeikemen/lsp-zero.nvim/tree/dev-v3) has been created (and is basically done). I'm thinking on making `v3.x` the default branch on `September 20`. If you want to talk about the new changes [join the discussion about v3.x](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/286).
+[lsp-zero version 3](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v3.x) is now available, the branch `v3.x` has been created. Note that `v2.x` is still the default, so the documentation here is still from version 2. `v3.x` will become the default on `september 20`.
+
+If you are using v2.x and wish to upgrade, read this:
+
+* [Migrate from v2.x to v3.x](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
 
 ## How to get started
 
