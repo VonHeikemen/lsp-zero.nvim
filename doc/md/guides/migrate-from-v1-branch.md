@@ -75,6 +75,25 @@ require('mason-lspconfig').setup({
 })
 ```
 
+## Exclude language server from automatic configuration
+
+You'll also need to use the option `handlers` in mason-lspconfig in order to disable a language server. This is in place of the `skip_server_setup` that was present in the `v1.x` branch.
+
+Use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/api-reference.md#noop) as a handler to make mason-lspconfig ignore the language server.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'rust_analyzer', 'jdtls'},
+  handlers = {
+    lsp_zero.default_setup,
+    jdtls = lsp_zero.noop,
+  }
+})
+```
+
 ## Automatic install of language servers
 
 This can be done using the module `mason-lspconfig`. Use the `ensure_installed` property of their `.setup()` function. There you can list all the language servers you want to install.
