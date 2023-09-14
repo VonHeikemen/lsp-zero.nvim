@@ -40,6 +40,16 @@ local lua_opts = lsp_zero.nvim_lua_ls()
 require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
+## Automatic install of language servers
+
+This can be done using the module `mason-lspconfig`. Use the `ensure_installed` property of their `.setup()` function. There you can list all the language servers you want to install.
+
+```lua
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+})
+```
+
 ## Enable automatic setup of language servers
 
 This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
@@ -75,13 +85,22 @@ require('mason-lspconfig').setup({
 })
 ```
 
-## Automatic install of language servers
+## Exclude a language server from automatic configuration
 
-This can be done using the module `mason-lspconfig`. Use the `ensure_installed` property of their `.setup()` function. There you can list all the language servers you want to install.
+You'll also need to use the option `handlers` in mason-lspconfig in order to disable a language server. This is in place of the `skip_server_setup` that was present in the `v1.x` branch.
+
+Use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#noop) as a handler to make mason-lspconfig ignore the language server.
 
 ```lua
+local lsp_zero = require('lsp-zero')
+
+require('mason').setup({})
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer'},
+  ensure_installed = {'tsserver', 'rust_analyzer', 'jdtls'},
+  handlers = {
+    lsp_zero.default_setup,
+    jdtls = lsp_zero.noop,
+  }
 })
 ```
 

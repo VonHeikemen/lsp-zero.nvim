@@ -33,7 +33,7 @@ require('mason-lspconfig').setup({
 
 To get more details on how to use mason.nvim with lsp-zero read this guide: [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md)
 
-## Exclude language server from automatic configuration
+## Exclude a language server from automatic configuration
 
 You'll also need to use the option `handlers` in mason-lspconfig in order to disable a language server. This is in place of the `skip_server_setup` that was present in the `v2.x` branch.
 
