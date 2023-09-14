@@ -33,6 +33,23 @@ require('mason-lspconfig').setup({
 
 To get more details on how to use mason.nvim with lsp-zero read this guide: [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md)
 
+## Disable a language server
+
+You'll also need to use the option `handlers` in mason-lspconfig in order to disable a language server. This is in place of the `skip_server_setup` that was present in the `v2.x` branch.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+  handlers = {
+    lsp_zero.default_setup,
+    jdtls = lsp_zero.noop,
+  }
+})
+```
+
 ## Setup lua_ls using mason-lspconfig
 
 When using mason-lspconfig, if you want to configure a language server you need to add a handler with the name of the language server. In this handler you will assign a lua function, and inside this function you will configure the server.
