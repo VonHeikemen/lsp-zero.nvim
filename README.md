@@ -318,7 +318,7 @@ vim.lsp.set_log_level('debug')
 vim.g.lsp_zero_extend_cmp = 0
 vim.g.lsp_zero_extend_lspconfig = 0
 
-local lsp_zero = require('lsp-zero')
+local lsp_zero = require('lsp-zero.api')
 local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 require('lspconfig').tsserver.setup({
