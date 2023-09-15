@@ -56,14 +56,14 @@ lsp.set_server_config({
 lsp.setup()
 ```
 
-## Enable inlay hints with inlay-hints.nvim
+## Enable inlay hints with lsp-inlayhints.nvim
 
-First make sure you setup [inlay-hints.nvim](https://github.com/simrat39/inlay-hints.nvim). Then, visit the documentation of the language server you want to configure, figure out what options you need to enable. Finally, use `lspconfig` to enable those options and execute the `.on_attach` function of `inlay-hints.nvim`.
+First make sure you setup [lsp-inlayhints.nvim](https://github.com/lvimuser/lsp-inlayhints.nvim). Then, visit the documentation of the language server you want to configure, figure out what options you need to enable. Finally, use `lspconfig` to enable those options and execute the `.on_attach` function of `lsp-inlayhints.nvim`.
 
 Here an example using the lua language server.
 
 ```lua
-local ih = require('inlay-hints')
+local ih = require('lsp-inlayhints')
 ih.setup()
 
 local lsp = require('lsp-zero').preset({})
