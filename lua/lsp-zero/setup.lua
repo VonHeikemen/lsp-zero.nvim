@@ -99,7 +99,9 @@ local function setup_lspconfig()
     return
   end
 
-  if #vim.tbl_keys(configs) > 0 then
+  local Server = require('lsp-zero.server')
+
+  if Server.has_configs() then
     local err_msg = '[lsp-zero] Some language servers have been configured before\n'
      .. 'lsp-zero could finish its initial setup. Some features may fail.'
      .. '\n\nDetails on how to solve this problem are in the help page.\n'
@@ -109,7 +111,6 @@ local function setup_lspconfig()
     return
   end
 
-  local Server = require('lsp-zero.server')
   Server.has_lspconfig = true
   Server.extend_lspconfig()
 end

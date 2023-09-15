@@ -301,6 +301,18 @@ function M.enable_omnifunc()
   state.set_omnifunc = true
 end
 
+function M.has_configs()
+  local configs = require('lspconfig.configs')
+
+  for _, c in pairs(configs) do
+    if c.manager then
+      return true
+    end
+  end
+
+  return false
+end
+
 function s.set_capabilities(current)
   if state.capabilities == nil then
     local cmp_default_capabilities = {}
