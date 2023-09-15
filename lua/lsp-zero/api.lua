@@ -24,9 +24,7 @@ function M.extend_lspconfig()
     return
   end
 
-  local configs = require('lspconfig.configs')
-
-  if #vim.tbl_keys(configs) > 0 then
+  if Server.has_configs() then
     local msg = '[lsp-zero] Some language servers have been configured before\n'
      .. 'you called the function .extened_lspconfig().\n\n'
      .. 'Solution: Go to the place where you use lspconfig for the first time.\n'
