@@ -432,7 +432,7 @@ gs: ~
 
 <F3>: ~
     Format a buffer using the LSP servers attached to it.
-    See |vim.lsp.buf.rename()|.
+    See |vim.lsp.buf.format()|.
 
 <F4>: ~
     Selects a code action available at the current cursor position.
