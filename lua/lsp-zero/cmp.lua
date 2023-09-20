@@ -233,26 +233,13 @@ end
 
 function M.cmp_config()
   local result = {
+    formatting = M.format(),
     window = {
       documentation = {
         max_height = 15,
         max_width = 60,
       }
     },
-    formatting = {
-      fields = {'abbr', 'menu', 'kind'},
-      format = function(entry, item)
-        local short_name = {
-          nvim_lsp = 'LSP',
-          nvim_lua = 'nvim'
-        }
-
-        local menu_name = short_name[entry.source.name] or entry.source.name
-
-        item.menu = string.format('[%s]', menu_name)
-        return item
-      end,
-    }
   }
 
   local ok_luasnip, luasnip = pcall(require, 'luasnip')
@@ -270,6 +257,23 @@ end
 
 function M.action()
   return require('lsp-zero.cmp-mapping')
+end
+
+function M.format()
+  return {
+    fields = {'abbr', 'menu', 'kind'},
+    format = function(entry, item)
+      local short_name = {
+        nvim_lsp = 'LSP',
+        nvim_lua = 'nvim'
+      }
+
+      local menu_name = short_name[entry.source.name] or entry.source.name
+
+      item.menu = string.format('[%s]', menu_name)
+      return item
+    end,
+  }
 end
 
 function s.merge(a, b)

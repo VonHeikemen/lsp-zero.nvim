@@ -26,6 +26,10 @@ function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
 end
 
+function M.cmp_format()
+  return require('lsp-zero.cmp').format()
+end
+
 function M.setup()
   if s.setup_status == 'complete' then
     return
@@ -60,6 +64,10 @@ function M.configure(name, opts)
   elseif opts then
     s.args.servers[name] = {}
   end
+end
+
+function M.default_setup(name)
+  Server.setup(name, {})
 end
 
 function M.skip_server_setup(list)
@@ -129,6 +137,10 @@ function M.use(servers, opts)
       pcall(function() lsp.manager:try_add_wrapper(bufnr) end)
     end
   end
+end
+
+function M.get_capabilities()
+  return Server.client_capabilities()
 end
 
 function M.nvim_lua_ls(opts)
