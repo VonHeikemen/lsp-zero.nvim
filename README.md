@@ -20,6 +20,13 @@ If you know how to configure neovim go to [Quickstart (for the impatient)](#quic
 
 Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md).
 
+## Migration guides
+
+`v3.x` is the current version of lsp-zero. If you are using a previous version and wish to update, follow one of these guides.
+
+* [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v1-branch.md)
+* [Migrate from v2.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
+
 ## Documentation
 
 * LSP
