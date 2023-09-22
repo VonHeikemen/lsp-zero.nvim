@@ -248,7 +248,7 @@ lsp_zero.setup_servers({'lua_ls', 'rust_analyzer'})
 
 If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) you can manage the installation of the LSP servers from inside Neovim, and then use lsp-zero to handle the configuration.
 
-Here a basic usage example.
+Here is a basic usage example.
 
 ```lua
 local lsp_zero = require('lsp-zero')
