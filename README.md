@@ -85,45 +85,36 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 This section will teach you how to create a basic configuration.
 
+If you know your way around Neovim and how to configure it, take a look at this examples:
+
+* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#lua-template)
+* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#vimscript-template)
+
 ### Installing
 
 Use your favorite plugin manager to install this plugin and all its lua dependencies.
 
 <details>
-<summary>Expand: lazy.nvim snippet </summary>
+<summary>Expand: lazy.nvim </summary>
 
 For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
-{
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+--- Uncomment these if you want to manage LSP servers from neovim
+-- {'williamboman/mason.nvim'},
+-- {'williamboman/mason-lspconfig.nvim'},
 
-  --- Uncomment these if you want to manage LSP servers from neovim
-  -- {'williamboman/mason.nvim'},
-  -- {'williamboman/mason-lspconfig.nvim'},
-
-  -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    },
-  },
-
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'},
-    }
-  }
-}
+{'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+{'neovim/nvim-lspconfig'},
+{'hrsh7th/cmp-nvim-lsp'},
+{'hrsh7th/nvim-cmp'},
+{'L3MON4D3/LuaSnip'},
 ```
 
 </details>
 
 <details>
-<summary>Expand: packer.nvim snippet </summary>
+<summary>Expand: packer.nvim </summary>
 
 ```lua
 use {
@@ -146,7 +137,7 @@ use {
 </details>
 
 <details>
-<summary>Expand: paq.nvim snippet </summary>
+<summary>Expand: paq.nvim </summary>
 
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'};
