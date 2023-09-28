@@ -89,6 +89,7 @@ If you know your way around Neovim and how to configure it, take a look at this 
 
 * [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#lua-template)
 * [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#vimscript-template)
+* [ThePrimeagen's config (adapted to version 3)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
 
 ### Installing
 
@@ -157,7 +158,7 @@ use {
 </details>
 
 <details>
-<summary>Expand: vim-plug snippet </summary>
+<summary>Expand: vim-plug </summary>
 
 ```vim
 "  Uncomment these if you want to manage LSP servers from neovim
