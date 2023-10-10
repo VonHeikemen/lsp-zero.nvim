@@ -224,6 +224,8 @@ lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 
 There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim), is often described a portable package manager. This plugin will allow Neovim to download language servers (and other type of tools) into a particular folder, meaning that the servers you install using this method will not be available system-wide.
 
+If you decide to use this plugin you'll need some extra tools installed in your system. So, take a look at [mason.nvim's requirements](https://github.com/williamboman/mason.nvim#requirements).
+
 > Note: mason.nvim doesn't provide any "special integration" to the tools it downloads. It's only good for installing and updating tools.
 
 Anyway, if you choose this method you will need to add these two plugins:
