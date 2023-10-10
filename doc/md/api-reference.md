@@ -12,6 +12,8 @@
 
 * `LspZeroSetupServers`: It takes a space separated list of servers and configures them.
 
+* `LspZeroViewConfigSource {server}`: Opens a split with the source code of the configuration for `{server}`. So you can inspect the requirements the language server needs to attach to a buffer. You'll be able to read what filetypes it needs and the config files it looks to detect the root directory.
+
 ## Global variables
 
 * `lsp_zero_extend_cmp`: When set to `0` then lsp-zero will not integrate with nvim-cmp automatically.

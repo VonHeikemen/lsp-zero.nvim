@@ -43,6 +43,50 @@ vim.api.nvim_create_user_command(
   {}
 )
 
+local function inspect_config_source(input)
+  local server = input.args
+  local mod = 'lua/lspconfig/server_configurations/%s.lua'
+  local path = vim.api.nvim_get_runtime_file(mod:format(server), 0)
+
+  if path[1] == nil then
+    local msg = "[lsp-zero] Could not find configuration for '%s'"
+    vim.notify(msg:format(server), vim.log.levels.WARN)
+    return
+  end
+
+  vim.cmd.sview({
+    args = {path[1]},
+    mods = {vertical = true},
+  })
+end
+
+local function config_source_complete(user_input)
+  local mod = 'lua/lspconfig/server_configurations'
+  local path = vim.api.nvim_get_runtime_file(mod, 0)[1]
+  local pattern = '%s/*.lua'
+
+  local list = vim.split(vim.fn.glob(pattern:format(path)), '\n')
+  local res = {}
+
+  for _, i in ipairs(list) do
+    local name = vim.fn.fnamemodify(i, ':t:r')
+    if vim.startswith(name, user_input) then
+      res[#res + 1] = name
+    end
+  end
+
+  return res
+end
+
+vim.api.nvim_create_user_command(
+  'LspZeroViewConfigSource',
+  inspect_config_source,
+  {
+    nargs = 1,
+    complete = config_source_complete,
+  }
+)
+
 
 ---
 -- Autocommands
@@ -80,16 +124,12 @@ local function setup_lspconfig()
     return
   end
 
-  local ok = false
-  local configs = false
-
-  if (
+  local ok = (
     vim.g.lspconfig == 1
     or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) > 0
-  ) then
-    ok = true
-    configs = require('lspconfig.configs')
-  else
+  )
+
+  if not ok then
     local show_msg = function()
       if vim.g.lspconfig ~= 1  then
         return
@@ -109,10 +149,6 @@ local function setup_lspconfig()
     end
 
     vim.api.nvim_create_autocmd('LspAttach', {once = true, callback = show_msg})
-    return
-  end
-
-  if ok == false or configs == false then
     return
   end
 

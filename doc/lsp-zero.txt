@@ -136,6 +136,12 @@ LspZeroSetupServers [{server}]: ~
     decide to handle the configuration of servers manually, it will
     only do something when `setup_servers_on_start` is disabled.
 
+LspZeroViewConfigSource {server}: ~
+    Opens a split with the source code of the configuration for {server}. So
+    you can inspect the requirements the language server needs to attach to a
+    buffer. You'll be able to read what filetypes it needs and the config
+    files it looks to detect the root directory.
+
                                                         *lsp-zero-keybindings*
 
 If you choose to use the function |lsp-zero.default_keymaps()|, you gain

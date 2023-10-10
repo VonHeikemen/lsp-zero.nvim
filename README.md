@@ -307,6 +307,22 @@ lsp_zero.on_attach(function(client, bufnr)
 end)
 ```
 
+### Root directory
+
+When you open a file compatible with a language server `lspconfig` will search for a set of files in the current folder or any of the parent folders. If it finds them, the language server will start analyzing that folder. So the "root directory" is basically your project folder.
+
+Some language servers have "single file support" enabled, this means if `lspconfig` can't determine the root directory then the current working directory becomes your root directory.
+
+If your language server doesn't attach to a file, make sure the file and the project folder meet the requirements of the language server.
+
+How do you know what are the requirements? Search the [list of language servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) and read their documentation, or inspect the configuration provided by lspconfig using the command `LspZeroViewConfigSource`.
+
+For example, this command will open the configuration for the lua language server.
+
+```vim
+LspZeroViewConfigSource lua_ls
+```
+
 ### Troubleshooting
 
 If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
