@@ -26,7 +26,7 @@ require('mason-lspconfig').setup({
 
 This config will tell `mason-lspconfig` to install tsserver and rust_analyzer automatically if they are missing. And lsp-zero will handle the configuration of those servers.
 
-> Click [HERE](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers) for the available language servers.
+Servers available in mason.nvim are [listed here](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 Note that after you install a language server you will need to restart Neovim so the language can be configured properly.
 
