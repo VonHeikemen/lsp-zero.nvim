@@ -24,6 +24,10 @@ function M.extend_lspconfig()
   util.default_config.capabilities = s.set_capabilities()
 
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
+    -- looks like some lsp servers can override the capabilities option
+    -- during "config definition". so, now we have to do this.
+    s.ensure_capabilities(config, user_config)
+
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
     end
@@ -274,6 +278,37 @@ function s.set_capabilities(current)
   end
 
   return vim.tbl_deep_extend('force', state.capabilities, current)
+end
+
+function s.ensure_capabilities(server_config, user_config)
+  local config_def = require('lspconfig.configs')[server_config.name]
+
+  if type(config_def) ~= 'table' then
+    return
+  end
+
+  local get_completion = function(val)
+    return vim.tbl_get(val, 'capabilities', 'textDocument', 'completion')
+  end
+
+  local defaults = vim.tbl_get(config_def, 'document_config', 'default_config')
+  local default_opts = get_completion(defaults or {})
+
+  if defaults == nil or default_opts == nil then
+    return
+  end
+
+  local user_opts = get_completion(user_config) or {}
+  local plugin_opts = s.set_capabilities().textDocument.completion
+
+  local completion_opts = vim.tbl_deep_extend(
+    'force',
+    default_opts,
+    plugin_opts,
+    user_opts
+  )
+
+  server_config.capabilities.textDocument.completion = completion_opts
 end
 
 function s.map_check(mode, lhs)
