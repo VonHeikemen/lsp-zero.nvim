@@ -263,14 +263,14 @@ function M.format()
   return {
     fields = {'abbr', 'menu', 'kind'},
     format = function(entry, item)
-      local short_name = {
-        nvim_lsp = 'LSP',
-        nvim_lua = 'nvim'
-      }
-
-      local menu_name = short_name[entry.source.name] or entry.source.name
-
-      item.menu = string.format('[%s]', menu_name)
+      local n = entry.source.name
+      if n == 'nvim_lsp' then
+        item.menu = '[LSP]'
+      elseif n == 'nvim_lua'  then
+        item.menu = '[nvim]'
+      else
+        item.menu = string.format('[%s]', n)
+      end
       return item
     end,
   }
