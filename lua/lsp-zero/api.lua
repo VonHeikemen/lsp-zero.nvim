@@ -192,5 +192,23 @@ function M.omnifunc.setup(opts)
   require('lsp-zero.omnifunc').setup(opts)
 end
 
+M.efm = {}
+
+function M.efm.tools(...)
+  return require('lsp-zero.efm').tools(...)
+end
+
+function M.efm.langs(...)
+  return require('lsp-zero.efm').langs(...)
+end
+
+function M.efm.get_tool_config(...)
+  return require('lsp-zero.efm').get_tool_config(...)
+end
+
+function M.efm.get_server_config()
+  return require('lsp-zero.efm').get_server_config()
+end
+
 return M
 
