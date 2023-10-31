@@ -12,13 +12,7 @@ If you were to do it all by yourself, the code would look like this.
 
 ```lua
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
-
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -42,8 +36,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end
 })
 
-lspconfig.tsserver.setup({})
-lspconfig.rust_analyzer.setup({})
+lspconfig.tsserver.setup({capabilities = lsp_capabilities})
+lspconfig.rust_analyzer.setup({capabilities = lsp_capabilities})
 ```
 
 ## Commands

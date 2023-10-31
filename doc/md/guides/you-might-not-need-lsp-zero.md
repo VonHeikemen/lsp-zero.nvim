@@ -15,13 +15,7 @@ The code I'm about to show does the following: Setup a few default options for l
 
 ```lua
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
-
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -46,7 +40,9 @@ vim.api.nvim_create_autocmd('LspAttach', {
 })
 
 local default_setup = function(server)
-  lspconfig[server].setup({})
+  lspconfig[server].setup({
+    capabilities = lsp_capabilities,
+  })
 end
 
 require('mason').setup({})
