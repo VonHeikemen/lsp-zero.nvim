@@ -24,7 +24,18 @@ Will turn into something very close to this.
 ---
 
 local lspconfig = require('lspconfig')
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+lspconfig.util.on_setup = lspconfig.util.add_hook_after(
+  lspconfig.util.on_setup,
+  function(config, user_config)
+    config.capabilities = vim.tbl_deep_extend(
+      'force',
+      config.capabilities,
+      require('cmp_nvim_lsp').default_capabilities(),
+      vim.tbl_get(user_config, 'capabilities') or {},
+    )
+  end
+)
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -93,8 +104,8 @@ end
 
 lsp_settings()
 
-require('lspconfig').tsserver.setup({capabilities = lsp_capabilities})
-require('lspconfig').rust_analyzer.setup({capabilities = lsp_capabilities})
+require('lspconfig').tsserver.setup({})
+require('lspconfig').rust_analyzer.setup({})
 
 
 ---
