@@ -16,13 +16,7 @@ If you were to do it all by yourself, the code would look like this.
 
 ```lua
 local lspconfig = require('lspconfig')
-local lsp_defaults = lspconfig.util.default_config
-
-lsp_defaults.capabilities = vim.tbl_deep_extend(
-  'force',
-  lsp_defaults.capabilities,
-  require('cmp_nvim_lsp').default_capabilities()
-)
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
 
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
@@ -50,8 +44,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- require('mason').setup()
 -- require('mason-lspconfig').setup()
 
-lspconfig.tsserver.setup({})
-lspconfig.eslint.setup({})
+lspconfig.tsserver.setup({capabilities = lsp_capabilities})
+lspconfig.eslint.setup({capabilities = lsp_capabilities})
 ```
 
 ## Commands
