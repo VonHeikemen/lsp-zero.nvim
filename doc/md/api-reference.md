@@ -524,6 +524,130 @@ require('lspconfig').vuels.setup({
 })
 ```
 
+### `.efm.tools({opts})`
+
+Returns a configuration for the efm language server based on the tools you declare in `{opts}`. This configuration will be compatible with lspconfig and also `vim.lsp.start()`.
+
+`{opts}` must be a list of tools definitions that follow [efm's schema](https://github.com/mattn/efm-langserver/blob/master/schema.md):
+
+Note that you need to convert each property from snake case to camel case. For example, `format-can-range` should be written as `formatCanRange`.
+
+Besides the properties from efm's schema you can also provide `name` and `languages` to the tool definition. Is important that you provide `languages` so lsp-zero can define the filetypes in which efm should be active.
+
+`{opts}` can also have a property call `server_config`. These are the properties you want to add to the language server configuration.
+
+Here is an example configuring `prettierd` and adding a custom config for the language server.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+local efm_opts = lsp_zero.efm.tools({
+  {
+    name = 'prettierd',
+    formatCommand = "prettierd '${INPUT}' ${--range-start=charStart} ${--range-end=charEnd}",
+    formatCanRange = true,
+    formatStdin = true,
+    rootMarkers = {'.prettierrc', '.prettierrc.json'},
+    languages = {'javascript', 'typescript'},
+  },
+  server_config = {
+    settings = {
+      rootMarkers = {'.git/'},
+    },
+    on_attach = function(client, bufnr)
+      local buf_cmd = vim.api.nvim_buf_create_user_command
+      buf_cmd(bufnr, 'EfmFormat', 'LspZeroFormat! efm', {}) 
+    end,
+  },
+})
+
+require('lspconfig').efm.setup(efm_opts)
+```
+
+When defining multiple tools for the same languages, order matters. The commands will be applied in the order they were defined.
+
+Consider this example.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+local efm_opts = lsp_zero.efm.tools({
+  {
+    name = 'eslint-fix',
+    formatCommand = "eslint --fix '${INPUT}'",
+    formatStdin = false,
+    languages = {'javascript', 'typescript'},
+  },
+  {
+    name = 'prettierd',
+    formatCommand = "prettierd '${INPUT}' ${--range-start=charStart} ${--range-end=charEnd}",
+    formatCanRange = true,
+    formatStdin = true,
+    rootMarkers = {'.prettierrc', '.prettierrc.json'},
+    languages = {'javascript', 'typescript'},
+  },
+})
+
+require('lspconfig').efm.setup(efm_opts)
+```
+
+In this case `eslint` command will be executed before the `prettierd` command for the filetypes `javascript` and `typescript`.
+
+If the configuration for the tool you want to use is in another lua module, you can use the property `config` to store the return value of the module.
+
+Here is an example using the plugin [efmls-configs-nvim](https://github.com/creativenull/efmls-configs-nvim) to get the settings for `prettierd`.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+local efm_opts = lsp_zero.efm.tools({
+  {
+    name = 'prettierd',
+    config = require('efmls-configs.formatters.prettier_d'),
+    languages = {'javascript', 'typescript'},
+  },
+})
+
+require('lspconfig').efm.setup(efm_opts)
+```
+
+### `.efm.langs({opts})`
+
+Returns a list of the languages registered by the [.efm.tools()](#efmtoolsopts) function.
+
+`{opts}` supports the following properties.
+
+  * with: (String, Optional). Property name used to filter the list of languages.
+
+  * exclude: (Table, Optional). List of languages that should be excluded from the final result.
+
+This functions was created to complement [.format_on_save()](#format_on_saveopts) and [.format_mapping()](#format_mappingkey-opts).
+
+Here's the basic usage.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+local efm_opts = lsp_zero.efm.tools({
+  {
+    name = 'prettierd',
+    formatCommand = "prettierd '${INPUT}' ${--range-start=charStart} ${--range-end=charEnd}",
+    formatCanRange = true,
+    formatStdin = true,
+    rootMarkers = {'.prettierrc', '.prettierrc.json'},
+    languages = {'javascript', 'typescript'},
+  },
+})
+
+require('lspconfig').efm.setup(efm_opts)
+
+lsp_zero.format_on_save({
+  servers = {
+    ['efm'] = lsp_zero.efm.langs({with = 'formatCommand'})
+  },
+})
+```
+
 ### `.extend_lspconfig()`
 
 Takes care of the integration between lspconfig and nvim-cmp.

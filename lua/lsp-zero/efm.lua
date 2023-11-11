@@ -131,25 +131,5 @@ function M.langs(opts)
   return vim.tbl_keys(res)
 end
 
-function M.get_tool_config(arg, opts)
-  local t = state.tools[arg]
-  if t == nil then
-    return
-  end
-
-  opts = opts or {}
-
-  local res = vim.deepcopy(t)
-  if opts.include_lang then
-    res.languages = state.tool_lang[arg]
-  end
-
-  return res
-end
-
-function M.get_server_config()
-  return state.current
-end
-
 return M
 

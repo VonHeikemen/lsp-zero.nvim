@@ -110,7 +110,6 @@ function M.use(servers, opts)
     servers = {servers}
   end
 
-  local bufnr = vim.api.nvim_get_current_buf()
   local has_filetype = not (vim.bo.filetype == '')
   local buffer = vim.api.nvim_get_current_buf()
   local lspconfig = require('lspconfig')
