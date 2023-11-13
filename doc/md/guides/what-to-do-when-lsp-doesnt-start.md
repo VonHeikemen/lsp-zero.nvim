@@ -1,4 +1,4 @@
-# What to do when your language server doesn't start?
+# What to do when a language server doesn't start?
 
 ## Ensure the executable is on your PATH
 
@@ -7,7 +7,8 @@ First things first, do you know what is the "PATH"?
 If the answer is "No, I don't know what the hell you are talking about?" I'm going to tell you.
 
 ```
-The PATH is an environment variable that contains a list of folder locations that the operating system searches for executable files.
+The PATH is an environment variable that contains a list of folder locations
+that the operating system searches for executable files.
 ```
 
 Here are a couple of links that can be useful to you.
