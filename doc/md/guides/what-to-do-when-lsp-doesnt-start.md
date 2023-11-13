@@ -35,6 +35,10 @@ LSP server: eslint
 
 If the executable could not be found, update your PATH environment variable. Add the folder where the executable of the language server is located.
 
+## Inspect the log file
+
+If the language server fails after it starts, look for an error message in the log file. Use the command `:LspLog`.
+
 ## Ensure mason-lspconfig knows about the server
 
 If you are using `mason-lspconfig` to handle the automatic setup, the first thing you can do is make sure mason-lspconfig recognizes the server.
