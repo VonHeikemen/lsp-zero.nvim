@@ -44,6 +44,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
   * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#format-buffer-using-a-keybinding)
   * [Use icons in the sign column](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#use-icons-in-the-sign-column)
   * [Troubleshooting](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#troubleshooting)
+  * [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md)
 
 * Autocompletion
 
@@ -323,46 +324,9 @@ For example, this command will open the configuration for the lua language serve
 LspZeroViewConfigSource lua_ls
 ```
 
-### Troubleshooting
+### What to do if something goes wrong?
 
-If you are having problems with a language server I recommend that you reduce your config to a minimal and check the logs of the LSP server.
-
-What do I mean with a minimal example? Configure the language just using `lspconfig` and increase the log level. Here is a minimal config using `tsserver` as an example.
-
-```lua
-vim.lsp.set_log_level('debug')
-
-vim.g.lsp_zero_extend_cmp = 0
-vim.g.lsp_zero_extend_lspconfig = 0
-
-local lsp_zero = require('lsp-zero.api')
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-
-require('lspconfig').tsserver.setup({
-  capabilities = lsp_capabilities,
-  on_attach = function(client, bufnr)
-    lsp_zero.default_keymaps({buffer = bufnr})
-  end,
-})
-
-local cmp = require('cmp')
-
-cmp.setup({
-  sources = {
-    {name = 'nvim_lsp'}
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-Space>'] = cmp.mapping.complete(),
-  }),
-  snippet = {
-    expand = function(args)
-      require('luasnip').lsp_expand(args.body)
-    end,
-  },
-})
-```
-
-Then you can test the language and inspect the log file using the command `:LspLog`.
+Turns out I have a lot to say on this subject so I made [a dedicated guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
 
 ## Autocomplete
 
