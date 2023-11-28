@@ -6,14 +6,15 @@ Okay, so this thing.
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- Replace the language servers listed here
--- with the ones you have installed
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp_zero.default_setup,
+  },
+})
 ```
 
 Will turn into something very close to this.
@@ -32,44 +33,10 @@ lspconfig.util.on_setup = lspconfig.util.add_hook_after(
       'force',
       config.capabilities,
       require('cmp_nvim_lsp').default_capabilities(),
-      vim.tbl_get(user_config, 'capabilities') or {},
+      vim.tbl_get(user_config, 'capabilities') or {}
     )
   end
 )
-
-vim.api.nvim_create_autocmd('LspAttach', {
-  desc = 'LSP actions',
-  callback = function(event)
-    local map = function(m, lhs, rhs)
-      local opts = {buffer = bufnr}
-      vim.keymap.set(m, lhs, rhs, opts)
-    end
-
-    local buf_command = vim.api.nvim_buf_create_user_command
-
-    buf_command(bufnr, 'LspFormat', function()
-      vim.lsp.buf.format()
-    end, {desc = 'Format buffer with language server'})
-
-    -- LSP actions
-    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
-    map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
-    map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
-    map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
-    map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
-    map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
-    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
-    map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
-    map({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
-    map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
-
-    -- Diagnostics
-    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>') 
-  end
-})
 
 local function lsp_settings()
   vim.diagnostic.config({
@@ -101,11 +68,67 @@ local function lsp_settings()
   end, {desc = 'Remove folder from workspace'})
 end
 
+local function lsp_format(input)
+  local name
+  local async = input.bang
+
+  if input.args ~= '' then
+    name = input.args
+  end
+
+  vim.lsp.buf.format({async = async, name = name})
+end
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local map = function(m, lhs, rhs)
+      local opts = {buffer = bufnr}
+      vim.keymap.set(m, lhs, rhs, opts)
+    end
+
+    vim.api.nvim_buf_create_user_command(
+      bufnr,
+      'LspFormat',
+      lsp_format,
+      {
+        bang = true,
+        nargs = '?',
+        desc = 'Format buffer with language server'
+      }
+    )
+
+    -- LSP actions
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+    map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+    map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+    map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+    map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+    map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
+    map({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+    map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
+
+    -- Diagnostics
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>') 
+  end
+})
+
 
 lsp_settings()
 
-require('lspconfig').tsserver.setup({})
-require('lspconfig').rust_analyzer.setup({})
+require('mason').setup({})
+require('mason-lspconfig').setup({
+  handlers = {
+    function(server)
+      require('lspconfig')[server].setup({})
+    end,
+  },
+})
 
 
 ---
