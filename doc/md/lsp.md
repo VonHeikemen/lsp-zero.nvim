@@ -226,19 +226,21 @@ end)
 
 local lsp_configurations = require('lspconfig.configs')
 
-if not lsp_configurations.my_new_lsp then
-  lsp_configurations.my_new_lsp = {
+if not lsp_configurations.name_of_my_lsp then
+  lsp_configurations.name_of_my_lsp = {
     default_config = {
-      name = 'my-new-lsp',
-      cmd = {'my-new-lsp'},
+      name = 'name-of-my-new-lsp',
+      cmd = {'command-that-start-the-lsp'},
       filetypes = {'my-filetype'},
       root_dir = require('lspconfig.util').root_pattern('some-config-file')
     }
   }
 end
 
-require('lspconfig').my_new_lsp.setup({})
+require('lspconfig').name_of_my_lsp.setup({})
 ```
+
+Note that `root_pattern` expects a list of files. The files that you list there should help `lspconfig` identify the root of your project.
 
 ### Use the function [.new_client()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#new_clientopts)
 
