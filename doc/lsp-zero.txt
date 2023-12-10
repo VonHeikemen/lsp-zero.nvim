@@ -700,6 +700,30 @@ set_sign_icons({opts}): ~
       info = '»'
     })
 <
+                                                *lsp-zero.highlight_symbol()*
+
+highlight_symbol({client}, {bufnr}): ~
+    Uses the |CursorHold| event to trigger a document highlight request. In
+    other words, it will highlight the symbol under the cursor.
+
+    For this to work properly your colorscheme needs to set these highlight
+    groups: `LspReferenceRead`, `LspReferenceText` and `LspReferenceWrite`.
+
+    Keep in mind the event `CursorHold` depends on the |'updatetime'| option.
+    If you want the highlight to happen fast, you will need to set this option
+    to a "low" value.
+>lua
+    vim.opt.updatetime = 350
+    local lsp_zero = require('lsp-zero')
+
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.highlight_symbol(client, bufnr)
+    end)
+
+    -- Replace the language servers listed here
+    -- with the ones you have installed
+    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+<
                                                       *lsp-zero.new_client()*
 
 new_client({opts}): ~
