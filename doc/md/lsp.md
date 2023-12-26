@@ -307,7 +307,7 @@ end)
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
 
-Is worth mention [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
+It's worth mentioning [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) is a blocking (synchronous) function. If you want something that behaves like [.buffer_autoformat()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#buffer_autoformatclient-bufnr) but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -470,7 +470,7 @@ Notice here that we have a property called `settings`, and you want to know if l
 
 If everything went well you should get every default config lspconfig added plus your own.
 
-If this didn't showed your settings, make sure you don't call `lspconfig` in another part of your neovim config. lspconfig can override everything lsp-zero does.
+If this didn't show your settings, make sure you don't call `lspconfig` in another part of your neovim config. lspconfig can override everything lsp-zero does.
 
 ### Inspect the entire server config
 
