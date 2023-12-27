@@ -8,12 +8,24 @@ lsp-zero first adds data to an option called `capabilities` in lspconfig's defau
 
 Then it creates an autocommand on the event `LspAttach`. This autocommand will be triggered every time a language server is attached to a buffer. This is where all keybindings and commands are created.
 
-If you were to do it all by yourself, the code would look like this.
+So this example configuration
 
 ```lua
-local lspconfig = require('lspconfig')
-local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+local lsp_zero = require('lsp-zero')
 
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+end)
+
+require('lspconfig').tsserver.setup({})
+require('lspconfig').rust_analyzer.setup({})
+
+-- lsp-zero will also setup autocompletion
+```
+
+Is (almost) the same as this:
+
+```lua
 vim.api.nvim_create_autocmd('LspAttach', {
   desc = 'LSP actions',
   callback = function(event)
@@ -36,8 +48,12 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end
 })
 
-lspconfig.tsserver.setup({capabilities = lsp_capabilities})
-lspconfig.rust_analyzer.setup({capabilities = lsp_capabilities})
+local lsp_capabilities = require('cmp_nvim_lsp').default_capabilities()
+
+require('lspconfig').tsserver.setup({capabilities = lsp_capabilities})
+require('lspconfig').rust_analyzer.setup({capabilities = lsp_capabilities})
+
+-- in this snippet there isn't any autocompletion setup
 ```
 
 ## Commands

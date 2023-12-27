@@ -2,7 +2,16 @@
 
 Collection of functions that will help you setup Neovim's LSP client, so you can get IDE-like features with minimum effort.
 
-Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a collection of configurations for various LSP servers).
+Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a collection of configurations for various LSP servers). So a minimal config can look like this.
+
+```lua
+require('lsp-zero')
+require('lspconfig').lua_ls.setup({})
+
+-- dear reader, read the documentation before you copy/paste
+```
+
+You'll get all the features Neovim's LSP client offers by default plus autocompletion.
 
 If you have any question about a feature or configuration feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
