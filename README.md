@@ -221,7 +221,7 @@ require('lspconfig').lua_ls.setup({})
 
 Here `lua_ls` is the name of the language server we have installed. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
 
-If you want to configure `lua_ls` specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/neovim-lua-ls.md).
+If you want to configure `lua_ls` specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
 
 #### Automatic setup of LSP servers
 
