@@ -7,7 +7,6 @@ Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/
 ```lua
 require('lsp-zero')
 require('lspconfig').lua_ls.setup({})
-
 -- dear reader, read the documentation before you copy/paste
 ```
 
@@ -208,6 +207,8 @@ lsp_zero.on_attach(function(client, bufnr)
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
+
+-- here you can configure the language servers
 ```
 
 Next step is to install a language server. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
@@ -220,30 +221,7 @@ require('lspconfig').lua_ls.setup({})
 
 Here `lua_ls` is the name of the language server we have installed. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
 
-You need to setup your language servers after you require lsp-zero.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
-end)
-
----
--- Replace these language servers
--- with the ones you have installed in your system
----
-require('lspconfig').lua_ls.setup({})
-require('lspconfig').rust_analyzer.setup({})
-```
-
-If you don't need to customize the language servers you are using, you can call the function [.setup_servers()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#setup_serverslist-opts) with a list of server names.
-
-```lua
-lsp_zero.setup_servers({'lua_ls', 'rust_analyzer'})
-```
+If you want to configure `lua_ls` specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/neovim-lua-ls.md).
 
 #### Automatic setup of LSP servers
 
