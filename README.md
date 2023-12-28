@@ -10,15 +10,7 @@ require('lspconfig').lua_ls.setup({})
 -- dear reader, read the documentation before you copy/paste
 ```
 
-You'll get all the features Neovim's LSP client offers by default plus autocompletion.
-
-If you have any question about a feature or configuration feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
-
-## Requirements
-
-Neovim v0.8 or greater. 
-
-If you need support for Neovim v0.7 use the branch [compat-07](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
+When a language server is active you'll get all the features Neovim's LSP client offers by default plus autocompletion.
 
 ## How to get started
 
@@ -27,6 +19,10 @@ If you are new to neovim and you don't have a configuration file (`init.lua`) fo
 If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
 
 Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md).
+
+### If you need any help
+
+Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
 ## Migration guides
 
@@ -91,13 +87,15 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 ## Quickstart (for the impatient)
 
-This section will teach you how to create a basic configuration.
+lsp-zero requires Neovim v0.8 or greater. If you need support for Neovim v0.7 use the [branch compat-07](https://github.com/VonHeikemen/lsp-zero.nvim/tree/compat-07).
 
 If you know your way around Neovim and how to configure it, take a look at this examples:
 
 * [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#lua-template)
 * [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#vimscript-template)
 * [ThePrimeagen's config (adapted to version 3)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
+
+The following sections will show how to create a basic configuration.
 
 ### Installing
 
@@ -208,10 +206,10 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- here you can configure the language servers
+-- here you can setup the language servers 
 ```
 
-Next step is to install a language server. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find the list of LSP servers and how to install them.
+Next step is to install a language server. Go to nvim-lspconfig's documentation, in the [server_configuration.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) file you'll find a list of language servers and how to install them.
 
 Once you have a language server installed in your system, add the setup in your Neovim config. Use the module `lspconfig`, like this.
 
@@ -219,9 +217,9 @@ Once you have a language server installed in your system, add the setup in your 
 require('lspconfig').lua_ls.setup({})
 ```
 
-Here `lua_ls` is the name of the language server we have installed. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
+Here `lua_ls` is the name of the language server. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
 
-If you want to configure `lua_ls` specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
+So `lua_ls` is the language server for lua, if you want to configure it specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
 
 #### Automatic setup of LSP servers
 
