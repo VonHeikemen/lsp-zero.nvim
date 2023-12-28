@@ -4,6 +4,8 @@
 
 This configuration assume you want to use `mason.nvim` to install (and update) your language servers. Note that after you install a language server with mason.nvim there is a good chance the server won't be able to initialize correctly the first time. Try to "refresh" the file with the command `:edit`, and if that doesn't work restart Neovim.
 
+> Note: lsp-zero requires Neovim v0.8 or greater.
+
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
 
@@ -54,7 +56,7 @@ require('mason-lspconfig').setup({
 
 This configuration assumes you want to use `mason.nvim` to install (and update) your language servers. Note that after you install a language server with mason.nvim there is a good chance the server won't be able to initialize correctly the first time. Try to "refresh" the file with the command `:edit`, and if that doesn't work restart Neovim.
 
-Make sure to download [vim-plug](https://github.com/junegunn/vim-plug) (the plugin manager) before you copy this code into your config (`init.vim`).
+Make sure you have Neovim v0.8 or greater and download [vim-plug](https://github.com/junegunn/vim-plug) (the plugin manager) before you copy this code into your config (`init.vim`).
 
 ```vim
 call plug#begin()
@@ -92,7 +94,26 @@ EOF
 
 This is the updated version of the configuration ThePrimeagen shows in his `0 to LSP` tutorial.
 
-I'm going to assume you have all the plugins necessary installed.
+I'm going to assume you have Neovim v0.8 or greater, and you installed all plugins necessary.
+
+<details>
+<summary>Expand: all plugins necessary </summary>
+
+Seriously, make sure you have all this installed.
+
+* [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+* [williamboman/mason.nvim](https://github.com/williamboman/mason.nvim)
+* [williamboman/mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim)
+* [hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+* [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
+* [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer)
+* [hrsh7th/cmp-path](https://github.com/hrsh7th/cmp-path)
+* [saadparwaiz1/cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip)
+* [hrsh7th/cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim-lua)
+* [L3MON4D3/LuaSnip](https://github.com/L3MON4D3/LuaSnip)
+* [rafamadriz/friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
+
+</details>
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -132,6 +153,8 @@ cmp.setup({
     {name = 'path'},
     {name = 'nvim_lsp'},
     {name = 'nvim_lua'},
+    {name = 'luasnip', keyword_length = 2},
+    {name = 'buffer', keyword_length = 3},
   },
   formatting = lsp_zero.cmp_format(),
   mapping = cmp.mapping.preset.insert({
