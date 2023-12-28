@@ -251,7 +251,19 @@ For more details about how to use mason.nvim with lsp-zero see the guide on how 
 
 ### Keybindings
 
-If you choose to use the function [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_keymapsopts) you gain access to some keybindings. All of these shortcuts are bound to built-in functions, so you can get more details using the `:help` command.
+If you choose to use the function [.default_keymaps()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_keymapsopts) you'll be able to use Neovim's built-in functions for various actions. Things like jump to definition, rename variable, format current file, and some more.
+
+Note that the keybindings have to be enabled explicitly, like this.
+
+```lua
+local lsp_zero = require('lsp-zero')
+
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+end)
+```
+
+Here's the full list:
 
 * `K`: Displays hover information about the symbol under the cursor in a floating window. See [:help vim.lsp.buf.hover()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.hover()).
 
