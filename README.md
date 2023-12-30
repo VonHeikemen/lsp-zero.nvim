@@ -22,7 +22,7 @@ When `require('lsp-zero')` is called this is what happens:
 * Reserves a space for the signcolumn.
 * Adds border to floating windows on diagnostics, the documentation window of the hover handler and signature help handler.
 
-And here's the code for all that.
+And here's the code for all that. Just in case you want to see it.
 
 ```lua
 --- btw, the user can disable all of this. or just parts of it.
