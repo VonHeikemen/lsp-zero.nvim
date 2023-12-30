@@ -2,7 +2,7 @@
 
 Collection of functions that will help you setup Neovim's LSP client, so you can get IDE-like features with minimum effort.
 
-Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a collection of configurations for various LSP servers). So a minimal config can look like this.
+Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a collection of configurations for various language servers). So a minimal config can look like this.
 
 ```lua
 require('lsp-zero')
@@ -268,7 +268,7 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
 For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
---- Uncomment these if you want to manage LSP servers from neovim
+--- Uncomment these if you want to manage the language servers from neovim
 -- {'williamboman/mason.nvim'},
 -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -289,7 +289,7 @@ use {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'v3.x',
   requires = {
-    --- Uncomment these if you want to manage LSP servers from neovim
+    --- Uncomment these if you want to manage the language servers from neovim
     -- {'williamboman/mason.nvim'},
     -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -310,7 +310,7 @@ use {
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'};
 
---- Uncomment these if you want to manage LSP servers from neovim
+--- Uncomment these if you want to manage the language servers from neovim
 -- {'williamboman/mason.nvim'};
 -- {'williamboman/mason-lspconfig.nvim'};
 
@@ -328,7 +328,7 @@ use {
 <summary>Expand: vim-plug </summary>
 
 ```vim
-"  Uncomment these if you want to manage LSP servers from neovim
+"  Uncomment these if you want to manage the language servers from neovim
 "  Plug 'williamboman/mason.nvim'
 "  Plug 'williamboman/mason-lspconfig.nvim'
 
@@ -382,9 +382,9 @@ Here `lua_ls` is the name of the language server. If you need to customize it, a
 
 So `lua_ls` is the language server for lua, if you want to configure it specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
 
-#### Automatic setup of LSP servers
+#### Automatic setup of language servers
 
-If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) you can manage the installation of the LSP servers from inside Neovim, and then use lsp-zero to handle the configuration.
+If you decided to install [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) you can manage the installation of the language servers from inside Neovim, and then use lsp-zero to handle the configuration.
 
 Here is a basic usage example.
 
@@ -549,7 +549,7 @@ Note: You can disable the warnings about removed functions by setting the global
 * [.defaults.cmp_mappings()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#defaultscmp_mappingsopts) was removed. All nvim-cmp mappings can be overriden using the `cmp` module.
 * [.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#nvim_workspaceopts) was removed. Use [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#nvim_lua_lsopts) to get the config for the lua language server.
 * [.defaults.nvim_workspace()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#defaultsnvim_workspace) was replaced by [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#nvim_lua_lsopts).
-* [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#ensure_installedlist) was removed. Use the module `mason-lspconfig` to install LSP servers.
+* [.ensure_installed()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#ensure_installedlist) was removed. Use the module `mason-lspconfig` to install the language servers.
 * [.new_server()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v2.x/doc/md/api-reference.md#new_serveropts) was renamed to [.new_client()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#new_clientopts).
 
 ## FAQ
