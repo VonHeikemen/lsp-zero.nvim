@@ -573,9 +573,15 @@ These are the supported methods:
 
 Quick note: "the fallback" is the default behavior of the key you assign to a method.
 
-### `.cmp_format()`
+### `.cmp_format({opts})`
 
 When used the completion items will show a label that identifies the source they come from.
+
+`{opts}` only supports one property:
+
+  * max_width: (Number, Optional). Maximum width the text content of the suggestion can have.
+
+The return value of this function must be used in the `formatting` property of nvim-cmp.
 
 ```lua
 local cmp = require('cmp')

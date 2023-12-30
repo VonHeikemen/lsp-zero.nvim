@@ -115,7 +115,10 @@ function M.basic_mappings()
   }
 end
 
-function M.format()
+function M.format(opts)
+  opts = opts or {}
+  local maxwidth = opts.max_width or false
+
   return {
     fields = {'abbr', 'menu', 'kind'},
     format = function(entry, item)
@@ -127,6 +130,16 @@ function M.format()
       else
         item.menu = string.format('[%s]', n)
       end
+
+      if maxwidth and #item.abbr > maxwidth then
+        local last = item.kind == 'Snippet' and '~' or ''
+        item.abbr = string.format(
+          '%s %s',
+          string.sub(item.abbr, 1, maxwidth),
+          last
+        )
+      end
+
       return item
     end,
   }

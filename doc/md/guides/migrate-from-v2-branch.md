@@ -74,7 +74,7 @@ require('mason-lspconfig').setup({
 
 ## Completion item label
 
-In `v2.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#cmp_format) to get the settings needed for nvim-cmp.
+In `v2.x` each completion item has a label that shows the source that created the item. This feature is now opt-in, you can use the function [.cmp_format()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#cmp_formatopts) to get the settings needed for nvim-cmp.
 
 ```lua
 local cmp = require('cmp')
