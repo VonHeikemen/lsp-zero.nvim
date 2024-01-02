@@ -7,10 +7,9 @@ Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/
 ```lua
 require('lsp-zero')
 require('lspconfig').lua_ls.setup({})
--- dear reader, read the documentation before you copy/paste
 ```
 
-When a language server is active you'll get all the features Neovim's LSP client offers by default plus autocompletion.
+With this code when `lua_ls` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion.
 
 <details>
 <summary>Expand: What happens under the hood? </summary>
@@ -18,11 +17,13 @@ When a language server is active you'll get all the features Neovim's LSP client
 When `require('lsp-zero')` is called this is what happens:
 
 * lsp-zero makes sure the configuration provided by [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is applied to every language server configured by `nvim-lspconfig`.
-* Sets up a "backup" configuration for nvim-cmp, to make sure it works even if the user forgot something important.
+* Sets up a "backup" configuration for the "essential" options in nvim-cmp. So autocomplation can work even if forgets something important.
 * Reserves a space for the signcolumn.
 * Adds border to floating windows on diagnostics, the documentation window of the hover handler and signature help handler.
 
 [Here's the simplified code of these steps](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-require-lsp-zero-does.md). In case you want to understand it without looking at source code of the plugin itself.
+
+Note that lsp-zero offers more features but those are opt-in, see [usage section](#usage).
 
 </details>
 
