@@ -8,7 +8,7 @@ Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/
 require('lsp-zero')
 require('lspconfig').lua_ls.setup({})
 -- don't copy/paste this if you don't know what is `lua_ls`.
--- yes, lsp-zero has changed since ThePrimeagen released his video (that tutorial is outdated)
+-- yes, lsp-zero has changed since ThePrimeagen released his video "0 to LSP".
 ```
 
 With this code when `lua_ls` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion.
