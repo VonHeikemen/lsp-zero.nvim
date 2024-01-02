@@ -259,6 +259,31 @@ require('mason-lspconfig').setup({
 })
 ```
 
+If you need to configure a language server installed by `mason.nvim`, add a "handler function" to the `handlers` option. Something like this:
+
+```lua
+require('mason-lspconfig').setup({
+  ensure_installed = {},
+  handlers = {
+    lsp_zero.default_setup,
+    --- the name of the handler must be the same
+    --- as the name of the language server 
+    tsserver = function()
+      --- in this function you can setup
+      --- the language server however you want. 
+      --- in this example we just use lspconfig
+
+      require('lspconfig').tsserver.setup({
+        ---
+        -- in here you can add your own
+        -- custom configuration
+        ---
+      })
+    end,
+  },
+})
+```
+
 For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md).
 
 ## Language servers
