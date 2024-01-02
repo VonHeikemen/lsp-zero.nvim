@@ -17,7 +17,7 @@ With this code when `lua_ls` (a language server) is active you'll get all the fe
 When `require('lsp-zero')` is called this is what happens:
 
 * lsp-zero makes sure the configuration provided by [cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp) is applied to every language server configured by `nvim-lspconfig`.
-* Sets up a "backup" configuration for the "essential" options in nvim-cmp. So autocomplation can work even if forgets something important.
+* Sets up a "backup" configuration for the "essential" options in nvim-cmp. So autocomplation can work even if the user forgets something important.
 * Reserves a space for the signcolumn.
 * Adds border to floating windows on diagnostics, the documentation window of the hover handler and signature help handler.
 
