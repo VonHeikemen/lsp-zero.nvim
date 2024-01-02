@@ -13,6 +13,8 @@ require('lspconfig').lua_ls.setup({})
 
 With this code when `lua_ls` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion.
 
+If you came here from a tutorial read the [migration guide section](#migration-guides) 
+
 <details>
 <summary>Expand: What happens under the hood? </summary>
 
@@ -47,6 +49,8 @@ Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvi
 
 * [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v1-branch.md)
 * [Migrate from v2.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
+* [ThePrimeagen's 0 to LSP config (this is an updated version)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
+* [Migrate away from lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md)
 
 ## Documentation
 
