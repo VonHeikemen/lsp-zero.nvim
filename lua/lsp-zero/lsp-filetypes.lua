@@ -1,4 +1,7 @@
 return {
+  aiken = {
+    aiken = true
+  },
   als = {
     ada = true
   },
@@ -28,8 +31,28 @@ return {
     asm = true,
     vmasm = true
   },
+  ast_grep = {
+    c = true,
+    cpp = true,
+    css = true,
+    dart = true,
+    go = true,
+    html = true,
+    java = true,
+    javascript = true,
+    kotlin = true,
+    lua = true,
+    python = true,
+    rust = true,
+    typescript = true
+  },
   astro = {
     astro = true
+  },
+  autotools_ls = {
+    automake = true,
+    config = true,
+    make = true
   },
   awk_ls = {
     awk = true
@@ -46,6 +69,15 @@ return {
   },
   bicep = {
     bicep = true
+  },
+  biome = {
+    javascript = true,
+    javascriptreact = true,
+    json = true,
+    jsonc = true,
+    typescript = true,
+    ["typescript.tsx"] = true,
+    typescriptreact = true
   },
   blueprint_ls = {
     blueprint = true
@@ -75,8 +107,15 @@ return {
   ccls = {
     c = true,
     cpp = true,
+    cuda = true,
     objc = true,
     objcpp = true
+  },
+  cds_lsp = {
+    cds = true
+  },
+  ["circom-lsp"] = {
+    circom = true
   },
   clangd = {
     c = true,
@@ -106,6 +145,10 @@ return {
   coffeesense = {
     coffee = true
   },
+  contextive = {},
+  coq_lsp = {
+    coq = true
+  },
   crystalline = {
     crystal = true
   },
@@ -126,14 +169,9 @@ return {
   cucumber_language_server = {
     cucumber = true
   },
-  custom_elements_ls = {
-    html = true,
-    javascript = true,
-    ["javascript.jsx"] = true,
-    javascriptreact = true,
-    typescript = true,
-    ["typescript.tsx"] = true,
-    typescriptreact = true
+  custom_elements_ls = {},
+  cypher_ls = {
+    cypher = true
   },
   dafny = {
     dafny = true,
@@ -163,7 +201,7 @@ return {
     tex = true
   },
   docker_compose_language_service = {
-    yaml = true
+    ["yaml.docker-compose"] = true
   },
   dockerls = {
     dockerfile = true
@@ -199,6 +237,9 @@ return {
   elmls = {
     elm = true
   },
+  elp = {
+    erlang = true
+  },
   ember = {
     handlebars = true,
     javascript = true,
@@ -207,7 +248,6 @@ return {
     ["typescript.glimmer"] = true
   },
   emmet_language_server = {
-    astro = true,
     css = true,
     eruby = true,
     html = true,
@@ -217,9 +257,7 @@ return {
     pug = true,
     sass = true,
     scss = true,
-    svelte = true,
-    typescriptreact = true,
-    vue = true
+    typescriptreact = true
   },
   emmet_ls = {
     astro = true,
@@ -227,7 +265,6 @@ return {
     eruby = true,
     html = true,
     htmldjango = true,
-    javascript = true,
     javascriptreact = true,
     less = true,
     pug = true,
@@ -256,6 +293,9 @@ return {
     ["typescript.tsx"] = true,
     typescriptreact = true,
     vue = true
+  },
+  facility_language_server = {
+    fsd = true
   },
   fennel_language_server = {
     fennel = true
@@ -314,8 +354,23 @@ return {
     typescript = true,
     ["typescript.glimmer"] = true
   },
+  glsl_analyzer = {
+    comp = true,
+    frag = true,
+    geom = true,
+    glsl = true,
+    tesc = true,
+    tese = true,
+    vert = true
+  },
   glslls = {
-    glsl = true
+    comp = true,
+    frag = true,
+    geom = true,
+    glsl = true,
+    tesc = true,
+    tese = true,
+    vert = true
   },
   golangci_lint_ls = {
     go = true,
@@ -340,6 +395,9 @@ return {
   },
   groovyls = {
     groovy = true
+  },
+  guile_ls = {
+    ["scheme.guile"] = true
   },
   haxe_language_server = {
     haxe = true
@@ -368,6 +426,12 @@ return {
   },
   html = {
     html = true
+  },
+  htmx = {
+    html = true
+  },
+  hydra_lsp = {
+    yaml = true
   },
   idris2_lsp = {
     idris2 = true
@@ -417,6 +481,12 @@ return {
     xsl = true,
     xslt = true
   },
+  lexical = {
+    eelixir = true,
+    elixir = true,
+    heex = true,
+    surface = true
+  },
   ltex = {
     bib = true,
     gitcommit = true,
@@ -424,6 +494,8 @@ return {
     org = true,
     pandoc = true,
     plaintex = true,
+    quarto = true,
+    rmd = true,
     rnoweb = true,
     rst = true,
     tex = true
@@ -438,10 +510,14 @@ return {
     asm68k = true
   },
   marksman = {
-    markdown = true
+    markdown = true,
+    ["markdown.mdx"] = true
   },
   matlab_ls = {
     matlab = true
+  },
+  mdx_analyzer = {
+    ["markdown.mdx"] = true
   },
   metals = {
     scala = true
@@ -461,14 +537,24 @@ return {
   mm0_ls = {
     ["metamath-zero"] = true
   },
+  mojo = {
+    mojo = true
+  },
   move_analyzer = {
     move = true
+  },
+  mutt_ls = {
+    muttrc = true,
+    neomuttrc = true
   },
   nelua_lsp = {
     nelua = true
   },
   neocmake = {
     cmake = true
+  },
+  nginx_language_server = {
+    nginx = true
   },
   nickel_ls = {
     ncl = true,
@@ -492,6 +578,9 @@ return {
   },
   ntt = {
     ttcn = true
+  },
+  nushell = {
+    nu = true
   },
   nxls = {
     json = true,
@@ -552,8 +641,14 @@ return {
   phpactor = {
     php = true
   },
+  pkgbuild_language_server = {
+    PKGBUILD = true
+  },
   please = {
     bzl = true
+  },
+  postgres_lsp = {
+    sql = true
   },
   powershell_es = {
     ps1 = true
@@ -592,6 +687,7 @@ return {
     qmljs = true
   },
   qmlls = {
+    qml = true,
     qmljs = true
   },
   quick_lint_js = {
@@ -654,6 +750,9 @@ return {
   ruff_lsp = {
     python = true
   },
+  rune_languageserver = {
+    rune = true
+  },
   rust_analyzer = {
     rust = true
   },
@@ -672,6 +771,10 @@ return {
   sixtyfps = {
     sixtyfps = true
   },
+  slangd = {
+    hlsl = true,
+    shaderslang = true
+  },
   slint_lsp = {
     slint = true
   },
@@ -681,6 +784,7 @@ return {
   smithy_ls = {
     smithy = true
   },
+  snyk_ls = {},
   solang = {
     solidity = true
   },
@@ -721,6 +825,9 @@ return {
     yaml = true,
     yml = true
   },
+  spyglassmc_language_server = {
+    mcfunction = true
+  },
   sqlls = {
     mysql = true,
     sql = true
@@ -742,6 +849,13 @@ return {
   },
   steep = {
     eruby = true,
+    ruby = true
+  },
+  stimulus_ls = {
+    blade = true,
+    eruby = true,
+    html = true,
+    php = true,
     ruby = true
   },
   stylelint_lsp = {
@@ -788,6 +902,7 @@ return {
     erb = true,
     eruby = true,
     gohtml = true,
+    gohtmltmpl = true,
     haml = true,
     handlebars = true,
     hbs = true,
@@ -831,6 +946,9 @@ return {
   teal_ls = {
     teal = true
   },
+  templ = {
+    templ = true
+  },
   terraform_lsp = {
     hcl = true,
     terraform = true
@@ -855,6 +973,9 @@ return {
   theme_check = {
     liquid = true
   },
+  thriftls = {
+    thrift = true
+  },
   tilt_ls = {
     tiltfile = true
   },
@@ -866,16 +987,31 @@ return {
     ["typescript.tsx"] = true,
     typescriptreact = true
   },
+  ttags = {
+    haskell = true,
+    javascript = true,
+    ruby = true,
+    rust = true
+  },
   turtle_ls = {
     ttl = true,
     turtle = true
+  },
+  twig_language_server = {
+    twig = true
   },
   typeprof = {
     eruby = true,
     ruby = true
   },
+  typos_lsp = {
+    ["*"] = true
+  },
   typst_lsp = {
     typst = true
+  },
+  uiua = {
+    uiua = true
   },
   unison = {
     unison = true
@@ -890,6 +1026,11 @@ return {
   },
   uvls = {
     uvl = true
+  },
+  v_analyzer = {
+    v = true,
+    vsh = true,
+    vv = true
   },
   vala_ls = {
     genie = true,
@@ -949,6 +1090,9 @@ return {
   yamlls = {
     yaml = true,
     ["yaml.docker-compose"] = true
+  },
+  yang_lsp = {
+    yang = true
   },
   yls = {
     yar = true,
