@@ -68,8 +68,6 @@ function M.setup(name, opts)
 end
 
 function M.default_keymaps(opts)
-  local fmt = function(cmd) return function(str) return cmd:format(str) end end
-
   local buffer = opts.buffer or vim.api.nvim_get_current_buf()
   local keep_defaults = true
   local exclude = {}
@@ -81,9 +79,6 @@ function M.default_keymaps(opts)
   if type(opts.exclude) == 'table' then
     exclude = opts.exclude
   end
-
-  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
-  local diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
 
   local map = function(m, lhs, rhs)
     if vim.tbl_contains(exclude, lhs) then
@@ -98,27 +93,27 @@ function M.default_keymaps(opts)
     vim.keymap.set(m, lhs, rhs, key_opts)
   end
 
-  map('n', 'K', lsp 'buf.hover()')
-  map('n', 'gd', lsp 'buf.definition()')
-  map('n', 'gD', lsp 'buf.declaration()')
-  map('n', 'gi', lsp 'buf.implementation()')
-  map('n', 'go', lsp 'buf.type_definition()')
-  map('n', 'gr', lsp 'buf.references()')
-  map('n', 'gs', lsp 'buf.signature_help()')
-  map('n', '<F2>', lsp 'buf.rename()')
-  map('n', '<F3>', lsp 'buf.format({async = true})')
-  map('x', '<F3>', lsp 'buf.format({async = true})')
-  map('n', '<F4>', lsp 'buf.code_action()')
+  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+  map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+  map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+  map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+  map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+  map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+  map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+  map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
+  map('n', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+  map('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>')
+  map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
 
   if vim.lsp.buf.range_code_action then
-    map('x', '<F4>', lsp 'buf.range_code_action()')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
   else
-    map('x', '<F4>', lsp 'buf.code_action()')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
   end
 
-  map('n', 'gl', diagnostic 'open_float()')
-  map('n', '[d', diagnostic 'goto_prev()')
-  map('n', ']d', diagnostic 'goto_next()')
+  map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+  map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+  map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
 end
 
 function M.set_sign_icons(opts)
