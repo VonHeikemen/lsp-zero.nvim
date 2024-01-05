@@ -914,15 +914,14 @@ highlight_symbol({client}, {bufnr}): ~
     to a "low" value.
 >lua
     vim.opt.updatetime = 350
-    local lsp_zero = require('lsp-zero')
+    local lsp = require('lsp-zero').preset({})
 
-    lsp_zero.on_attach(function(client, bufnr)
-      lsp_zero.highlight_symbol(client, bufnr)
+    lsp.on_attach(function(client, bufnr)
+      lsp.default_keymaps({buffer = bufnr})
+      lsp.highlight_symbol(client, bufnr)
     end)
 
-    -- Replace the language servers listed here
-    -- with the ones you have installed
-    lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+    lsp.setup()
 <
                                                        *lsp-zero.new_server()*
 

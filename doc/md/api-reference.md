@@ -559,11 +559,14 @@ Keep in mind the event `CursorHold` depends on the `updatetime` option. If you w
 
 ```lua
 vim.opt.updatetime = 350
-local lsp_zero = require('lsp-zero')
+local lsp = require('lsp-zero').preset({})
 
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.highlight_symbol(client, bufnr)
+lsp.on_attach(function(client, bufnr)
+  lsp.default_keymaps({buffer = bufnr})
+  lsp.highlight_symbol(client, bufnr)
 end)
+
+lsp.setup()
 ```
 
 ### `.new_server({opts})`
