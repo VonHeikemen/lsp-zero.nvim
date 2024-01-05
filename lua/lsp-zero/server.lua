@@ -243,12 +243,8 @@ M.buffer_commands = function()
 end
 
 s.set_keymaps = function(bufnr, opts)
-  local fmt = function(cmd) return function(str) return cmd:format(str) end end
   local omit = {}
   local keep_defaults = true
-
-  local lsp = fmt('<cmd>lua vim.lsp.%s<cr>')
-  local diagnostic = ''
 
   if type(opts.set_lsp_keymaps) == 'table' then
     local keys = opts.set_lsp_keymaps.omit or {}
@@ -275,32 +271,30 @@ s.set_keymaps = function(bufnr, opts)
   end
 
   if vim.diagnostic then
-    diagnostic = fmt('<cmd>lua vim.diagnostic.%s<cr>')
-    map('n', 'gl', diagnostic 'open_float()')
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
   else
-    diagnostic = fmt('<cmd>lua vim.lsp.diagnostic.%s<cr>')
-    map('n', 'gl', diagnostic 'show_line_diagnostics()')
+    map('n', 'gl', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
+    map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
+    map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
   end
 
   if vim.lsp.buf.range_code_action then
-    map('x', '<F4>', lsp 'buf.range_code_action()')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
   else
-    map('x', '<F4>', lsp 'buf.code_action()')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
   end
 
-  map('n', 'K', lsp 'buf.hover()')
-  map('n', 'gd', lsp 'buf.definition()')
-  map('n', 'gD', lsp 'buf.declaration()')
-  map('n', 'gi', lsp 'buf.implementation()')
-  map('n', 'go', lsp 'buf.type_definition()')
-  map('n', 'gr', lsp 'buf.references()')
-  map('n', '<F2>', lsp 'buf.rename()')
-  map('n', '<F4>', lsp 'buf.code_action()')
-
-  map('n', '<C-k>', lsp 'buf.signature_help()')
-
-  map('n', '[d', diagnostic 'goto_prev()')
-  map('n', ']d', diagnostic 'goto_next()')
+  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+  map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
+  map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
+  map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
+  map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>')
+  map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
+  map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
+  map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+  map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
 end
 
 s.map_check = function(mode, lhs)
