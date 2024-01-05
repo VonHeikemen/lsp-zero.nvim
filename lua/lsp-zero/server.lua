@@ -289,6 +289,35 @@ function M.setup_installer()
   end
 end
 
+function M.highlight_symbol(client, bufnr)
+  if client == nil 
+    or client.supports_method('textDocument/documentHighlight') == false
+  then
+    return
+  end
+
+  if bufnr == nil or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+
+  local autocmd = vim.api.nvim_create_autocmd
+  local augroup = vim.api.nvim_create_augroup('lsp_zero_highlight_symbol', {clear = false})
+
+  vim.api.nvim_clear_autocmds({buffer = bufnr, group = augroup})
+
+  autocmd({'CursorHold', 'CursorHoldI'}, {
+    group = augroup,
+    buffer = bufnr,
+    callback = vim.lsp.buf.document_highlight,
+  })
+
+  autocmd({'CursorMoved', 'CursorMovedI'}, {
+    group = augroup,
+    buffer = bufnr,
+    callback = vim.lsp.buf.clear_references,
+  })
+end
+
 function s.set_capabilities(current)
   if state.capabilities == nil then
     local cmp_txt = vim.api.nvim_get_runtime_file('doc/cmp.txt', 1)

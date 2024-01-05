@@ -160,6 +160,10 @@ function M.extend_cmp(opts)
   require('lsp-zero.cmp').extend(opts)
 end
 
+function M.highlight_symbol(...)
+  Server.highlight_symbol(...)
+end
+
 function M.new_server(opts)
   if type(opts) ~= 'table' then
     return

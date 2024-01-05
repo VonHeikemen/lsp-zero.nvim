@@ -549,6 +549,23 @@ lsp.format_mapping('gq', {
 lsp.setup()
 ```
 
+### `highlight_symbol({client}, {bufnr})`
+
+Uses the `CursorHold` event to trigger a document highlight request. In other words, it will highlight the symbol under the cursor.
+
+For this to work properly your colorscheme needs to set these highlight groups: `LspReferenceRead`, `LspReferenceText` and `LspReferenceWrite`.
+
+Keep in mind the event `CursorHold` depends on the `updatetime` option. If you want the highlight to happen fast, you will need to set this option to a "low" value.
+
+```lua
+vim.opt.updatetime = 350
+local lsp_zero = require('lsp-zero')
+
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.highlight_symbol(client, bufnr)
+end)
+```
+
 ### `.new_server({opts})`
 
 lsp-zero will execute a user provided function to detect the root directory of the project when Neovim assigns the file type for a buffer. If the root directory is detected the LSP server will be attached to the file.
