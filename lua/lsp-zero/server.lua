@@ -124,6 +124,27 @@ end
 function M.set_sign_icons(opts)
   opts = opts or {}
 
+  if vim.diagnostic.count then
+    local ds = vim.diagnostic.severity
+    local levels = {
+      [ds.ERROR] = 'error',
+      [ds.WARN] = 'warn',
+      [ds.INFO] = 'info',
+      [ds.HINT] = 'hint'
+    }
+
+    local text = {}
+
+    for i, l in pairs(levels) do
+      if type(opts[l]) == 'string' then
+        text[i] = opts[l]
+      end
+    end
+
+    vim.diagnostic.config({signs = {text = text}})
+    return
+  end
+
   local sign = function(args)
     if opts[args.name] == nil then
       return
