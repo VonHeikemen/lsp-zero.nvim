@@ -206,6 +206,29 @@ M.setup_handlers = function()
 end
 
 M.set_sign_icons = function(icon)
+  icon = icon or {}
+
+  if vim.diagnostic and vim.diagnostic.count then
+    local ds = vim.diagnostic.severity
+    local levels = {
+      [ds.ERROR] = 'error',
+      [ds.WARN] = 'warn',
+      [ds.INFO] = 'info',
+      [ds.HINT] = 'hint'
+    }
+
+    local text = {}
+
+    for i, l in pairs(levels) do
+      if type(icon[l]) == 'string' then
+        text[i] = icon[l]
+      end
+    end
+
+    vim.diagnostic.config({signs = {text = text}})
+    return
+  end
+
   local sign = function(opts)
     if type(opts.text) ~= 'string' then
       return
