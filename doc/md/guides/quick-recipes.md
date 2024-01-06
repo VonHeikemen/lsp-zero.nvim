@@ -82,11 +82,11 @@ require('lspconfig').lua_ls.setup({
 })
 ```
 
-## Setup with rust-tools
+## Setup with rustaceanvim
 
-Use [rust-tools](https://github.com/simrat39/rust-tools.nvim) to configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
+Here you just let [rustaceanvim](https://github.com/mrcjkb/rustaceanvim) configure [rust-analyzer](https://github.com/rust-analyzer/rust-analyzer).  
 
-`rust-tools` will use `lspconfig` to initialize the rust language server, so you need to setup rust-tools after lsp-zero.
+You can share the "capabilities" option with rustaceanvim.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -95,28 +95,21 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
-local rust_tools = require('rust-tools')
-
-rust_tools.setup({
+vim.g.rustaceanvim = {
   server = {
-    on_attach = function(client, bufnr)
-      vim.keymap.set('n', '<leader>ca', rust_tools.hover_actions.hover_actions, {buffer = bufnr})
-    end
-  }
-})
+    capabilities = lsp_zero.get_capabilities()
+  },
+}
 ```
 
-Note: if you use `mason-lspconfig.nvim` to install the language server, add a custom handler to the setup function.
+And if you use `mason-lspconfig` make sure you ignore `rust_analyzer` from the automatic setup.
 
 ```lua
+require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
     lsp_zero.default_setup,
-    rust_analyzer = function()
-      ---
-      -- here you will setup rust-tools
-      ---
-    end,
+    rust_analyzer = lsp_zero.noop,
   }
 })
 ```
