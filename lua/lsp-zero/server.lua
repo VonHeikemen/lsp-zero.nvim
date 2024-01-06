@@ -309,6 +309,28 @@ s.map_check = function(mode, lhs)
   return cache
 end
 
+function M.highlight_symbol(client, bufnr)
+  if client == nil 
+    or client.supports_method('textDocument/documentHighlight') == false
+  then
+    return
+  end
+
+  if bufnr == nil or bufnr == 0 then
+    bufnr = vim.api.nvim_get_current_buf()
+  end
+
+  local autocmd = [[
+    augroup lsp_zero_highlight_symbol
+      autocmd! * <buffer=%d>
+      autocmd CursorHold,CursorHoldI * lua vim.lsp.buf.document_highlight()
+      autocmd CursorMoved,CursorMovedI * lua vim.lsp.buf.clear_references()
+    augroup END
+  ]]
+
+  vim.cmd(autocmd:format(bufnr))
+end
+
 s.set_capabilities = function(current)
   if state.capabilities == nil then
     local cmp_lsp = {}

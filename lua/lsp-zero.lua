@@ -328,6 +328,10 @@ M.nvim_workspace = function(opts)
   M.configure('lua_ls', server_opts)
 end
 
+M.highlight_symbol = function(...)
+  Server.highlight_symbol(...)
+end
+
 M.new_server = function(opts)
   if type(opts) ~= 'table' then
     return

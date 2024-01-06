@@ -324,6 +324,30 @@ Defines the sign icons that appear in the gutter. If `{opts}` is not provided th
 * `hint`: Text for the hint signs.
 * `info`: Text for the information signs.
 
+### `highlight_symbol({client}, {bufnr})`
+
+Uses the `CursorHold` event to trigger a document highlight request. In other words, it will highlight the symbol under the cursor.
+
+For this to work properly your colorscheme needs to set these highlight groups: `LspReferenceRead`, `LspReferenceText` and `LspReferenceWrite`.
+
+Keep in mind the event `CursorHold` depends on the `updatetime` option. If you want the highlight to happen fast, you will need to set this option to a "low" value.
+
+```lua
+vim.opt.updatetime = 400
+
+local lsp = require('lsp-zero').preset({
+  name = 'minimal',
+  set_lsp_keymaps = true,
+  manage_nvim_cmp = true,
+  suggest_lsp_servers = false,
+})
+
+lsp.on_attach(function(client, bufnr)
+  lsp.highlight_symbol(client, bufnr)
+end)
+
+lsp.setup()
+```
 
 ### `.new_server({opts})`
 
