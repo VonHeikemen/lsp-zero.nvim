@@ -122,6 +122,10 @@ vim.cmd.colorscheme('tokyonight')
 
 When Neovim starts it should show a message telling us is cloning the plugin manager. After it's done another window will show up, it'll tell us the progress of the plugin's download. After the plugins are installed they will be loaded.
 
+### Learning more about lazy.nvim
+
+If you want to know more details about lazy.nvim, I made another blog post [Lazy.nvim: plugin configuration](https://dev.to/vonheikemen/lazynvim-plugin-configuration-3opi). This will teach you the basics of the "plugin spec" and how to split your plugin setup into multiple files.
+
 ## Setup lsp-zero
 
 Now we need to add lsp-zero and all its dependencies in lazy's list of plugins.
