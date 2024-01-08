@@ -142,6 +142,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
 
+      --- if you want to know more about lsp-zero and mason.nvim
+      --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
       lsp_zero.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions

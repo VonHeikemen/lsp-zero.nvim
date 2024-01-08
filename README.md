@@ -128,7 +128,8 @@ Use your favorite plugin manager to install this plugin and all its lua dependen
 For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
---- Uncomment these if you want to manage the language servers from neovim
+--- Uncomment the two plugins below if you want to manage the language servers from neovim
+--- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 -- {'williamboman/mason.nvim'},
 -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -149,7 +150,8 @@ use {
   'VonHeikemen/lsp-zero.nvim',
   branch = 'v3.x',
   requires = {
-    --- Uncomment these if you want to manage the language servers from neovim
+    --- Uncomment the two plugins below if you want to manage the language servers from neovim
+    --- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
     -- {'williamboman/mason.nvim'},
     -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -170,7 +172,8 @@ use {
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'};
 
---- Uncomment these if you want to manage the language servers from neovim
+--- Uncomment the two plugins below if you want to manage the language servers from neovim
+--- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 -- {'williamboman/mason.nvim'};
 -- {'williamboman/mason-lspconfig.nvim'};
 
@@ -188,7 +191,8 @@ use {
 <summary>Expand: vim-plug </summary>
 
 ```vim
-"  Uncomment these if you want to manage the language servers from neovim
+"  Uncomment the two plugins below if you want to manage the language servers from neovim
+"  and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 "  Plug 'williamboman/mason.nvim'
 "  Plug 'williamboman/mason-lspconfig.nvim'
 
