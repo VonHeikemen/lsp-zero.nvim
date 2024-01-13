@@ -72,3 +72,34 @@ require('mason-lspconfig').setup({
 
 When the time comes for `mason-lspconfig` to setup `tsserver` it will execute an empty function.
 
+## The magic behind .default_setup()
+
+The function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) is really just a "shortcut" that calls `lspconfig`.
+
+This basically what happens (explained with code):
+
+```lua
+-- just in case: there is no need to copy/paste this example in your own config
+-- this snippet exists only for educational purpose.
+
+require('mason-lspconfig').setup({
+  ensure_installed = {'tsserver', 'rust_analyzer'},
+  handlers = {
+    function(name)
+      local lsp = require('lspconfig')[name]
+      if lsp.manager then
+        -- if lsp.manager is defined it means the
+        -- language server was configured some place else
+        return
+      end
+
+      -- at this point lsp-zero has already applied
+      -- the "capabilities" options to lspconfig's defaults. 
+      -- so there is no need to add them here manually.
+
+      lsp.setup({})
+    end,
+  },
+})
+```
+
