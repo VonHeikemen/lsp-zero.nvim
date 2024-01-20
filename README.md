@@ -47,11 +47,11 @@ If have problems with a language server read this guide: [What to do when the la
 
 ## Migration guides
 
-`v3.x` is the current version of lsp-zero. If you are using a previous version and wish to update, follow one of these guides.
+`v3.x` is the current version of lsp-zero. If you are using a previous version follow one of these guides.
 
 * [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v1-branch.md)
 * [Migrate from v2.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
-* [ThePrimeagen's 0 to LSP config (this is an updated version)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
+* [ThePrimeagen's 0 to LSP config](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
 * [Migrate away from lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md)
 
 ## Documentation
@@ -132,7 +132,6 @@ For a more advance config that lazy loads everything take a look at the example 
 
 ```lua
 --- Uncomment the two plugins below if you want to manage the language servers from neovim
---- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 -- {'williamboman/mason.nvim'},
 -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -154,7 +153,6 @@ use {
   branch = 'v3.x',
   requires = {
     --- Uncomment the two plugins below if you want to manage the language servers from neovim
-    --- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
     -- {'williamboman/mason.nvim'},
     -- {'williamboman/mason-lspconfig.nvim'},
 
@@ -176,7 +174,6 @@ use {
 {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'};
 
 --- Uncomment the two plugins below if you want to manage the language servers from neovim
---- and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 -- {'williamboman/mason.nvim'};
 -- {'williamboman/mason-lspconfig.nvim'};
 
@@ -195,7 +192,6 @@ use {
 
 ```vim
 "  Uncomment the two plugins below if you want to manage the language servers from neovim
-"  and read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 "  Plug 'williamboman/mason.nvim'
 "  Plug 'williamboman/mason-lspconfig.nvim'
 
@@ -449,7 +445,7 @@ Note: You can disable the warnings about removed functions by setting the global
 
 ### How do I get rid warnings in my neovim lua config?
 
-lsp-zero has a function that will configure the lua language server for you: [.nvim_lua_ls()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#nvim_lua_lsopts)
+You have two choices, and the details about them are on this guide: [lua_ls for Neovim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
 
 ### Can I use the Enter key to confirm completion item?
 
