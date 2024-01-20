@@ -124,7 +124,13 @@ When Neovim starts it should show a message telling us is cloning the plugin man
 
 ### Learning more about lazy.nvim
 
-If you want to know more details about lazy.nvim, I made another blog post [Lazy.nvim: plugin configuration](https://dev.to/vonheikemen/lazynvim-plugin-configuration-3opi). This will teach you the basics of the "plugin spec" and how to split your plugin setup into multiple files.
+If you want to know more details about lazy.nvim, here are a few resources
+(that you can read later). 
+
+* [Lazy.nvim: plugin configuration](https://dev.to/vonheikemen/lazynvim-plugin-configuration-3opi). This will teach you the basics of the "plugin spec" and how to split your plugin setup into multiple files.
+
+* [Lazy.nvim: how to revert a plugin back to a previous version](https://dev.to/vonheikemen/lazynvim-how-to-revert-a-plugin-back-to-a-previous-version-1pdp). Learn how to recover from a bad plugin update.
+
 
 ## Setup lsp-zero
 
