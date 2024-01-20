@@ -124,8 +124,7 @@ When Neovim starts it should show a message telling us is cloning the plugin man
 
 ### Learning more about lazy.nvim
 
-If you want to know more details about lazy.nvim, here are a few resources
-(that you can read later). 
+If you want to know more details about lazy.nvim, here are a few resources (that you can read later). 
 
 * [Lazy.nvim: plugin configuration](https://dev.to/vonheikemen/lazynvim-plugin-configuration-3opi). This will teach you the basics of the "plugin spec" and how to split your plugin setup into multiple files.
 
