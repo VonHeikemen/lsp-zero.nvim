@@ -1090,39 +1090,43 @@ property to `handlers`. This new property must have the same name as the
 language server you want to configure, and you need to assign a function to
 it.
 
-Lets use `tsserver` as an example.
+Lets use an imaginary language server called `example_server` as an example.
 >lua
+  --- in your own config you should replace 
+  --- `example_server` with the name of a language server
+
   require('mason-lspconfig').setup({
-    ensure_installed = {'tsserver', 'rust_analyzer'},
     handlers = {
       lsp_zero.default_setup,
-      tsserver = function()
-        require('lspconfig').tsserver.setup({
-          settings = {
-            completions = {
-              completeFunctionCalls = true
-            }
-          }
+      example_server = function()
+        require('lspconfig').example_server.setup({
+          ---
+          -- in here you can add your own
+          -- custom configuration
+          ---
         })
       end,
     },
   })
 <
 Here we use the module `lspconfig` to setup the language server and we add our
-custom config in the first argument of `.tsserver.setup()`.
+custom config in the first argument of `.example_server.setup()`.
 
 On the other hand if we want to ignore a language server we can use the
-function |lsp-zero.noop()|.
+function |lsp-zero.noop()| as a handler. This will make `mason-lspconfig`
+ignore the setup for the language server.
 >lua
+  --- in your own config you should replace 
+  --- `example_server` with the name of a language server
+
   require('mason-lspconfig').setup({
-    ensure_installed = {'tsserver', 'rust_analyzer'},
     handlers = {
       lsp_zero.default_setup,
-      tsserver = lsp_zero.noop,
+      example_server = lsp_zero.noop,
     },
   })
 <
-This will cause `mason-lspconfig` to exclude `tsserver` from the automatic
+This will cause `mason-lspconfig` to exclude `example_server` from the automatic
 setup.
 
                                           *lsp-zero-guide:lua-lsp-for-neovim*

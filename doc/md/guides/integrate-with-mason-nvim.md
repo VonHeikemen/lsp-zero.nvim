@@ -34,43 +34,46 @@ Note that after you install a language server you will need to restart Neovim so
 
 If we need to add a custom configuration for a server, you'll need to add a property to `handlers`. This new property must have the same name as the language server you want to configure, and you need to assign a function to it.
 
-Lets use `tsserver` as an example.
+Lets use an imaginary language server called `example_server` as an example.
 
 ```lua
+--- in your own config you should replace 
+--- `example_server` with the name of a language server
+
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
     lsp_zero.default_setup,
-    tsserver = function()
-      require('lspconfig').tsserver.setup({
-        settings = {
-          completions = {
-            completeFunctionCalls = true
-          }
-        }
+    example_server = function()
+      require('lspconfig').example_server.setup({
+        ---
+        -- in here you can add your own
+        -- custom configuration
+        ---
       })
     end,
   },
 })
 ```
 
-Here we use the module `lspconfig` to setup the language server and we add our custom config in the first argument of `.tsserver.setup()`.
+Here we use the module `lspconfig` to setup the language server and we add our custom config in the first argument of `.example_server.setup()`.
 
 ## Exclude a language server from the automatic setup
 
-If we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#noop), which is a function that doesn't do anything.
+If we want to ignore a language server we can use the function [.noop()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#noop) as a handler. This will make `mason-lspconfig` ignore the setup for the language server.
 
 ```lua
+--- in your own config you should replace 
+--- `example_server` with the name of a language server
+
 require('mason-lspconfig').setup({
-  ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
     lsp_zero.default_setup,
-    tsserver = lsp_zero.noop,
+    example_server = lsp_zero.noop,
   },
 })
 ```
 
-When the time comes for `mason-lspconfig` to setup `tsserver` it will execute an empty function.
+When the time comes for `mason-lspconfig` to setup `example_server` it will execute an empty function.
 
 ## The magic behind .default_setup()
 

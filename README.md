@@ -43,6 +43,8 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
+If have problems with a language server read this guide: [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
+
 ## Migration guides
 
 `v3.x` is the current version of lsp-zero. If you are using a previous version and wish to update, follow one of these guides.
@@ -90,6 +92,7 @@ Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvi
 
   * [API Reference](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md)
   * [Tutorial: Step by step setup from scratch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/tutorial.md)
+  * [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md)
   * [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v1-branch.md)
   * [Migrate from v2.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
   * [lsp-zero under the hood](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/under-the-hood.md)
@@ -114,7 +117,7 @@ If you know your way around Neovim and how to configure it, take a look at this 
 
 * [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#lua-template)
 * [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#vimscript-template)
-* [ThePrimeagen's config (adapted to version 3)](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
+* [ThePrimeagen's "0 to LSP" config adapted to version 3](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
 
 The following sections will show how to create a basic configuration.
 
@@ -239,12 +242,15 @@ Next step is to install a language server. Go to nvim-lspconfig's documentation,
 Once you have a language server installed in your system, add the setup in your Neovim config. Use the module `lspconfig`, like this.
 
 ```lua
-require('lspconfig').lua_ls.setup({})
+require('lspconfig').example_server.setup({})
+
+--- in your own config you should replace `example_server`
+--- with the name of a language server you have installed
 ```
 
-Here `lua_ls` is the name of the language server. If you need to customize it, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig`.
+If you need to customize the language server, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig` or [click here](https://github.com/neovim/nvim-lspconfig/blob/8917d2c830e04bf944a699b8c41f097621283828/doc/lspconfig.txt#L46).
 
-So `lua_ls` is the language server for lua, if you want to configure it specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
+If you did install `lua_ls` and you want to configure it specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
 
 #### Automatic setup of language servers
 
@@ -261,6 +267,8 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
+-- to learn how to use mason.nvim with lsp-zero
+-- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
@@ -277,14 +285,14 @@ require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
     lsp_zero.default_setup,
-    --- the name of the handler must be the same
-    --- as the name of the language server 
-    tsserver = function()
+
+    --- replace `example_server` with the name of a language server
+    example_server = function()
       --- in this function you can setup
       --- the language server however you want. 
       --- in this example we just use lspconfig
 
-      require('lspconfig').tsserver.setup({
+      require('lspconfig').example_server.setup({
         ---
         -- in here you can add your own
         -- custom configuration
@@ -370,10 +378,6 @@ For example, this command will open the configuration for the lua language serve
 LspZeroViewConfigSource lua_ls
 ```
 
-### What to do if something goes wrong?
-
-Turns out I have a lot to say on this subject so I made [a dedicated guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
-
 ## Autocomplete
 
 The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7th/nvim-cmp). The default config in lsp-zero will only add the minimum required to integrate lspconfig, nvim-cmp and [luasnip](https://github.com/L3MON4D3/LuaSnip).
@@ -450,10 +454,6 @@ lsp-zero has a function that will configure the lua language server for you: [.n
 ### Can I use the Enter key to confirm completion item?
 
 Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
-
-### My luasnip snippet don't show up in completion menu. How do I get them back?
-
-If you have this problem I assume you are migrating from the `v1.x` branch. What you have to do is add the luasnip source in nvim-cmp, then call the correct luasnip loader. You can find more details of this in the [documentation for autocompletion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets).
 
 ## Support
 
