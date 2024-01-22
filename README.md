@@ -455,6 +455,10 @@ Yes, you can. You can find the details in the autocomplete documentation: [Enter
 
 [Here is an example](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#use-icons-in-the-sign-column).
 
+### How to configure snippets?
+
+I hope you mean custom snippets like [friendly snippets](https://github.com/rafamadriz/friendly-snippets), 'cause some language servers already provide snippets. Anyway, [the answer is here](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets).
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
