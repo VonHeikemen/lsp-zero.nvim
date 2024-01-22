@@ -6,7 +6,7 @@ The plugin responsable for autocompletion is [nvim-cmp](https://github.com/hrsh7
 
 lsp-zero will configure the basic features for you. This config will include a "completion source" to get data from your LSP servers. It will create keybindings to control the completion menu (following Neovim's default whenever possible). Setup a snippet engine ([luasnip](https://github.com/L3MON4D3/LuaSnip)) to expand the snippet that come from your LSP server.
 
-This is the code lsp-zero will run for you.
+This is the "backup" configuration lsp-zero will run for you if you don't configure nvim-cmp yourself.
 
 ```lua
 local cmp = require('cmp')
@@ -128,7 +128,7 @@ cmp.setup({
 
 ### Add an external collection of snippets
 
-By default luasnip is configured to expand snippets, and the only snippets you get will come from your LSP server. If you want to load **custom snippets** into the completion menu you need add [saadparwaiz1/cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) as a source in nvim-cmp (if you are not familiar with the concept of source, see [the previous section](#adding-a-source)).
+By default luasnip is configured to expand snippets, and the only snippets you get will come from your LSP server. If you want to load **custom snippets** into the completion menu you need add [saadparwaiz1/cmp_luasnip](https://github.com/saadparwaiz1/cmp_luasnip) as a source in nvim-cmp (if you are not familiar with the concept of source, see the previous section ["Adding a source"](#adding-a-source)).
 
 We don't need to write our own snippets, we can download a collection like [friendly-snippets](https://github.com/rafamadriz/friendly-snippets) and then parse them using a luasnip loader.
 
