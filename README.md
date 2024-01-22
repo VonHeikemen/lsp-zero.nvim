@@ -421,6 +421,19 @@ cmp.setup({
 })
 ```
 
+### Loading more snippets
+
+Some language servers already provide basic snippets, but maybe this is not enough for you. Or maybe the language server you are using doesn't provide snippets. In this case you have the option to install an **external collection of snippets**, like these ones.
+
+* [rafamadriz/friendly-snippets](https://github.com/rafamadriz/friendly-snippets)
+* [honza/vim-snippets](https://github.com/honza/vim-snippets)
+
+These can be installed like any other Neovim plugin. But don't install both, you'll get duplicate snippets.
+
+Anyway, the process to load these snippets into your completion menu involves a few steps so the details are in the autocomplete documentation:
+
+* [Add an external collection of snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)
+
 ## Breaking changes
 
 Changed/Removed features from the `v2.x` branch.
