@@ -43,7 +43,7 @@ Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-z
 
 Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
-If have problems with a language server read this guide: [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
+If you have problems with a language server read this guide: [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
 
 ## Migration guides
 
