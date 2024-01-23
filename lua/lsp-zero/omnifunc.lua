@@ -20,9 +20,6 @@ local key = {
   tab = '<Tab>',
 }
 
-local omni_code = t(key.omni)
-local buffer_code = t(key.buffer)
-
 function M.enable() return false end
 
 function M.setup(user_opts)
@@ -99,6 +96,23 @@ function M.setup(user_opts)
 
   if set_autocomplete then
     vim.opt.completeopt:append('noinsert')
+
+    ---
+    -- preserve dot-repeat
+    ---
+    local plug_omni = '<Plug>(lsp-zero-complete-omni)'
+    local plug_buffer = '<Plug>(lsp-zero-complete-word)'
+
+    vim.keymap.set('i', plug_omni, function()
+      return '<C-x><C-o>'
+    end, {expr = true})
+
+    vim.keymap.set('i', plug_buffer, function()
+      return '<C-x><C-n>'
+    end, {expr = true})
+
+    key.plug_omni = t(plug_omni)
+    key.plug_buffer = t(plug_buffer)
   end
 
   if opts.use_fallback then
@@ -184,7 +198,7 @@ function s.try_complete()
   end
 
   if match(vim.v.char, pattern) >= 0 then
-    vim.api.nvim_feedkeys(omni_code, 'n', false)
+    vim.api.nvim_feedkeys(key.plug_omni, 'n', false)
   end
 end
 
@@ -194,7 +208,7 @@ function s.try_complete_fallback()
   end
 
   if match(vim.v.char, pattern) >= 0 then
-    vim.api.nvim_feedkeys(buffer_code, 'n', false)
+    vim.api.nvim_feedkeys(key.plug_buffer, 'n', false)
   end
 end
 
