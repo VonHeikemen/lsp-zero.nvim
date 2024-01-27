@@ -350,6 +350,8 @@ Keep in mind it's only meant to allow one LSP server per filetype, this is so th
 ```lua
 local lsp_zero = require('lsp-zero')
 
+-- don't add this function in the `on_attach` callback.
+-- `format_on_save` should run only once, before the language servers are active.
 lsp_zero.format_on_save({
   format_opts = {
     async = false,
