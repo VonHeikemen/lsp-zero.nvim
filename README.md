@@ -69,6 +69,7 @@ If you have problems with a language server read this guide: [What to do when th
   * [Custom servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#custom-servers)
   * [Enable Format on save](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#enable-format-on-save)
   * [Format buffer using a keybinding](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#format-buffer-using-a-keybinding)
+  * [Format buffer using random cli tool](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#how-to-make-lsp-zero-format-using-random-cli-tool)
   * [Use icons in the sign column](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#use-icons-in-the-sign-column)
   * [What to do when a language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md)
 
@@ -463,6 +464,10 @@ You have two choices, and the details about them are on this guide: [lua_ls for 
 ### Can I use the Enter key to confirm completion item?
 
 Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
+
+### Can I use prettier to format my files?
+
+Yes. [Full answer is here](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#how-to-make-lsp-zero-format-using-random-cli-tool).
 
 ### Configure sign_icons
 
