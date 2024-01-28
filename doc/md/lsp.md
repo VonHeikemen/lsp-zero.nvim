@@ -408,6 +408,29 @@ lsp_zero.format_mapping('gq', {
 })
 ```
 
+## How to make lsp-zero format using [Random CLI Tool]?
+
+Where `[Random ClI Tool]` can be prettier or black or stylua or any CLI tool that was create before the LSP protocol existed.
+
+Short answer: You need some sort of adapter. Another plugin or a language server that can communicate with `[Random CLI Tool]`.
+
+Long answer: Your question should be more specific to Neovim and not lsp-zero. You should be looking for "how to make [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) use `[Random CLI Tool]`?" And once you know how to do that you can use one of lsp-zero helper functions... or just `vim.lsp.buf.format()`.
+
+If you really want to integrate that CLI tool with Neovim's LSP client, these are your options:
+
+* [efm-langserver](https://github.com/mattn/efm-langserver)
+* [none-ls](https://github.com/nvimtools/none-ls.nvim)
+
+(It should not be too difficult to use one those plugins with lsp-zero, but if you want me to create a dedicated guide on how to do it, create an issue and I will write it)
+
+Personally, I would use a plugin that communicates directly with the CLI tool. Here are a few options:
+
+* [conform.nvim](https://github.com/stevearc/conform.nvim)
+* [Formatter.nvim](https://github.com/mhartington/formatter.nvim)
+* [guard.nvim](https://github.com/nvimdev/guard.nvim)
+
+If you are going that route and you are wondering which one to choose, use `conform.nvim`. People say it's good. Don't think about it too much.
+
 ## Diagnostics
 
 ### Use icons in the sign column
