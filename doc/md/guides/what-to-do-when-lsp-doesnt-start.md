@@ -1,8 +1,28 @@
 # What to do when a language server doesn't start?
 
+## Make sure you have the latest version of lsp-zero
+
+Everything here assumes you are using the `v3.x` branch of lsp-zero.
+
+You can check the version of lsp-zero you have installed using this command.
+
+```vim
+:help lsp-zero-version
+```
+
+That command will take you to the help page of lsp-zero, and it should show you this.
+
+```
+Version                                                      lsp-zero-version
+
+Current version: v3.x
+
+The code on this version requires Neovim v0.8 or greater.
+```
+
 ## Ensure the executable is on your PATH
 
-First things first, do you know what is the "PATH"?
+Before we start, do you know what is the "PATH"?
 
 If the answer is "No, I don't know what the hell you are talking about?" I'm going to tell you.
 
