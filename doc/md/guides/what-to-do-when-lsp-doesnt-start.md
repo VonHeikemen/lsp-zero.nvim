@@ -6,7 +6,7 @@ Everything here assumes you are using the `v3.x` branch of lsp-zero.
 
 You can check the version of lsp-zero you have installed using this command.
 
-```vim
+```
 :help lsp-zero-version
 ```
 
@@ -78,7 +78,7 @@ If everything is okay you should see a list like this.
 
 If your language server is not on this list execute the command `:LspInstall` with the name of the server. For example:
 
-```lua
+```
 :LspInstall eslint
 ```
 
@@ -173,7 +173,7 @@ Sometimes the documentation in lspconfig just says `see source file` in the `roo
 
 So you can inspect `eslint` config using this.
 
-```vim
+```
 :LspZeroViewConfigSource eslint
 ```
 
