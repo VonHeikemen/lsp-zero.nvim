@@ -60,7 +60,7 @@ require('mason-lspconfig').setup({
 
 The following setup will add more "completion sources" to nvim-cmp. Adds more keybindings to the autocompletion plugin (nvim-cmp). And will add more snippets.
 
-Warning: this will make the autocompletion plugin work even if you don't have a language server installed. Why is that a warning? The amount of confusion this has caused is insane. I've seen people delete lsp-zero from their Neovim configuration because they can't figure out what is happening. So, if you find yourself overwhelmed use the "simple version" from the previous section.
+Warning: this configuration can be overwhelming for people (very) new to Neovim. I've seen people getting extremely confused because the autocompletion plugin works without a language server. Some of them deleted lsp-zero from their Neovim configuration because they don't know how to tweak it to their liking. So, if you find yourself overwhelmed use the "simple version" from the previous section as a starting point.
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
