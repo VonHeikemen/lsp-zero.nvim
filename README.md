@@ -118,9 +118,9 @@ lsp-zero requires Neovim v0.8 or greater. If you need support for Neovim v0.7 us
 
 If you know your way around Neovim and how to configure it, take a look at this examples:
 
-* [Lua template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#lua-template)
-* [Vimscript template configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#vimscript-template)
-* [ThePrimeagen's "0 to LSP" config adapted to version 3](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
+* [Lua template configuration](https://lsp-zero.netlify.app/v3.x/template/lua-config.html)
+* [Vimscript template configuration](https://lsp-zero.netlify.app/v3.x/template/vimscript-config.html)
+* [ThePrimeagen's "0 to LSP" config adapted to version 3](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
 
 The following sections will show how to create a basic configuration.
 
@@ -249,7 +249,7 @@ require('lspconfig').example_server.setup({})
 
 If you need to customize the language server, add your settings inside the `{}`. To know more details about lspconfig use the command `:help lspconfig` or [click here](https://github.com/neovim/nvim-lspconfig/blob/8917d2c830e04bf944a699b8c41f097621283828/doc/lspconfig.txt#L46).
 
-If you did install `lua_ls` and you want to configure it specifically for Neovim [these are your options](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
+If you did install `lua_ls` and you want to configure it specifically for Neovim [these are your options](https://lsp-zero.netlify.app/v3.x/guide/neovim-lua-ls.html).
 
 #### Automatic setup of language servers
 
@@ -302,7 +302,7 @@ require('mason-lspconfig').setup({
 })
 ```
 
-For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md).
+For more details about how to use mason.nvim with lsp-zero see the guide on how to [integrate with mason.nvim](https://lsp-zero.netlify.app/v3.x/guide/integrate-with-mason-nvim.html).
 
 ## Language servers
 
@@ -435,7 +435,7 @@ These can be installed like any other Neovim plugin. But don't install both, you
 
 Anyway, the process to load these snippets into your completion menu involves a few steps so the details are in the autocomplete documentation:
 
-* [Add an external collection of snippets](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets)
+* [Add an external collection of snippets](https://lsp-zero.netlify.app/v3.x/autocomplete.html#add-an-external-collection-of-snippets)
 
 ## Breaking changes
 
@@ -461,23 +461,23 @@ Note: You can disable the warnings about removed functions by setting the global
 
 ### How do I get rid warnings in my neovim lua config?
 
-You have two choices, and the details about them are on this guide: [lua_ls for Neovim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/neovim-lua-ls.md).
+You have two choices, and the details about them are on this guide: [lua_ls for Neovim](https://lsp-zero.netlify.app/v3.x/guide/neovim-lua-ls.html).
 
 ### Can I use the Enter key to confirm completion item?
 
-Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#use-enter-to-confirm-completion).
+Yes, you can. You can find the details in the autocomplete documentation: [Enter key to confirm completion](https://lsp-zero.netlify.app/v3.x/autocomplete.html#use-enter-to-confirm-completion).
 
 ### Can I use prettier to format my files?
 
-Yes. [Full answer is here](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#how-to-make-lsp-zero-format-using-random-cli-tool).
+Yes. [Full answer is here](https://lsp-zero.netlify.app/v3.x/language-server-configuration.html#how-to-format-file-using-tool).
 
 ### Configure sign_icons
 
-[Here is an example](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/lsp.md#use-icons-in-the-sign-column).
+[Here is an example](https://lsp-zero.netlify.app/v3.x/language-server-configuration.html#use-icons-in-the-sign-column).
 
 ### How to configure snippets?
 
-I hope you mean custom snippets like [friendly snippets](https://github.com/rafamadriz/friendly-snippets), 'cause some language servers already provide snippets. Anyway, [the answer is here](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/autocomplete.md#add-an-external-collection-of-snippets).
+I hope you mean custom snippets like [friendly snippets](https://github.com/rafamadriz/friendly-snippets), 'cause some language servers already provide snippets. Anyway, [the answer is here](https://lsp-zero.netlify.app/v3.x/autocomplete.html#add-an-external-collection-of-snippets).
 
 ## Support
 
