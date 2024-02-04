@@ -25,7 +25,7 @@ When `require('lsp-zero')` is called this is what happens:
 * Reserves a space for the signcolumn.
 * Adds border to floating windows on diagnostics, the documentation window of the hover handler and signature help handler.
 
-[Here's the simplified code of these steps](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-require-lsp-zero-does.md). In case you want to understand it without looking at source code of the plugin itself.
+[Here's the simplified code of these steps](https://lsp-zero.netlify.app/v3.x/blog/what-require-lsp-zero-does.html). In case you want to understand it without looking at source code of the plugin itself.
 
 Note that lsp-zero offers more features but those are opt-in, see [usage section](#usage).
 
@@ -33,28 +33,30 @@ Note that lsp-zero offers more features but those are opt-in, see [usage section
 
 ## How to get started
 
-If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/tutorial.md).
+If you are new to neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://lsp-zero.netlify.app/v3.x/tutorial.html).
 
-If you know how to configure neovim go to [Quickstart (for the impatient)](#quickstart-for-the-impatient).
+If you know how to configure neovim go to [Quickstart (for the impatient)](https://lsp-zero.netlify.app/v3.x/getting-started.html).
 
-Also consider [you might not need lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md).
+Also consider [you might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html).
 
 ### If you need any help
 
 Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
 
-If you have problems with a language server read this guide: [What to do when the language server doesn't start?](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/what-to-do-when-lsp-doesnt-start.md).
+If you have problems with a language server read this guide: [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/v3.x/guide/what-to-do-when-lsp-doesnt-start.html).
 
 ## Migration guides
 
 `v3.x` is the current version of lsp-zero. If you are using a previous version follow one of these guides.
 
-* [Migrate from v1.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v1-branch.md)
-* [Migrate from v2.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/migrate-from-v2-branch.md)
-* [ThePrimeagen's 0 to LSP config](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/configuration-templates.md#primes-config)
-* [Migrate away from lsp-zero](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/you-might-not-need-lsp-zero.md)
+* [Migrate from v1.x branch](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
+* [Migrate from v2.x branch](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch)
+* [ThePrimeagen's 0 to LSP config](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
+* [Migrate away from lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html)
 
 ## Documentation
+
+You can browse the documentation here [lsp-zero.netlify.app/v3.x/](https://lsp-zero.netlify.app/v3.x/). Or in this repository.
 
 * LSP
 
