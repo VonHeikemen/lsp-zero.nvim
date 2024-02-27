@@ -122,7 +122,7 @@ cmp.setup({
     -- scroll up and down the documentation window
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
     ['<C-d>'] = cmp.mapping.scroll_docs(4),   
-  })
+  }),
 })
 ```
 
@@ -149,7 +149,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  })
+  }),
   --- (Optional) Show source name in completion menu
   formatting = cmp_format,
 })
@@ -171,7 +171,7 @@ local cmp = require('cmp')
 cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<CR>'] = cmp.mapping.confirm({select = false}),
-  })
+  }),
 })
 ```
 
@@ -214,7 +214,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-  })
+  }),
   --- (Optional) Show source name in completion menu
   formatting = cmp_format,
 })
@@ -232,7 +232,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<Tab>'] = cmp_action.luasnip_supertab(),
     ['<S-Tab>'] = cmp_action.luasnip_shift_supertab(),
-  })
+  }),
 })
 ```
 
@@ -248,7 +248,7 @@ cmp.setup({
   mapping = cmp.mapping.preset.insert({
     ['<Tab>'] = cmp_action.tab_complete(),
     ['<S-Tab>'] = cmp_action.select_prev_or_fallback(),
-  })
+  }),
 })
 ```
 
@@ -267,7 +267,7 @@ cmp.setup({
   },
   mapping = cmp.mapping.preset.insert({
     ['<C-Space>'] = cmp.mapping.complete(),
-  })
+  }),
 })
 ```
 
