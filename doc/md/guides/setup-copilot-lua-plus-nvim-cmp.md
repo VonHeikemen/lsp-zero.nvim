@@ -24,7 +24,7 @@ require('copilot_cmp').setup()
 
 ```lua
 local cmp = require('cmp')
-local cmp_format = require('lsp-zero').cmp_format()
+local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 cmp.setup({
   sources = {

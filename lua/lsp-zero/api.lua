@@ -10,6 +10,10 @@ function M.cmp_action()
   return require('lsp-zero.cmp-mapping')
 end
 
+function M.cmp_format(opts)
+  return require('lsp-zero.cmp').format(opts)
+end
+
 function M.extend_cmp(opts)
   require('lsp-zero.cmp').extend(opts)
 end
