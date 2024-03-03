@@ -91,7 +91,7 @@ Third step, add the sources you want to use to nvim-cmp's config. For this we ne
 
 ```lua
 local cmp = require('cmp')
-local cmp_format = require('lsp-zero').cmp_format()
+local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 cmp.setup({
   sources = {
@@ -137,7 +137,7 @@ Here is the code you would need to load `friendly-snippets` into nvim-cmp.
 ```lua
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
-local cmp_format = require('lsp-zero').cmp_format()
+local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 require('luasnip.loaders.from_vscode').lazy_load()
 
@@ -204,7 +204,7 @@ You can install and configure [cmp-nvim-lua](https://github.com/hrsh7th/cmp-nvim
 
 ```lua
 local cmp = require('cmp')
-local cmp_format = require('lsp-zero').cmp_format()
+local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 cmp.setup({
   sources = {

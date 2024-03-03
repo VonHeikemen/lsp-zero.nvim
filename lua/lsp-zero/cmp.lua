@@ -119,16 +119,30 @@ function M.format(opts)
   opts = opts or {}
   local maxwidth = opts.max_width or false
 
+  local details = type(opts.details) == 'boolean' and opts.details or false
+
+  local fields = details 
+    and {'abbr', 'kind', 'menu'}
+    or {'abbr', 'menu', 'kind'}
+
   return {
-    fields = {'abbr', 'menu', 'kind'},
+    fields = fields,
     format = function(entry, item)
       local n = entry.source.name
+      local label = ''
+
       if n == 'nvim_lsp' then
-        item.menu = '[LSP]'
+        label = '[LSP]'
       elseif n == 'nvim_lua'  then
-        item.menu = '[nvim]'
+        label = '[nvim]'
       else
-        item.menu = string.format('[%s]', n)
+        label = string.format('[%s]', n)
+      end
+
+      if details and item.menu ~= nil then
+        item.menu =  string.format('%s %s', label, item.menu)
+      else
+        item.menu = label
       end
 
       if maxwidth and #item.abbr > maxwidth then

@@ -579,7 +579,11 @@ Quick note: "the fallback" is the default behavior of the key you assign to a me
 
 When used the completion items will show a label that identifies the source they come from.
 
-`{opts}` only supports one property:
+By default it will override the property where nvim-cmp shows extra data about the completion item. This can be configured using the `details` property in `opts`.
+
+`{opts}` supports the following properties:
+
+  * details: (Boolean, Optional). Defaults to `false`. When enabled it will show extra information about completion item.
 
   * max_width: (Number, Optional). Maximum width the text content of the suggestion can have.
 

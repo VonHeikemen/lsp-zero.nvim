@@ -36,7 +36,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local cmp_action = lsp_zero.cmp_action()
 
       cmp.setup({
-        formatting = lsp_zero.cmp_format(),
+        formatting = lsp_zero.cmp_format({details = true}),
         mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -116,7 +116,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local cmp_action = lsp_zero.cmp_action()
 
       cmp.setup({
-        formatting = lsp_zero.cmp_format(),
+        formatting = lsp_zero.cmp_format({details = true}),
         mapping = cmp.mapping.preset.insert({
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
