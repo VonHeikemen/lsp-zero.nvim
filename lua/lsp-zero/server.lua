@@ -20,13 +20,18 @@ function M.extend_lspconfig()
   end
 
   local util = require('lspconfig.util')
+  local capabilities = s.set_capabilities()
 
-  util.default_config.capabilities = s.set_capabilities()
+  if M.cmp_capabilities then
+    util.default_config.capabilities = capabilities
+  end
 
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     -- looks like some lsp servers can override the capabilities option
     -- during "config definition". so, now we have to do this.
-    s.ensure_capabilities(config, user_config)
+    if M.cmp_capabilities then
+      s.ensure_capabilities(config, user_config)
+    end
 
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
@@ -263,7 +268,7 @@ function M.has_configs()
 end
 
 function M.highlight_symbol(client, bufnr)
-  if client == nil 
+  if client == nil
     or client.supports_method('textDocument/documentHighlight') == false
   then
     return
@@ -291,38 +296,41 @@ function M.highlight_symbol(client, bufnr)
   })
 end
 
-function s.set_capabilities(current)
-  if state.capabilities == nil then
-    local cmp_default_capabilities = {}
-    local base = {}
-
-    if M.has_lspconfig then
-      base = require('lspconfig.util').default_config.capabilities
-    else
-      base = vim.lsp.protocol.make_client_capabilities()
-    end
-
-    local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
-    if ok then
-      M.cmp_capabilities = true
-      cmp_default_capabilities = cmp_lsp.default_capabilities()
-    end
-
-    state.capabilities = vim.tbl_deep_extend(
-      'force',
-      base,
-      cmp_default_capabilities,
-      current or {}
-    )
-
+function s.set_capabilities()
+  if state.capabilities then
     return state.capabilities
   end
 
-  if current == nil then
+  local extend = vim.g.lsp_zero_extend_capabilities
+  local use_default = extend == 0 or extend == false
+
+  if use_default then
+    state.capabilities = vim.lsp.protocol.make_client_capabilities()
     return state.capabilities
   end
 
-  return vim.tbl_deep_extend('force', state.capabilities, current)
+  local cmp_default_capabilities = {}
+  local base = {}
+
+  if M.has_lspconfig then
+    base = require('lspconfig.util').default_config.capabilities
+  else
+    base = vim.lsp.protocol.make_client_capabilities()
+  end
+
+  local ok, cmp_lsp = pcall(require, 'cmp_nvim_lsp')
+  if ok then
+    M.cmp_capabilities = true
+    cmp_default_capabilities = cmp_lsp.default_capabilities()
+  end
+
+  state.capabilities = vim.tbl_deep_extend(
+    'force',
+    base,
+    cmp_default_capabilities
+  )
+
+  return state.capabilities
 end
 
 function s.ensure_capabilities(server_config, user_config)
