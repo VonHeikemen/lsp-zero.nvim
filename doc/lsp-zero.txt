@@ -205,8 +205,11 @@ lsp_zero_extend_lspconfig: ~
     automatically.
 
 lsp_zero_extend_capabilities: ~
-    When set to `0` then lsp-zero will not extend lspconfig default
-    capabilities option.
+    When set to `0` then lsp-zero will only send Neovim's default capabilities
+    settings to language servers. This means language servers that respect the
+    `capabilities` settings will stop sending snippets. And also the "extra edits"
+    may stop working, you will not get things like automatically adding a missing
+    import for a completion item.
 
 lsp_zero_ui_float_border: ~
     Set the style of border of diagnostic floating window, hover window and

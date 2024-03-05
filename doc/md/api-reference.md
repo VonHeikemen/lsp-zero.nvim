@@ -20,7 +20,7 @@
 
 * `lsp_zero_extend_lspconfig`: When set to `0` then lsp-zero will not integrate with lspconfig automatically.
 
-* `lsp_zero_extend_capabilities`: When set to `0` then lsp-zero will not extend lspconfig default capabilities option.
+* `lsp_zero_extend_capabilities`: When set to `0` then lsp-zero will only send Neovim's default capabilities settings to language servers. This means language servers that respect the `capabilities` settings will stop sending snippets. And also the extra edits, like automatically adding a missing import for a completion item, may stop working.
 
 * `lsp_zero_ui_float_border`: Set the style of border of diagnostic floating window, hover window and signature help window. Can have one of these: `'none'`, `'single'`, `'double'`, `'rounded'`, `'solid'` or `'shadow'`. The default value is `rounded`. If set to `0` then lsp-zero will not configure the border style.
 
