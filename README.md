@@ -50,6 +50,7 @@ You can browse the documentation at [lsp-zero.netlify.app/v3.x](https://lsp-zero
   * [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/v3.x/guide/what-to-do-when-lsp-doesnt-start.html)
   * [Lazy loading with lazy.nvim](https://lsp-zero.netlify.app/v3.x/guide/lazy-loading-with-lazy-nvim.html)
   * [lua_ls for Neovim](https://lsp-zero.netlify.app/v3.x/guide/neovim-lua-ls.html)
+  * [Configure Volar 2.0 (with typescript support)](https://lsp-zero.netlify.app/v3.x/guide/configure-volar-v2.html)
   * [Migrate from v2.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch.html)
   * [Migrate from v1.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
 
