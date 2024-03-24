@@ -6,11 +6,11 @@ Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/
 
 ```lua
 require('lsp-zero')
-require('lspconfig').lua_ls.setup({})
--- for this to work `lua_ls` needs to be installed in your system
+require('lspconfig').intelephense.setup({})
+-- install and basic usage demo: https://asciinema.org/a/648850
 ```
 
-With this code when `lua_ls` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion.
+With this code when `intelephense` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion. [See demo in asciinema](https://asciinema.org/a/648850).
 
 ## How to get started
 
