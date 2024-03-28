@@ -101,8 +101,8 @@ vim.cmd.colorscheme('habamax')
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
-  -- keybindings are listed here:
-  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/README.md#keybindings
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
@@ -149,8 +149,6 @@ cmp.setup({
     completion = cmp.config.window.bordered(),
     documentation = cmp.config.window.bordered(),
   },
-  -- default keybindings for nvim-cmp are here:
-  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/README.md#keybindings-1
   mapping = cmp.mapping.preset.insert({
     -- confirm completion item
     ['<Enter>'] = cmp.mapping.confirm({ select = true }),
@@ -166,6 +164,11 @@ cmp.setup({
     ['<C-f>'] = cmp_action.luasnip_jump_forward(),
     ['<C-b>'] = cmp_action.luasnip_jump_backward(),
   }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
   -- note: if you are going to use lsp-kind (another plugin)
   -- replace the line below with the function from lsp-kind
   formatting = lsp_zero.cmp_format(),
@@ -285,6 +288,11 @@ cmp.setup({
     ['<C-y>'] = cmp.mapping.confirm({ select = true }),
     ['<C-Space>'] = cmp.mapping.complete(),
   }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
 })
 ```
 

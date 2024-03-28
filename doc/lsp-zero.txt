@@ -967,7 +967,12 @@ extend_cmp({opts}): ~
         ['<C-Space>'] = cmp.mapping.complete(),
         ['<C-f>'] = cmp_action.luasnip_jump_forward(),
         ['<C-b>'] = cmp_action.luasnip_jump_backward(),
-      })
+      }),
+      snippet = {
+        expand = function(args)
+          require('luasnip').lsp_expand(args.body)
+        end,
+      },
     })
 <
                                                    *lsp-zero.omnifunc.setup()*
@@ -1220,7 +1225,12 @@ You can call the setup function of the `cmp` module. Here is a quick example.
       ['<C-b>'] = cmp_action.luasnip_jump_backward(),
       ['<C-u>'] = cmp.mapping.scroll_docs(-4),
       ['<C-d>'] = cmp.mapping.scroll_docs(4),
-    })
+    }),
+    snippet = {
+      expand = function(args)
+        require('luasnip').lsp_expand(args.body)
+      end,
+    },
   })
 <
 When configuring the `sources` option make sure to add the source for the LSP

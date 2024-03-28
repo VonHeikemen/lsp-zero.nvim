@@ -128,6 +128,11 @@ cmp.setup({
     {name = 'buffer', keyword_length = 3},
     {name = 'luasnip', keyword_length = 2},
   },
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
 })
 ```
 
@@ -159,6 +164,11 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(-5),
     ['<C-d>'] = cmp.mapping.scroll_docs(5),
   }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
 })
 ```
 
@@ -326,6 +336,11 @@ cmp.setup({
     ['<C-f>'] = cmp.mapping.scroll_docs(5),
     ['<C-u>'] = cmp.mapping.scroll_docs(-5),
   }),
+  snippet = {
+    expand = function(args)
+      require('luasnip').lsp_expand(args.body)
+    end,
+  },
 })
 ```
 
