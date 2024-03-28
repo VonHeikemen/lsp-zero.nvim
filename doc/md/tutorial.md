@@ -138,26 +138,11 @@ Now we need to add lsp-zero and all its dependencies in lazy's list of plugins.
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  -- LSP Support
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    config = false,
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+  {'L3MON4D3/LuaSnip'},
 })
 ```
 
@@ -247,26 +232,11 @@ require('lazy').setup({
   {'folke/tokyonight.nvim'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
-  -- LSP Support
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    config = false,
-  },
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+  {'L3MON4D3/LuaSnip'},
 })
 ```
 
@@ -423,26 +393,11 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    config = false,
-  },
-  -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+  {'L3MON4D3/LuaSnip'}
 })
 
 -- Set colorscheme
@@ -527,26 +482,11 @@ require('lazy').setup({
   {'folke/tokyonight.nvim'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
-    lazy = true,
-    config = false,
-  },
-  -- LSP Support
-  {
-    'neovim/nvim-lspconfig',
-    dependencies = {
-      {'hrsh7th/cmp-nvim-lsp'},
-    }
-  },
-  -- Autocompletion
-  {
-    'hrsh7th/nvim-cmp',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'}
-    },
-  },
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'neovim/nvim-lspconfig'},
+  {'hrsh7th/cmp-nvim-lsp'},
+  {'hrsh7th/nvim-cmp'},
+  {'L3MON4D3/LuaSnip'},
 })
 
 -- Set colorscheme
