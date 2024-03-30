@@ -563,15 +563,25 @@ These are the supported methods:
 
 * `toggle_completion`: If the completion menu is visible it cancels the process. Else, it triggers the completion menu. You can use the property `modes` in the first argument to specify where this mapping should active (the default is `{modes = {'i'}}`).
 
-* `luasnip_jump_forward`: Go to the next placeholder in the snippet.
+* `vim_snippet_jump_forward`: Go to the next placeholder in a snippet created by the module `vim.snippet`. This requires Neovim v0.10 or greater.
 
-* `luasnip_jump_backward`: Go to the previous placeholder in the snippet.
+* `vim_snippet_jump_backward`: Go to the previous placeholder in a snippet created by the module `vim.snippet`. This requires Neovim v0.10 or greater.
 
-* `luasnip_next`: If completion menu is visible it will navigate to the item in the list. If the cursor can jump to a snippet placeholder, it moves to it. Else, it uses the fallback.
+* `vim_snippet_next`: If completion menu is visible it will navigate to the next item in the list. If the cursor can jump to a vim snippet placeholder, it moves to it. Else, it uses the fallback. This requires Neovim v0.10 or greater.
 
-* `luasnip_next_or_expand`: If completion menu is visible it will navigate to the item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a snippet placeholder, it moves to it. Else, it uses the fallback.
+* `vim_snippet_prev`: If completion menu is visible it will navigate to the previous item in the list. If the cursor can jump to a vim snippet placeholder, it moves to it. Else, it uses the fallback. This requires Neovim v0.10 or greater.
 
-* `luasnip_supertab`: If the completion menu is visible it will navigate to the next item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a snippet placeholder, it moves to it. If the cursor is in the middle of a word that doesn't trigger a snippet it displays the completion menu. Else, it uses the fallback.
+* `vim_snippet_tab_next`: If the completion menu is visible it will navigate to the next item in the list. If the cursor can jump to a vim snippet placeholder, it moves to it. If the cursor is in the middle of a word it displays the completion menu. Else, it uses the fallback. This requires Neovim v0.10 or greater.
+
+* `luasnip_jump_forward`: Go to the next placeholder in a snippet created by luasnip.
+
+* `luasnip_jump_backward`: Go to the previous placeholder in a snippet created by luasnip.
+
+* `luasnip_next`: If completion menu is visible it will navigate to the next item in the list. If the cursor can jump to a luasnip placeholder, it moves to it. Else, it uses the fallback.
+
+* `luasnip_next_or_expand`: If completion menu is visible it will navigate to the next item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a luasnip placeholder, it moves to it. Else, it uses the fallback.
+
+* `luasnip_supertab`: If the completion menu is visible it will navigate to the next item in the list. If cursor is on top of the trigger of a snippet it'll expand it. If the cursor can jump to a luasnip placeholder, it moves to it. If the cursor is in the middle of a word that doesn't trigger a snippet it displays the completion menu. Else, it uses the fallback.
 
 * `luasnip_shift_supertab`: If the completion menu is visible it will navigate to previous item in the list. If the cursor can navigate to a previous snippet placeholder, it moves to it. Else, it uses the fallback.
 
