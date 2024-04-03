@@ -146,7 +146,15 @@ function M.default_keymaps(opts)
 end
 
 function M.get_capabilities()
-  return require('lsp-zero.server').client_capabilities()
+  local Server = require('lsp-zero.server')
+  local client_defaults = Server.client_capabilities()
+  local user_defaults = vim.tbl_get(Server, 'default_config', 'capabilities')
+
+  if user_defaults == nil then
+    return client_defaults
+  end
+
+  return vim.tbl_deep_extend('force', client_defaults, user_defaults)
 end
 
 function M.highlight_symbol(...)
