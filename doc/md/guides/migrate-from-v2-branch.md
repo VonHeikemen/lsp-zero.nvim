@@ -17,7 +17,7 @@ require('mason-lspconfig').setup({
 
 To configure the language servers installed with `mason.nvim` automatically you should use the module `mason-lspconfig`.
 
-You'll need to use the option `handlers` in mason-lspconfig. You can use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) as a default handler.
+You'll need to use the option `handlers` in mason-lspconfig. You can setup a default handler and use `lspconfig` to configure the language servers.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -26,7 +26,9 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   }
 })
 ```
@@ -46,7 +48,14 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer', 'jdtls'},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `jdtls`
+    -- noop is an empty function that doesn't do anything
     jdtls = lsp_zero.noop,
   }
 })
@@ -63,7 +72,13 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)
@@ -78,7 +93,7 @@ In `v2.x` each completion item has a label that shows the source that created th
 
 ```lua
 local cmp = require('cmp')
-local cmp_format = require('lsp-zero').cmp_format()
+local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 cmp.setup({
   formatting = cmp_format,
@@ -141,13 +156,19 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
---- if you want to know more about lsp-zero and mason.nvim
+--- if you want to know more about mason.nvim
 --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)
@@ -156,7 +177,7 @@ require('mason-lspconfig').setup({
 })
 
 local cmp = require('cmp')
-local cmp_format = lsp_zero.cmp_format()
+local cmp_format = lsp_zero.cmp_format({details = true})
 
 cmp.setup({
   formatting = cmp_format,

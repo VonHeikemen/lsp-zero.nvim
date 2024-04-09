@@ -46,12 +46,16 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
--- to learn how to use mason.nvim with lsp-zero
+-- to learn how to use mason.nvim
 -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   }
 })
 ```
@@ -116,12 +120,18 @@ lsp_zero.set_sign_icons({
   info = '»'
 })
 
--- to learn how to use mason.nvim with lsp-zero
+-- to learn how to use mason.nvim
 -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)
@@ -202,12 +212,14 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
---" to learn how to use mason.nvim with lsp-zero
+--" to learn how to use mason.nvim
 --" read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   }
 })
 EOF
@@ -262,7 +274,13 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)

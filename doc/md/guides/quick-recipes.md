@@ -108,7 +108,14 @@ And if you use `mason-lspconfig` make sure you ignore `rust_analyzer` from the a
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `rust_analyzer`
+    -- noop is an empty function that doesn't do anything
     rust_analyzer = lsp_zero.noop,
   }
 })

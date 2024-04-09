@@ -251,12 +251,14 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
---- if you want to know more about lsp-zero and mason.nvim
+--- if you want to know more about mason.nvim
 --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   },
 })
 ```
@@ -504,12 +506,18 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
---- if you want to know more about lsp-zero and mason.nvim
+--- if you want to know more about mason.nvim
 --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       -- (Optional) configure lua language server
       local lua_opts = lsp_zero.nvim_lua_ls()

@@ -52,7 +52,7 @@ require('mason-lspconfig').setup({
 
 ## Enable automatic setup of language servers
 
-This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use the function [.default_setup](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) of lsp-zero as a "default handler" and this will be enough to get the behaviour you want.
+This can be done using the module `mason-lspconfig`. In their `.setup()` function you will need to configure a property called `handlers`. You can use a "default handler" and this will be enough to get the behaviour you want.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -66,7 +66,9 @@ end)
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   }
 })
 ```
@@ -76,7 +78,13 @@ To add a custom configuration to a server you need to add property to `handlers`
 ```lua
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)
@@ -98,7 +106,14 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {'tsserver', 'rust_analyzer', 'jdtls'},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `jdtls`
+    -- noop is an empty function that doesn't do anything
     jdtls = lsp_zero.noop,
   }
 })
@@ -260,13 +275,19 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 end)
 
---- if you want to know more about lsp-zero and mason.nvim
+--- if you want to know more about mason.nvim
 --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
 require('mason').setup({})
 require('mason-lspconfig').setup({
   ensure_installed = {},
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `lua_ls`
     lua_ls = function()
       local lua_opts = lsp_zero.nvim_lua_ls()
       require('lspconfig').lua_ls.setup(lua_opts)

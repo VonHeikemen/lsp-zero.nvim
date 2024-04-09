@@ -128,14 +128,16 @@ require('mason-lspconfig').setup({
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   }
 })
 ```
 
-Notice here we also use the function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver). We add this to the `handlers` so we can get automatic setup for all the language servers installed with `mason.nvim`.
+We add a "default handler" to the `handlers` option so we can get automatic setup for all the language servers installed with `mason.nvim`.
 
-For more details on how to use mason.nvim with lsp-zero [read this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md).
+For more details on how to use mason.nvim [read this guide](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md).
 
 ## Configure language servers
 
@@ -161,7 +163,13 @@ If you use `mason-lspconfig` to manage the setup of your language servers then y
 ```lua
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `tsserver`
     tsserver = function()
       require('lspconfig').tsserver.setup({
         single_file_support = false,

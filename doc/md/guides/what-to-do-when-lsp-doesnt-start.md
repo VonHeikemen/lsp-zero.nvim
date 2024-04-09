@@ -110,35 +110,12 @@ If you used `mason-lspconfig` automatic setup then it's being called for you in 
 ```lua
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
-  }
-})
-```
-
-`.default_setup` should be calling lspconfig. We can inspect that if we want.
-
-We can take control of the default handler and check the state of lspconfig after the setup.
-
-```lua
-require('mason-lspconfig').setup({
-  handlers = {
-    function(name)
-      lsp_zero.default_setup(name)
-      local lsp = require('lspconfig')[name]
-      print(name, type(lsp.manager))
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
     end,
   }
 })
 ```
-
-If everything went well Neovim should show you the name of each language server and next to them the word `table`.
-
-```
-tsserver table
-eslint table
-```
-
-If you get the word `nil` instead of `table`, open a new issue in lsp-zero.
 
 ## Ensure root_dir can be detected
 

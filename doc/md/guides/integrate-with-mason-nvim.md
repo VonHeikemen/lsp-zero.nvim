@@ -1,6 +1,6 @@
 # Integrate with mason.nvim
 
-We can use [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) to help us manage the installation of language servers. And then we can use lsp-zero to help with the automatic configuration.
+We can use [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-lspconfig.nvim](https://github.com/williamboman/mason-lspconfig.nvim) to help us manage the installation of language servers. And then we can use [lspconfig](https://github.com/neovim/nvim-lspconfig) to setup the servers only when they are installed.
 
 Here is a basic example.
 
@@ -19,7 +19,9 @@ require('mason-lspconfig').setup({
   -- with the ones you want to install
   ensure_installed = {'tsserver', 'rust_analyzer'},
   handlers = {
-    lsp_zero.default_setup,
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
   },
 })
 ```
@@ -42,7 +44,13 @@ Lets use an imaginary language server called `example_server` as an example.
 
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `example_server`
     example_server = function()
       require('lspconfig').example_server.setup({
         ---
@@ -67,19 +75,50 @@ If we want to ignore a language server we can use the function [.noop()](https:/
 
 require('mason-lspconfig').setup({
   handlers = {
-    lsp_zero.default_setup,
+    -- this first function is the "default handler"
+    -- it applies to every language server without a "custom handler"
+    function(server_name)
+      require('lspconfig')[server_name].setup({})
+    end,
+
+    -- this is the "custom handler" for `example_server`
+    -- noop is an empty function that doesn't do anything
     example_server = lsp_zero.noop,
   },
 })
 ```
 
+So `example_server = lsp_zero.noop` is the same thing as this.
+
+```lua
+example_server = function() end
+```
+
 When the time comes for `mason-lspconfig` to setup `example_server` it will execute an empty function.
 
-## The magic behind .default_setup()
+## The default_setup shortcut
 
-The function [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) is really just a "shortcut" that calls `lspconfig`.
+In lsp-zero there is a function called [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver), this purpose of this function is to act as a default handler in `mason-lspconfig`'s options. Like this.
 
-This basically what happens (explained with code):
+```lua
+require('mason-lspconfig').setup({
+  handlers = {
+    lsp_zero.default_setup,
+  },
+})
+```
+
+This way you can setup your language server without needing to call `lspconfig` yourself.
+
+### Why is this not in the other documentation examples?
+
+This used to be the recommended way of to configure lsp-zero. The problem with [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) is not about the code behind it, is about people. When new users ask for help on discord or reddit they don't get support from the community. [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) hides the fact that [lspconfig](https://github.com/neovim/nvim-lspconfig) is being called, so new users don't know how to ask the right questions, and other Neovim users often will advice against using lsp-zero. The documentation now shows an explicit setup with [lspconfig](https://github.com/neovim/nvim-lspconfig), my hope is that increases the chances of new users getting the support they need.
+
+You can still use [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver) if you want, but you have to know how to ask the right question when you ask for help online.
+
+### Behind the scenes
+
+If you want to know, this is what happens behind the scenes when you call [.default_setup()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#default_setupserver).
 
 ```lua
 -- just in case: there is no need to copy/paste this example in your own config

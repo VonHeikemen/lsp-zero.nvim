@@ -152,8 +152,8 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       local lsp_zero = require('lsp-zero')
       lsp_zero.extend_lspconfig()
 
-      --- if you want to know more about lsp-zero and mason.nvim
-      --- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+      -- if you want to know more about mason.nvim
+      -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
       lsp_zero.on_attach(function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
@@ -163,7 +163,13 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       require('mason-lspconfig').setup({
         ensure_installed = {},
         handlers = {
-          lsp_zero.default_setup,
+          -- this first function is the "default handler"
+          -- it applies to every language server without a "custom handler"
+          function(server_name)
+            require('lspconfig')[server_name].setup({})
+          end,
+
+          -- this is the "custom handler" for `lua_ls`
           lua_ls = function()
             -- (Optional) Configure lua language server for neovim
             local lua_opts = lsp_zero.nvim_lua_ls()
