@@ -127,6 +127,7 @@ local function setup_lspconfig()
   local ok = (
     vim.g.lspconfig == 1
     or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) > 0
+    or pcall(require, 'lspconfig.util')
   )
 
   if not ok then
