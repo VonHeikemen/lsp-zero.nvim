@@ -9,7 +9,7 @@ require('lsp-zero')
 require('lspconfig').intelephense.setup({})
 ```
 
-With this code when `intelephense` (a language server) is active you'll get all the features Neovim offers by default plus autocompletion. [See demo in asciinema](https://asciinema.org/a/648850).
+With this code when `intelephense` (a language server for PHP) is active you'll get all the features Neovim offers by default plus autocompletion. [See demo in asciinema](https://asciinema.org/a/648850).
 
 ## How to get started
 
@@ -80,6 +80,10 @@ If you want to migrate from a previous version to the `v3.x` branch, follow one 
 * [Migrate from v2.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch.html)
 * [Migrate from v1.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
 
+### A word of advice
+
+One thing you should know when asking for help online: asking the question "how to configure [random language] with lsp-zero?" is not going to give you the results you want. You probably want to ask "how to configure the language server for [random language] using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)?" That will give you better results because `nvim-lspconfig` is the plugin that configures the language servers.
+
 ## Quickstart (for the impatient)
 
 If you are not that impatient, I recommend reading the [Getting started](https://lsp-zero.netlify.app/v3.x/getting-started.html) page.
@@ -88,7 +92,7 @@ But for those of you that just want to copy/paste, here are some templates you c
 
 * [Lua template configuration](https://lsp-zero.netlify.app/v3.x/template/lua-config.html)
 * [Vimscript template configuration](https://lsp-zero.netlify.app/v3.x/template/vimscript-config.html)
-* [ThePrimeagen's "0 to LSP" config adapted to version 3](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
+* [ThePrimeagen's "0 to LSP" config updated](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
 
 ## Support
 
