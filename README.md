@@ -80,7 +80,7 @@ If you want to migrate from a previous version to the `v3.x` branch, follow one 
 * [Migrate from v2.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch.html)
 * [Migrate from v1.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
 
-### A word of advice
+### When asking for help for a specific language
 
 One thing you should know when asking for help online: asking the question "how to configure [random language] with lsp-zero?" is not going to give you the results you want. You probably want to ask "how to configure the language server for [random language] using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)?" That will give you better results because `nvim-lspconfig` is the plugin that configures the language servers.
 
