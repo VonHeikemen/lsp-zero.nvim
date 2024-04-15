@@ -395,7 +395,14 @@ noop(): ~
     require('mason-lspconfig').setup({
       ensure_installed = {'tsserver', 'eslint', 'jdtls'},
       handlers = {
-        lsp_zero.default_setup,
+        -- this first function is the "default handler"
+        -- it applies to every language server without a "custom handler"
+        function(server_name)
+          require('lspconfig')[server_name].setup({})
+        end,
+
+        -- this is the "custom handler" for `jdtls`
+        -- noop is an empty function that doesn't do anything
         jdtls = lsp_zero.noop,
       },
     })
@@ -1102,8 +1109,8 @@ Guides                                                       *lsp-zero-guides*
 Integrate with mason.nvim
 
 We can use |mason.nvim| and |mason-lspconfig.nvim| to help us manage the
-installation of language servers. And then we can use lsp-zero to help with
-the automatic configuration.
+installation of language servers. And then we can use lspconfig to configure
+the language servers.
 
 Here is a basic example.
 >lua
@@ -1121,13 +1128,15 @@ Here is a basic example.
     -- with the ones you want to install
     ensure_installed = {'tsserver', 'rust_analyzer'},
     handlers = {
-      lsp_zero.default_setup,
+      function(server_name)
+        require('lspconfig')[server_name].setup({})
+      end,
     },
   })
 <
 
 This config will tell `mason-lspconfig` to install tsserver and rust_analyzer
-automatically if they are missing. And lsp-zero will handle the configuration
+automatically if they are missing. And lspconfig will handle the configuration
 of those servers.
 
 Note that after you install a language server you will need to restart Neovim
@@ -1145,7 +1154,13 @@ Lets use an imaginary language server called `example_server` as an example.
 
   require('mason-lspconfig').setup({
     handlers = {
-      lsp_zero.default_setup,
+      -- this first function is the "default handler"
+      -- it applies to every language server without a "custom handler"
+      function(server_name)
+        require('lspconfig')[server_name].setup({})
+      end,
+
+      -- this is the "custom handler" for `example_server`
       example_server = function()
         require('lspconfig').example_server.setup({
           ---
@@ -1169,7 +1184,14 @@ ignore the setup for the language server.
 
   require('mason-lspconfig').setup({
     handlers = {
-      lsp_zero.default_setup,
+      -- this first function is the "default handler"
+      -- it applies to every language server without a "custom handler"
+      function(server_name)
+        require('lspconfig')[server_name].setup({})
+      end,
+
+      -- this is the "custom handler" for `example_server`
+      -- noop is an empty function that doesn't do anything
       example_server = lsp_zero.noop,
     },
   })
@@ -1224,7 +1246,13 @@ If you used |mason-lspconfig.nvim| to setup your language servers, add
 >lua
   require('mason-lspconfig').setup({
     handlers = {
-      lsp_zero.default_setup,
+      -- this first function is the "default handler"
+      -- it applies to every language server without a "custom handler"
+      function(server_name)
+        require('lspconfig')[server_name].setup({})
+      end,
+
+      -- this is the "custom handler" for `lua_ls`
       lua_ls = function()
         local lua_opts = lsp_zero.nvim_lua_ls()
         require('lspconfig').lua_ls.setup(lua_opts)
