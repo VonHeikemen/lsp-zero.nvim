@@ -198,6 +198,7 @@ function M.nvim_workspace(opts)
   return vim.tbl_deep_extend('force', config, opts or {})
 end
 
+---@return table<string, any>
 function M.client_capabilities()
   if state.capabilities == nil then
     if M.has_lspconfig == false then
@@ -296,6 +297,7 @@ function M.highlight_symbol(client, bufnr)
   })
 end
 
+---@return table<string, any>
 function s.set_capabilities()
   if state.capabilities then
     return state.capabilities

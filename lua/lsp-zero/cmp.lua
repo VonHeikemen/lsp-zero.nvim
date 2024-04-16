@@ -1,8 +1,35 @@
+---@class lsp_zero.cmp
 local M = {}
 
 local base_setup = false
 local setup_complete = false
 
+---@class lsp_zero.config.CmpExtend
+---@inlinedoc
+---
+---Add cmp_nvim_lsp? as a source. (default: true)
+---@field set_lsp_source? boolean
+---
+---Setup default keymaps.
+---(default: true)
+---@field set_mappings? boolean 
+---
+---Setup luasnip to expand snippets.
+---(default: true)
+---@field use_luasnip? boolean
+
+---@class lsp_zero.config.CmpFormat
+---@inlinedoc
+---
+---Maximum width the text content of the suggestion can have.
+---@field max_width? integer
+---
+---Show extra information about completion item.
+---(default: false)
+---@field details? boolean
+
+---Adds the essential configuration options to nvim-cmp.
+---@param opts lsp_zero.config.CmpExtend
 function M.extend(opts)
   if setup_complete then
     return
@@ -14,9 +41,12 @@ function M.extend(opts)
     use_luasnip = true,
   }
 
+  ---@type lsp_zero.config.CmpExtend
   opts = vim.tbl_deep_extend('force', defaults, opts or {})
 
   local base = M.base_config()
+
+  ---@type cmp.ConfigSchema
   local config = {}
 
   if opts.set_lsp_source then
@@ -78,6 +108,8 @@ function M.apply_base()
   cmp.setup(new_config)
 end
 
+---Essential options needed to get nvim-cmp working.
+---@return cmp.ConfigSchema
 function M.base_config()
   return {
     mapping = M.basic_mappings(),
@@ -90,6 +122,8 @@ function M.base_config()
   }
 end
 
+---Default keymaps for nvim-cmp's autocompletion.
+---@return table<string, cmp.Mapping>
 function M.basic_mappings()
   local cmp = require('cmp')
 
@@ -115,13 +149,15 @@ function M.basic_mappings()
   }
 end
 
+---@param opts lsp_zero.config.CmpFormat
+---@return cmp.FormattingConfig
 function M.format(opts)
   opts = opts or {}
   local maxwidth = opts.max_width or false
 
   local details = type(opts.details) == 'boolean' and opts.details or false
 
-  local fields = details 
+  local fields = details
     and {'abbr', 'kind', 'menu'}
     or {'abbr', 'menu', 'kind'}
 
@@ -159,6 +195,7 @@ function M.format(opts)
   }
 end
 
+---Contains functions that can be use as mappings in nvim-cmp.
 function M.action()
   return require('lsp-zero.cmp-mapping')
 end

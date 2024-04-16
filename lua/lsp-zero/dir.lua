@@ -1,3 +1,8 @@
+---@class lsp_zero.config.DirList
+---@field [integer] string
+---@field path? string
+---@field buffer? integer
+
 local M = {}
 local uv = vim.uv or vim.loop
 
@@ -18,6 +23,8 @@ local function scan_dir(list, dir)
   return false
 end
 
+---@param list lsp_zero.config.DirList
+---@return string | nil
 function M.find_all(list)
   local dir = list.path
 
@@ -47,6 +54,8 @@ function M.find_all(list)
   end
 end
 
+---@param list lsp_zero.config.DirList
+---@return string | nil
 function M.find_first(list)
   local dir = list.path
 

@@ -1,3 +1,64 @@
+---@class lsp_zero.config.Omnifunc
+---@inlinedoc
+---
+---When enabled it triggers the completion menu if the character
+---under the cursor matches opts.keyword_pattern. 
+---@field autocomplete? boolean
+---
+---Regex pattern used by the autocomplete implementation.
+---Default value is "[[:keyword:]]".
+---@field keyword_pattern? string
+---
+---Assigns common actions to keymaps.
+---@field mapping? lsp_zero.config.OmnifuncMapping
+---
+---When enabled the first item in the completion menu
+---will be selected automatically.
+---@field preselect? boolean
+---
+---Configures what happens when you select an item in the completion menu. 
+---@field select_behavior? string
+---
+---When enabled <Tab> will trigger the completion menu if the cursor is
+---in the middle of a word. When the completion menu is visible it will
+---navigate to the next item in the menu. If there is a blank character
+---under the cursor it inserts a Tab character. <Shift-Tab> will navigate
+---to the previous item in the menu, and if the menu is not visible it'll
+---insert a Tab character.
+---@field tabcomplete? boolean
+---
+---It must be a valid keyboard shortcut. This will be used as a
+---keybinding to trigger the completion menu manually.
+---@field trigger? string
+---
+---Turns out Neovim will hide the completion menu when you delete a
+---character, so when you enable this option lsp-zero will trigger
+---the menu again after you press <backspace>.
+---@field update_on_delete? boolean
+---
+---When enabled lsp-zero will try to complete using
+---the words in the current buffer.
+---@field use_fallback? boolean
+---
+---When enabled Neovim will show the state of
+---the completion in message area.
+---@field verbose? boolean
+
+---@class lsp_zero.config.OmnifuncMapping
+---@inlinedoc
+---
+---Confirm completion item.
+---@field confirm? string
+---
+---Hide completion menu.
+---@field abort? string
+---
+---Navigate to next completion item.
+---@field next_item? string
+---
+---Navigate to previous completion item.
+---@field prev_item? string
+
 local M = {}
 local s = {}
 local group = 'lsp_zero_completion'
@@ -20,9 +81,7 @@ local key = {
   tab = '<Tab>',
 }
 
-local omni_code = t(key.omni)
-local buffer_code = t(key.buffer)
-
+---@param user_opts lsp_zero.config.Omnifunc
 function M.setup(user_opts)
   if type(user_opts) ~= 'table' then
     user_opts = {}

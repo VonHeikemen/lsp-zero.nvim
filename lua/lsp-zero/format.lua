@@ -1,9 +1,41 @@
+---@class lsp_zero.config.FormatOnSave
+---@inlinedoc
+---
+---Key/value pair list. On the left hand side you specify the name of
+--language server. On the right hand side you provide a list of filetypes.
+---@field servers table<string, string|string[]>
+---
+---Configuration that will passed to the formatting function.
+---@field format_opts? lsp_zero.config.BufFormatOpts
+
+---@class lsp_zero.config.BufFormatOpts
+---@inlinedoc
+---
+---If true the method won't block the editor.
+---@field async? boolean
+---
+---Can be used to specify FormattingOptions send to the language server.
+---@field formatting_options? table
+---
+---Time in milliseconds to block for formatting requests.
+---@field timeout_ms? integer
+
+---@class lsp_zero.config.FormatOpts
+---@inlinedoc
+---
+---Can be used to specify FormattingOptions send to the language server.
+---@field formatting_options? table
+---
+---Time in milliseconds to block for formatting requests.
+---@field timeout_ms? integer
+
 local M = {}
 local s = {}
 local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
+---@param opts lsp_zero.config.FormatOnSave
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -33,11 +65,12 @@ function M.format_on_save(opts)
       return
     end
 
+    ---@type lsp_zero.api.Client
     local client = vim.lsp.get_client_by_id(client_id)
     local files = list[client.name] or {}
 
     if type(files) == 'string' then
-      files = {list[client.name]}
+      files = {files}
     end
 
     if files == nil or vim.tbl_contains(files, vim.bo.filetype) == false then
@@ -81,6 +114,9 @@ function M.format_on_save(opts)
   })
 end
 
+---@param client? lsp_zero.api.Client
+---@param bufnr? integer
+---@param opts? lsp_zero.config.FormatOpts
 function M.buffer_autoformat(client, bufnr, opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -129,6 +165,9 @@ function M.buffer_autoformat(client, bufnr, opts)
   })
 end
 
+---@param client? lsp_zero.api.Client
+---@param bufnr? integer
+---@param opts? lsp_zero.config.FormatOpts
 function M.async_autoformat(client, bufnr, opts)
   if type(client) ~= 'table' or client.id == nil then
     return
