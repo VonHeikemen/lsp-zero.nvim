@@ -17,7 +17,7 @@ If you are new to Neovim and you don't have a configuration file (`init.lua`) fo
 
 If you know how to configure Neovim go to the [Getting started](https://lsp-zero.netlify.app/v3.x/getting-started.html) page in the documentation.
 
-Also consider [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html).
+Also consider `nvim-lspconfig` works fine without lsp-zero. And you can setup `nvim-cmp` by yourself. I wrote a blog post that shows how to do it: [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html).
 
 ## Documentation
 
