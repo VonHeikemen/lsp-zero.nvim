@@ -668,6 +668,8 @@ Configure the behavior of Neovim's completion mechanism. If for some reason you 
 
   * `verbose`: Boolean. Default value is `false`. When enabled Neovim will show the state of the completion in message area.
 
+  * `expand_snippet`: Function. Callback that will be invoked when the CompleteDone event is triggered and the completion item is a snippet.
+
   * `mapping`: Table. Defaults to an empty table. With this you can configure the keybinding for common actions.
 
     * `confirm`: Accept the selected completion item.
