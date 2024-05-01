@@ -1041,6 +1041,10 @@ extend_cmp({opts}): ~
         • verbose: (Boolean, Optional) Defaults to `false`. When enabled
         Neovim will show the state of the completion in message area.
 
+        • expand_snippet: (function, Optional) Callback that will be invoked
+        when the CompleteDone event is triggered and the completion item is a
+        snippet.
+
         • mapping: (Table, Optional) Defaults to an empty table. With this you
         can configure the keybinding for common actions.
 
