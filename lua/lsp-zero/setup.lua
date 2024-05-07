@@ -124,10 +124,16 @@ local function setup_lspconfig()
     return
   end
 
+  -- Note: can't use pcall(require) because lazy.nvim 
+  -- will still show an error message.
+  -- Note: rocks.nvim also has it's own way of loading plugins,
+  -- searching for lua files in the runtimepath can fail.
+  -- Note: if lspconfig is an "optional plugin" no files
+  -- will be found in runtimepath either.
   local ok = (
     vim.g.lspconfig == 1
-    or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) > 0
-    or pcall(require, 'lspconfig.util')
+    or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', false) > 0
+    or type(package.loaded['lspconfig.util']) == 'table'
   )
 
   if not ok then
