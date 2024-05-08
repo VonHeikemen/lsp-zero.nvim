@@ -85,14 +85,18 @@ In this new `jdtls.lua` script we are going to add our config for nvim-jdtls. Th
 -- If you are using linux or mac this file will be located at:
 -- ~/.config/nvim/plugin/jdtls.lua
 
--- `nvim-jdtls` will look for these files/folders
--- to determine the root directory of your project
+-- Here you can add files/folders that you use at
+-- the root of your project. `nvim-jdtls` will use 
+-- these to find the path to your project source code.
 local root_files = {
   '.git',
-  'mvnw',
-  'gradlew',
-  'pom.xml',
-  'build.gradle',
+
+  --- here are more examples that may or 
+  --- may not work as root files, according to some guy on the internet
+  -- 'mvnw',
+  -- 'gradlew',
+  -- 'pom.xml',
+  -- 'build.gradle',
 }
 
 local function get_jdtls_paths()
@@ -151,12 +155,18 @@ The complete implementation for `jdtls.lua` is this:
 local java_cmds = vim.api.nvim_create_augroup('java_cmds', {clear = true})
 local cache_vars = {}
 
+-- Here you can add files/folders that you use at
+-- the root of your project. `nvim-jdtls` will use 
+-- these to find the path to your project source code.
 local root_files = {
   '.git',
-  'mvnw',
-  'gradlew',
-  'pom.xml',
-  'build.gradle',
+
+  --- here are more examples files that may or 
+  --- may not work as root files, according to some guy on the internet
+  -- 'mvnw',
+  -- 'gradlew',
+  -- 'pom.xml',
+  -- 'build.gradle',
 }
 
 local features = {
