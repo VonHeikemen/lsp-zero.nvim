@@ -14,6 +14,8 @@ local state = {
   omit_keys = {n = {}, i = {}, x = {}},
 }
 
+local islist = vim.islist or vim.tbl_islist
+
 function M.extend_lspconfig()
   if M.setup_done then
     return
@@ -406,7 +408,6 @@ function s.compose_fn(config_callback, user_callback)
 end
 
 function s.is_keyval(v)
-  local islist = vim.islist or vim.tbl_islist
   return type(v) == 'table' and not islist(v)
 end
 
