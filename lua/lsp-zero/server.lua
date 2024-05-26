@@ -406,7 +406,8 @@ function s.compose_fn(config_callback, user_callback)
 end
 
 function s.is_keyval(v)
-  return type(v) == 'table' and not vim.islist(v)
+  local islist = vim.islist or vim.tbl_islist
+  return type(v) == 'table' and not islist(v)
 end
 
 function s.tbl_merge(old_val, new_val)
