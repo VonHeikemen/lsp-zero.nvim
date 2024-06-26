@@ -846,7 +846,7 @@ dir.find_all({list}): ~
       root_dir = function()
         --- project root will be the first directory that has
         --- either .luarc.json or .stylua.toml
-        return lsp_zero.dir.find_first({'.luarc.json', '.stylua.toml'})
+        return lsp_zero.dir.find_all({'.luarc.json', '.stylua.toml'})
       end
     })
 <
