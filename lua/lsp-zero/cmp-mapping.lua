@@ -89,7 +89,7 @@ function M.vim_snippet_jump_forward()
   end
 
   return cmp.mapping(function(fallback)
-    if vim.snippet.jumpable(1) then
+    if vim.snippet.active({direction = 1}) then
       vim.snippet.jump(1)
     else
       fallback()
@@ -108,7 +108,7 @@ function M.vim_snippet_jump_backward()
   end
 
   return cmp.mapping(function(fallback)
-    if vim.snippet.jumpable(-1) then
+    if vim.snippet.active({direction = -1}) then
       vim.snippet.jump(-1)
     else
       fallback()
@@ -135,7 +135,7 @@ function M.vim_snippet_next(select_opts)
   return cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_next_item(select_opts)
-    elseif vim.snippet.jumpable(1) then
+    elseif vim.snippet.active({direction = 1}) then
       vim.snippet.jump(1)
     else
       fallback()
@@ -158,7 +158,7 @@ function M.vim_snippet_prev(select_opts)
   return cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_prev_item(select_opts)
-    elseif vim.snippet.jumpable(-1) then
+    elseif vim.snippet.active({direction = -1}) then
       vim.snippet.jump(-1)
     else
       fallback()
@@ -188,7 +188,7 @@ function M.vim_snippet_tab_next(select_opts)
 
     if cmp.visible() then
       cmp.select_next_item(select_opts)
-    elseif vim.snippet.jumpable(1) then
+    elseif vim.snippet.active({direction = 1}) then
       vim.snippet.jump(1)
     elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
       fallback()
