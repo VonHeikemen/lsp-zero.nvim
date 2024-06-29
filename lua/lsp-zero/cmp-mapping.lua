@@ -9,7 +9,7 @@ end
 
 local function vim_snippet_support()
   if s._vim_snippet == nil then
-    s._vim_snippet = type(vim.tbl_get(vim, 'snippet', 'expand')) == 'function'
+    s._vim_snippet = vim.fn.has('nvim-0.10') == 1
   end
 
   return s._vim_snippet
@@ -40,20 +40,6 @@ function M.tab_complete(select_opts)
   end, {'i', 's'})
 end
 
----If the completion menu is visible navigate to the previous item
----in the list. Else, uses the fallback.
----@param select_opts? cmp.SelectOption
----@return cmp.Mapping
-function M.select_prev_or_fallback(select_opts)
-  local cmp = get_cmp()
-  return cmp.mapping(function(fallback)
-    if cmp.visible() then
-      cmp.select_prev_item(select_opts)
-    else
-      fallback()
-    end
-  end, {'i', 's'})
-end
 
 ---If the completion menu is visible it cancels the
 ---process. Else, it triggers the completion menu.
@@ -76,7 +62,7 @@ end
 ---
 
 ---Go to the next placeholder in a snippet created by the module vim.snippet.
----@return cmp.Mapping
+---@return cmp.Mapping | vim.NIL
 function M.vim_snippet_jump_forward()
   local cmp = get_cmp()
 
@@ -99,7 +85,7 @@ end
 
 ---Go to the previous placeholder in a snippet created by the module
 ---vim.snippet.
----@return cmp.Mapping
+---@return cmp.Mapping | vim.NIL
 function M.vim_snippet_jump_backward()
   local cmp = get_cmp()
 
@@ -120,7 +106,7 @@ end
 ---list. If the cursor can jump to a vim snippet placeholder, it moves to it.
 ---Else, it uses the fallback
 ---@param select_opts? cmp.SelectOption
----@return cmp.Mapping
+---@return cmp.Mapping | vim.NIL
 function M.vim_snippet_next(select_opts)
   local cmp = get_cmp()
 
@@ -147,7 +133,7 @@ end
 ---list. If the cursor can jump to a vim snippet placeholder, it moves to it.
 ---Else, it uses the fallback.
 ---@param select_opts? cmp.SelectOption
----@return cmp.Mapping
+---@return cmp.Mapping | vim.NIL
 function M.vim_snippet_prev(select_opts)
   local cmp = get_cmp()
 
@@ -171,7 +157,7 @@ end
 ---If the cursor is in the middle of a word it displays the completion menu.
 ---Else, it uses the fallback.
 ---@param select_opts? cmp.SelectOption
----@return cmp.Mapping
+---@return cmp.Mapping | vim.NIL
 function M.vim_snippet_tab_next(select_opts)
   local cmp = get_cmp()
 
@@ -209,7 +195,7 @@ function M.luasnip_jump_forward()
   local luasnip = get_luasnip()
 
   return cmp.mapping(function(fallback)
-    if luasnip.jumpable(1) then
+    if luasnip.locally_jumpable(1) then
       luasnip.jump(1)
     else
       fallback()
@@ -224,7 +210,7 @@ function M.luasnip_jump_backward()
   local luasnip = get_luasnip()
 
   return cmp.mapping(function(fallback)
-    if luasnip.jumpable(-1) then
+    if luasnip.locally_jumpable(-1) then
       luasnip.jump(-1)
     else
       fallback()
@@ -248,7 +234,7 @@ function M.luasnip_supertab(select_opts)
 
     if cmp.visible() then
       cmp.select_next_item(select_opts)
-    elseif luasnip.expand_or_jumpable() then
+    elseif luasnip.expand_or_locally_jumpable() then
       luasnip.expand_or_jump()
     elseif col == 0 or vim.fn.getline('.'):sub(col, col):match('%s') then
       fallback()
@@ -270,7 +256,7 @@ function M.luasnip_shift_supertab(select_opts)
   return cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_prev_item(select_opts)
-    elseif luasnip.jumpable(-1) then
+    elseif luasnip.locally_jumpable(-1) then
       luasnip.jump(-1)
     else
       fallback()
@@ -291,7 +277,7 @@ function M.luasnip_next_or_expand(select_opts)
   return cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_next_item(select_opts)
-    elseif luasnip.expand_or_jumpable() then
+    elseif luasnip.expand_or_locally_jumpable() then
       luasnip.expand_or_jump()
     else
       fallback()
@@ -311,7 +297,7 @@ function M.luasnip_next(select_opts)
   return cmp.mapping(function(fallback)
     if cmp.visible() then
       cmp.select_next_item(select_opts)
-    elseif luasnip.jumpable(1) then
+    elseif luasnip.locally_jumpable(1) then
       luasnip.jump(1)
     else
       fallback()

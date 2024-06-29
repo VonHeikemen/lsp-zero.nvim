@@ -1,4 +1,4 @@
----@class lsp_zero.config.FormatOnSave
+---@class lsp_zero.FormatOnSave
 ---@inlinedoc
 ---
 ---Key/value pair list. On the left hand side you specify the name of
@@ -6,9 +6,9 @@
 ---@field servers table<string, string|string[]>
 ---
 ---Configuration that will passed to the formatting function.
----@field format_opts? lsp_zero.config.BufFormatOpts
+---@field format_opts? lsp_zero.BufFormatOpts
 
----@class lsp_zero.config.BufFormatOpts
+---@class lsp_zero.BufFormatOpts
 ---@inlinedoc
 ---
 ---If true the method won't block the editor.
@@ -20,7 +20,7 @@
 ---Time in milliseconds to block for formatting requests.
 ---@field timeout_ms? integer
 
----@class lsp_zero.config.FormatOpts
+---@class lsp_zero.FormatOpts
 ---@inlinedoc
 ---
 ---Can be used to specify FormattingOptions send to the language server.
@@ -35,7 +35,7 @@ local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
----@param opts lsp_zero.config.FormatOnSave
+---@param opts lsp_zero.FormatOnSave
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -65,8 +65,8 @@ function M.format_on_save(opts)
       return
     end
 
-    ---@type lsp_zero.api.Client
-    local client = vim.lsp.get_client_by_id(client_id)
+    ---@type vim.lsp.Client
+    local client = vim.lsp.get_client_by_id(client_id) or {}
     local files = list[client.name] or {}
 
     if type(files) == 'string' then
@@ -114,9 +114,9 @@ function M.format_on_save(opts)
   })
 end
 
----@param client? lsp_zero.api.Client
+---@param client? vim.lsp.Client
 ---@param bufnr? integer
----@param opts? lsp_zero.config.FormatOpts
+---@param opts? lsp_zero.FormatOpts
 function M.buffer_autoformat(client, bufnr, opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -165,9 +165,9 @@ function M.buffer_autoformat(client, bufnr, opts)
   })
 end
 
----@param client? lsp_zero.api.Client
+---@param client? vim.lsp.Client
 ---@param bufnr? integer
----@param opts? lsp_zero.config.FormatOpts
+---@param opts? lsp_zero.FormatOpts
 function M.async_autoformat(client, bufnr, opts)
   if type(client) ~= 'table' or client.id == nil then
     return
@@ -231,7 +231,7 @@ function M.format_mapping(key, opts)
       return
     end
 
-    local client = vim.lsp.get_client_by_id(client_id)
+    local client = vim.lsp.get_client_by_id(client_id) or {}
     local files = list[client.name]
 
     if type(files) == 'string' then
@@ -266,8 +266,11 @@ function M.format_mapping(key, opts)
 end
 
 function M.check(server)
+  ---@diagnostic disable-next-line: deprecated
+  local get_clients = vim.lsp.get_clients or vim.lsp.get_active_clients
+
   local buffer = vim.api.nvim_get_current_buf()
-  local client = vim.lsp.get_active_clients({bufnr = buffer, name = server})[1]
+  local client = get_clients({bufnr = buffer, name = server})[1]
 
   if client == nil then
     local msg = '[lsp-zero] %s is not active'
@@ -302,7 +305,7 @@ function s.setup_async_format(opts)
       return
     end
 
-    local client = vim.lsp.get_client_by_id(client_id)
+    local client = vim.lsp.get_client_by_id(client_id) or {}
     local files = opts.servers[client.name] or {}
 
     if type(files) == 'string' then
@@ -366,7 +369,11 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   vim.b.lsp_zero_format_progress = 1
   local timer = uv.new_timer()
 
-  local client = vim.lsp.get_client_by_id(client_id)
+  if timer == nil then
+    return
+  end
+
+  local client = vim.lsp.get_client_by_id(client_id) or {}
   local encoding = client.offset_encoding
   local client_name = client.name
     or string.format('Client %s', client.id)

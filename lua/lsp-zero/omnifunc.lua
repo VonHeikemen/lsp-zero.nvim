@@ -334,7 +334,7 @@ function s.is_macro()
 end
 
 function s.is_prompt()
-  return vim.api.nvim_buf_get_option(0, 'buftype') == 'prompt'
+  return vim.bo.buftype == 'prompt'
 end
 
 function s.tab_expr()

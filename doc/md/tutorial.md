@@ -1,14 +1,14 @@
 # Tutorial
 
-Here we will learn enough about Neovim to configure lsp-zero version 3. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here we will learn enough about Neovim to configure lsp-zero version 4. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+
+If you already have a Neovim configuration setup with a plugin manager, go to the getting started page for a quick start.
 
 ## Requirements
 
 * Basic knowledge about Neovim: what is `normal mode`, `insert mode`, `command mode` and how to navigate between them.
-* Neovim v0.8 or greater
+* Neovim v0.10 or greater
 * git
-
-> If you are using Neovim v0.7, the branch `compat-07` is compatible with that Neovim version. See the [tutorial in the compat-07 branch](https://github.com/VonHeikemen/lsp-zero.nvim/blob/compat-07/doc/md/tutorial.md).
 
 ## The Entry Point
 
@@ -31,16 +31,18 @@ nvim -c 'edit $MYVIMRC'
 Now let's make sure Neovim is actually loading our file. We will change the colorscheme to a light theme. So, open your `init.lua` and add this line.
 
 ```lua
-vim.cmd.colorscheme('morning')
+if vim.fn.has('nvim-0.10') == 1 then
+  vim.cmd.colorscheme('morning')
+else
+  vim.cmd.colorscheme('blue')
+end
 ```
 
-Open Neovim again and you should notice the light theme. If you get an error it means your Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
+Open Neovim again and you should notice the light theme. If you get the blue theme then your  Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
 
-If you can't upgrade Neovim you can still install `v1.0` of lsp-zero, I have another tutorial for that:
+If you can't upgrade Neovim you can still install a previous version of lsp-zero.
 
-* [Getting started with neovim's native LSP client](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v1.x/doc/md/tutorial.md)
-
-Assuming everything went well, you can now change the theme to something else.
+Assuming everything went well, you can now delete the `if` block and change to a dark theme.
 
 ```lua
 vim.cmd.colorscheme('habamax')
@@ -48,7 +50,8 @@ vim.cmd.colorscheme('habamax')
 
 ## Install the Plugin Manager
 
-> Note: We don't **need** a plugin manager but they make our lives easier.
+> [!NOTE]
+> We don't **need** a plugin manager but they make our lives easier.
 
 We are going to use [lazy.nvim](https://github.com/folke/lazy.nvim), only because that's what the cool kids are doing these days. You can do a lot with lazy.nvim but I'm just going to show the most basic usage.
 
@@ -138,11 +141,10 @@ Now we need to add lsp-zero and all its dependencies in lazy's list of plugins.
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
-  {'L3MON4D3/LuaSnip'},
 })
 ```
 
@@ -151,16 +153,21 @@ Then we add the configuration at the end of the file.
 ```lua
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 ```
 
 Save the file, restart Neovim and wait for everything to be downloaded.
 
-Right now this setup won't do much. We don't have any language server installed just yet (and the code to use them is not there yet).
+Right now this setup won't do much. We don't have any language server installed (and the code to use them is not there yet).
 
 ### Language servers and how to use them
 
@@ -168,18 +175,23 @@ First thing you would want to do is install a language server. There are two way
 
 #### Manual global install
 
-In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of LSP servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the LSP server.
+In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of language servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the language server.
 
 Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
 
 ```lua
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 
 require('lspconfig').tsserver.setup({})
 require('lspconfig').rust_analyzer.setup({})
@@ -192,24 +204,27 @@ If you need to customize a language server, add your config inside the curly bra
 ```lua
 require('lspconfig').tsserver.setup({
   single_file_support = false,
-  on_init = function(client)
-    -- disable formatting capabilities
-    client.server_capabilities.documentFormattingProvider = false
-    client.server_capabilities.documentFormattingRangeProvider = false
+  on_attach = function(client, bufnr)
+    print('hello world')
   end,
 })
 ```
 
-Now, if none of your language server need a special config you can use the function [.setup_servers](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#setup_serverslist-opts).
+Now, if none of your language server need a special config you can use the function [.setup_servers()](./reference/lua-api#setup-servers-list-opts).
 
 ```lua
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 
 lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
 ```
@@ -220,7 +235,8 @@ There is a plugin called [mason.nvim](https://github.com/williamboman/mason.nvim
 
 If you decide to use this plugin you'll need some extra tools installed in your system. So, take a look at [mason.nvim's requirements](https://github.com/williamboman/mason.nvim#requirements).
 
-> Note: mason.nvim doesn't provide any "special integration" to the tools it downloads. It's only good for installing and updating tools.
+> [!NOTE]
+> mason.nvim doesn't provide any "special integration" to the tools it downloads. It's only good for installing and updating tools.
 
 Anyway, if you choose this method you will need to add these two plugins:
 
@@ -230,29 +246,31 @@ Anyway, if you choose this method you will need to add these two plugins:
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
-  {'L3MON4D3/LuaSnip'},
 })
 ```
 
-`mason.nvim` will make sure we have access to the LSP servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
+`mason.nvim` will make sure we have access to the language servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
 ```lua
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
 
---- if you want to know more about mason.nvim
---- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
@@ -294,56 +312,59 @@ We can add the following config to the `.luarc.json` file located in our Neovim 
   "workspace.checkThirdParty": false,
   "workspace.library": [
     "$VIMRUNTIME",
-    "./lua"
+    "${3rd}/luv/library"
   ]
 }
 ```
 
-* Fixed config
+* Lua config
 
-You should only use this method if your Neovim config is the only lua project you will ever manage with `lua_ls`.
-
-lsp-zero has a function that returns a basic config for `lua_ls`, this is how you use it.
+lsp-zero has a function that applies a basic config to `lua_ls` as a backup. If there isn't any local config file (`.luarc.json`) in the current root directory then it applies the Neovim specific settings to the language server.
 
 ```lua
 local lsp_zero = require('lsp-zero')
 
-local lua_opts = lsp_zero.nvim_lua_ls()
-require('lspconfig').lua_ls.setup(lua_opts)
-```
-
-If you need to add your own config, use the first argument to `.nvim_lua_ls()`.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
-local lua_opts = lsp_zero.nvim_lua_ls({
-  single_file_support = false,
-  on_attach = function(client, bufnr)
-    print('hello world')
+require('lspconfig').lua_ls.setup({
+  on_init = function(client)
+    lsp_zero.nvim_lua_settings(client)
   end,
 })
-
-require('lspconfig').lua_ls.setup(lua_opts)
 ```
 
-## Customizing the autocompletion menu
+## Setup autocompletion
 
-Last thing we are going to do is add some keybindings to the autocomplete menu. lsp-zero already has some defaults in place but they all meant to emulate Neovim's default, so I will suggest a few keybindings that you can add to your config.
+Last thing we are going to do is setup the autocompletion plugin: `nvim-cmp`.
 
-Before we start you need to know two things:
+To use nvim-cmp you need the lua module called `cmp`. And to make it work with Neovim's LSP client this is the minimal configuration needed.
 
-1. To customize nvim-cmp you need to use the lua module called `cmp`.
-2. To make sure we don't lose the default keybindings we need to use nvim-cmp's preset. That is a function called `.mapping.preset.insert()`.
+```lua
+local cmp = require('cmp')
 
-Here are some common keybindings you might want to add.
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  mapping = cmp.mapping.preset.insert({}),
+})
+```
+
+This will work but the keybindings you get basically emulate Neovim's defaults, which might not be enough for some.
+
+Now this is the way you can add more keybindings.
 
 ```lua
 local cmp = require('cmp')
 local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
   mapping = cmp.mapping.preset.insert({
+    -- Navigate between completion items
+    ['<C-p>'] = cmp.mapping.select_prev_item({behavior = 'select'}),
+    ['<C-n>'] = cmp.mapping.select_next_item({behavior = 'select'}),
+
     -- `Enter` key to confirm completion
     ['<CR>'] = cmp.mapping.confirm({select = false}),
 
@@ -351,8 +372,8 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
 
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -360,18 +381,19 @@ cmp.setup({
   }),
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      vim.snippet.expand(args.body)
     end,
   },
 })
 ```
 
-Note that here I'm showing a function called [.cmp_action()](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/api-reference.md#cmp_action), other extra mappings that people requested. There is a function for tab complete, one for a "supertab" behavior and a few others.
+Note that here I'm showing a function called [.cmp_action()](./reference/lua-api#cmp-action), other extra mappings that people requested. There is a function for tab complete, one for a "supertab" behavior and a few others.
 
 ## Complete code
 
 <details>
-<summary>Expand: manual setup of LSP servers </summary>
+
+<summary>Expand: Manual setup of language servers </summary>
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -395,11 +417,10 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
-  {'L3MON4D3/LuaSnip'}
 })
 
 -- Set colorscheme
@@ -411,15 +432,16 @@ vim.cmd.colorscheme('tokyonight')
 ---
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
 
--- (Optional) configure lua language server
-local lua_opts = lsp_zero.nvim_lua_ls()
-require('lspconfig').lua_ls.setup(lua_opts)
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
 
 -- Replace the language servers listed here
 -- with the ones you have installed
@@ -440,8 +462,8 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
 
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -449,7 +471,7 @@ cmp.setup({
   }),
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      vim.snippet.expand(args.body)
     end,
   },
 })
@@ -457,8 +479,10 @@ cmp.setup({
 
 </details>
 
+
 <details>
-<summary>Expand: automatic setup of LSP servers </summary>
+
+<summary>Expand: Automatic setup of language servers </summary>
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
@@ -482,13 +506,12 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
+  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
-  {'L3MON4D3/LuaSnip'},
 })
 
 -- Set colorscheme
@@ -500,28 +523,22 @@ vim.cmd.colorscheme('tokyonight')
 ---
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
   -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
-end)
+end
 
---- if you want to know more about mason.nvim
---- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+
 require('mason').setup({})
 require('mason-lspconfig').setup({
   handlers = {
-    -- this first function is the "default handler"
-    -- it applies to every language server without a "custom handler"
     function(server_name)
       require('lspconfig')[server_name].setup({})
-    end,
-
-    -- this is the "custom handler" for `lua_ls`
-    lua_ls = function()
-      -- (Optional) configure lua language server
-      local lua_opts = lsp_zero.nvim_lua_ls()
-      require('lspconfig').lua_ls.setup(lua_opts)
     end,
   }
 })
@@ -541,8 +558,8 @@ cmp.setup({
     ['<C-Space>'] = cmp.mapping.complete(),
 
     -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-    ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -550,7 +567,7 @@ cmp.setup({
   }),
   snippet = {
     expand = function(args)
-      require('luasnip').lsp_expand(args.body)
+      vim.snippet.expand(args.body)
     end,
   },
 })

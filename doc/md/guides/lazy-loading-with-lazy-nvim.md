@@ -3,35 +3,24 @@
 Lots of you really like this lazy loading business. Let me show you how to defer everything in lsp-zero using [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 <details>
-<summary>Expand manual setup of LSP servers: </summary>
+<summary>Expand: manual setup of language servers: </summary>
 
 ```lua
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
+    branch = 'v4.x',
     lazy = true,
     config = false,
-    init = function()
-      -- Disable automatic setup, we are doing it manually
-      vim.g.lsp_zero_extend_cmp = 0
-      vim.g.lsp_zero_extend_lspconfig = 0
-    end,
   },
 
-  -- Autocompletion
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'},
-    },
     config = function()
       -- Here is where you configure the autocompletion settings.
       local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_cmp()
 
-      -- And you can configure cmp even more, if you want to.
       local cmp = require('cmp')
       local cmp_action = lsp_zero.cmp_action()
 
@@ -41,19 +30,18 @@ Lots of you really like this lazy loading business. Let me show you how to defer
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
-          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+          ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+          ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
         }),
         snippet = {
           expand = function(args)
-            require('luasnip').lsp_expand(args.body)
+            vim.snippet.expand(args.body)
           end,
         },
       })
     end
   },
 
-  -- LSP
   {
     'neovim/nvim-lspconfig',
     cmd = 'LspInfo',
@@ -64,17 +52,24 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     config = function()
       -- This is where all the LSP shenanigans will live
       local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_lspconfig()
 
-      lsp_zero.on_attach(function(client, bufnr)
+      local lsp_attach = function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
         lsp_zero.default_keymaps({buffer = bufnr})
-      end)
+      end
+
+      lsp_zero.extend_lspconfig({
+        lsp_attach = lsp_attach,
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+      })
 
       -- (Optional) Configure lua language server for neovim
-      local lua_opts = lsp_zero.nvim_lua_ls()
-      require('lspconfig').lua_ls.setup(lua_opts)
+      require('lspconfig').lua_ls.setup({
+        on_init = function(client)
+          lsp_zero.nvim_lua_settings(client, {})
+        end,
+      })
     end
   }
 }
@@ -83,34 +78,26 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 </details>
 
 <details>
-<summary>Expand automatic setup of LSP servers: </summary>
+<summary>Expand: automatic setup of language servers: </summary>
 
 ```lua
 {
   {
     'VonHeikemen/lsp-zero.nvim',
-    branch = 'v3.x',
+    branch = 'v4.x',
     lazy = true,
     config = false,
-    init = function()
-      -- Disable automatic setup, we are doing it manually
-      vim.g.lsp_zero_extend_cmp = 0
-      vim.g.lsp_zero_extend_lspconfig = 0
-    end,
   },
+
   {
     'williamboman/mason.nvim',
     lazy = false,
     config = true,
   },
 
-  -- Autocompletion
   {
     'hrsh7th/nvim-cmp',
     event = 'InsertEnter',
-    dependencies = {
-      {'L3MON4D3/LuaSnip'},
-    },
     config = function()
       -- Here is where you configure the autocompletion settings.
       local lsp_zero = require('lsp-zero')
@@ -126,39 +113,41 @@ Lots of you really like this lazy loading business. Let me show you how to defer
           ['<C-Space>'] = cmp.mapping.complete(),
           ['<C-u>'] = cmp.mapping.scroll_docs(-4),
           ['<C-d>'] = cmp.mapping.scroll_docs(4),
-          ['<C-f>'] = cmp_action.luasnip_jump_forward(),
-          ['<C-b>'] = cmp_action.luasnip_jump_backward(),
+          ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
+          ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
         }),
         snippet = {
           expand = function(args)
-            require('luasnip').lsp_expand(args.body)
+            vim.snippet.expand(args.body)
           end,
         },
       })
     end
   },
 
-  -- LSP
   {
     'neovim/nvim-lspconfig',
     cmd = {'LspInfo', 'LspInstall', 'LspStart'},
     event = {'BufReadPre', 'BufNewFile'},
     dependencies = {
       {'hrsh7th/cmp-nvim-lsp'},
+      {'williamboman/mason.nvim'},
       {'williamboman/mason-lspconfig.nvim'},
     },
     config = function()
       -- This is where all the LSP shenanigans will live
       local lsp_zero = require('lsp-zero')
-      lsp_zero.extend_lspconfig()
 
-      -- if you want to know more about mason.nvim
-      -- read this: https://github.com/VonHeikemen/lsp-zero.nvim/blob/v3.x/doc/md/guides/integrate-with-mason-nvim.md
-      lsp_zero.on_attach(function(client, bufnr)
+      local lsp_attach = function(client, bufnr)
         -- see :help lsp-zero-keybindings
         -- to learn the available actions
         lsp_zero.default_keymaps({buffer = bufnr})
-      end)
+      end
+
+      lsp_zero.extend_lspconfig({
+        lsp_attach = lsp_attach,
+        capabilities = require('cmp_nvim_lsp').default_capabilities(),
+      })
 
       require('mason-lspconfig').setup({
         ensure_installed = {},
@@ -172,8 +161,11 @@ Lots of you really like this lazy loading business. Let me show you how to defer
           -- this is the "custom handler" for `lua_ls`
           lua_ls = function()
             -- (Optional) Configure lua language server for neovim
-            local lua_opts = lsp_zero.nvim_lua_ls()
-            require('lspconfig').lua_ls.setup(lua_opts)
+            require('lspconfig').lua_ls.setup({
+              on_init = function(client)
+                lsp_zero.nvim_lua_settings(client, {})
+              end,
+            })
           end,
         }
       })

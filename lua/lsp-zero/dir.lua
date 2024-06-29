@@ -1,4 +1,4 @@
----@class lsp_zero.config.DirList
+---@class lsp_zero.DirList
 ---@field [integer] string
 ---@field path? string
 ---@field buffer? integer
@@ -23,7 +23,7 @@ local function scan_dir(list, dir)
   return false
 end
 
----@param list lsp_zero.config.DirList
+---@param list lsp_zero.DirList
 ---@return string | nil
 function M.find_all(list)
   local dir = list.path
@@ -54,7 +54,7 @@ function M.find_all(list)
   end
 end
 
----@param list lsp_zero.config.DirList
+---@param list lsp_zero.DirList
 ---@return string | nil
 function M.find_first(list)
   local dir = list.path

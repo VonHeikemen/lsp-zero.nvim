@@ -1,98 +1,273 @@
 # LSP Zero
 
-Collection of functions that will help you setup Neovim's LSP client, so you can get IDE-like features with minimum effort.
-
-Out of the box it will help you integrate [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a collection of configurations for various language servers). So a minimal config can look like this.
-
-```lua
-require('lsp-zero')
-require('lspconfig').intelephense.setup({})
-```
-
-With this code when `intelephense` (a language server for PHP) is active you'll get all the features Neovim offers by default plus autocompletion. [See demo in asciinema](https://asciinema.org/a/648850).
-
-## How to get started
-
-If you are new to Neovim and you don't have a configuration file (`init.lua`) follow this [step by step tutorial](https://lsp-zero.netlify.app/v3.x/tutorial.html).
-
-If you know how to configure Neovim go to the [Getting started](https://lsp-zero.netlify.app/v3.x/getting-started.html) page in the documentation.
-
-Also consider `nvim-lspconfig` works fine without lsp-zero. And you can setup `nvim-cmp` by yourself. I wrote a blog post that shows how to do it: [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html).
-
-## Documentation
-
-You can browse the documentation at [lsp-zero.netlify.app/v3.x](https://lsp-zero.netlify.app/v3.x/introduction.html)
-
-* [Installation and basic usage](https://lsp-zero.netlify.app/v3.x/getting-started.html)
-* [LSP configuration](https://lsp-zero.netlify.app/v3.x/language-server-configuration.html)
-* [Autocompletion](https://lsp-zero.netlify.app/v3.x/autocomplete.html)
-* [Frequent Questions](https://lsp-zero.netlify.app/v3.x/faq.html) 
+Collection of functions that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
 
 <details>
 
-<summary>Expand: More Documentation Links </summary>
+<summary>Expand: Showcase </summary>
 
-* Integrations
+```lua
+-- An example setup showing a bunch of functions, just because I can, no one actually uses all of this.
+--
+-- Some people still say lsp-zero is a "super plugin" that needs 11 other plugins to work.
+-- That's not true. The only dependency you need is the language server you want to use.
+-- That said, you can use lsp-zero combined with other plugins (that's what people do)
 
-  * [Integrate with mason.nvim](https://lsp-zero.netlify.app/v3.x/guide/integrate-with-mason-nvim.html)
-  * [Enable folds with nvim-ufo](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#enable-folds-with-nvim-ufo)
-  * [Setup copilot.lua + nvim-cmp](https://lsp-zero.netlify.app/v3.x/guide/setup-copilot-lua-plus-nvim-cmp.html)
-  * [Setup with nvim-jdtls](https://lsp-zero.netlify.app/v3.x/guide/setup-with-nvim-jdtls.html)
-  * [Setup lsp-inlayhints.nvim](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#enable-inlay-hints-with-lsp-inlayhints-nvim)
-  * [Setup with nvim-navic](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#setup-with-nvim-navic)
-  * [Setup with rustaceanvim](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#setup-with-rustaceanvim)
-  * [Setup with flutter-tools](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#setup-with-flutter-tools)
-  * [Setup with nvim-metals](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#setup-with-nvim-metals)
-  * [Setup with haskell-tools](https://lsp-zero.netlify.app/v3.x/guide/quick-recipes.html#setup-with-haskell-tools)
+vim.opt.signcolumn = 'yes'
+vim.opt.updatetime = 800
 
-* Guides
+local lsp_zero = require('lsp-zero')
 
-  * [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/v3.x/guide/what-to-do-when-lsp-doesnt-start.html)
-  * [Lazy loading with lazy.nvim](https://lsp-zero.netlify.app/v3.x/guide/lazy-loading-with-lazy-nvim.html)
-  * [lua_ls for Neovim](https://lsp-zero.netlify.app/v3.x/guide/neovim-lua-ls.html)
-  * [Configure Volar 2.0 (with typescript support)](https://lsp-zero.netlify.app/v3.x/guide/configure-volar-v2.html)
-  * [Migrate from v2.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch.html)
-  * [Migrate from v1.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+  lsp_zero.highlight_symbol(client, bufnr)
+  lsp_zero.buffer_autoformat()
+end)
 
-* API
+lsp_zero.omnifunc.setup({
+  trigger = '<C-Space>',
+  tabcomplete = true,
+  use_fallback = true,
+  update_on_delete = true,
+  -- You need Neovim v0.10 to use vim.snippet.expand
+  expand_snippet = vim.snippet.expand,
+})
 
-  * [Commands](https://lsp-zero.netlify.app/v3.x/reference/commands.html)
-  * [Variables](https://lsp-zero.netlify.app/v3.x/reference/variables.html)
-  * [Lua API](https://lsp-zero.netlify.app/v3.x/guide/what-to-do-when-lsp-doesnt-start.html) 
+-- For this to work you need to install this:
+-- https://github.com/LuaLS/lua-language-server
+lsp_zero.new_client({
+  cmd = {'lua-language-server'},
+  filetypes = {'lua'},
+  on_init = function(client)
+    lsp_zero.nvim_lua_settings(client)
+  end,
+  root_dir = function(bufnr)
+    -- You need Neovim v0.10 to use vim.fs.root
+    -- Note: include a .git folder in the root of your Neovim config
+    return vim.fs.root(bufnr, {'.git', '.luarc.json', '.luarc.jsonc'})
+  end,
+})
 
-* Blog posts
-
-  * [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html)
-  * [lsp-zero under the hood](https://lsp-zero.netlify.app/v3.x/blog/under-the-hood.html)
-  * [require lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/what-require-lsp-zero-does.html)
-  * [ThePrimeagen 0 to LSP config](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
+-- For this to work you need to install this:
+-- https://www.npmjs.com/package/intelephense
+lsp_zero.new_client({
+  cmd = {'intelephense', '--stdio'},
+  filetypes = {'php'},
+  root_dir = function(bufnr)
+    -- You need Neovim v0.10 to use vim.fs.root
+    return vim.fs.root(bufnr, {'composer.json'})
+  end,
+})
+```
 
 </details>
 
-## If you need any help
+## Documentation
 
-Feel free to open a new [discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions) in this repository. Or join the chat [#lsp-zero-nvim:matrix.org](https://matrix.to/#/#lsp-zero-nvim:matrix.org).
+This branch is still under development. The available documentation is here:
 
-If you have problems with a language server read this guide: [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/v3.x/guide/what-to-do-when-lsp-doesnt-start.html)
+* [help page](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/lsp-zero.txt)
+* [Tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/tutorial.md)
+* [LSP Configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lsp.md)
+* [Autocomplete](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/autocomplete.md)
 
-If you want to migrate from a previous version to the `v3.x` branch, follow one of these guides:
+## Getting started
 
-* [Migrate from v2.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v2-branch.html)
-* [Migrate from v1.x to v3.x](https://lsp-zero.netlify.app/v3.x/guide/migrate-from-v1-branch.html)
+### Requirements
 
-### When asking for help for a specific language
+Before doing anything, make sure you...
 
-One thing you should know when asking for help online: asking the question "how to configure [random language] with lsp-zero?" is not going to give you the results you want. You probably want to ask "how to configure the language server for [random language] using [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)?" That will give you better results because `nvim-lspconfig` is the plugin that configures the language servers.
+  * Have Neovim v0.10 installed
+  * Know how to install Neovim plugins
+  * Know where to add the configuration code for lua plugins
+  * Know what is LSP, and what is a language server
 
-## Quickstart (for the impatient)
+### Installation
 
-If you are not that impatient, I recommend reading the [Getting started](https://lsp-zero.netlify.app/v3.x/getting-started.html) page.
+In this "getting started" section I will show you how to use these plugins:
 
-But for those of you that just want to copy/paste, here are some templates you can use.
+  * [VonHeikemen/lsp-zero.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v4.x)
+  * [neovim/nvim-lspconfig](https://github.com/neovim/nvim-lspconfig)
+  * [hrsh7th/nvim-cmp](https://github.com/hrsh7th/nvim-cmp)
+  * [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp)
 
-* [Lua template configuration](https://lsp-zero.netlify.app/v3.x/template/lua-config.html)
-* [Vimscript template configuration](https://lsp-zero.netlify.app/v3.x/template/vimscript-config.html)
-* [ThePrimeagen's "0 to LSP" config updated](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
+Install them using your favorite method.
+
+<details>
+
+<summary>Expand: lazy.nvim </summary>
+
+For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lazy-loading-with-lazy-nvim.md).
+
+```lua
+{'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
+{'neovim/nvim-lspconfig'},
+{'hrsh7th/cmp-nvim-lsp'},
+{'hrsh7th/nvim-cmp'},
+```
+
+</details>
+
+<details>
+
+<summary>Expand: paq.nvim </summary>
+
+```lua
+{'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
+{'neovim/nvim-lspconfig'},
+{'hrsh7th/nvim-cmp'},
+{'hrsh7th/cmp-nvim-lsp'},
+```
+
+</details>
+
+<details>
+
+<summary>Expand: vim-plug </summary>
+
+```vim
+Plug 'neovim/nvim-lspconfig'
+Plug 'hrsh7th/nvim-cmp'
+Plug 'hrsh7th/cmp-nvim-lsp'
+Plug 'VonHeikemen/lsp-zero.nvim', {'branch': 'v4.x'}
+```
+
+When using vimscript you can wrap lua code in `lua <<EOF ... EOF`.
+
+```lua
+lua <<EOF
+print('this an example code')
+print('written in lua')
+EOF
+```
+
+</details>
+
+<details>
+
+<summary>Expand: rocks.nvim </summary>
+
+`v4.x` is not in luarocks yet so you'll need to install an extension so `rocks.nvim` can download plugins from github.
+
+```
+Rocks install rocks-git.nvim
+```
+
+Install version 4 of lsp-zero.
+
+```
+Rocks install VonHeikemen/lsp-zero.nvim rev=v4.x
+```
+
+Install nvim-cmp.
+
+```
+Rocks install hrsh7th/nvim-cmp rev=main
+```
+
+Install cmp-nvim-lsp.
+
+```
+Rocks install hrsh7th/cmp-nvim-lsp rev=main
+```
+
+</details>
+
+### Extend nvim-lspconfig
+
+lsp-zero can handle the configuration steps people don't want to do. That is, modifying `nvim-lspconfig` default settings and create keymaps.
+
+```lua
+vim.opt.signcolumn = 'yes'
+
+local lsp_zero = require('lsp_zero')
+
+local lsp_attach = function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+```
+
+### Use nvim-lspconfig
+
+Once you have a language server installed you add the setup function in your Neovim config. Follow this syntax.
+
+```lua
+require('lspconfig').example_server.setup({})
+
+-- You would add this setup function after calling lsp_zero.extend_lspconfig()
+```
+
+Where `example_server` is the name of the language server you have installed in your system. For example, this is the setup for function for the lua language server.
+
+```lua
+require('lspconfig').lua_ls.setup({})
+```
+
+You can find a list of language servers in [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+
+### Minimal autocompletion config
+
+To setup autocompletion you use `nvim-cmp`.
+
+```lua
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  mapping = cmp.mapping.preset.insert({}),
+})
+```
+
+### Complete code
+
+<details>
+
+<summary>Expand: code snippet </summary>
+
+```lua
+---
+-- LSP configuration
+---
+vim.opt.signcolumn = 'yes'
+
+local lsp_zero = require('lsp_zero')
+
+local lsp_attach = function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+})
+
+-- These are just examples. Replace them with the language
+-- servers you have installed in your system
+require('lspconfig').lua_ls.setup({})
+require('lspconfig').rust_analyzer.setup({})
+require('lspconfig').intelephense.setup({})
+
+---
+-- Autocompletion setup
+---
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  mapping = cmp.mapping.preset.insert({}),
+})
+```
+
+</details>
 
 ## Support
 
