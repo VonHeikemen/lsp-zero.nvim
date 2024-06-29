@@ -19,6 +19,10 @@ If you know how to configure Neovim go to the [Getting started](https://lsp-zero
 
 Also consider `nvim-lspconfig` works fine without lsp-zero. And you can setup `nvim-cmp` by yourself. I wrote a blog post that shows how to do it: [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html).
 
+## Announcement
+
+The development on the next version of lsp-zero has started. The [v4.x branch](https://github.com/VonHeikemen/lsp-zero.nvim/tree/v4.x) has been created and is ready for testing. I opened a [new discussion](https://github.com/VonHeikemen/lsp-zero.nvim/discussions/402) if you want to know more details or want to provide feedback.
+
 ## Documentation
 
 You can browse the documentation at [lsp-zero.netlify.app/v3.x](https://lsp-zero.netlify.app/v3.x/introduction.html)
