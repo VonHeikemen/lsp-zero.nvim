@@ -225,7 +225,7 @@ end
 
 function M.nvim_lua_settings(client, opts)
   if type(client) ~= 'table' then
-    local msg = '[lsp-zero] Must provide an instance of LSP client to .nvim_lua_init()'
+    local msg = '[lsp-zero] Must provide an instance of LSP client to .nvim_lua_settings()'
     vim.notify(msg, vim.log.levels.WARN)
     return
   end
@@ -254,16 +254,21 @@ function M.nvim_lua_settings(client, opts)
     settings = {Lua = opts}
   })
 
-  if client.config.settings == nil then
-    client.config.settings = lua_opts.settings
+  local kind = type(client.config.settings)
+
+  if kind == 'nil' then
+    client.config.settings = {Lua = lua_opts.settings.Lua}
     return
   end
 
-  client.config.settings = vim.tbl_deep_extend(
-    'force',
-    client.config.settings,
-    lua_opts.settings
-  )
+  if kind == 'table' then
+    client.config.settings.Lua = vim.tbl_deep_extend(
+      'force',
+      client.config.settings.Lua or {},
+      lua_opts.settings.Lua
+    )
+    return
+  end
 end
 
 function M.highlight_symbol(client, bufnr)
