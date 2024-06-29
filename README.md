@@ -179,7 +179,7 @@ Rocks install hrsh7th/cmp-nvim-lsp rev=main
 
 ### Extend nvim-lspconfig
 
-lsp-zero can handle the configuration steps people don't want to do. That is, modifying `nvim-lspconfig` default settings and create keymaps.
+lsp-zero can handle the configuration steps people don't want to do. That is, modifying `nvim-lspconfig` default settings and create keymaps. The default keymaps are listed [in the documentation](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lsp.md#default-keybindings).
 
 ```lua
 vim.opt.signcolumn = 'yes'
@@ -187,6 +187,8 @@ vim.opt.signcolumn = 'yes'
 local lsp_zero = require('lsp_zero')
 
 local lsp_attach = function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end
 
@@ -233,6 +235,7 @@ cmp.setup({
       vim.snippet.expand(args.body)
     end,
   },
+  -- see :help lsp-zero-completion-keybindings
   mapping = cmp.mapping.preset.insert({}),
 })
 ```
@@ -262,6 +265,8 @@ vim.opt.signcolumn = 'yes'
 local lsp_zero = require('lsp_zero')
 
 local lsp_attach = function(client, bufnr)
+  -- see :help lsp-zero-keybindings
+  -- to learn the available actions
   lsp_zero.default_keymaps({buffer = bufnr})
 end
 
@@ -290,6 +295,7 @@ cmp.setup({
       vim.snippet.expand(args.body)
     end,
   },
+  -- see :help lsp-zero-completion-keybindings
   mapping = cmp.mapping.preset.insert({}),
 })
 ```
