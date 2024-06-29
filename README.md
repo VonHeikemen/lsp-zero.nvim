@@ -292,10 +292,86 @@ cmp.setup({
   },
   snippet = {
     expand = function(args)
+      -- You need Neovim v0.10 to use vim.snippet
       vim.snippet.expand(args.body)
     end,
   },
   -- see :help lsp-zero-completion-keybindings
+  mapping = cmp.mapping.preset.insert({}),
+})
+```
+
+</details>
+
+### Plot twist
+
+<details>
+
+<summary>Expand: You might not need lsp-zero </summary>
+
+If the code I showed in this getting started section is all you ever need to be happy, then you don't need lsp-zero.
+
+You can do the same thing without lsp-zero:
+
+```lua
+---
+-- LSP configuration
+---
+vim.opt.signcolumn = 'yes'
+
+local lspconfig = require('lspconfig')
+
+lspconfig.util.on_setup = lspconfig.util.add_hook_after(
+  lspconfig.util.on_setup,
+  function(config, user_config)
+    config.capabilities = vim.tbl_deep_extend(
+      'force',
+      config.capabilities,
+      require('cmp_nvim_lsp').default_capabilities(),
+      vim.tbl_get(user_config, 'capabilities') or {}
+    )
+  end
+)
+
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = {buffer = event.buf}
+
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end,
+})
+
+-- These are just examples. Replace them with the language
+-- servers you have installed in your system
+require('lspconfig').lua_ls.setup({})
+require('lspconfig').rust_analyzer.setup({})
+require('lspconfig').intelephense.setup({})
+
+---
+-- Autocompletion setup
+---
+local cmp = require('cmp')
+
+cmp.setup({
+  sources = {
+    {name = 'nvim_lsp'},
+  },
+  snippet = {
+    expand = function(args)
+      -- You need Neovim v0.10 to use vim.snippet
+      vim.snippet.expand(args.body)
+    end,
+  },
   mapping = cmp.mapping.preset.insert({}),
 })
 ```
