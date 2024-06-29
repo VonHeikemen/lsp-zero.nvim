@@ -7,11 +7,10 @@ Collection of functions that will help you use Neovim's LSP client. The aim is t
 <summary>Expand: Showcase </summary>
 
 ```lua
--- Example setup showing a bunch of functions, just because I can, no one actually uses all.
---
--- Some people still say lsp-zero is a "super plugin" that needs 11 other plugins to work.
--- That's not true. The only dependency you need is the language server you want to use.
--- That said, you can use lsp-zero combined with other plugins (that's what people do)
+-- WARNING: This is not a snippet you want to copy/paste blindly
+
+-- This snippet is just a fun example I can show to people.
+-- A showcase of all the functions they don't know about.
 
 vim.opt.signcolumn = 'yes'
 vim.opt.updatetime = 800
@@ -30,7 +29,21 @@ lsp_zero.omnifunc.setup({
   use_fallback = true,
   update_on_delete = true,
   -- You need Neovim v0.10 to use vim.snippet.expand
-  expand_snippet = vim.snippet.expand,
+  expand_snippet = vim.snippet.expand
+})
+
+-- For this to work you need to install this:
+-- https://www.npmjs.com/package/intelephense
+lsp_zero.new_client({
+  cmd = {'intelephense', '--stdio'},
+  filetypes = {'php'},
+  root_dir = function(bufnr)
+    -- You need Neovim v0.10 to use vim.fs.root
+    -- If vim.fs.root is not available, use this:
+    -- lsp_zero.dir.find_first({buffer = true, 'composer.json'})
+
+    return vim.fs.root(bufnr, {'composer.json'})
+  end,
 })
 
 -- For this to work you need to install this:
@@ -44,18 +57,8 @@ lsp_zero.new_client({
   root_dir = function(bufnr)
     -- You need Neovim v0.10 to use vim.fs.root
     -- Note: include a .git folder in the root of your Neovim config
-    return vim.fs.root(bufnr, {'.git', '.luarc.json', '.luarc.jsonc'})
-  end,
-})
 
--- For this to work you need to install this:
--- https://www.npmjs.com/package/intelephense
-lsp_zero.new_client({
-  cmd = {'intelephense', '--stdio'},
-  filetypes = {'php'},
-  root_dir = function(bufnr)
-    -- You need Neovim v0.10 to use vim.fs.root
-    return vim.fs.root(bufnr, {'composer.json'})
+    return vim.fs.root(bufnr, {'.git', '.luarc.json', '.luarc.jsonc'})
   end,
 })
 ```
@@ -78,6 +81,7 @@ This branch is still under development. The available documentation is here:
 Before doing anything, make sure you...
 
   * Have Neovim v0.10 installed
+    * Neovim v0.9 also works (requires an extra step)
   * Know how to install Neovim plugins
   * Know where to add the configuration code for lua plugins
   * Know what is LSP, and what is a language server
@@ -212,7 +216,9 @@ You can find a list of language servers in [nvim-lspconfig's documentation](http
 
 ### Minimal autocompletion config
 
-To setup autocompletion you use `nvim-cmp`.
+To get code autocompletion you use the plugin `nvim-cmp`. But now this is where you need know what Neovim version you have installed.
+
+If you have Neovim v0.10 you can use this configuration.
 
 ```lua
 local cmp = require('cmp')
@@ -223,11 +229,22 @@ cmp.setup({
   },
   snippet = {
     expand = function(args)
+      -- You need Neovim v0.10 to use vim.snippet
       vim.snippet.expand(args.body)
     end,
   },
   mapping = cmp.mapping.preset.insert({}),
 })
+```
+
+If you have Neovim v0.9 you will need to install a snippet engine. I recommend [luasnip](https://github.com/L3MON4D3/LuaSnip). Once you have it installed you can use it in the `snippet.expand` option.
+
+```lua
+snippet = {
+  expand = function(args)
+    require('luasnip').lsp_expand(args.body)
+  end,
+},
 ```
 
 ### Complete code
