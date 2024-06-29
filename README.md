@@ -7,7 +7,7 @@ Collection of functions that will help you use Neovim's LSP client. The aim is t
 <summary>Expand: Showcase </summary>
 
 ```lua
--- An example setup showing a bunch of functions, just because I can, no one actually uses all of this.
+-- Example setup showing a bunch of functions, just because I can, no one actually uses all.
 --
 -- Some people still say lsp-zero is a "super plugin" that needs 11 other plugins to work.
 -- That's not true. The only dependency you need is the language server you want to use.
@@ -97,7 +97,7 @@ Install them using your favorite method.
 
 <summary>Expand: lazy.nvim </summary>
 
-For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lazy-loading-with-lazy-nvim.md).
+For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
