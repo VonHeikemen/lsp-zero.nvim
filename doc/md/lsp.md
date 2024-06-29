@@ -7,6 +7,8 @@ If you choose to use the function `.default_keymaps()` you'll be able to use Neo
 Note that the keybindings have to be enabled explicitly, like this.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -61,6 +63,8 @@ Just like the default keybindings the idea here is to create them only when a la
 Here is an example that replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -110,6 +114,8 @@ If you have [mason.nvim](https://github.com/williamboman/mason.nvim) and [mason-
 > The name of the language server you want to install must be [on this list](https://github.com/williamboman/mason-lspconfig.nvim#available-lsp-servers).
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -143,6 +149,8 @@ We add a "default handler" to the `handlers` option so we can get automatic setu
 To pass arguments to a language server you can use the lspconfig directly.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -197,6 +205,8 @@ Neovim v0.9 allows a language server to apply new highlights, this is known as s
 We can disable this new feature in every server whenever they attach to a buffer.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -250,6 +260,8 @@ You'll need to provide the command to start the LSP server, a list of filetypes 
 Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported LSP servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -288,6 +300,8 @@ require('lspconfig').name_of_my_lsp.setup({})
 If you don't need a "robust" solution you can use the function `.new_client()`. This function is just a thin wrapper that calls [vim.lsp.start()](https://neovim.io/doc/user/lsp.html#vim.lsp.start()) in a `FileType` autocommand.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 lsp_zero.on_attach(function(client, bufnr)
@@ -315,13 +329,11 @@ Note: When you enable format on save your LSP server is doing the formatting. Th
 If you want to control exactly what language server is used to format a file call the function `.format_on_save()`, this will allow you to associate a language server with a list of filetypes.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({buffer = bufnr})
-end)
-
--- don't add this function in the `on_attach` callback.
+-- don't add this function in the `lsp_attach` callback.
 -- `format_on_save` should run only once, before the language servers are active.
 lsp_zero.format_on_save({
   format_opts = {
@@ -340,12 +352,19 @@ lsp_zero.format_on_save({
 If you only ever have **one** language server attached in each file and you are happy with all of them, you can call the function `.buffer_autoformat()` when a language server is active in the current buffer.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
   lsp_zero.buffer_autoformat()
-end)
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+})
 ```
 
 If you have multiple servers active in one file it'll try to format using all of them, and I can't guarantee the order.
@@ -353,9 +372,11 @@ If you have multiple servers active in one file it'll try to format using all of
 It's worth mentioning `.buffer_autoformat()` is a blocking (synchronous) function. If you want something that behaves like `.buffer_autoformat()` but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
-lsp_zero.on_attach(function(client, bufnr)
+local lsp_attach = function(client, bufnr)
   lsp_zero.default_keymaps({buffer = bufnr})
 
   -- make sure you use clients with formatting capabilities
@@ -363,7 +384,12 @@ lsp_zero.on_attach(function(client, bufnr)
   if client.supports_method('textDocument/formatting') then
     require('lsp-format').on_attach(client)
   end
-end)
+end
+
+lsp_zero.extend_lspconfig({
+  lsp_attach = lsp_attach,
+  capabilities = require('cmp_nvim_lsp').default_capabilities()
+})
 ```
 
 ## Format using a keybinding
@@ -373,6 +399,8 @@ end)
 You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will create a keymap `gq` to format the current buffer using **all** active servers with formatting capabilities.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -396,6 +424,8 @@ lsp_zero.extend_lspconfig({
 If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local allow_format = function(servers)
@@ -421,13 +451,15 @@ lsp_zero.extend_lspconfig({
 })
 ```
 
-### Ensure only one LSP server per filetype
+### Ensure only one language server per filetype
 
-If you want to control exactly what language server can format, use the function [.format_mapping()](./reference/lua-api#format-mapping-key-opts). It will allow you to associate a list of filetypes to a particular language server.
+If you want to control exactly what language server can format, use the function `.format_mapping()`. It will allow you to associate a list of filetypes to a particular language server.
 
 Here is an example using `gq` as the keymap.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -439,6 +471,8 @@ lsp_zero.extend_lspconfig({
   capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
+-- don't add this function in the `lsp_attach` callback.
+-- `format_mapping` should run only once, before the language servers are active.
 lsp_zero.format_mapping('gq', {
   format_opts = {
     async = false,
@@ -512,6 +546,8 @@ Then it creates an autocommand on the event `LspAttach`. This autocommand will b
 So this example configuration
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -530,6 +566,8 @@ require('lspconfig').rust_analyzer.setup({})
 Is the same as this:
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lspconfig = require('lspconfig')
 
 lspconfig.util.on_setup = lspconfig.util.add_hook_after(

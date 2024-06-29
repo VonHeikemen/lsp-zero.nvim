@@ -151,6 +151,8 @@ require('lazy').setup({
 Then we add the configuration at the end of the file.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -180,6 +182,8 @@ In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blo
 Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -213,6 +217,8 @@ require('lspconfig').tsserver.setup({
 Now, if none of your language server need a special config you can use the function [.setup_servers()](./reference/lua-api#setup-servers-list-opts).
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -258,6 +264,8 @@ require('lazy').setup({
 `mason.nvim` will make sure we have access to the language servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
 ```lua
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -435,6 +443,8 @@ vim.cmd.colorscheme('tokyonight')
 ---
 -- LSP setup
 ---
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -529,6 +539,8 @@ vim.cmd.colorscheme('tokyonight')
 ---
 -- LSP setup
 ---
+vim.opt.signcolumn = 'yes'
+
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)

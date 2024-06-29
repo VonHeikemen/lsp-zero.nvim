@@ -18,6 +18,8 @@ So I recommend you install these plugins:
 
 And this is how you would use them together:
 >lua
+  vim.opt.signcolumn = 'yes'
+
   local lsp_zero = require('lsp-zero')
 
   lsp_zero.extend_lspconfig({
@@ -58,6 +60,8 @@ all keybindings and commands are created.
 If you didn't have lsp-zero installed and you wanted to do all that by
 yourself, the code will be something like this:
 >lua
+  vim.opt.signcolumn = 'yes'
+
   local lspconfig = require('lspconfig')
 
   lspconfig.util.on_setup = lspconfig.util.add_hook_after(
@@ -242,6 +246,8 @@ extend_lspconfig({opts}): ~
 
     Here is an example.
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
 
     lsp_zero.extend_lspconfig({
@@ -582,6 +588,7 @@ use({name}, {opts}): ~
     -- init.lua
 
     local lsp_zero = require('lsp-zero')
+    lsp_zero.extend_lspconfig({})
 
     lsp_zero.configure('pyright', {
       single_file_support = false,
@@ -624,6 +631,8 @@ set_server_config({opts}): ~
     For example, if you didn't have lspconfig installed, you would do
     something like this:
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
 
     lsp_zero.set_server_config({
@@ -648,6 +657,8 @@ set_server_config({opts}): ~
 <
     But if you do have lspconfig installed:
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
     lsp_zero.extend_lspconfig({})
 
@@ -693,6 +704,8 @@ new_client({opts}): ~
     a project that has a `gleam.toml` file in the current directory or any of
     its parent folders.
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
 
     lsp_zero.on_attach(function()
@@ -741,6 +754,8 @@ nvim_lua_settings({client}, {opts}): ~
 
     You can use {opts} to override or add your own settings.
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
     lsp_zero.extend_lspconfig({})
 
@@ -1018,6 +1033,8 @@ noop(): ~
     You can use think of this as "empty handler" for |mason-lspconfig.nvim|.
     Consider this example.
 >lua
+    vim.opt.signcolumn = 'yes'
+
     local lsp_zero = require('lsp-zero')
     local lsp_zero.extend_lspconfig({})
 
@@ -1095,6 +1112,8 @@ lsp-zero has a function that applies a basic config to `lua_ls` as a backup. If
 there isn't any local config file (`.luarc.json`) in the current root directory
 then it applies the Neovim specific settings to the language server.
 >lua
+  vim.opt.signcolumn = 'yes'
+
   local lsp_zero = require('lsp-zero')
   lsp_zero.extend_lspconfig({})
 
