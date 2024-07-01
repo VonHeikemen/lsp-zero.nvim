@@ -86,10 +86,21 @@ end
 ---the language servers initialized by lspconfig.
 ---@param opts lspconfig.Config
 function M.set_server_config(opts)
-  if type(opts) == 'table' then
-    local Server = require('lsp-zero.server')
-    Server.default_config = opts
+  if type(opts) ~= 'table' then
+    return
   end
+
+  local Server = require('lsp-zero.server')
+  if type(Server.default_config) ~= 'table' then
+    Server.default_config = opts
+    return
+  end
+
+  Server.default_config = vim.tbl_deep_extend(
+    'force',
+    Server.default_config,
+    opts
+  )
 end
 
 ---@class lsp_zero.DefaultKeymapOpts
