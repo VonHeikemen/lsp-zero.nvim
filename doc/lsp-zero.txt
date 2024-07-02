@@ -525,30 +525,50 @@ highlight_symbol({client}, {bufnr}): ~
     require('lspconfig').gleam.setup({})
     require('lspconfig').lua_ls.setup({})
 <
-                                                   *lsp-zero.set_sign_icons()*
+                                                               *lsp-zero.ui()*
 
-set_sign_icons({opts}): ~
-    Defines the sign icons that appear in the gutter.
+ui({opts}): ~
+    Configure some UI elements. Right now is just floating window border style
+    and diagnostic signs.
 
     {opts} table supports these properties:
 
-        • error: (String, Optional) Text for the error signs.
+        • float_border (String | Table, Optional) Set the style of border of
+          diagnostic floating window, hover window and signature help window.
+          These are valid the styles: `'none'`, `'single'`, `'double'`,
+          `'rounded'`, `'solid'` or `'shadow'`.
 
-        • warn: (String, Optional) Text for the warning signs.
+          If the value is a string then all the floating windows mentioned
+          above will have the same style. If it's a table you can set each
+          individual style using these properties:
 
-        • hint: (String, Optional) Text for the hint signs.
+              • diagnostic
+              • hover
+              • signature_help
 
-        • info: (String, Optional) Text for the information signs.
+        • sign_text (Boolean | Table, Optional) If the value is `true` it will
+          make sure diagnostic signs are enable and reserve a space in the
+          signcolumn. If the value is `false` it will disable the diagnostics
+          signs. If the value is a table, it can modify the text of the
+          diagnostic signs using these properties:
 
-    Here is an example with basic icons (doesn't require a nerd fonts).
+              • error
+              • warn
+              • hint
+              • info
+    
+    If the font supports it, you can change the sign with fancy icons.
 >lua
     local lsp_zero = require('lsp-zero')
 
-    lsp_zero.set_sign_icons({
-      error = '✘',
-      warn = '▲',
-      hint = '⚑',
-      info = '»'
+    lsp_zero.ui({
+      float_border = 'rounded',
+      sign_text = {
+        error = '✘',
+        warn = '▲',
+        hint = '⚑',
+        info = '»',
+      },
     })
 <
                                                     *lsp-zero.setup_servers()*
@@ -965,10 +985,6 @@ cmp_action(): ~
             completion menu is visible it will navigate to the next item in
             the list. If the line is empty it uses the fallback.
 
-        • select_prev_or_fallback: ~
-            If the completion menu is visible navigate to the
-            previous item in the list. Else, uses the fallback.
-
         • toggle_completion: ~
             If the completion menu is visible it cancels the process. Else, it
             triggers the completion menu. You can use the property `modes` in
@@ -1069,25 +1085,17 @@ noop(): ~
     ignore `jdtls` because the handler doesn't do anything. So you are free to
     configure jdtls however you like.
 
-                                                   *lsp-zero.default_setup()*
-
-default_setup({server}): ~
-    Configures {server} with the default config provided by lspconfig.
-
-    This is meant to be used with |mason-lspconfig.nvim|, in order to help
-    configure automatic setup of language servers. It can be added as a
-    default handler in the setup function of the module `mason-lspconfig`.
->lua
-    local lsp_zero = require('lsp-zero')
-    local lsp_zero.extend_lspconfig({})
-
-    require('mason').setup({})
-    require('mason-lspconfig').setup({
-      handlers = {
-        lsp_zero.default_setup,
-      },
-    })
+==============================================================================
+Deprecated features                             *lsp-zero-deprecated-features*
 <
+- *lsp-zero.default_setup()* Use |lspconfig-setup| or |lsp-zero.configure()|
+  instead
+
+- *lsp-zero.extend_cmp()* Configure nvim-cmp manually. There is a minimal
+  configuration in the section |lsp-zero-quickstart|.
+
+- *lsp-zero.set_sign_icons()* Use |lsp-zero.ui()| instead.
+
 ==============================================================================
 Guides                                                       *lsp-zero-guides*
 
