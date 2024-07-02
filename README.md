@@ -12,7 +12,6 @@ Collection of functions that will help you use Neovim's LSP client. The aim is t
 -- This snippet is just a fun example I can show to people.
 -- A showcase of all the functions they don't know about.
 
-vim.opt.signcolumn = 'yes'
 vim.opt.updatetime = 800
 
 local lsp_zero = require('lsp-zero')
@@ -22,6 +21,16 @@ lsp_zero.on_attach(function(client, bufnr)
   lsp_zero.highlight_symbol(client, bufnr)
   lsp_zero.buffer_autoformat()
 end)
+
+lsp_zero.ui({
+  float_border = 'rounded',
+  sign_text = {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = '»',
+  },
+})
 
 lsp_zero.omnifunc.setup({
   trigger = '<C-Space>',
@@ -179,11 +188,9 @@ Rocks install hrsh7th/cmp-nvim-lsp rev=main
 
 ### Extend nvim-lspconfig
 
-lsp-zero can handle the configuration steps people don't want to do. That is, modifying `nvim-lspconfig` default settings and create keymaps. The default keymaps are listed [in the documentation](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lsp.md#default-keybindings).
+lsp-zero can handle configurations steps some people find tedious. Set additional `capabilities` in nvim-lspconfig, choosing keyboard shortcurts, modifying some UI elements.
 
 ```lua
-vim.opt.signcolumn = 'yes'
-
 local lsp_zero = require('lsp_zero')
 
 local lsp_attach = function(client, bufnr)
@@ -193,12 +200,15 @@ local lsp_attach = function(client, bufnr)
 end
 
 lsp_zero.extend_lspconfig({
+  sign_text = true,
   lsp_attach = lsp_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 ```
 
 ### Use nvim-lspconfig
+
+Remember that you need to install a language server so nvim-lspconfig can work properly. You can find a list of language servers in [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
 
 Once you have a language server installed you add the setup function in your Neovim config. Follow this syntax.
 
@@ -214,7 +224,31 @@ Where `example_server` is the name of the language server you have installed in 
 require('lspconfig').lua_ls.setup({})
 ```
 
-You can find a list of language servers in [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+<details>
+
+<summary>Expand: Neovim and lua_ls </summary>
+
+The language server for lua does not have "support" Neovim's lua API out the box. You won't get code completion for Neovim's built-in functions and you may see some annoying warnings.
+
+To get some basic support for Neovim, create a file called `.luarc.json` in your Neovim config folder (next to your `init.lua` file). Then add this content.
+
+```json
+{
+  "runtime.version": "LuaJIT",
+  "runtime.path": [
+    "lua/?.lua",
+    "lua/?/init.lua"
+  ],
+  "diagnostics.globals": ["vim"],
+  "workspace.checkThirdParty": false,
+  "workspace.library": [
+    "$VIMRUNTIME",
+    "${3rd}/luv/library"
+  ]
+}
+```
+
+</details>
 
 ### Minimal autocompletion config
 
@@ -260,8 +294,6 @@ snippet = {
 ---
 -- LSP configuration
 ---
-vim.opt.signcolumn = 'yes'
-
 local lsp_zero = require('lsp_zero')
 
 local lsp_attach = function(client, bufnr)
@@ -271,6 +303,7 @@ local lsp_attach = function(client, bufnr)
 end
 
 lsp_zero.extend_lspconfig({
+  sign_text = true,
   lsp_attach = lsp_attach,
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
