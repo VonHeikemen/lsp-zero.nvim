@@ -300,6 +300,88 @@ function M.highlight_symbol(client, bufnr)
   })
 end
 
+---@class lsp_zero.FloatBorderOpts
+---@field hover? string
+---@field signature_help? string
+---@field diagnostic? string
+---
+---@class lsp_zero.UIOpts
+---@field float_border? string | lsp_zero.FloatBorderOpts
+---@field sign_text? boolean | lsp_zero.SignIconsOpts
+
+---@param opts lsp_zero.UIOpts
+function M.ui(opts)
+  opts = opts or {}
+  local border_style = {}
+  local signs = opts.sign_text
+  local diagnostic_settings = {}
+
+  if signs == true then
+    vim.opt.signcolumn = 'yes'
+    diagnostic_settings.signs = true
+  elseif signs == false
+    diagnostic_settings.signs = false
+  elseif type(signs) == 'table' then
+    vim.opt.signcolumn = 'yes'
+
+    local level = vim.diagnostic.severity
+    diagnostic_settings.signs = {
+      text = {
+        [level.ERROR] = signs.error,
+        [level.WARN] = signs.warn,
+        [level.INFO] = signs.info,
+        [level.HINT] = signs.hint,
+      }
+    }
+
+    if vim.diagnostic.count == nil  then
+      M.set_sign_icons(signs)
+      diagnostic_settings.signs = true
+    end
+  end
+
+  if type(opts.float_border) == 'string' then
+    border_style = {
+      hover = opts.float_border,
+      signature_help = opts.float_border,
+      diagnostic = opts.float_border
+    }
+  end
+
+  if type(opts.float_border) == 'table' then
+    border_style = opts.float_border
+  end
+
+  if border_style.hover then
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+      vim.lsp.handlers.hover,
+      {border = border_style.hover}
+    )
+  end
+
+  if border_style.signature_help then
+    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+      vim.lsp.handlers.signature_help,
+      {border = border_style.signature_help}
+    )
+  end
+
+  if border_style.diagnostic then
+    diagnostic_settings.float = {border = border_style.diagnostic}
+  end
+
+  if vim.tbl_isempty(diagnostic_settings) == false then
+    vim.diagnostic.config(diagnostic_settings)
+  end
+end
+
+---@class lsp_zero.SignIconsOpts
+---@field warn? string
+---@field error? string
+---@field info? string
+---@field hint? string
+
+---@param opts lsp_zero.SignIconsOpts
 function M.set_sign_icons(opts)
   opts = opts or {}
 

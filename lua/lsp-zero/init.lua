@@ -186,16 +186,17 @@ function M.highlight_symbol(client, bufnr)
   require('lsp-zero.server').highlight_symbol(client, bufnr)
 end
 
----@class lsp_zero.SignIconsOpts
----@field warn? string
----@field error? string
----@field info? string
----@field hint? string
-
 ---Defines the sign icons that appear in the gutter.
 ---@param opts lsp_zero.SignIconsOpts
 function M.set_sign_icons(opts)
   require('lsp-zero.server').set_sign_icons(opts)
+end
+
+---Configure some UI elements. Right now is just floating
+---window border style and diagnostic signs.
+---@param lsp_zero.UIOpts
+function M.ui(opts)
+  require('lsp-zero.server').ui(opts)
 end
 
 ---@class lsp_zero.SetupServersOpts
