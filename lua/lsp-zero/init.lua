@@ -69,6 +69,21 @@ function M.extend_lspconfig(opts)
     Server.common_attach = opts.lsp_attach
   end
 
+  local ui_settings = {}
+  local sign_type = type(opts.sign_text)
+  if sign_type == 'table' or sign_type  == 'boolean' then
+    ui_settings.sign_text = opts.sign_text
+  end
+
+  local border_type = type(opts.float_border)
+  if border_type == 'table' or border_type  == 'string' then
+    ui_settings.float_border = opts.float_border
+  end
+
+  if vim.tbl_isempty(ui_settings) == false then
+    Server.ui(ui_settings)
+  end
+
   Server.extend_lspconfig()
 end
 

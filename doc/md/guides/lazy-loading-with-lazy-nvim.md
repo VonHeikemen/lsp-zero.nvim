@@ -52,9 +52,6 @@ Lots of you really like this lazy loading business. Let me show you how to defer
     dependencies = {
       {'hrsh7th/cmp-nvim-lsp'},
     },
-    init = function()
-      vim.opt.signcolumn = 'yes'
-    end,
     config = function()
       -- This is where all the LSP shenanigans will live
       local lsp_zero = require('lsp-zero')
@@ -66,6 +63,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       end
 
       lsp_zero.extend_lspconfig({
+        sign_text = true,
         lsp_attach = lsp_attach,
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
@@ -157,6 +155,7 @@ Lots of you really like this lazy loading business. Let me show you how to defer
       end
 
       lsp_zero.extend_lspconfig({
+        sign_text = true,
         lsp_attach = lsp_attach,
         capabilities = require('cmp_nvim_lsp').default_capabilities(),
       })
