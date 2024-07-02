@@ -191,7 +191,7 @@ Rocks install hrsh7th/cmp-nvim-lsp rev=main
 lsp-zero can handle configurations steps some people find tedious. Set additional `capabilities` in nvim-lspconfig, choosing keyboard shortcurts, modifying some UI elements.
 
 ```lua
-local lsp_zero = require('lsp_zero')
+local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
@@ -294,7 +294,7 @@ snippet = {
 ---
 -- LSP configuration
 ---
-local lsp_zero = require('lsp_zero')
+local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   -- see :help lsp-zero-keybindings
