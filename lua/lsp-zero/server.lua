@@ -319,7 +319,7 @@ function M.ui(opts)
   if signs == true then
     vim.opt.signcolumn = 'yes'
     diagnostic_settings.signs = true
-  elseif signs == false
+  elseif signs == false then
     diagnostic_settings.signs = false
   elseif type(signs) == 'table' then
     vim.opt.signcolumn = 'yes'
