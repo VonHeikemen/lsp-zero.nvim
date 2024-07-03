@@ -308,7 +308,7 @@ snippet = {
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
-  local opts = {buffer = event.buf}
+  local opts = {buffer = bufnr}
 
   vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
   vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
@@ -330,9 +330,8 @@ lsp_zero.extend_lspconfig({
 
 -- These are just examples. Replace them with the language
 -- servers you have installed in your system
-require('lspconfig').lua_ls.setup({})
+require('lspconfig').gleam.setup({})
 require('lspconfig').rust_analyzer.setup({})
-require('lspconfig').intelephense.setup({})
 
 ---
 -- Autocompletion setup
@@ -416,9 +415,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 
 -- These are just examples. Replace them with the language
 -- servers you have installed in your system
-require('lspconfig').lua_ls.setup({})
+require('lspconfig').gleam.setup({})
 require('lspconfig').rust_analyzer.setup({})
-require('lspconfig').intelephense.setup({})
 
 ---
 -- Autocompletion setup
