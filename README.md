@@ -110,14 +110,14 @@ Install them using your favorite method.
 
 <summary>Expand: lazy.nvim </summary>
 
-For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
-
 ```lua
 {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
 {'neovim/nvim-lspconfig'},
 {'hrsh7th/cmp-nvim-lsp'},
 {'hrsh7th/nvim-cmp'},
 ```
+
+For a more advance config that lazy loads everything take a look at the example on this link: [Lazy loading with lazy.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/guides/lazy-loading-with-lazy-nvim.md).
 
 </details>
 
