@@ -98,9 +98,10 @@ function M.on_attach(callback)
 end
 
 ---It will share the configuration options with all
----the language servers initialized by lspconfig.
+---the language servers initialized by lspconfig or
+--- the new_client() function of lsp-zero.
 ---@param opts lspconfig.Config
-function M.set_server_config(opts)
+function M.client_config(opts)
   if type(opts) ~= 'table' then
     return
   end
@@ -117,6 +118,8 @@ function M.set_server_config(opts)
     opts
   )
 end
+
+M.set_server_config = M.client_config
 
 ---@class lsp_zero.DefaultKeymapOpts
 ---@inlinedoc
@@ -151,7 +154,7 @@ end
 
 ---Returns Neovim's default capabilities mixed with the
 ---capabilities that was provided to lsp-zero in the functions
----.extend_lspconfig() or .set_server_config()
+---.extend_lspconfig() or .client_config()
 ---@return table<string, any>
 function M.get_capabilities()
   local Server = require('lsp-zero.server')

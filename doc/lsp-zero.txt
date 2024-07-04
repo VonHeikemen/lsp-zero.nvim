@@ -663,9 +663,9 @@ store_config({name}, {opts}): ~
     Saves the configuration options for a language server, so you can
     use it at a later time in a local config file.
 
-                                                *lsp-zero.set_server_config()*
+                                                    *lsp-zero.client_config()*
 
-set_server_config({opts}): ~
+client_config({opts}): ~
     Share the configuration provided in {opts} with all the language servers
     setup with |lsp-zero.new_client()| or |lspconfig|.
 
@@ -674,7 +674,7 @@ set_server_config({opts}): ~
 >lua
     local lsp_zero = require('lsp-zero')
 
-    lsp_zero.set_server_config({
+    lsp_zero.client_config({
       capabilities = require('cmp_nvim_lsp').default_capabilities()
     })
 
@@ -699,7 +699,7 @@ set_server_config({opts}): ~
     local lsp_zero = require('lsp-zero')
     lsp_zero.extend_lspconfig({})
 
-    lsp_zero.set_server_config({
+    lsp_zero.client_config({
       capabilities = require('cmp_nvim_lsp').default_capabilities()
     })
 
@@ -764,7 +764,7 @@ new_client({opts}): ~
 get_capabilities(): ~
     Returns Neovim's default capabilities mixed with the settings provided to
     lsp-zero in the functions |lsp-zero.extend_lspconfig()| or
-    |lsp-zero.set_server_config()|.
+    |lsp-zero.client_config()|.
 
     This is useful when you want to configure a language using a specialized
     plugin.
@@ -1092,7 +1092,7 @@ noop(): ~
 
 ==============================================================================
 Deprecated features                             *lsp-zero-deprecated-features*
-<
+
 - *lsp-zero.default_setup()* Use |lspconfig-setup| or |lsp-zero.configure()|
   instead
 
@@ -1100,6 +1100,8 @@ Deprecated features                             *lsp-zero-deprecated-features*
   configuration in the section |lsp-zero-quickstart|.
 
 - *lsp-zero.set_sign_icons()* Use |lsp-zero.ui()| instead.
+
+- *lsp-zero.set_server_config()* was renamed to |lsp-zero.client_config()|.
 
 ==============================================================================
 Guides                                                       *lsp-zero-guides*
