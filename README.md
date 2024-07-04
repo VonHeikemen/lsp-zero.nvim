@@ -78,10 +78,10 @@ lsp_zero.new_client({
 
 This branch is still under development. The available documentation is here:
 
-* [help page](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/lsp-zero.txt)
-* [Tutorial](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/tutorial.md)
+* [Tutorial for beginners](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/tutorial.md)
 * [LSP Configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lsp.md)
 * [Autocomplete](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/autocomplete.md)
+* [Help Page](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/lsp-zero.txt)
 
 ## Getting started
 
@@ -188,7 +188,7 @@ Rocks install hrsh7th/cmp-nvim-lsp rev=main
 
 ### Extend nvim-lspconfig
 
-lsp-zero can handle configurations steps some people find tedious. Set additional `capabilities` in nvim-lspconfig, creating an autocommand on the `LspAttach` event, modifying some UI elements.
+lsp-zero can handle configurations steps some people find tedious. Set additional `capabilities` in nvim-lspconfig, creating an autocommand on the `LspAttach` event, reserve space in the gutter for diagnostic signs.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -263,7 +263,9 @@ To get some basic support for Neovim, create a file called `.luarc.json` in your
 
 ### Minimal autocompletion config
 
-To get code autocompletion you use the plugin `nvim-cmp`. But now this is where you need know what Neovim version you have installed.
+`nvim-cmp` is the plugin that you would use to get code autocompletion. By default nvim-cmp only handles the interface of the completion menu. It does not gather data from language servers or any other source.
+
+`cmp_nvim_lsp` is an extension for nvim-cmp. This is the plugin that collects data from the language servers and gives it to `nvim-cmp`.
 
 If you have Neovim v0.10 you can use this configuration.
 
@@ -280,7 +282,8 @@ cmp.setup({
       vim.snippet.expand(args.body)
     end,
   },
-  -- see :help lsp-zero-completion-keybindings
+  -- List of default keymaps is here:
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/autocomplete.md#keybindings
   mapping = cmp.mapping.preset.insert({}),
 })
 ```
@@ -348,7 +351,8 @@ cmp.setup({
       vim.snippet.expand(args.body)
     end,
   },
-  -- see :help lsp-zero-completion-keybindings
+  -- List of default keymaps is here:
+  -- https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/autocomplete.md#keybindings
   mapping = cmp.mapping.preset.insert({}),
 })
 ```
