@@ -377,24 +377,11 @@ vim.opt.signcolumn = 'yes'
 
 local lspconfig = require('lspconfig')
 
--- Add nvim-cmp's capabilities settings to every
--- language server setup with lspconfig
-local extend_lspconfig = function(config, user_config)
-  local cmp_capabilities = require('cmp_nvim_lsp').default_capabilities()
-  local custom_capabilities = vim.tbl_get(user_config, 'capabilities')
-
-  config.capabilities = vim.tbl_deep_extend(
-    'force',
-    config.capabilities,
-    cmp_capabilities,
-    custom_capabilities or {}
-  )
-end
-
--- Add the extend_lspconfig function to lspconfig
-lspconfig.util.on_setup = lspconfig.util.add_hook_after(
-  lspconfig.util.on_setup,
-  extend_lspconfig
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+lspconfig.util.default_config.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig.util.default_config.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
 )
 
 -- Executes the callback function every time a
