@@ -183,7 +183,7 @@ end
 
 ---Configure some UI elements. Right now is just floating
 ---window border style and diagnostic signs.
----@param lsp_zero.UIOpts
+---@param opts? lsp_zero.UIOpts
 function M.ui(opts)
   require('lsp-zero.server').ui(opts)
 end

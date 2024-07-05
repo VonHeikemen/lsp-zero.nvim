@@ -25,7 +25,7 @@ function M.extend_lspconfig(opts)
   if #started > 0 then
     local msg = '[lsp-zero] Some language servers have been configured before\n'
       .. 'you called the function .extend_lspconfig().'
-      .. '\n\nConfigured servers: ' 
+      .. '\n\nConfigured servers: '
       .. vim.inspect(started)
 
      vim.notify(msg, vim.log.levels.WARN)
@@ -316,7 +316,6 @@ end
 ---@field float_border? string
 ---@field sign_text? boolean | lsp_zero.SignIconsOpts
 
----@param opts lsp_zero.UIOpts
 function M.ui(opts)
   opts = opts or {}
 
@@ -334,7 +333,7 @@ function M.ui(opts)
     vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
       vim.lsp.handlers.hover,
       {border = border_style}
-    ) 
+    )
     vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
       vim.lsp.handlers.signature_help,
       {border = border_style}
