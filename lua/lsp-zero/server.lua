@@ -33,7 +33,7 @@ function M.extend_lspconfig(opts)
 
   local util = require('lspconfig.util')
 
-  if opts.capabilities then
+  if type(opts.capabilities) == 'table' then
     util.default_config.capabilities = vim.tbl_deep_extend(
       'force',
       util.default_config.capabilities,
@@ -156,7 +156,6 @@ function M.client_capabilities()
   if user_defaults == nil then
     return lsp_capabilities
   end
-
 end
 
 function M.has_configs()
@@ -313,31 +312,48 @@ function M.highlight_symbol(client, bufnr)
   })
 end
 
----@class lsp_zero.FloatBorderOpts
----@field hover? string
----@field signature_help? string
----@field diagnostic? string
----
 ---@class lsp_zero.UIOpts
----@field float_border? string | lsp_zero.FloatBorderOpts
+---@field float_border? string
 ---@field sign_text? boolean | lsp_zero.SignIconsOpts
 
 ---@param opts lsp_zero.UIOpts
 function M.ui(opts)
   opts = opts or {}
-  local border_style = {}
+
+  local border_style = opts.float_border
   local signs = opts.sign_text
+
+  if border_style == nil and signs == nil then
+    return
+  end
+
+  local diagnostic = false
   local diagnostic_settings = {}
 
+  if type(border_style) == 'string' then
+    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+      vim.lsp.handlers.hover,
+      {border = border_style}
+    ) 
+    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+      vim.lsp.handlers.signature_help,
+      {border = border_style}
+    )
+
+    diagnostic = true
+    diagnostic_settings.float = {border = border_style}
+  end
+
   if signs == true then
-    vim.opt.signcolumn = 'yes'
+    diagnostic = true
     diagnostic_settings.signs = true
   elseif signs == false then
+    diagnostic = true
     diagnostic_settings.signs = false
   elseif type(signs) == 'table' then
-    vim.opt.signcolumn = 'yes'
-
+    diagnostic = true
     local level = vim.diagnostic.severity
+
     diagnostic_settings.signs = {
       text = {
         [level.ERROR] = signs.error,
@@ -353,39 +369,15 @@ function M.ui(opts)
     end
   end
 
-  if type(opts.float_border) == 'string' then
-    border_style = {
-      hover = opts.float_border,
-      signature_help = opts.float_border,
-      diagnostic = opts.float_border
-    }
+  if diagnostic == false then
+    return
   end
 
-  if type(opts.float_border) == 'table' then
-    border_style = opts.float_border
+  if vim.o.signcolumn == 'auto' and diagnostic_settings.signs then
+    vim.opt.signcolumn = 'yes'
   end
 
-  if border_style.hover then
-    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-      vim.lsp.handlers.hover,
-      {border = border_style.hover}
-    )
-  end
-
-  if border_style.signature_help then
-    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-      vim.lsp.handlers.signature_help,
-      {border = border_style.signature_help}
-    )
-  end
-
-  if border_style.diagnostic then
-    diagnostic_settings.float = {border = border_style.diagnostic}
-  end
-
-  if vim.tbl_isempty(diagnostic_settings) == false then
-    vim.diagnostic.config(diagnostic_settings)
-  end
+  vim.diagnostic.config(diagnostic_settings)
 end
 
 ---@class lsp_zero.SignIconsOpts

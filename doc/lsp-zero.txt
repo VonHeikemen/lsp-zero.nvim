@@ -260,7 +260,7 @@ extend_lspconfig({opts}): ~
         • sign_text: (Boolean, Table) Configures the diagnostic signs. For
           more details see |lsp-zero.ui()|.
 
-        • float_border: (String, Table) Configure the style of some floating
+        • float_border: (String, Optional) Configure the style of some floating
           windows. For more details see |lsp-zero.ui()|.
 
     Here is an example.
@@ -544,18 +544,10 @@ ui({opts}): ~
 
     {opts} table supports these properties:
 
-        • float_border (String | Table, Optional) Set the style of border of
+        • float_border (String, Optional) Set the style of the border of
           diagnostic floating window, hover window and signature help window.
           These are valid the styles: `'none'`, `'single'`, `'double'`,
           `'rounded'`, `'solid'` or `'shadow'`.
-
-          If the value is a string then all the floating windows mentioned
-          above will have the same style. If it's a table you can set each
-          individual style using these properties:
-
-              • diagnostic
-              • hover
-              • signature_help
 
         • sign_text (Boolean | Table, Optional) If the value is `true` it will
           make sure diagnostic signs are enable and reserve a space in the

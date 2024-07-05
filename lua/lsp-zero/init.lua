@@ -34,10 +34,16 @@ end
 ---Options that describe the features the LSP client supports.
 ---These will be added automatically to every language server
 ---configured with lspconfig.
----@field capabilities? lspconfig.Config
+---@field capabilities? table<string, any>
 ---
 ---Callback invoked when client attaches to a buffer.
 ---@field lsp_attach? fun(client: vim.lsp.Client, bufnr: integer)
+---
+---String with a valid border style for floating windows
+---@field float_border? string
+---
+---Enable diagnostic signs or modify their text content
+---@field sign_text? boolean | lsp_zero.SignIconsOpts
 
 ---It can be use to apply settings to every language server
 ---configured with lspconfig.
@@ -53,31 +59,12 @@ function M.extend_lspconfig(opts)
     opts = {}
   end
 
-  local capabilities = false
-  if type(opts.capabilities) == 'table' then
-    capabilities = opts.capabilities
-  end
-
   if type(opts.lsp_attach) == 'function' then
     Server.common_attach = opts.lsp_attach
   end
 
-  local ui_settings = {}
-  local sign_type = type(opts.sign_text)
-  if sign_type == 'table' or sign_type  == 'boolean' then
-    ui_settings.sign_text = opts.sign_text
-  end
-
-  local border_type = type(opts.float_border)
-  if border_type == 'table' or border_type  == 'string' then
-    ui_settings.float_border = opts.float_border
-  end
-
-  if vim.tbl_isempty(ui_settings) == false then
-    Server.ui(ui_settings)
-  end
-
-  Server.extend_lspconfig({capabilities = capabilities})
+  Server.ui(opts)
+  Server.extend_lspconfig(opts)
 end
 
 ---Executes the {callback} function every time a
