@@ -53,16 +53,9 @@ function M.extend_lspconfig(opts)
     opts = {}
   end
 
+  local capabilities = false
   if type(opts.capabilities) == 'table' then
-    if Server.default_config == false then
-      Server.default_config = {capabilities = opts.capabilities}
-    elseif type(Server.default_config) == 'table' then
-      Server.default_config.capabilities = vim.tbl_deep_extend(
-        'force',
-        Server.default_config.capabilities or {},
-        opts.capabilities
-      )
-    end
+    capabilities = opts.capabilities
   end
 
   if type(opts.lsp_attach) == 'function' then
@@ -84,7 +77,7 @@ function M.extend_lspconfig(opts)
     Server.ui(ui_settings)
   end
 
-  Server.extend_lspconfig()
+  Server.extend_lspconfig({capabilities = capabilities})
 end
 
 ---Executes the {callback} function every time a
@@ -107,16 +100,7 @@ function M.client_config(opts)
   end
 
   local Server = require('lsp-zero.server')
-  if type(Server.default_config) ~= 'table' then
-    Server.default_config = opts
-    return
-  end
-
-  Server.default_config = vim.tbl_deep_extend(
-    'force',
-    Server.default_config,
-    opts
-  )
+  Server.default_config = opts
 end
 
 M.set_server_config = M.client_config

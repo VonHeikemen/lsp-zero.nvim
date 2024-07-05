@@ -15,19 +15,31 @@ local s = {}
 ---@diagnostic disable-next-line: deprecated
 s.islist = vim.islist or vim.tbl_islist
 
-function M.extend_lspconfig()
+function M.extend_lspconfig(opts)
   if M.setup_done then
     return
   end
 
-  if M.has_configs() then
+  local started = M.has_configs()
+
+  if #started > 0 then
     local msg = '[lsp-zero] Some language servers have been configured before\n'
-     .. 'you called the function .extend_lspconfig().'
+      .. 'you called the function .extend_lspconfig().'
+      .. '\n\nConfigured servers: ' 
+      .. vim.inspect(started)
 
      vim.notify(msg, vim.log.levels.WARN)
    end
 
   local util = require('lspconfig.util')
+
+  if opts.capabilities then
+    util.default_config.capabilities = vim.tbl_deep_extend(
+      'force',
+      util.default_config.capabilities,
+      opts.capabilities
+    )
+  end
 
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     if type(M.default_config) == 'table' then
@@ -149,14 +161,15 @@ end
 
 function M.has_configs()
   local configs = require('lspconfig.configs')
+  local setup = {}
 
-  for _, c in pairs(configs) do
+  for name, c in pairs(configs) do
     if c.manager then
-      return true
+      table.insert(setup, name)
     end
   end
 
-  return false
+  return setup
 end
 
 function M.setup(name, opts)
