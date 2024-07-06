@@ -14,9 +14,7 @@ local lsp_attach = function(client, bufnr)
 end
 
 lsp_zero.extend_lspconfig({
-  sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -71,24 +69,19 @@ end
 ```
 ## Creating new keybindings
 
-The convention here is to create keymaps only when a language server is active in a buffer. For this use the [.on_attach()](./reference/lua-api#on-attach-callback) function, and then use neovim's built-in functions create the keybindings.
+The convention here is to create keymaps only when a language server is active in a buffer. For this use the `lsp_attach` option in `.extend_lspconfig()`, and then use neovim's built-in functions create the keybindings.
 
-Here is an example that replaces the default keybinding `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
+Here is an example that uses `gr` with a [telescope](https://github.com/nvim-telescope/telescope.nvim) command.
 
 ```lua
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
-  -- see :help lsp-zero-keybindings
-  -- to learn the available actions
-  lsp_zero.default_keymaps({buffer = bufnr})
-
   vim.keymap.set('n', 'gr', '<cmd>Telescope lsp_references<cr>', {buffer = bufnr})
 end
 
 lsp_zero.extend_lspconfig({
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -114,15 +107,13 @@ local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   ---
-  -- Here is where you enable features that only work if
-  -- there is a language server active in the file
+  -- Code omitted for brevity
   ---
 end
 
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
 require('mason').setup({})
@@ -149,15 +140,13 @@ local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   ---
-  -- Here is where you enable features that only work if
-  -- there is a language server active in the file
+  -- Code omitted for brevity
   ---
 end
 
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
 require('lspconfig').tsserver.setup({
@@ -211,7 +200,6 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -255,15 +243,13 @@ local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   ---
-  -- Here is where you enable features that only work if
-  -- there is a language server active in the file
+  -- Code omitted for brevity
   ---
 end
 
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
 local lsp_configurations = require('lspconfig.configs')
@@ -271,7 +257,6 @@ local lsp_configurations = require('lspconfig.configs')
 if not lsp_configurations.name_of_my_lsp then
   lsp_configurations.name_of_my_lsp = {
     default_config = {
-      name = 'name-of-my-new-lsp',
       cmd = {'command-that-start-the-lsp'},
       filetypes = {'my-filetype'},
       root_dir = require('lspconfig.util').root_pattern('some-config-file')
@@ -344,7 +329,6 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -353,8 +337,6 @@ If you have multiple servers active in one file it'll try to format using all of
 It's worth mentioning `.buffer_autoformat()` is a blocking (synchronous) function. If you want something that behaves like `.buffer_autoformat()` but is asynchronous you'll have to use [lsp-format.nvim](https://github.com/lukas-reineke/lsp-format.nvim).
 
 ```lua
-vim.opt.signcolumn = 'yes'
-
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -368,7 +350,6 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -379,8 +360,6 @@ lsp_zero.extend_lspconfig({
 You'll want to bind the function [vim.lsp.buf.format()](https://neovim.io/doc/user/lsp.html#vim.lsp.buf.format()) to a keymap. The next example will create a keymap `gq` to format the current buffer using **all** active servers with formatting capabilities.
 
 ```lua
-vim.opt.signcolumn = 'yes'
-
 local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
@@ -394,15 +373,12 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
 If you want to allow only a list of servers, use the `filter` option. You can create a function that compares the current server with a list of allowed servers.
 
 ```lua
-vim.opt.signcolumn = 'yes'
-
 local lsp_zero = require('lsp-zero')
 
 local allow_format = function(servers)
@@ -424,7 +400,6 @@ end
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 ```
 
@@ -439,15 +414,13 @@ local lsp_zero = require('lsp-zero')
 
 local lsp_attach = function(client, bufnr)
   ---
-  -- Here is where you enable features that only work if
-  -- there is a language server active in the file
+  -- Code omitted for brevity
   ---
 end
 
 lsp_zero.extend_lspconfig({
   sign_text = true,
   lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
 -- don't add this function in the `lsp_attach` callback.
@@ -487,32 +460,38 @@ If you are going that route and you are wondering which one to choose, use `conf
 
 ## Diagnostics
 
-### Use icons in the sign column
+The function `.extend_lspconfig()` has the option `sign_text`, with it you can enable or disable the diagnostic signs.
 
-If you don't know, the "sign column" is a space in the gutter next to the line numbers. When there is a warning or an error in a line Neovim will show you a letter like `W` or `E`. Well, you can turn that into icons if you wanted to, using the function [vim.diagnostic.config()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()). 
+The value `true` will enable diagnostic signs in the `vim.diagnostic` module. It will also change the value of the vim option `signcolumn` from "auto" to "yes" to avoid a layout shift when signs appear on screen.
 
 ```lua
-vim.diagnostic.config({
-  signs = {
-    text = {
-      [vim.diagnostic.severity.ERROR] = '✘',
-      [vim.diagnostic.severity.WARN] = '▲',
-      [vim.diagnostic.severity.HINT] = '⚑',
-      [vim.diagnostic.severity.INFO] = '»',
-    },
+lsp_zero.extend_lspconfig({
+  sign_text = true,
+})
+```
+
+If `sign_text` is `false` it will disable diagnostic signs in the `vim.diagnostic` module. The vim option `signcolumn` will not be modified.
+
+```lua
+lsp_zero.extend_lspconfig({
+  sign_text = false,
+})
+```
+
+`sign_text` can also be a table, this will allow you to change the text of diagnostic signs.
+
+```lua
+lsp_zero.extend_lspconfig({
+  sign_text = {
+    error = '✘',
+    warn = '▲',
+    hint = '⚑',
+    info = '»',
   },
 })
 ```
 
-### Disable diagnostic signs
-
-To hide diagnostics from the gutter you need to use the function [vim.diagnostic.config()](https://neovim.io/doc/user/diagnostic.html#vim.diagnostic.config()).
-
-```lua
-vim.diagnostic.config({
-  signs = false
-})
-```
+If you don't provide `sign_text` to `extend_lspconfig()` you get the default behavior your Neovim version has for diagnostic signs.
 
 ## How does it work?
 
