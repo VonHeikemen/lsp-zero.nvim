@@ -136,6 +136,23 @@ For a more advance config that lazy loads everything take a look at the example 
 
 <details>
 
+<summary>Expand: mini.deps </summary>
+
+```lua
+MiniDeps.add({source = 'VonHeikemen/lsp-zero.nvim', checkout = 'v4.x'})
+MiniDeps.add({source = 'neovim/nvim-lspconfig'})
+MiniDeps.add({
+  source = 'hrsh7th/nvim-cmp',
+  depends = {
+    'hrsh7th/cmp-nvim-lsp',
+  },
+})
+```
+
+</details>
+
+<details>
+
 <summary>Expand: vim-plug </summary>
 
 ```vim
