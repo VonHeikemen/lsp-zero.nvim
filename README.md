@@ -209,39 +209,41 @@ Rocks install hrsh7th/cmp-nvim-lsp rev=main
 
 To install a plugin without a plugin manager you just have to download them in the right location.
 
-The exact path depends on your operating system and environment variables. To get a valid location you can execute this command in your terminal.
+* Create folder where plugins should be downloaded
 
-```sh
-nvim --headless -c "echo stdpath('config') . '/pack/github/start/'" -c "echo ''" -c "quit"
-```
+  The exact path depends on your operating system and environment variables. To get a valid location you can execute this command in your terminal.
 
-Create that folder and navigate to it. Use whatever method you know best.
+  ```sh
+  nvim --headless -c "echo stdpath('config') . '/pack/github/start/'" -c "echo ''" -c "quit"
+  ```
 
-Then you can download the plugins using `git clone`.
+  Create that folder and navigate to it. Use whatever method you know best.
+
+  Use the command `git clone` inside that folder.
 
 * Install lsp-zero
 
-```sh
-git clone --branch=v4.x https://github.com/VonHeikemen/lsp-zero.nvim.git
-```
+  ```sh
+  git clone --branch=v4.x https://github.com/VonHeikemen/lsp-zero.nvim.git
+  ```
 
 * Install nvim-lspconfig
 
-```sh
-git clone https://github.com/neovim/nvim-lspconfig.git
-```
+  ```sh
+  git clone https://github.com/neovim/nvim-lspconfig.git
+  ```
 
 * Install nvim-cmp
 
-```sh
-git clone https://github.com/hrsh7th/nvim-cmp.git
-```
+  ```sh
+  git clone https://github.com/hrsh7th/nvim-cmp.git
+  ```
 
 * Install cmp-nvim-lsp
 
-```sh
-git clone https://github.com/hrsh7th/cmp-nvim-lsp.git
-```
+  ```sh
+  git clone https://github.com/hrsh7th/cmp-nvim-lsp.git
+  ```
 
 </details>
 
