@@ -76,11 +76,11 @@ lsp_zero.new_client({
 
 ## Documentation
 
-This branch is still under development. The available documentation is here:
+You can browse the available documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-zero.netlify.app/v4.x/)
 
-* [Tutorial for beginners](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/tutorial.md)
-* [LSP Configuration](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/lsp.md)
-* [Autocomplete](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/autocomplete.md)
+* [Tutorial for beginners](https://lsp-zero.netlify.app/v4.x/tutorial.html)
+* [LSP Configuration](https://lsp-zero.netlify.app/v4.x/language-server-configuration.html)
+* [Autocomplete](https://lsp-zero.netlify.app/v4.x/autocomplete.html)
 * [Help Page](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/lsp-zero.txt)
 
 ## Getting started
