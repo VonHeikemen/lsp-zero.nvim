@@ -38,7 +38,7 @@ else
 end
 ```
 
-Open Neovim again and you should notice the light theme. If you get the blue theme then your  Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
+Save the file and restart Neovim, you should notice the light theme. If you get the blue theme then your Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
 
 If you can't upgrade Neovim you can still install a previous version of lsp-zero.
 
@@ -61,10 +61,9 @@ Add this to your init.lua.
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not uv.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -136,7 +135,7 @@ If you want to know more details about lazy.nvim, here are a few resources (that
 
 ## Setup lsp-zero
 
-Now we need to add all the lua plugins we need in lazy's setup function.
+Now we need to add all the lua plugins in lazy's setup function.
 
 ```lua
 require('lazy').setup({
@@ -148,7 +147,7 @@ require('lazy').setup({
 })
 ```
 
-Next, we add the configuration at the end of the file.
+Next, we add this configuration at the end of the file.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -243,6 +242,8 @@ lsp_zero.extend_lspconfig({
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 
+-- These are just examples. Replace them with the language
+-- servers you have installed in your system
 require('lspconfig').tsserver.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
@@ -302,9 +303,7 @@ require('mason-lspconfig').setup({
 
 Now you will have access to a command called `:LspInstall`. If you execute that command while you have a file opened `mason-lspconfig.nvim` will suggest a language server compatible with that type of file.
 
-After you install a language server you need to restart Neovim so it can be start properly.
-
-And don't forget you need to call the function `lsp_zero.extend_lspconfig()` before you use `lspconfig`.
+After you install a language server you need to restart Neovim so it can start properly.
 
 #### Root directory
 
@@ -356,7 +355,7 @@ require('lspconfig').lua_ls.setup({
 
 Last thing we are going to do is setup the autocompletion plugin: `nvim-cmp`.
 
-To use nvim-cmp you need the lua module called `cmp`. And to make it work with Neovim's LSP client this is the minimal configuration needed.
+To configure nvim-cmp use the lua module called `cmp`. And to make it work with Neovim's LSP client this is the minimal configuration needed.
 
 ```lua
 local cmp = require('cmp')
@@ -413,7 +412,7 @@ cmp.setup({
 })
 ```
 
-Note that here I'm showing a function called `.cmp_action()`, other extra mappings that people requested.
+Note that here I'm showing a function called `.cmp_action()`, this function provides extra mappings that people requested. There is a function for tab complete, one for a "supertab" behavior and a few others.
 
 ## Complete code
 
@@ -481,8 +480,8 @@ lsp_zero.extend_lspconfig({
   capabilities = require('cmp_nvim_lsp').default_capabilities(),
 })
 
--- Replace the language servers listed here
--- with the ones you have installed
+-- These are just examples. Replace them with the language
+-- servers you have installed in your system
 require('lspconfig').tsserver.setup({})
 require('lspconfig').rust_analyzer.setup({})
 

@@ -90,7 +90,7 @@ This branch is still under development. The available documentation is here:
 Before doing anything, make sure you...
 
   * Have Neovim v0.10 installed
-    * Neovim v0.9 also works (requires an extra step)
+    * Neovim v0.9 also works
   * Know how to install Neovim plugins
   * Know where to add the configuration code for lua plugins
   * Know what is LSP, and what is a language server
@@ -249,7 +249,7 @@ To install a plugin without a plugin manager you just have to download them in t
 
 ### Extend nvim-lspconfig
 
-lsp-zero can handle configurations steps some people find tedious. Set additional `capabilities` in nvim-lspconfig, creating an autocommand on the `LspAttach` event, reserve space in the gutter for diagnostic signs.
+lsp-zero can handle configurations steps for you: Set additional `capabilities` in nvim-lspconfig, creating an autocommand on the `LspAttach` event and reserve space in the gutter for diagnostic signs.
 
 ```lua
 local lsp_zero = require('lsp-zero')

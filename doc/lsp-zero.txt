@@ -189,7 +189,7 @@ gs: ~
     See |vim.lsp.buf.rename()|.
 
 <F3>: ~
-    Format a buffer using the LSP servers attached to it.
+    Format a buffer using the language servers attached to it.
     See |vim.lsp.buf.format()|.
 
 <F4>: ~
@@ -231,8 +231,8 @@ Lua API                                                     *lsp-zero-lua-api*
                                                  *lsp-zero.extend_lspconfig()*
 
 extend_lspconfig({opts}): ~
-    The options provided to this function will be shared to every language
-    server initialized with lspconfig.
+    Handle some basic configuration steps and makes lspconfig easier to work
+    with.
 
     {opts} supports the following properties:
 
@@ -250,7 +250,7 @@ extend_lspconfig({opts}): ~
         • float_border: (String, Optional) Configure the style of some floating
           windows. For more details see |lsp-zero.ui()|.
 
-    Here is an example.
+    Here is a basic usage example.
 >lua
     local lsp_zero = require('lsp-zero')
 
@@ -271,12 +271,73 @@ extend_lspconfig({opts}): ~
     require('lspconfig').gleam.setup({})
     require('lspconfig').lua_ls.setup({})
 <
+                                                               *lsp-zero.ui()*
+
+ui({opts}): ~
+    Configure some UI elements. Right now is just floating window border style
+    and diagnostic signs.
+
+    {opts} table supports these properties:
+
+        • float_border (String, Optional) Set the style of the border of
+          diagnostic floating window, hover window and signature help window.
+          These are valid the styles: `'none'`, `'single'`, `'double'`,
+          `'rounded'`, `'solid'` or `'shadow'`.
+
+        • sign_text (Boolean | Table, Optional) If the value is `true` it will
+          make sure diagnostic signs are enable and reserve a space in the
+          signcolumn. If the value is `false` it will disable the diagnostics
+          signs. If the value is a table, it can modify the text of the
+          diagnostic signs using these properties:
+
+              • error
+              • warn
+              • hint
+              • info
+    
+    If the font supports it, you can change the sign with fancy icons.
+>lua
+    local lsp_zero = require('lsp-zero')
+
+    lsp_zero.ui({
+      float_border = 'rounded',
+      sign_text = {
+        error = '✘',
+        warn = '▲',
+        hint = '⚑',
+        info = '»',
+      },
+    })
+<
+                                                        *lsp-zero.on_attach()*
+
+on_attach({callback}): ~
+    Execute {callback} function every time a server is attached
+    to a buffer.
+
+    This can be used if you don't have |lspconfig| installed.
+>lua
+    local lsp_zero = require('lsp-zero')
+
+    lsp_zero.on_attach(function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
+    end)
+
+    lsp_zero.new_client({
+      cmd = {'gleam', 'lsp'},
+      filetypes = {'gleam'},
+      root_dir = function()
+        -- You need Neovim v0.10 to use vim.fs.root
+        return vim.fs.root(bufnr, {'gleam.toml'})
+      end,
+    })
+<
                                                   *lsp-zero.default_keymaps()*
 
 default_keymaps({opts}): ~
     Create the keybindings bound to Neovim's built-in functions.
 
-    The {opts} supports the following properties:
+    {opts} supports the following properties:
 
         • buffer: (Number, Optional) Defaults to 0. The "id" of an open buffer.
         If the number 0 is provided then the keymaps will be effective in the
@@ -292,29 +353,44 @@ default_keymaps({opts}): ~
 >lua
     local lsp_zero = require('lsp-zero')
 
+    local lsp_attach = function(client, bufnr)
+      lsp_zero.default_keymaps({buffer = bufnr})
+    end
+
     lsp_zero.extend_lspconfig({
-      lsp_attach = function(client, bufnr)
-        lsp_zero.default_keymaps({buffer = bufnr})
-      end,
+      lsp_attach = lsp_attach,
     })
 <
-    If you don't have lspconfig installed you can use the
-    |lsp-zero.on_attach()| function.
+                                                *lsp-zero.highlight_symbol()*
+
+highlight_symbol({client}, {bufnr}): ~
+    Uses the |CursorHold| event to trigger a document highlight request. In
+    other words, it will highlight the symbol under the cursor.
+
+    For this to work properly your colorscheme needs to set these highlight
+    groups: `LspReferenceRead`, `LspReferenceText` and `LspReferenceWrite`.
+
+    Keep in mind the event `CursorHold` depends on the |'updatetime'| option.
+    If you want the highlight to happen fast, you will need to set this option
+    to a "low" value.
 >lua
+    vim.opt.updatetime = 500
+
     local lsp_zero = require('lsp-zero')
 
-    lsp_zero.on_attach(function(client, bufnr)
-      lsp_zero.default_keymaps({buffer = bufnr})
-    end)
+    local lsp_attach = function(client, bufnr)
+      lsp_zero.highlight_symbol(client, bufnr)
+    end
+
+    lsp_zero.extend_lspconfig({
+      lsp_attach = lsp_attach,
+    })
+
+    -- Replace the language servers listed here
+    -- with the ones you have installed
+    require('lspconfig').gleam.setup({})
+    require('lspconfig').lua_ls.setup({})
 <
-                                                        *lsp-zero.on_attach()*
-
-on_attach({callback}): ~
-    Execute {callback} function every time a server is attached
-    to a buffer.
-
-    This can be used if you don't have |lspconfig| installed.
-
                                                    *lsp-zero.format_on_save()*
 format_on_save({opts}): ~
     Setup autoformat on save. This will to allow you to associate a language
@@ -353,7 +429,7 @@ format_on_save({opts}): ~
     local lsp_zero = require('lsp-zero')
     lsp_zero.extend_lspconfig({})
 
-    -- don't add this function in the `on_attach` callback.
+    -- don't add this function in the `lsp_attach` callback.
     -- `format_on_save` should run only once, before the language servers are active.
     lsp_zero.format_on_save({
       format_opts = {
@@ -393,16 +469,18 @@ buffer_autoformat({client}, {bufnr}, {opts}): ~
         `FormattingOptions`, these options are sent to the language
         server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
-    Tabs and indents can change after the LSP formats the code in the file. Read
-    the documentation of the language servers you are using, figure out how to
-    configure it to your prefered style.
+    Tabs and indents can change after the language server formats the code in
+    the file. Read the documentation of the language servers you are using,
+    figure out how to configure it to your prefered style.
 >lua
     local lsp_zero = require('lsp-zero')
 
+    local lsp_attach = function(client, bufnr)
+      lsp_zero.buffer_autoformat()
+    end
+
     lsp_zero.extend_lspconfig({
-      lsp_attach = function(client, bufnr)
-        lsp_zero.buffer_autoformat()
-      end,
+      lsp_attach = lsp_attach,
     })
 
     -- Replace the language servers listed here
@@ -480,13 +558,16 @@ format_mapping({key}, {opts}): ~
             `FormattingOptions`, these options are sent to the language
             server. See https://microsoft.github.io/language-server-protocol/specifications/lsp/3.17/specification/#formattingOptions
 
-    Tabs and indents can change after the LSP formats the code in the file. Read
-    the documentation of the language servers you are using, figure out how to
-    configure it to your prefered style.
+    Tabs and indents can change after the language server formats the code in
+    the file. Read the documentation of the language servers you are using,
+    figure out how to configure it to your prefered style.
 >lua
     local lsp_zero = require('lsp-zero')
     lsp_zero.extend_lspconfig({})
 
+
+    -- don't add this function in the `lsp_attach` callback.
+    -- `format_mapping` should run only once, before the language servers are active.
     lsp_zero.format_mapping('gq', {
       servers = {
         ['lua_ls'] = {'lua'},
@@ -496,70 +577,6 @@ format_mapping({key}, {opts}): ~
 
     require('lspconfig').biome.setup({})
     require('lspconfig').lua_ls.setup({})
-<
-                                                *lsp-zero.highlight_symbol()*
-
-highlight_symbol({client}, {bufnr}): ~
-    Uses the |CursorHold| event to trigger a document highlight request. In
-    other words, it will highlight the symbol under the cursor.
-
-    For this to work properly your colorscheme needs to set these highlight
-    groups: `LspReferenceRead`, `LspReferenceText` and `LspReferenceWrite`.
-
-    Keep in mind the event `CursorHold` depends on the |'updatetime'| option.
-    If you want the highlight to happen fast, you will need to set this option
-    to a "low" value.
->lua
-    vim.opt.updatetime = 500
-    local lsp_zero = require('lsp-zero')
-    lsp_zero.extend_lspconfig({
-      lsp_attach = function(client, bufnr)
-        lsp_zero.highlight_symbol(client, bufnr)
-      end,
-    })
-
-    -- Replace the language servers listed here
-    -- with the ones you have installed
-    require('lspconfig').gleam.setup({})
-    require('lspconfig').lua_ls.setup({})
-<
-                                                               *lsp-zero.ui()*
-
-ui({opts}): ~
-    Configure some UI elements. Right now is just floating window border style
-    and diagnostic signs.
-
-    {opts} table supports these properties:
-
-        • float_border (String, Optional) Set the style of the border of
-          diagnostic floating window, hover window and signature help window.
-          These are valid the styles: `'none'`, `'single'`, `'double'`,
-          `'rounded'`, `'solid'` or `'shadow'`.
-
-        • sign_text (Boolean | Table, Optional) If the value is `true` it will
-          make sure diagnostic signs are enable and reserve a space in the
-          signcolumn. If the value is `false` it will disable the diagnostics
-          signs. If the value is a table, it can modify the text of the
-          diagnostic signs using these properties:
-
-              • error
-              • warn
-              • hint
-              • info
-    
-    If the font supports it, you can change the sign with fancy icons.
->lua
-    local lsp_zero = require('lsp-zero')
-
-    lsp_zero.ui({
-      float_border = 'rounded',
-      sign_text = {
-        error = '✘',
-        warn = '▲',
-        hint = '⚑',
-        info = '»',
-      },
-    })
 <
                                                     *lsp-zero.setup_servers()*
 
@@ -575,6 +592,7 @@ setup_servers({list}, {opts}): ~
     Here is the basic usage.
 >lua
     local lsp_zero = require('lsp-zero')
+    lsp_zero.extend_lspconfig({})
 
     -- Replace the language servers listed here
     -- with the ones you have installed
@@ -583,11 +601,12 @@ setup_servers({list}, {opts}): ~
                                                         *lsp-zero.configure()*
 
 configure({name}, {opts}): ~
-    Useful when you need to pass some custom options to a specific
-    language server. Takes the same options as `nvim-lspconfig`'s
-    setup function. For more details go to |lspconfig-setup|.
+    Useful when you need to pass some options to a specific language server.
+    Takes the same options as `nvim-lspconfig`'s setup function. For more
+    details go to |lspconfig-setup|.
 >lua
     local lsp_zero = require('lsp-zero')
+    lsp_zero.extend_lspconfig({})
 
     lsp_zero.configure('lua_ls', {
       single_file_support = false,
@@ -642,6 +661,39 @@ store_config({name}, {opts}): ~
     Saves the configuration options for a language server, so you can
     use it at a later time in a local config file.
 
+                                                      *lsp-zero.nvim_lua_ls()*
+
+nvim_lua_ls({opts}): ~
+    Returns settings specific to Neovim for the lua language server, lua_ls.
+    If you provide the {opts} table it'll merge it with the defaults,
+    this way you can extend or change the values easily.
+>lua
+    local lsp_zero = require('lsp-zero')
+    lsp_zero.extend_lspconfig({})
+
+    local lua_opts = lsp_zero.nvim_lua_ls()
+    require('lspconfig').lua_ls.setup(lua_opts)
+<
+                                                *lsp-zero.nvim_lua_settings()*
+
+nvim_lua_settings({client}, {opts}): ~
+    Apply Neovim specific setting to {client}. This is meant to be used in the
+    `on_init` callback of the lua language server.
+
+    Note the Neovim settings will only be effective if there isn't a
+    `.luarc.json` or a `.luarc.jsonc` file in the root of the project.
+
+    You can use {opts} to override or add your own settings.
+>lua
+    local lsp_zero = require('lsp-zero')
+    lsp_zero.extend_lspconfig({})
+
+    require('lspconfig').lua_ls.setup({
+      on_init = function(client)
+        lsp_zero.nvim_lua_settings(client, {})
+      end,
+    })
+<
                                                     *lsp-zero.client_config()*
 
 client_config({opts}): ~
@@ -654,22 +706,26 @@ client_config({opts}): ~
     local lsp_zero = require('lsp-zero')
 
     lsp_zero.client_config({
-      capabilities = require('cmp_nvim_lsp').default_capabilities()
+      on_init = function(client)
+        print('hello from' .. client.name)
+      end,
     })
 
     lsp_zero.new_client({
       cmd = {'gleam', 'lsp'},
       filetypes = {'gleam'},
-      root_dir = function()
-        return lsp_zero.dir.find_first({'gleam.toml'})
+      root_dir = function(bufnr)
+        -- You need Neovim v0.10 to use vim.fs.root
+        return vim.fs.root(bufnr, {'gleam.toml'})
       end,
     })
 
     lsp_zero.new_client({
       cmd = {'lua-language-server'},
       filetypes = {'lua'},
-      root_dir = function()
-        return lsp_zero.dir.find_first({'.luarc.json', '.luarc.jsonc'})
+      root_dir = function(bufnr)
+        -- You need Neovim v0.10 to use vim.fs.root
+        return vim.fs.root(bufnr, {'.luarc.json', '.luarc.jsonc'})
       end,
     })
 <
@@ -679,7 +735,9 @@ client_config({opts}): ~
     lsp_zero.extend_lspconfig({})
 
     lsp_zero.client_config({
-      capabilities = require('cmp_nvim_lsp').default_capabilities()
+      on_init = function(client)
+        print('hello from' .. client.name)
+      end,
     })
 
     require('lspconfig').gleam.setup({})
@@ -734,51 +792,9 @@ new_client({opts}): ~
       cmd = {'gleam', 'lsp'},
       filetypes = {'gleam'},
       root_dir = function()
-        return lsp_zero.dir.find_first({'gleam.toml'})
+        -- You need Neovim v0.10 to use vim.fs.root
+        return vim.fs.root(bufnr, {'gleam.toml'})
       end
-    })
-<
-                                                 *lsp-zero.get_capabilities()*
-
-get_capabilities(): ~
-    Returns Neovim's default capabilities mixed with the settings provided to
-    lsp-zero in the functions |lsp-zero.extend_lspconfig()| or
-    |lsp-zero.client_config()|.
-
-    This is useful when you want to configure a language using a specialized
-    plugin.
-
-                                                      *lsp-zero.nvim_lua_ls()*
-
-nvim_lua_ls({opts}): ~
-    Returns settings specific to Neovim for the lua language server, lua_ls.
-    If you provide the {opts} table it'll merge it with the defaults,
-    this way you can extend or change the values easily.
->lua
-    local lsp_zero = require('lsp-zero')
-    lsp_zero.extend_lspconfig({})
-
-    local lua_opts = lsp_zero.nvim_lua_ls()
-    require('lspconfig').lua_ls.setup(lua_opts)
-<
-                                                *lsp-zero.nvim_lua_settings()*
-
-nvim_lua_settings({client}, {opts}): ~
-    Apply Neovim specific setting to {client}. This is meant to be used in the
-    `on_init` callback of the lua language server.
-
-    Note the Neovim settings will only be effective if there isn't a
-    `.luarc.json` or a `.luarc.jsonc` file in the root of the project.
-
-    You can use {opts} to override or add your own settings.
->lua
-    local lsp_zero = require('lsp-zero')
-    lsp_zero.extend_lspconfig({})
-
-    require('lspconfig').lua_ls.setup({
-      on_init = function(client)
-        lsp_zero.nvim_lua_settings(client, {})
-      end,
     })
 <
                                                    *lsp-zero.dir.find_first()*
@@ -835,6 +851,16 @@ dir.find_all({list}): ~
       end
     })
 <
+                                                 *lsp-zero.get_capabilities()*
+
+get_capabilities(): ~
+    Returns Neovim's default capabilities mixed with the settings provided to
+    lsp-zero in the functions |lsp-zero.extend_lspconfig()| or
+    |lsp-zero.client_config()|.
+
+    This is useful when you want to configure a language using a specialized
+    plugin.
+
                                                    *lsp-zero.omnifunc.setup()*
 
 omnifunc.setup({opts}): ~
@@ -1042,8 +1068,8 @@ cmp_action(): ~
 noop(): ~
     Doesn't do anything. Literally.
 
-    You can use think of this as "empty handler" for |mason-lspconfig.nvim|.
-    Consider this example.
+    You can use this as "empty handler" for |mason-lspconfig.nvim|. Consider
+    this example.
 >lua
     local lsp_zero = require('lsp-zero')
     local lsp_zero.extend_lspconfig({})

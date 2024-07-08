@@ -4,7 +4,7 @@
 
 If you choose to use the function `.default_keymaps()` you'll be able to use Neovim's built-in functions for various actions. Things like jump to definition, rename variable, format current file, and some more.
 
-Note that the keybindings have to be enabled explicitly, like this.
+Note that lsp-zero's keybindings have to be enabled explicitly, like this.
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -234,9 +234,9 @@ There are two ways you can use a server that is not supported by `lspconfig`:
 
 You can add the configuration to the module `lspconfig.configs` then you can call the `.setup` function.
 
-You'll need to provide the command to start the LSP server, a list of filetypes where you want to attach the LSP server, and a function that detects the "root directory" of the project.
+You'll need to provide the command that starts the language server, a list of filetypes where you want to attach the language server, and a function that detects the "root directory" of the project.
 
-Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported LSP servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
+Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported language servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
 
 ```lua
 local lsp_zero = require('lsp-zero')
@@ -292,7 +292,7 @@ lsp_zero.new_client({
 
 You have two ways to enable format on save.
 
-Note: When you enable format on save your LSP server is doing the formatting. The LSP server does not share the same style configuration as Neovim. Tabs and indents can change after the LSP formats the code in the file. Read the documentation of the LSP server you are using, figure out how to configure it to your prefered style.
+Note: When you enable format on save your language server is doing the formatting. The language server does not share the same style configuration as Neovim. Tabs and indents can change after the language server formats the code in the file. Read the documentation of the language server you are using, figure out how to configure it to your prefered style.
 
 ### Explicit setup
 
