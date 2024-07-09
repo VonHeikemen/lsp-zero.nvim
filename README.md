@@ -195,6 +195,12 @@ Install version 4 of lsp-zero.
 Rocks install VonHeikemen/lsp-zero.nvim rev=v4.x
 ```
 
+Install nvim-lspconfig.
+
+```
+Rocks install nvim-lspconfig
+```
+
 Install nvim-cmp.
 
 ```
@@ -327,6 +333,10 @@ To get some basic support for Neovim, create a file called `.luarc.json` in your
 ```
 
 </details>
+
+### Alternative install method
+
+There is a way to install **some** language servers from inside Neovim. This requires two extra plugins and learning how to use them together with `lspconfig`. The details are in this guide: [Integrate with mason.nvim](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/md/guides/integrate-with-mason-nvim.md)
 
 ### Minimal autocompletion config
 
