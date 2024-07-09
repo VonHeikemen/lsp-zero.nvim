@@ -507,6 +507,15 @@ cmp.setup({
 
 </details>
 
+## Quickstart (for the impatient)
+
+For those of you that just want something to copy/paste.
+
+* [Lua template configuration](https://lsp-zero.netlify.app/v4.x/template/lua-config.html)
+* [Vimscript template configuration](https://lsp-zero.netlify.app/v4.x/template/vimscript-config.html)
+* [Opinionated config](https://lsp-zero.netlify.app/v4.x/template/opinionated.html) 
+* [ThePrimeagen's "0 to LSP" config updated](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
+
 ## Support
 
 If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
