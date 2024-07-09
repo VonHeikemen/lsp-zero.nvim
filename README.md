@@ -83,6 +83,12 @@ You can browse the available documentation here: [lsp-zero.netlify.app/v4.x](htt
 * [Autocomplete](https://lsp-zero.netlify.app/v4.x/autocomplete.html)
 * [Help Page](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/doc/lsp-zero.txt)
 
+### Upgrade guides
+
+* [from v3.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v3-branch.html)
+* [from v2.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v2-branch.html)
+* [from v1.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v1-branch.html)
+
 ## Getting started
 
 ### Requirements
