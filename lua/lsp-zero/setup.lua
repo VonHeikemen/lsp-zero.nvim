@@ -160,12 +160,13 @@ local function setup_lspconfig()
   end
 
   local Server = require('lsp-zero.server')
+  local started = Server.has_configs()
 
-  if Server.has_configs() then
+  if #started > 0 then
     local err_msg = '[lsp-zero] Some language servers have been configured before\n'
-     .. 'lsp-zero could finish its initial setup. Some features may fail.'
-     .. '\n\nDetails on how to solve this problem are in the help page.\n'
-     .. 'Execute the following command\n\n:help lsp-zero-guide:fix-extend-lspconfig'
+      .. 'lsp-zero could finish its initial setup.'
+      .. '\n\nConfigured servers: '
+      .. vim.inspect(started)
 
     vim.notify(err_msg, vim.log.levels.WARN)
     return

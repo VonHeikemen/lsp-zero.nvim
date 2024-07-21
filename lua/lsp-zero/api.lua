@@ -39,11 +39,12 @@ function M.extend_lspconfig()
     return
   end
 
-  if Server.has_configs() then
+  local started = Server.has_configs()
+  if #started > 0 then
     local msg = '[lsp-zero] Some language servers have been configured before\n'
-     .. 'you called the function .extend_lspconfig().\n\n'
-     .. 'Solution: Go to the place where you use lspconfig for the first time.\n'
-     .. 'Call the .extend_lspconfig() function before you setup the language server'
+      .. 'you called the function .extend_lspconfig().'
+      .. '\n\nConfigured servers: '
+      .. vim.inspect(started)
 
      vim.notify(msg, vim.log.levels.WARN)
      return

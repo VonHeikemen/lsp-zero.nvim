@@ -260,14 +260,15 @@ end
 
 function M.has_configs()
   local configs = require('lspconfig.configs')
+  local setup = {}
 
-  for _, c in pairs(configs) do
+  for name, c in pairs(configs) do
     if c.manager then
-      return true
+      table.insert(setup, name)
     end
   end
 
-  return false
+  return setup
 end
 
 function M.highlight_symbol(client, bufnr)
