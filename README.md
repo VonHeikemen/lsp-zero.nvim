@@ -2,6 +2,9 @@
 
 Collection of functions that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
 
+> [!IMPORTANT]
+> `v4.x` became the default branch on `August 03`. If you are here because of a youtube video or some other tutorial, pay attention to the version of lsp-zero its been used in that tutorial.
+
 ## Documentation
 
 You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-zero.netlify.app/v4.x/introduction.html)
