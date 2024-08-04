@@ -66,7 +66,9 @@ You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-z
 
 ## Quickstart (for the impatient)
 
-If you want instructions visit the documentation. The following links just provide code for copy/paste.
+For detailed instructions visit the [getting started](https://lsp-zero.netlify.app/v4.x/getting-started.html) page or the [tutorial for beginners](https://lsp-zero.netlify.app/v4.x/tutorial.html).
+
+The following links just provide code for copy/paste.
 
 * [Lua template configuration](https://lsp-zero.netlify.app/v4.x/template/lua-config.html)
 * [Vimscript template configuration](https://lsp-zero.netlify.app/v4.x/template/vimscript-config.html)
