@@ -7,7 +7,7 @@ Collection of functions that will help you use Neovim's LSP client. The aim is t
 
 ## Demo
 
-Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a plugin with pre-made configurations for various language servers).
+Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a plugin with pre-made configurations for various language servers). Here's a showcase of (some) features you can get using all those plugins.
 
 > See [demo in asciinema](https://asciinema.org/a/636643)
 
