@@ -5,6 +5,14 @@ Collection of functions that will help you use Neovim's LSP client. The aim is t
 > [!IMPORTANT]
 > `v4.x` became the default branch on `August 03`. If you are here because of a youtube video or some other tutorial, pay attention to the version of lsp-zero its been used in that tutorial.
 
+## Demo
+
+Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a plugin with pre-made configurations for various language servers).
+
+> See [demo in asciinema](https://asciinema.org/a/636643)
+
+[![php code being edited in neovim](https://asciinema.org/a/636643.png)](https://asciinema.org/a/636643) 
+
 ## Documentation
 
 You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-zero.netlify.app/v4.x/introduction.html)
