@@ -11,7 +11,7 @@ Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/h
 
 > See [demo in asciinema](https://asciinema.org/a/636643)
 
-[![php code being edited in neovim](https://asciinema.org/a/636643.png)](https://asciinema.org/a/636643) 
+[![php code being edited in neovim](https://github.com/user-attachments/assets/6d414988-d912-4bf0-812a-3c2dad92a472)](https://asciinema.org/a/636643) 
 
 ## Documentation
 
