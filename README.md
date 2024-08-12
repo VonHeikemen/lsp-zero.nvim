@@ -3,7 +3,7 @@
 Collection of functions that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
 
 > [!IMPORTANT]
-> `v4.x` became the default branch on `August 03`. If you are here because of a youtube video or some other tutorial, pay attention to the version of lsp-zero its been used in that tutorial.
+> `v4.x` became the default branch on `August 03`. If you are here because of a youtube video or some other tutorial, pay attention to the version of lsp-zero its been used in that tutorial. Here is an [installation demo](https://asciinema.org/a/671812) for the current version.
 
 ## Demo
 
