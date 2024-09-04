@@ -342,5 +342,15 @@ function M.omnifunc.setup(opts)
   require('lsp-zero.omnifunc').setup(opts)
 end
 
+function M.preset()
+  local msg = 'The .preset() function was removed on September 2023.'
+    .. '\nIf you are following an old tutorial then that content is outdated.\n'
+    .. '\nCheck the getting started page for the version you have installed:'
+    .. '\nhttps://lsp-zero.netlify.app/v4.x/getting-started.html'
+
+  vim.api.nvim_echo({{msg, 'WarningMsg'}}, true, {})
+  return M
+end
+
 return M
 
