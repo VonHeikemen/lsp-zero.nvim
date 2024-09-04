@@ -3,7 +3,7 @@
 [Collection of functions](https://lsp-zero.netlify.app/v4.x/reference/lua-api.html) that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
 
 > [!IMPORTANT]
-> `v4.x` became the default branch on `August 03`. If you are here because of a youtube video or some other tutorial, pay attention to the version of lsp-zero its been used in that tutorial. Here is an [installation demo](https://asciinema.org/a/671812) for the current version.
+> `v4.x` became the default branch on `August 03 2024`. If you are here because of a youtube video or some other tutorial, there is a good chance the configuration they show is outdated. Here is an [installation demo](https://asciinema.org/a/671812) for the current version.
 
 ## Demo
 
