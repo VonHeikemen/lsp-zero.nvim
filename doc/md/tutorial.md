@@ -188,10 +188,10 @@ First thing you should do is install a language server. There are two ways you c
 
 In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of language servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the language server.
 
-Let's pretend that we installed `tsserver` and `rust_analyzer`, this is how we would use them.
+Let's pretend that we installed `gopls` and `rust_analyzer`, this is how we would use them.
 
 ```lua
-require('lspconfig').tsserver.setup({})
+require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
@@ -200,7 +200,7 @@ We use the module `lspconfig` and call the setup function of each language serve
 If you need to customize a language server, add your config inside the curly braces of the setup function. Here is an example.
 
 ```lua
-require('lspconfig').tsserver.setup({
+require('lspconfig').gopls.setup({
   single_file_support = false,
   on_attach = function(client, bufnr)
     print('hello world')
@@ -211,7 +211,7 @@ require('lspconfig').tsserver.setup({
 Now, if none of your language server need a special config you can use the function `.setup_servers()`.
 
 ```lua
-lsp_zero.setup_servers({'tsserver', 'rust_analyzer'})
+lsp_zero.setup_servers({'gopls', 'rust_analyzer'})
 ```
 
 At this point the configuration code should look like this.
@@ -244,7 +244,7 @@ lsp_zero.extend_lspconfig({
 
 -- These are just examples. Replace them with the language
 -- servers you have installed in your system
-require('lspconfig').tsserver.setup({})
+require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
@@ -482,7 +482,7 @@ lsp_zero.extend_lspconfig({
 
 -- These are just examples. Replace them with the language
 -- servers you have installed in your system
-require('lspconfig').tsserver.setup({})
+require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 
 ---

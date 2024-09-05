@@ -120,7 +120,7 @@ require('mason').setup({})
 require('mason-lspconfig').setup({
   -- Replace the language servers listed here
   -- with the ones you want to install
-  ensure_installed = {'tsserver', 'rust_analyzer'},
+  ensure_installed = {'gopls', 'rust_analyzer'},
   handlers = {
     function(server_name)
       require('lspconfig')[server_name].setup({})
@@ -149,10 +149,10 @@ lsp_zero.extend_lspconfig({
   lsp_attach = lsp_attach,
 })
 
-require('lspconfig').tsserver.setup({
+require('lspconfig').gopls.setup({
   single_file_support = false,
   on_attach = function(client, bufnr)
-    print('hello tsserver')
+    print('hello gopls')
   end
 })
 ```
@@ -168,12 +168,12 @@ require('mason-lspconfig').setup({
       require('lspconfig')[server_name].setup({})
     end,
 
-    -- this is the "custom handler" for `tsserver`
-    tsserver = function()
-      require('lspconfig').tsserver.setup({
+    -- this is the "custom handler" for `gopls`
+    gopls = function()
+      require('lspconfig').gopls.setup({
         single_file_support = false,
         on_attach = function(client, bufnr)
-          print('hello tsserver')
+          print('hello gopls')
         end
       })
     end,
@@ -206,7 +206,7 @@ lsp_zero.extend_lspconfig({
 If you just want to disable it for a particular server, use lspconfig to assign the `on_attach` hook to that server.
 
 ```lua
-require('lspconfig').tsserver.setup({
+require('lspconfig').gopls.setup({
   on_attach = function(client)
     client.server_capabilities.semanticTokensProvider = nil
   end,
@@ -218,7 +218,7 @@ require('lspconfig').tsserver.setup({
 Sometimes you might want to prevent Neovim from using a language server as a formatter. For this you can use the `on_attach` hook to modify the client instance.
 
 ```lua
-require('lspconfig').tsserver.setup({
+require('lspconfig').lua_ls.setup({
   on_attach = function(client)
     client.server_capabilities.documentFormattingProvider = false
     client.server_capabilities.documentFormattingRangeProvider = false
@@ -309,7 +309,7 @@ lsp_zero.format_on_save({
     timeout_ms = 10000,
   },
   servers = {
-    ['tsserver'] = {'javascript', 'typescript'},
+    ['biome'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
   }
 })
@@ -431,7 +431,7 @@ lsp_zero.format_mapping('gq', {
     timeout_ms = 10000,
   },
   servers = {
-    ['tsserver'] = {'javascript', 'typescript'},
+    ['biome'] = {'javascript', 'typescript'},
     ['rust_analyzer'] = {'rust'},
   }
 })
@@ -516,7 +516,7 @@ lsp_zero.extend_lspconfig({
   capabilities = require('cmp_nvim_lsp').default_capabilities()
 })
 
-require('lspconfig').tsserver.setup({})
+require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
@@ -555,7 +555,7 @@ vim.api.nvim_create_autocmd('LspAttach', {
   end,
 })
 
-lspconfig.tsserver.setup({})
+lspconfig.gopls.setup({})
 lspconfig.rust_analyzer.setup({})
 ```
 
