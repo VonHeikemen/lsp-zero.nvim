@@ -1,6 +1,6 @@
 # LSP Zero
 
-[Collection of functions](https://lsp-zero.netlify.app/v4.x/reference/lua-api.html) that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
+[Collection of functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
 
 > [!IMPORTANT]
 > `v4.x` became the default branch on `August 03 2024`. If you are here because of a youtube video or some other tutorial, there is a good chance the configuration they show is outdated. Here is an [installation demo](https://asciinema.org/a/671812) for the current version.
@@ -15,12 +15,12 @@ Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/h
 
 ## Documentation
 
-You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-zero.netlify.app/v4.x/introduction.html)
+You can browse the documentation here: [lsp-zero.netlify.app/docs](https://lsp-zero.netlify.app/docs/introduction.html)
 
-* [Tutorial for beginners](https://lsp-zero.netlify.app/v4.x/tutorial.html)
-* [Installation and Basic Usage](https://lsp-zero.netlify.app/v4.x/getting-started.html)
-* [LSP Configuration](https://lsp-zero.netlify.app/v4.x/language-server-configuration.html)
-* [Autocomplete](https://lsp-zero.netlify.app/v4.x/autocomplete.html)
+* [Tutorial for beginners](https://lsp-zero.netlify.app/docs/tutorial.html)
+* [Installation and Basic Usage](https://lsp-zero.netlify.app/docs/getting-started.html)
+* [LSP Configuration](https://lsp-zero.netlify.app/docs/language-server-configuration.html)
+* [Autocomplete](https://lsp-zero.netlify.app/docs/autocomplete.html)
 
 <details>
 
@@ -28,28 +28,28 @@ You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-z
 
 * Integrations
 
-  * [Integrate with mason.nvim](https://lsp-zero.netlify.app/v4.x/guide/integrate-with-mason-nvim.html)
-  * [Enable folds with nvim-ufo](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#enable-folds-with-nvim-ufo)
-  * [Setup copilot.lua + nvim-cmp](https://lsp-zero.netlify.app/v4.x/guide/setup-copilot-lua-plus-nvim-cmp.html)
-  * [Setup with nvim-jdtls](https://lsp-zero.netlify.app/v4.x/guide/setup-with-nvim-jdtls.html)
-  * [Setup with nvim-navic](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#setup-with-nvim-navic)
-  * [Setup with rustaceanvim](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#setup-with-rustaceanvim)
-  * [Setup with flutter-tools](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#setup-with-flutter-tools)
-  * [Setup with nvim-metals](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#setup-with-nvim-metals)
-  * [Setup with haskell-tools](https://lsp-zero.netlify.app/v4.x/guide/quick-recipes.html#setup-with-haskell-tools)
+  * [Integrate with mason.nvim](https://lsp-zero.netlify.app/docs/guide/integrate-with-mason-nvim.html)
+  * [Enable folds with nvim-ufo](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#enable-folds-with-nvim-ufo)
+  * [Setup copilot.lua + nvim-cmp](https://lsp-zero.netlify.app/docs/guide/setup-copilot-lua-plus-nvim-cmp.html)
+  * [Setup with nvim-jdtls](https://lsp-zero.netlify.app/docs/guide/setup-with-nvim-jdtls.html)
+  * [Setup with nvim-navic](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-nvim-navic)
+  * [Setup with rustaceanvim](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-rustaceanvim)
+  * [Setup with flutter-tools](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-flutter-tools)
+  * [Setup with nvim-metals](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-nvim-metals)
+  * [Setup with haskell-tools](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-haskell-tools)
 
 * Guides
 
-  * [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/v4.x/guide/what-to-do-when-lsp-doesnt-start.html)
-  * [Lazy loading with lazy.nvim](https://lsp-zero.netlify.app/v4.x/guide/lazy-loading-with-lazy-nvim.html)
-  * [lua_ls for Neovim](https://lsp-zero.netlify.app/v4.x/guide/neovim-lua-ls.html)
-  * [Configure Volar 2.0 (with typescript support)](https://lsp-zero.netlify.app/v4.x/guide/configure-volar-v2.html)
+  * [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/docs/guide/what-to-do-when-lsp-doesnt-start.html)
+  * [Lazy loading with lazy.nvim](https://lsp-zero.netlify.app/docs/guide/lazy-loading-with-lazy-nvim.html)
+  * [lua_ls for Neovim](https://lsp-zero.netlify.app/docs/guide/neovim-lua-ls.html)
+  * [Configure Volar 2.0 (with typescript support)](https://lsp-zero.netlify.app/docs/guide/configure-volar-v2.html)
 
 * API
 
-  * [Commands](https://lsp-zero.netlify.app/v4.x/reference/commands.html)
-  * [Variables](https://lsp-zero.netlify.app/v4.x/reference/variables.html)
-  * [Lua API](https://lsp-zero.netlify.app/v4.x/guide/what-to-do-when-lsp-doesnt-start.html) 
+  * [Commands](https://lsp-zero.netlify.app/docs/reference/commands.html)
+  * [Variables](https://lsp-zero.netlify.app/docs/reference/variables.html)
+  * [Lua API](https://lsp-zero.netlify.app/docs/guide/what-to-do-when-lsp-doesnt-start.html) 
 
 * Blog posts
 
@@ -60,19 +60,19 @@ You can browse the documentation here: [lsp-zero.netlify.app/v4.x](https://lsp-z
 
 ### Upgrade guides
 
-* [from v3.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v3-branch.html)
-* [from v2.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v2-branch.html)
-* [from v1.x to v4.x](https://lsp-zero.netlify.app/v4.x/guide/migrate-from-v1-branch.html)
+* [from v3.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v3-branch.html)
+* [from v2.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v2-branch.html)
+* [from v1.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v1-branch.html)
 
 ## Quickstart (for the impatient)
 
-For detailed instructions visit the [getting started](https://lsp-zero.netlify.app/v4.x/getting-started.html) page or the [tutorial for beginners](https://lsp-zero.netlify.app/v4.x/tutorial.html).
+For detailed instructions visit the [getting started](https://lsp-zero.netlify.app/docs/getting-started.html) page or the [tutorial for beginners](https://lsp-zero.netlify.app/docs/tutorial.html).
 
 The following links just provide code for copy/paste.
 
-* [Lua template configuration](https://lsp-zero.netlify.app/v4.x/template/lua-config.html)
-* [Vimscript template configuration](https://lsp-zero.netlify.app/v4.x/template/vimscript-config.html)
-* [Opinionated config](https://lsp-zero.netlify.app/v4.x/template/opinionated.html) 
+* [Lua template configuration](https://lsp-zero.netlify.app/docs/template/lua-config.html)
+* [Vimscript template configuration](https://lsp-zero.netlify.app/docs/template/vimscript-config.html)
+* [Opinionated config](https://lsp-zero.netlify.app/docs/template/opinionated.html) 
 * [ThePrimeagen's "0 to LSP" config updated](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
 
 ## Support

@@ -346,7 +346,7 @@ function M.preset()
   local msg = 'The .preset() function was removed on September 2023.'
     .. '\nIf you are following an old tutorial then that content is outdated.\n'
     .. '\nCheck the getting started page for the version you have installed:'
-    .. '\nhttps://lsp-zero.netlify.app/v4.x/getting-started.html'
+    .. '\nhttps://lsp-zero.netlify.app/docs/getting-started.html'
 
   vim.api.nvim_echo({{msg, 'WarningMsg'}}, true, {})
   return M
