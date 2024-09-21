@@ -1166,6 +1166,6 @@ To use lsp-zero with Neovim v0.7 install the `compat-07` branch of lsp-zero.
 Support                                                    *lsp-zero-donation*
 
 If you find this tool useful and want to support my efforts, consider
-leaving a tip in https://www.buymeacoffee.com/vonheikemen
+leaving a tip in https://ko-fi.com/vonheikemen
 
 vim:tw=78:ft=help:norl:

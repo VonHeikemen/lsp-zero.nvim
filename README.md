@@ -77,7 +77,7 @@ The following links just provide code for copy/paste.
 
 ## Support
 
-If you find this tool useful and want to support my efforts, [buy me a coffee ☕](https://www.buymeacoffee.com/vonheikemen).
+If you find this tool useful and want to support my efforts, consider leave a tip in [ko-fi.com ☕](https://ko-fi.com/vonheikemen).
 
-[![buy me a coffee](https://res.cloudinary.com/vonheikemen/image/upload/v1618466522/buy-me-coffee_ah0uzh.png)](https://www.buymeacoffee.com/vonheikemen)
+[![buy me a coffee](https://res.cloudinary.com/vonheikemen/image/upload/v1726766343/gzu1l1mx3ou7jmp0tkvt.webp)](https://ko-fi.com/vonheikemen)
 
