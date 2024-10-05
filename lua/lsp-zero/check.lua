@@ -103,7 +103,7 @@ function s.is_executable(name, check_available)
   end
 
   if lsp == nil then
-    local mod = string.format('lspconfig.server_configurations.%s', name)
+    local mod = string.format('lspconfig.configs.%s', name)
     local ok, server = pcall(require, mod)
     if ok == false or not server.default_config then
       return {cmd = '', result = false}

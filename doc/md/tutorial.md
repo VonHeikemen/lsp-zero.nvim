@@ -186,7 +186,7 @@ First thing you should do is install a language server. There are two ways you c
 
 #### Manual global install
 
-In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md) you will find the list of language servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the language server.
+In [nvim-lspconfig's documentation](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md) you will find the list of language servers currently supported. Some of them have install instructions you can follow, others will have a link to the repository of the language server.
 
 Let's pretend that we installed `gopls` and `rust_analyzer`, this is how we would use them.
 

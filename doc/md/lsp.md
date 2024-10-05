@@ -89,7 +89,7 @@ lsp_zero.extend_lspconfig({
 
 ### Manual install
 
-You can find install instructions for each language server in lspconfig's documentation: [server_configurations.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md).
+You can find install instructions for each language server in lspconfig's documentation: [configs.md](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md).
 
 ### Via command
 
@@ -236,7 +236,7 @@ You can add the configuration to the module `lspconfig.configs` then you can cal
 
 You'll need to provide the command that starts the language server, a list of filetypes where you want to attach the language server, and a function that detects the "root directory" of the project.
 
-Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported language servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/server_configurations.md#configurations).
+Note: before doing anything, make sure the server you want to add is **not** supported by `lspconfig`. Read the [list of supported language servers](https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md#configurations).
 
 ```lua
 local lsp_zero = require('lsp-zero')
