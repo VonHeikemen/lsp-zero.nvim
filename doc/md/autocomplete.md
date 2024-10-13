@@ -44,19 +44,16 @@ Third step, add the sources you want to use to nvim-cmp's config. For this we ne
 
 ```lua
 local cmp = require('cmp')
-local cmp_format = require('lsp-zero').cmp_format({details = true})
 
 cmp.setup({
   sources = {
     {name = 'nvim_lsp'},
     {name = 'buffer'},
   },
-  --- (Optional) Show source name in completion menu
-  formatting = cmp_format,
 })
 ```
 
-Notice we have two sources. The first source, `{name = 'nvim_lsp'}`, belongs to this plugin [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). You installed that when you configured lsp-zero for the first time. We need to add it here because nvim-cmp will override previous value of the `sources` option. In other words, we need so we don't lose the LSP completions.
+Notice we have two sources. The first source, `{name = 'nvim_lsp'}`, belongs to this plugin [hrsh7th/cmp-nvim-lsp](https://github.com/hrsh7th/cmp-nvim-lsp). This is the source recommended in the getting started page.
 
 `{name = 'buffer'}` is the new plugin [hrsh7th/cmp-buffer](https://github.com/hrsh7th/cmp-buffer). After adding this we can restart Neovim and test it.
 
@@ -174,8 +171,7 @@ Install and configure the language server for lua: [lua_ls](https://github.com/L
   "diagnostics.globals": ["vim"],
   "workspace.checkThirdParty": false,
   "workspace.library": [
-    "$VIMRUNTIME",
-    "${3rd}/luv/library"
+    "$VIMRUNTIME"
   ]
 }
 ```
