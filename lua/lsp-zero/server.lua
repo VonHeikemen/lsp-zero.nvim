@@ -1,5 +1,6 @@
 local M = {
   setup_done = false,
+  setup_hook = false,
   common_attach = nil,
   default_config = false,
   cache_capabilities = nil,
@@ -41,13 +42,24 @@ function M.extend_lspconfig(opts)
     )
   end
 
+  M.lspconfig_hook()
+  M.setup_done = true
+end
+
+function M.lspconfig_hook()
+  if M.setup_hook then
+    return
+  end
+
+  local util = require('lspconfig.util')
+
   util.on_setup = util.add_hook_after(util.on_setup, function(config, user_config)
     if type(M.default_config) == 'table' then
       s.apply_global_config(config, user_config, M.default_config)
     end
   end)
 
-  M.setup_done = true
+  M.setup_hook = true
 end
 
 function M.set_buf_commands(bufnr)

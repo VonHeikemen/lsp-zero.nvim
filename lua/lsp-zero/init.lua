@@ -88,6 +88,17 @@ function M.client_config(opts)
 
   local Server = require('lsp-zero.server')
   Server.default_config = opts
+
+  if Server.setup_hook then
+    return
+  end
+
+  if vim.g.lspconfig == 1
+    or type(package.loaded['lspconfig']) == 'table'
+    or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', false) > 0
+  then
+    Server.lspconfig_hook()
+  end
 end
 
 M.set_server_config = M.client_config
