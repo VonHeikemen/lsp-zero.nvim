@@ -1,13 +1,13 @@
 # LSP Zero
 
-[Collection of functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) that will help you use Neovim's LSP client. The aim is to provide abstractions on top of Neovim's LSP client that are easy to use.
+Collection of [functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) and a [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) that will help you use Neovim's LSP client.
 
 > [!IMPORTANT]
 > `v4.x` became the default branch on `August 2024`. If you are here because of a youtube video or some other tutorial, there is a good chance the configuration they show is outdated. The [quickstart section](#quickstart-for-the-impatient) has a example config.
 
 ## Demo
 
-Most people use lsp-zero just to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) (an autocompletion plugin) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig) (a plugin with pre-made configurations for various language servers). Here's a showcase of (some) features you can get using all those plugins.
+In the past most people used lsp-zero to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). This use case doesn't require you to have lsp-zero installed anymore. The steps to make this work are covered in the [getting started](https://lsp-zero.netlify.app/docs/getting-started.html) page.
 
 > See [demo in asciinema](https://asciinema.org/a/636643)
 
@@ -21,41 +21,6 @@ You can browse the documentation here: [lsp-zero.netlify.app/docs](https://lsp-z
 * [Installation and Basic Usage](https://lsp-zero.netlify.app/docs/getting-started.html)
 * [LSP Configuration](https://lsp-zero.netlify.app/docs/language-server-configuration.html)
 * [Autocomplete](https://lsp-zero.netlify.app/docs/autocomplete.html)
-
-<details>
-
-<summary>Expand: More Documentation Links </summary>
-
-* Integrations
-
-  * [Integrate with mason.nvim](https://lsp-zero.netlify.app/docs/guide/integrate-with-mason-nvim.html)
-  * [Enable folds with nvim-ufo](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#enable-folds-with-nvim-ufo)
-  * [Setup copilot.lua + nvim-cmp](https://lsp-zero.netlify.app/docs/guide/setup-copilot-lua-plus-nvim-cmp.html)
-  * [Setup with nvim-jdtls](https://lsp-zero.netlify.app/docs/guide/setup-with-nvim-jdtls.html)
-  * [Setup with rustaceanvim](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-rustaceanvim)
-  * [Setup with flutter-tools](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-flutter-tools)
-  * [Setup with nvim-metals](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-nvim-metals)
-  * [Setup with haskell-tools](https://lsp-zero.netlify.app/docs/guide/quick-recipes.html#setup-with-haskell-tools)
-
-* Guides
-
-  * [What to do when the language server doesn't start?](https://lsp-zero.netlify.app/docs/guide/what-to-do-when-lsp-doesnt-start.html)
-  * [Lazy loading with lazy.nvim](https://lsp-zero.netlify.app/docs/guide/lazy-loading-with-lazy-nvim.html)
-  * [lua_ls for Neovim](https://lsp-zero.netlify.app/docs/guide/neovim-lua-ls.html)
-  * [Configure Volar 2.0 (with typescript support)](https://lsp-zero.netlify.app/docs/guide/configure-volar-v2.html)
-
-* API
-
-  * [Commands](https://lsp-zero.netlify.app/docs/reference/commands.html)
-  * [Variables](https://lsp-zero.netlify.app/docs/reference/variables.html)
-  * [Lua API](https://lsp-zero.netlify.app/docs/guide/what-to-do-when-lsp-doesnt-start.html) 
-
-* Blog posts
-
-  * [You might not need lsp-zero](https://lsp-zero.netlify.app/v3.x/blog/you-might-not-need-lsp-zero.html)
-  * [ThePrimeagen 0 to LSP config](https://lsp-zero.netlify.app/v3.x/blog/theprimeagens-config-from-2022.html)
-
-</details>
 
 ### Upgrade guides
 
@@ -77,7 +42,8 @@ The following piece of code should be enough to get a basic setup:
 
 ```lua
 -- NOTE: to make any of this work you need a language server.
--- If you don't know what that is, you should do some research.
+-- If you don't know what that is, watch this 5 min video:
+-- https://www.youtube.com/watch?v=LaS32vctfOY
 
 -- Reserve a space in the gutter
 vim.opt.signcolumn = 'yes'
@@ -114,8 +80,8 @@ vim.api.nvim_create_autocmd('LspAttach', {
 -- You'll find a list of language servers here:
 -- https://github.com/neovim/nvim-lspconfig/blob/master/doc/configs.md
 -- These are example language servers. 
--- require('lspconfig').gleam.setup({})
--- require('lspconfig').rust_analyzer.setup({})
+require('lspconfig').gleam.setup({})
+require('lspconfig').ocamllsp.setup({})
 
 local cmp = require('cmp')
 
@@ -135,13 +101,13 @@ cmp.setup({
 
 ### Why is lsp-zero not used there?
 
-Because lsp-zero is not the plugin it used to be back in 2022. And its clear to me now that adding even a tiny layer of abstraction on top of this setup can cause a huge amount of confusion.
+Because lsp-zero is not the plugin it used to be back in 2022. And its clear to me now that adding even a tiny layer of abstraction on top of this setup can cause a huge amount of confusion. If you want to know what lsp-zero can do, there is a list of features in the [final section of getting started page](https://lsp-zero.netlify.app/docs/getting-started.html#plot-twist).
 
-If you want to know what lsp-zero can do, there is a list of features in the [final section of getting started page](https://lsp-zero.netlify.app/docs/getting-started.html#plot-twist).
+For better or worse the documentation is the most valuable thing of lsp-zero. The docs will teach you how to use all the moving pieces of a typical "LSP setup" in Neovim.
 
 ## Support
 
-If you find this tool useful and want to support my efforts, consider leave a tip in [ko-fi.com ☕](https://ko-fi.com/vonheikemen).
+If you find this useful and want to support my efforts, consider leave a tip in [ko-fi.com ☕](https://ko-fi.com/vonheikemen).
 
 [![buy me a coffee](https://res.cloudinary.com/vonheikemen/image/upload/v1726766343/gzu1l1mx3ou7jmp0tkvt.webp)](https://ko-fi.com/vonheikemen)
 
