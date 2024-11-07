@@ -45,7 +45,7 @@ vim.api.nvim_create_user_command(
 
 local function inspect_config_source(input)
   local server = input.args
-  local mod = 'lua/lspconfig/server_configurations/%s.lua'
+  local mod = 'lua/lspconfig/configs/%s.lua'
   local path = vim.api.nvim_get_runtime_file(mod:format(server), 0)
 
   if path[1] == nil then
@@ -61,7 +61,7 @@ local function inspect_config_source(input)
 end
 
 local function config_source_complete(user_input)
-  local mod = 'lua/lspconfig/server_configurations'
+  local mod = 'lua/lspconfig/configs'
   local path = vim.api.nvim_get_runtime_file(mod, 0)[1]
   local pattern = '%s/*.lua'
 
