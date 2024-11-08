@@ -101,7 +101,7 @@ cmp.setup({
 
 ### Why is lsp-zero not used there?
 
-Because lsp-zero is not the plugin it used to be back in 2022. And its clear to me now that adding even a tiny layer of abstraction on top of this setup can cause a huge amount of confusion. If you want to know what lsp-zero can do, there is a list of features in the [final section of getting started page](https://lsp-zero.netlify.app/docs/getting-started.html#plot-twist).
+Because lsp-zero is not the plugin it used to be back in 2022. And its clear to me now that adding even a tiny layer of abstraction on top of this setup can cause a huge amount of confusion. If you want to know what lsp-zero can do, you can check the functions it has available in the [Lua API](https://lsp-zero.netlify.app/docs/reference/lua-api.html).
 
 For better or worse the documentation is the most valuable thing of lsp-zero. The docs will teach you how to use all the moving pieces of a typical "LSP setup" in Neovim.
 
