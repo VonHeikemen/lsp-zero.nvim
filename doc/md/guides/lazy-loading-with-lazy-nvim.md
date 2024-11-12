@@ -1,19 +1,12 @@
 # Lazy loading with lazy.nvim
 
-Lots of you really like this lazy loading business. Let me show you how to defer everything in lsp-zero using [lazy.nvim](https://github.com/folke/lazy.nvim).
+Lots of you really like this lazy loading business. Let me show you how to defer everything using [lazy.nvim](https://github.com/folke/lazy.nvim).
 
 <details>
 <summary>Expand: manual setup of language servers: </summary>
 
 ```lua
 {
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v4.x',
-    lazy = true,
-    config = false,
-  },
-
   -- Autocompletion
   {
     'hrsh7th/nvim-cmp',
@@ -99,12 +92,6 @@ Lots of you really like this lazy loading business. Let me show you how to defer
 
 ```lua
 {
-  {
-    'VonHeikemen/lsp-zero.nvim',
-    branch = 'v4.x',
-    lazy = true,
-    config = false,
-  },
   {
     'williamboman/mason.nvim',
     lazy = false,

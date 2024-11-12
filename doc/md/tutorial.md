@@ -1,8 +1,8 @@
 # Tutorial
 
-Here you will learn enough about Neovim to configure lsp-zero version 4. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally setup lsp-zero.
+Here you will learn enough to configure Neovim from scratch with LSP support. We will create a configuration file called `init.lua`, install a plugin manager, a colorscheme and finally install some plugins.
 
-If you already have a Neovim configuration with a plugin manager, go to the [getting started section](https://github.com/VonHeikemen/lsp-zero.nvim/blob/v4.x/README.md#getting-started) for a quick start.
+If you already have a Neovim configuration with a plugin manager, go to the [getting started page](https://lsp-zero.netlify.app/docs/getting-started.html) for a quick start.
 
 ## Requirements
 
@@ -39,8 +39,6 @@ end
 ```
 
 Save the file and restart Neovim, you should notice the light theme. If you get the blue theme then your Neovim version does not meet the requirements. Visit Neovim's github repository, in the [release section](https://github.com/neovim/neovim/releases) you'll find prebuilt executables for the latest versions.
-
-If you can't upgrade Neovim you can still install a previous version of lsp-zero.
 
 Assuming everything went well, you can now delete the `if` block and change to a dark theme.
 
@@ -133,46 +131,55 @@ If you want to know more details about lazy.nvim, here are a few resources (that
 * [Lazy.nvim: how to revert a plugin back to a previous version](https://dev.to/vonheikemen/lazynvim-how-to-revert-a-plugin-back-to-a-previous-version-1pdp). Learn how to recover from a bad plugin update.
 
 
-## Setup lsp-zero
+## LSP support
 
 Now we need to add all the lua plugins in lazy's setup function.
 
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
 })
 ```
 
-Next, we add this configuration at the end of the file.
+Next, we prepare our custom keymaps and add extra settings from `cmp_nvim_lsp` to `nvim-lspconfig` defaults.
+
+Add this code at the end of the file.
 
 ```lua
-local lsp_zero = require('lsp-zero')
+-- Reserve a space in the gutter
+-- This will avoid an annoying layout shift in the screen
+vim.opt.signcolumn = 'yes'
 
--- lsp_attach is where you enable features that only work
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
+
+-- This is where you enable features that only work
 -- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = {buffer = event.buf}
 
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
-
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end,
 })
 ```
 
@@ -195,7 +202,7 @@ require('lspconfig').gopls.setup({})
 require('lspconfig').rust_analyzer.setup({})
 ```
 
-We use the module `lspconfig` and call the setup function of each language server we installed. Note is important that you setup the language servers after you call `lsp_zero.extend_lspconfig()`.
+We use the module `lspconfig` and call the setup function of each language server we installed.
 
 If you need to customize a language server, add your config inside the curly braces of the setup function. Here is an example.
 
@@ -206,46 +213,6 @@ require('lspconfig').gopls.setup({
     print('hello world')
   end,
 })
-```
-
-Now, if none of your language server need a special config you can use the function `.setup_servers()`.
-
-```lua
-lsp_zero.setup_servers({'gopls', 'rust_analyzer'})
-```
-
-At this point the configuration code should look like this.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
--- lsp_attach is where you enable features that only work
--- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
-
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
-
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
-})
-
--- These are just examples. Replace them with the language
--- servers you have installed in your system
-require('lspconfig').gopls.setup({})
-require('lspconfig').rust_analyzer.setup({})
 ```
 
 #### Local installation with mason.nvim
@@ -265,7 +232,6 @@ Anyway, if you choose this method you will need to add these two plugins:
 ```lua
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
   {'neovim/nvim-lspconfig'},
@@ -277,18 +243,22 @@ require('lazy').setup({
 `mason.nvim` will make sure we have access to the language servers. And we will use `mason-lspconfig` to configure the automatic setup of every language server we install.
 
 ```lua
-local lsp_zero = require('lsp-zero')
+vim.opt.signcolumn = 'yes'
 
-local lsp_attach = function(client, bufnr)
-  ---
-  -- code omitted for brevity...
-  ---
-end
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
 
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    ---
+    -- code omitted for brevity...
+    ---
+  end,
 })
 
 require('mason').setup({})
@@ -315,9 +285,7 @@ Let's say you have `lua_ls` installed, if you want it to detect the root directo
 
 #### Configure lua language server
 
-If you installed the language server for lua you are probably getting lots of warnings, most of them should be about the global variable `vim`. That is a Neovim specific variable, the lua language server doesn't know anything about it. There are a couple of ways we can fix this.
-
-* Workspace specific config
+If you installed the language server for lua you are probably getting lots of warnings, most of them should be about the global variable `vim`. That is a Neovim specific variable, the lua language server doesn't know anything about it. Here is a quick way to fix it:
 
 We can create a file called `.luarc.json` file in our Neovim config folder, and then add this.
 
@@ -331,24 +299,9 @@ We can create a file called `.luarc.json` file in our Neovim config folder, and 
   "diagnostics.globals": ["vim"],
   "workspace.checkThirdParty": false,
   "workspace.library": [
-    "$VIMRUNTIME",
-    "${3rd}/luv/library"
+    "$VIMRUNTIME"
   ]
 }
-```
-
-* Lua config
-
-lsp-zero has a function that applies a basic config to `lua_ls` as a backup. If there isn't any local config file (`.luarc.json`) in the current root directory then it applies the Neovim specific settings to the language server.
-
-```lua
-local lsp_zero = require('lsp-zero')
-
-require('lspconfig').lua_ls.setup({
-  on_init = function(client)
-    lsp_zero.nvim_lua_settings(client, {})
-  end,
-})
 ```
 
 ## Setup autocompletion
@@ -379,7 +332,6 @@ Here are some keybindings I suggest.
 
 ```lua
 local cmp = require('cmp')
-local cmp_action = require('lsp-zero').cmp_action()
 
 cmp.setup({
   sources = {
@@ -395,10 +347,6 @@ cmp.setup({
 
     -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
-    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -422,10 +370,9 @@ Note that here I'm showing a function called `.cmp_action()`, this function prov
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not uv.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -442,7 +389,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v4.x'},
   {'neovim/nvim-lspconfig'},
   {'hrsh7th/cmp-nvim-lsp'},
   {'hrsh7th/nvim-cmp'},
@@ -455,29 +401,38 @@ vim.cmd.colorscheme('tokyonight')
 ---
 -- LSP setup
 ---
-local lsp_zero = require('lsp-zero')
 
--- lsp_attach is where you enable features that only work
+-- Reserve a space in the gutter
+-- This will avoid an annoying layout shift in the screen
+vim.opt.signcolumn = 'yes'
+
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
+
+-- This is where you enable features that only work
 -- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = {buffer = event.buf}
 
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
-
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end,
 })
 
 -- These are just examples. Replace them with the language
@@ -489,7 +444,6 @@ require('lspconfig').rust_analyzer.setup({})
 -- Autocompletion config
 ---
 local cmp = require('cmp')
-local cmp_action = lsp_zero.cmp_action()
 
 cmp.setup({
   sources = {
@@ -501,10 +455,6 @@ cmp.setup({
 
     -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
-    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
@@ -527,10 +477,9 @@ cmp.setup({
 
 ```lua
 local lazypath = vim.fn.stdpath('data') .. '/lazy/lazy.nvim'
-local uv = vim.uv or vim.loop
 
 -- Auto-install lazy.nvim if not present
-if not uv.fs_stat(lazypath) then
+if not vim.uv.fs_stat(lazypath) then
   print('Installing lazy.nvim....')
   vim.fn.system({
     'git',
@@ -547,7 +496,6 @@ vim.opt.rtp:prepend(lazypath)
 
 require('lazy').setup({
   {'folke/tokyonight.nvim'},
-  {'VonHeikemen/lsp-zero.nvim', branch = 'v3.x'},
   {'williamboman/mason.nvim'},
   {'williamboman/mason-lspconfig.nvim'},
   {'neovim/nvim-lspconfig'},
@@ -562,29 +510,38 @@ vim.cmd.colorscheme('tokyonight')
 ---
 -- LSP setup
 ---
-local lsp_zero = require('lsp-zero')
 
--- lsp_attach is where you enable features that only work
+-- Reserve a space in the gutter
+-- This will avoid an annoying layout shift in the screen
+vim.opt.signcolumn = 'yes'
+
+-- Add cmp_nvim_lsp capabilities settings to lspconfig
+-- This should be executed before you configure any language server
+local lspconfig_defaults = require('lspconfig').util.default_config
+lspconfig_defaults.capabilities = vim.tbl_deep_extend(
+  'force',
+  lspconfig_defaults.capabilities,
+  require('cmp_nvim_lsp').default_capabilities()
+)
+
+-- This is where you enable features that only work
 -- if there is a language server active in the file
-local lsp_attach = function(client, bufnr)
-  local opts = {buffer = bufnr}
+vim.api.nvim_create_autocmd('LspAttach', {
+  desc = 'LSP actions',
+  callback = function(event)
+    local opts = {buffer = event.buf}
 
-  vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
-  vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
-  vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
-  vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
-  vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
-  vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
-  vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
-  vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
-  vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
-  vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
-end
-
-lsp_zero.extend_lspconfig({
-  sign_text = true,
-  lsp_attach = lsp_attach,
-  capabilities = require('cmp_nvim_lsp').default_capabilities(),
+    vim.keymap.set('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', opts)
+    vim.keymap.set('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', opts)
+    vim.keymap.set('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', opts)
+    vim.keymap.set('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', opts)
+    vim.keymap.set('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', opts)
+    vim.keymap.set('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', opts)
+    vim.keymap.set('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', opts)
+    vim.keymap.set('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', opts)
+    vim.keymap.set({'n', 'x'}, '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', opts)
+    vim.keymap.set('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', opts)
+  end,
 })
 
 require('mason').setup({})
@@ -600,7 +557,6 @@ require('mason-lspconfig').setup({
 -- Autocompletion config
 ---
 local cmp = require('cmp')
-local cmp_action = lsp_zero.cmp_action()
 
 cmp.setup({
   sources = {
@@ -612,10 +568,6 @@ cmp.setup({
 
     -- Ctrl+Space to trigger completion menu
     ['<C-Space>'] = cmp.mapping.complete(),
-
-    -- Navigate between snippet placeholder
-    ['<C-f>'] = cmp_action.vim_snippet_jump_forward(),
-    ['<C-b>'] = cmp_action.vim_snippet_jump_backward(),
 
     -- Scroll up and down in the completion documentation
     ['<C-u>'] = cmp.mapping.scroll_docs(-4),
