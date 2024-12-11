@@ -1,17 +1,52 @@
 # LSP Zero
 
-Collection of [functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) and a [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) that will help you use Neovim's LSP client.
+A collection of [functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) for Neovim's LSP client.
 
-> [!IMPORTANT]
-> `v4.x` became the default branch on `August 2024`. If you are here because of a youtube video or some other tutorial, there is a good chance the configuration they show is outdated. The [quickstart section](#quickstart-for-the-impatient) has a example config.
+<details>
 
-## Demo
+<summary>Expand: showcase</summary>
 
-In the past most people used lsp-zero to help them setup [nvim-cmp](https://github.com/hrsh7th/nvim-cmp) and [nvim-lspconfig](https://github.com/neovim/nvim-lspconfig). This use case doesn't require you to have lsp-zero installed anymore. The steps to make this work are covered in the [getting started](https://lsp-zero.netlify.app/docs/getting-started.html) page.
+```lua
+-- WARNING: This is not a snippet you want to copy/paste blindly
 
-> See [demo in asciinema](https://asciinema.org/a/636643)
+local lsp_zero = require('lsp-zero')
 
-[![php code being edited in neovim](https://github.com/user-attachments/assets/6d414988-d912-4bf0-812a-3c2dad92a472)](https://asciinema.org/a/636643) 
+lsp_zero.on_attach(function(client, bufnr)
+  lsp_zero.default_keymaps({buffer = bufnr})
+  lsp_zero.buffer_autoformat()
+end)
+
+-- Enable a simple tab complete
+lsp_zero.omnifunc.setup({
+  trigger = '<C-Space>',
+  tabcomplete = true,
+  use_fallback = true,
+  update_on_delete = true,
+})
+
+-- For this to work you need to install this:
+-- https://github.com/LuaLS/lua-language-server
+lsp_zero.new_client({
+  cmd = {'lua-language-server'},
+  filetypes = {'lua'},
+  on_init = function(client)
+    lsp_zero.nvim_lua_settings(client, {})
+  end,
+  root_dir = function(bufnr)
+    -- You need Neovim v0.10 to use vim.fs.root
+    -- Note: include a .git folder in the root of your Neovim config
+    return vim.fs.root(bufnr, {'.git', '.luarc.json', '.luarc.jsonc'})
+  end,
+})
+```
+
+</details>
+
+## Project status
+
+The development of this plugin will stop. And the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) is now wiki that will teach you how to setup Neovim's LSP client. The only section that mentions lsp-zero is the API reference. I'll move this documentation to some other place in the future.
+
+It seems like future versions of Neovim will address (most of) the issues that led to the creation of this plugin. In the current nightly version of Neovim (`v0.11`) is possible to have a good experience without installing extra plugins. And even today with Neovim `v0.10` you can have all the features that you need with just 3 plugins (and no, lsp-zero is not one of them), see the example in the [quickstart section](#quickstart-for-the-impatient).
 
 ## Documentation
 
@@ -22,11 +57,11 @@ You can browse the documentation here: [lsp-zero.netlify.app/docs](https://lsp-z
 * [LSP Configuration](https://lsp-zero.netlify.app/docs/language-server-configuration.html)
 * [Autocomplete](https://lsp-zero.netlify.app/docs/autocomplete.html)
 
-### Upgrade guides
+### Migration guides
 
-* [from v3.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v3-branch.html)
-* [from v2.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v2-branch.html)
-* [from v1.x to v4.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v1-branch.html)
+* [from v3.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v3-branch.html)
+* [from v2.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v2-branch.html)
+* [from v1.x](https://lsp-zero.netlify.app/docs/guide/migrate-from-v1-branch.html)
 
 ## Quickstart (for the impatient)
 
@@ -99,15 +134,9 @@ cmp.setup({
 })
 ```
 
-### Why is lsp-zero not used there?
-
-Because lsp-zero is not the plugin it used to be back in 2022. And its clear to me now that adding even a tiny layer of abstraction on top of this setup can cause a huge amount of confusion. If you want to know what lsp-zero can do, you can check the functions it has available in the [Lua API](https://lsp-zero.netlify.app/docs/reference/lua-api.html).
-
-For better or worse the documentation is the most valuable thing of lsp-zero. The docs will teach you how to use all the moving pieces of a typical "LSP setup" in Neovim.
-
 ## Support
 
-If you find this useful and want to support my efforts, consider leave a tip in [ko-fi.com ☕](https://ko-fi.com/vonheikemen).
+If you find this useful and want to support my efforts, you can donate in [ko-fi.com/vonheikemen](https://ko-fi.com/vonheikemen).
 
 [![buy me a coffee](https://res.cloudinary.com/vonheikemen/image/upload/v1726766343/gzu1l1mx3ou7jmp0tkvt.webp)](https://ko-fi.com/vonheikemen)
 
