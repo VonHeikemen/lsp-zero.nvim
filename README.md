@@ -44,9 +44,9 @@ lsp_zero.new_client({
 
 ## Project status
 
-The development of this plugin will stop. And the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) is now wiki that will teach you how to setup Neovim's LSP client. The only section that mentions lsp-zero is the API reference. I'll move this documentation to some other place in the future.
+The development of this plugin will stop. And the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) is now a wiki that will teach you how to setup Neovim's LSP client. The only section that mentions lsp-zero is the API reference. I'll move this documentation to some other place in the future.
 
-It seems like future versions of Neovim will address (most of) the issues that led to the creation of this plugin. In the current nightly version of Neovim (`v0.11`) is possible to have a good experience without installing extra plugins. And even today with Neovim `v0.10` you can have all the features that you need with just 3 plugins (and no, lsp-zero is not one of them), see the example in the [quickstart section](#quickstart-for-the-impatient).
+It seems like future versions of Neovim will address (most of) the issues that led to the creation of this plugin. In the current nightly version of Neovim (`v0.11`) is possible to have a [good experience without installing extra plugins](https://lsp-zero.netlify.app/blog/lsp-in-3-steps.html). And even today with Neovim `v0.10` you can have all the features that you need with just 3 plugins (and no, lsp-zero is not one of them), see the example in the [quickstart section](#quickstart-for-the-impatient).
 
 ## Documentation
 
