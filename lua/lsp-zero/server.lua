@@ -100,27 +100,17 @@ function M.default_keymaps(opts)
     vim.keymap.set(m, lhs, rhs, key_opts)
   end
 
-  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Hover documentation')
+  s.supported_keymaps(map)
+
   map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Go to definition')
   map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Go to declaration')
   map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Go to implementation')
   map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Go to type definition')
   map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', 'Go to reference')
-  map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
   map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
   map('n', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
   map('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format selection')
   map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
-
-  if vim.lsp.buf.range_code_action then
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>', 'Execute code action')
-  else
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
-  end
-
-  map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
-  map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Previous diagnostic')
-  map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next diagnostic')
 end
 
 function M.set_sign_icons(opts)
@@ -273,7 +263,7 @@ end
 
 function M.highlight_symbol(client, bufnr)
   if client == nil
-    or client.supports_method('textDocument/documentHighlight') == false
+    or s.supports_method(client, 'textDocument/documentHighlight') == false
   then
     return
   end
@@ -315,11 +305,13 @@ function s.set_capabilities()
   end
 
   local cmp_default_capabilities = {}
-  local base = {}
+  local base = nil
 
   if M.has_lspconfig then
     base = require('lspconfig.util').default_config.capabilities
-  else
+  end
+
+  if base == nil then
     base = vim.lsp.protocol.make_client_capabilities()
   end
 
@@ -419,6 +411,37 @@ function s.tbl_merge(old_val, new_val)
     else
       old_val[k] = v
     end
+  end
+end
+
+function s.supports_method(client, method)
+  return client.supports_method(method)
+end
+
+function s.supported_keymaps(map)
+  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Hover documentation')
+  map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
+  map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
+  map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>', 'Previous diagnostic')
+  map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>', 'Next diagnostic')
+
+  if vim.lsp.buf.range_code_action then
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>', 'Execute code action')
+  else
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
+  end
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  function s.supports_method(client, method)
+    return client:supports_method(method)
+  end
+
+  function s.supported_keymaps(map)
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover({border = vim.g.lsp_zero_ui_float_border})<cr>', 'Hover documentation')
+    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help({border = vim.g.lsp_zero_ui_float_border})<cr>', 'Show function signature')
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>', 'Show diagnostic')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>', 'Execute code action')
   end
 end
 
