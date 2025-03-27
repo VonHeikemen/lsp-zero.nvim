@@ -4,6 +4,16 @@ local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
+local supports_formatting = function(client)
+  return client.supports_method('textDocument/formatting')
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  supports_formatting = function(client)
+    return client:supports_method('textDocument/formatting')
+  end
+end
+
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -139,7 +149,7 @@ function M.async_autoformat(client, bufnr, opts)
     return
   end
 
-  if client.supports_method('textDocument/formatting') == false then
+  if supports_formatting(client) == false then
     return
   end
 
@@ -250,7 +260,7 @@ function M.check(server)
     return
   end
 
-  if client.supports_method('textDocument/formatting') == false then
+  if supports_formatting(client) == false then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return
@@ -282,7 +292,7 @@ function s.setup_async_format(opts)
       return
     end
 
-    if client.supports_method('textDocument/formatting') == false then
+    if supports_formatting(client) == false then
       return
     end
 

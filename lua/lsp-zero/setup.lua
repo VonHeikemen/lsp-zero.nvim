@@ -51,6 +51,15 @@ function s.setup_ui(opts)
     vim.opt.signcolumn = 'yes'
   end
 
+  vim.diagnostic.config({
+    float = {border = opts.border}
+  })
+
+  if vim.fn.has('nvim-0.11') == 1 and type(opts.border) == 'string' then
+    vim.g.lsp_zero_border_style = opts.border
+    return
+  end
+
   vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
     vim.lsp.handlers.hover,
     {border = opts.border}
@@ -61,9 +70,6 @@ function s.setup_ui(opts)
     {border = opts.border}
   )
 
-  vim.diagnostic.config({
-    float = {border = opts.border}
-  })
 end
 
 function s.setup_servers(list, opts)
