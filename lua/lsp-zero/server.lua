@@ -166,7 +166,6 @@ M.diagnostics_config = function()
       focusable = false,
       style = 'minimal',
       border = 'rounded',
-      source = 'always',
       header = '',
       prefix = '',
     },
@@ -293,23 +292,8 @@ s.set_keymaps = function(bufnr, opts)
     vim.api.nvim_buf_set_keymap(bufnr, m, lhs, rhs, key_opts)
   end
 
-  if vim.diagnostic then
-    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
-    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
-    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
-  else
-    map('n', 'gl', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
-    map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
-    map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
-  end
+  s.supported_keymaps(map)
 
-  if vim.lsp.buf.range_code_action then
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
-  else
-    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-  end
-
-  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
   map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>')
   map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>')
   map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>')
@@ -317,7 +301,6 @@ s.set_keymaps = function(bufnr, opts)
   map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>')
   map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>')
   map('n', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
-  map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
 end
 
 s.map_check = function(mode, lhs)
@@ -334,7 +317,7 @@ end
 
 function M.highlight_symbol(client, bufnr)
   if client == nil 
-    or client.supports_method('textDocument/documentHighlight') == false
+    or s.supports_method(client, 'textDocument/documentHighlight') == false
   then
     return
   end
@@ -364,7 +347,7 @@ s.set_capabilities = function(current)
       if ok then
         cmp_lsp = source.default_capabilities()
       else
-        local msg = "[lsp-zero] Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false (use set_preferences)."
+        local msg = "[lsp-zero] Could not find cmp_nvim_lsp. Please install cmp_nvim_lsp or set the option cmp_capabilities to false."
         vim.notify(msg, vim.log.levels.WARN)
       end
     end
@@ -515,10 +498,55 @@ s.format_range_fallback = function(timeout)
 
   for _, c in ipairs(vim.lsp.get_active_clients()) do
     if vim.lsp.buf_is_attached(buffer, c.id)
-      and c.supports_method('textDocument/rangeFormatting')
+      and s.supports_method(c, 'textDocument/rangeFormatting')
     then
       lsp_format.apply_range_fallback(c, buffer, config)
     end
+  end
+end
+
+s.supported_keymaps = function(map)
+  map('n', 'gl', '<cmd>lua vim.lsp.diagnostic.show_line_diagnostics()<cr>')
+  map('n', '[d', '<cmd>lua vim.lsp.diagnostic.goto_prev()<cr>')
+  map('n', ']d', '<cmd>lua vim.lsp.diagnostic.goto_next()<cr>')
+
+  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+  map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+  map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
+end
+
+s.supports_method = function(client, method)
+  return client.supports_method(method)
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  s.supported_keymaps = function(map)
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover({border = "rounded"})<cr>')
+    map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help({border = "rounded"})<cr>')
+  end
+  s.supports_method = function(client, method)
+    return client:supports_method(method)
+  end
+elseif vim.fn.has('nvim-0.9') == 1 then
+  s.supported_keymaps = function(map)
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+    map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.code_action()<cr>')
+  end
+elseif vim.fn.has('nvim-0.6') == 1 then
+  s.supported_keymaps = function(map)
+    map('n', 'gl', '<cmd>lua vim.diagnostic.open_float()<cr>')
+    map('n', '[d', '<cmd>lua vim.diagnostic.goto_prev()<cr>')
+    map('n', ']d', '<cmd>lua vim.diagnostic.goto_next()<cr>')
+
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>')
+    map('n', '<C-k>', '<cmd>lua vim.lsp.buf.signature_help()<cr>')
+    map('x', '<F4>', '<cmd>lua vim.lsp.buf.range_code_action()<cr>')
   end
 end
 

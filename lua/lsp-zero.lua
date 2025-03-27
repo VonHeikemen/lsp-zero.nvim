@@ -39,7 +39,9 @@ local run = function(args)
     require('lsp-zero.snippets')
   end
 
-  Server.setup_handlers()
+  if vim.fn.has('nvim-0.11') == 0 then
+    Server.setup_handlers()
+  end
 
   if user_config.manage_nvim_cmp then
     require('lsp-zero.nvim-cmp-setup').call_setup(args.cmp_opts)
