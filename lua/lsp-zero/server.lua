@@ -15,6 +15,7 @@ local s = {}
 
 ---@diagnostic disable-next-line: deprecated
 s.islist = vim.islist or vim.tbl_islist
+s.nvim_011 = vim.fn.has('nvim-0.11') == 1
 
 function M.extend_lspconfig(opts)
   if M.setup_done then
@@ -35,9 +36,10 @@ function M.extend_lspconfig(opts)
   local util = require('lspconfig.util')
 
   if type(opts.capabilities) == 'table' then
+    local defaults = util.default_config.capabilities or {}
     util.default_config.capabilities = vim.tbl_deep_extend(
       'force',
-      util.default_config.capabilities,
+      defaults,
       opts.capabilities
     )
   end
@@ -127,13 +129,19 @@ function M.default_keymaps(opts)
     vim.keymap.set(m, lhs, rhs, key_opts)
   end
 
-  map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Hover documentation')
+  if s.nvim_011 then
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover({border = vim.g.lsp_zero_border_style})<cr>', 'Hover documentation')
+    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help({border = vim.g.lsp_zero_border_style})<cr>', 'Show function signature')
+  else
+    map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<cr>', 'Hover documentation')
+    map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
+  end
+
   map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<cr>', 'Go to definition')
   map('n', 'gD', '<cmd>lua vim.lsp.buf.declaration()<cr>', 'Go to declaration')
   map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<cr>', 'Go to implementation')
   map('n', 'go', '<cmd>lua vim.lsp.buf.type_definition()<cr>', 'Go to type definition')
   map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<cr>', 'Go to reference')
-  map('n', 'gs', '<cmd>lua vim.lsp.buf.signature_help()<cr>', 'Show function signature')
   map('n', '<F2>', '<cmd>lua vim.lsp.buf.rename()<cr>', 'Rename symbol')
   map('n', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format file')
   map('x', '<F3>', '<cmd>lua vim.lsp.buf.format({async = true})<cr>', 'Format selection')
@@ -145,10 +153,11 @@ function M.client_capabilities()
   local lsp_capabilities = nil
 
   if M.setup_done then
+    local defaults = require('lspconfig.util').default_config.capabilities or {}
     lsp_capabilities = vim.tbl_deep_extend(
       'force',
       vim.lsp.protocol.make_client_capabilities(),
-      require('lspconfig.util').default_config.capabilities
+      defaults
     )
   end
 
@@ -297,7 +306,7 @@ end
 
 function M.highlight_symbol(client, bufnr)
   if client == nil
-    or client.supports_method('textDocument/documentHighlight') == false
+    or s.supports_method(client, 'textDocument/documentHighlight') == false
   then
     return
   end
@@ -342,14 +351,18 @@ function M.ui(opts)
   local diagnostic_settings = {}
 
   if type(border_style) == 'string' then
-    vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
-      vim.lsp.handlers.hover,
-      {border = border_style}
-    )
-    vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
-      vim.lsp.handlers.signature_help,
-      {border = border_style}
-    )
+    if s.nvim_011 then
+      vim.g.lsp_zero_border_style = border_style
+    else
+      vim.lsp.handlers['textDocument/hover'] = vim.lsp.with(
+        vim.lsp.handlers.hover,
+        {border = border_style}
+      )
+      vim.lsp.handlers['textDocument/signatureHelp'] = vim.lsp.with(
+        vim.lsp.handlers.signature_help,
+        {border = border_style}
+      )
+    end
 
     diagnostic = true
     diagnostic_settings.float = {border = border_style}
@@ -491,6 +504,16 @@ function s.map_check(mode, lhs)
   end
 
   return cache
+end
+
+function s.supports_method(client, method)
+  return client.supports_method(method)
+end
+
+if s.nvim_011 then
+  function s.supports_method(client, method)
+    return client:supports_method(method)
+  end
 end
 
 return M
