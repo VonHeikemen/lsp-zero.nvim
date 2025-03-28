@@ -1,52 +1,10 @@
-# LSP Zero
-
-A collection of [functions](https://lsp-zero.netlify.app/docs/reference/lua-api.html) for Neovim's LSP client.
-
-<details>
-
-<summary>Expand: showcase</summary>
-
-```lua
--- WARNING: This is not a snippet you want to copy/paste blindly
-
-local lsp_zero = require('lsp-zero')
-
-lsp_zero.on_attach(function(client, bufnr)
-  lsp_zero.default_keymaps({buffer = bufnr})
-  lsp_zero.buffer_autoformat()
-end)
-
--- Enable a simple tab complete
-lsp_zero.omnifunc.setup({
-  trigger = '<C-Space>',
-  tabcomplete = true,
-  use_fallback = true,
-  update_on_delete = true,
-})
-
--- For this to work you need to install this:
--- https://github.com/LuaLS/lua-language-server
-lsp_zero.new_client({
-  cmd = {'lua-language-server'},
-  filetypes = {'lua'},
-  on_init = function(client)
-    lsp_zero.nvim_lua_settings(client, {})
-  end,
-  root_dir = function(bufnr)
-    -- You need Neovim v0.10 to use vim.fs.root
-    -- Note: include a .git folder in the root of your Neovim config
-    return vim.fs.root(bufnr, {'.git', '.luarc.json', '.luarc.jsonc'})
-  end,
-})
-```
-
-</details>
-
 ## Project status
 
-The development of this plugin will stop. And the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) is now a wiki that will teach you how to setup Neovim's LSP client. The only section that mentions lsp-zero is the API reference. I'll move this documentation to some other place in the future.
+Dead.
 
-It seems like future versions of Neovim will address (most of) the issues that led to the creation of this plugin. In the current nightly version of Neovim (`v0.11`) is possible to have a [good experience without installing extra plugins](https://lsp-zero.netlify.app/blog/lsp-in-3-steps.html). And even today with Neovim `v0.10` you can have all the features that you need with just 3 plugins (and no, lsp-zero is not one of them), see the example in the [quickstart section](#quickstart-for-the-impatient).
+It took about 3 years but finally Neovim has solved all the issues that led to the creation of this plugin. Neovim v0.11 can provide [everything you need without installing extra plugins](https://lsp-zero.netlify.app/blog/lsp-config-overview.html).
+
+For those of you that still use Neovim v0.9 or v0.10, the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) will teach you about Neovim's LSP client and the plugins that were popular between 2022 and 2024. Do note that the ecosystem is changing and I have no interest in keeping that up to date with the new trends.
 
 ## Documentation
 
