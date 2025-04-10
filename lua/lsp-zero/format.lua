@@ -4,16 +4,6 @@ local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
-local supports_formatting = function(client)
-  return client.supports_method('textDocument/formatting')
-end
-
-if vim.fn.has('nvim-0.11') == 1 then
-  supports_formatting = function(client)
-    return client:supports_method('textDocument/formatting')
-  end
-end
-
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
@@ -37,13 +27,14 @@ function M.format_on_save(opts)
 
   local filetype_setup = function(event)
     local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
+    local client = client_id and vim.lsp.get_client_by_id(client_id)
+
+    if client == nil then
       -- I don't know how this would happen
       -- but apparently it can happen
       return
     end
 
-    local client = vim.lsp.get_client_by_id(client_id)
     local files = list[client.name] or {}
 
     if type(files) == 'string' then
@@ -149,7 +140,7 @@ function M.async_autoformat(client, bufnr, opts)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     return
   end
 
@@ -205,13 +196,14 @@ function M.format_mapping(key, opts)
 
   local filetype_setup = function(event)
     local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
+    local client = client_id and vim.lsp.get_client_by_id(client_id)
+
+    if client == nil then
       -- I don't know how this would happen
       -- but apparently it can happen
       return
     end
 
-    local client = vim.lsp.get_client_by_id(client_id)
     local files = list[client.name]
 
     if type(files) == 'string' then
@@ -246,7 +238,13 @@ end
 
 function M.check(server)
   local buffer = vim.api.nvim_get_current_buf()
-  local client = vim.lsp.get_active_clients({bufnr = buffer, name = server})[1]
+  local get_clients = vim.lsp.get_clients
+  if get_clients == nil then
+    ---@diagnostic disable-next-line: deprecated
+    get_clients = vim.lsp.get_active_clients
+  end
+
+  local client = get_clients({bufnr = buffer, name = server})[1]
 
   if client == nil then
     local msg = '[lsp-zero] %s is not active'
@@ -260,7 +258,7 @@ function M.check(server)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return
@@ -275,13 +273,14 @@ function s.setup_async_format(opts)
 
   local filetype_setup = function(event)
     local client_id = vim.tbl_get(event, 'data', 'client_id')
-    if client_id == nil then
+    local client = client_id and vim.lsp.get_client_by_id(client_id)
+
+    if client == nil then
       -- I don't know how this would happen
       -- but apparently it can happen
       return
     end
 
-    local client = vim.lsp.get_client_by_id(client_id)
     local files = opts.servers[client.name] or {}
 
     if type(files) == 'string' then
@@ -292,7 +291,7 @@ function s.setup_async_format(opts)
       return
     end
 
-    if supports_formatting(client) == false then
+    if s.supports_formatting(client) == false then
       return
     end
 
@@ -346,6 +345,10 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   local timer = uv.new_timer()
 
   local client = vim.lsp.get_client_by_id(client_id)
+  if client == nil then
+    return
+  end
+
   local encoding = client.offset_encoding
   local client_name = client.name
     or string.format('Client %s', client.id)
@@ -377,7 +380,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
-  client.request('textDocument/formatting', params, handler, buffer)
+  s.make_request(client, params, handler, buffer)
 end
 
 function s.format_handler(err, result, ctx)
@@ -453,6 +456,24 @@ function s.format_cleanup(buffer, client_name)
 
   if changedtick  == current_changedtick then
     buf_set(buffer, 'lsp_zero_changedtick', changedtick - 1)
+  end
+end
+
+function s.supports_formatting(client)
+  return client.supports_method('textDocument/formatting')
+end
+
+function s.make_request(client, params, handler, buffer)
+  client.request('textDocument/formatting', params, handler, buffer)
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  function s.supports_formatting(client)
+    return client:supports_method('textDocument/formatting')
+  end
+
+  function s.make_request(client, params, handler, buffer)
+    client:request('textDocument/formatting', params, handler, buffer)
   end
 end
 
