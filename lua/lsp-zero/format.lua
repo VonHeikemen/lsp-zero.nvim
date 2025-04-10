@@ -35,16 +35,6 @@ local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
 
-local supports_formatting = function(client)
-  return client.supports_method('textDocument/formatting')
-end
-
-if vim.fn.has('nvim-0.11') == 1 then
-  local supports_formatting = function(client)
-    return client:supports_method('textDocument/formatting')
-  end
-end
-
 ---@param opts lsp_zero.FormatOnSave
 function M.format_on_save(opts)
   local autocmd = vim.api.nvim_create_autocmd
@@ -183,7 +173,7 @@ function M.async_autoformat(client, bufnr, opts)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     return
   end
 
@@ -294,7 +284,7 @@ function M.check(server)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return
@@ -326,7 +316,7 @@ function s.setup_async_format(opts)
       return
     end
 
-    if supports_formatting(client) == false then
+    if s.supports_formatting(client) == false then
       return
     end
 
@@ -415,7 +405,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
-  client.request('textDocument/formatting', params, handler, buffer)
+  s.make_request(client, params, handler, buffer)
 end
 
 function s.format_handler(err, result, ctx)
@@ -491,6 +481,24 @@ function s.format_cleanup(buffer, client_name)
 
   if changedtick  == current_changedtick then
     buf_set(buffer, 'lsp_zero_changedtick', changedtick - 1)
+  end
+end
+
+function s.supports_formatting(client)
+  return client.supports_method('textDocument/formatting')
+end
+
+function s.make_request(client, params, handler, buffer)
+  client.request('textDocument/formatting', params, handler, buffer)
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  function s.supports_formatting(client)
+    return client:supports_method('textDocument/formatting')
+  end
+
+  function s.make_request(client, params, handler, buffer)
+    client:request('textDocument/formatting', params, handler, buffer)
   end
 end
 
