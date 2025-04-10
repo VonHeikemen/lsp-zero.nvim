@@ -70,7 +70,10 @@ end
 function M.on_attach(fn)
   local Server = require('lsp-zero.server')
 
-  if s.setup_lspconfig then
+  if (
+    vim.g.lspconfig == 1
+    or #vim.api.nvim_get_runtime_file('doc/lspconfig.txt', 0) > 0
+  ) then
     Server.extend_lspconfig()
   end
 
