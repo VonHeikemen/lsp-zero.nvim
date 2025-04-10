@@ -3,9 +3,12 @@ local s = {}
 local uv = vim.uv or vim.loop
 local format_group = 'lsp_zero_format'
 local timeout_ms = 10000
+local nvim_format = type(vim.lsp.buf.format) == 'function'
 
-local supports_formatting = function(client)
-  return client.supports_method('textDocument/formatting')
+local get_clients = vim.lsp.get_clients
+if get_clients == nil then
+  ---@diagnostic disable-next-line: deprecated
+  get_clients = vim.lsp.get_active_clients
 end
 
 function M.format_on_save(opts)
@@ -34,6 +37,7 @@ function M.format_on_save(opts)
 
     local config = {
       name = name,
+      async = false,
       verbose = false,
       timeout_ms = format_opts.timeout_ms or timeout_ms,
       formatting_options = format_opts.formatting_options or {},
@@ -46,7 +50,11 @@ function M.format_on_save(opts)
         return
       end
 
-      M.apply_sync(e.buf, config)
+      if nvim_format then
+        vim.lsp.buf.format(config)
+      else
+        M.apply_sync(e.buf, config)
+      end
     end
 
     local desc = string.format('Format buffer with %s', name)
@@ -100,7 +108,7 @@ function M.buffer_autoformat(client, bufnr, opts)
     end
 
     if config.name == nil then
-      if vim.lsp.buf.format then
+      if nvim_format then
         vim.lsp.buf.format({
           async = false,
           formatting_options = config.formatting_options
@@ -132,7 +140,7 @@ function M.async_autoformat(client, bufnr, opts)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     return
   end
 
@@ -218,6 +226,10 @@ function M.format_mapping(key, opts)
       end
     end
 
+    if nvim_format then
+      exec = function() vim.lsp.buf.format(config) end
+    end
+
     local desc = string.format('Format buffer with %s', config.name)
 
     vim.keymap.set(mode, key, exec, {buffer = event.buf, desc = desc})
@@ -241,7 +253,7 @@ function M.check(server)
 
   local client = vim.tbl_filter(
     function(c) return c.name == server end,
-    vim.lsp.get_active_clients()
+    get_clients()
   )[1]
 
   if client == nil then
@@ -256,7 +268,7 @@ function M.check(server)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return
@@ -269,7 +281,7 @@ end
 function M.apply_sync(bufnr, opts)
   local client = vim.tbl_filter(
     function(c) return c.name == opts.name end,
-    vim.lsp.get_active_clients()
+    get_clients()
   )[1]
 
   if (
@@ -282,8 +294,8 @@ function M.apply_sync(bufnr, opts)
   end
 
   local params = vim.lsp.util.make_formatting_params(opts.formatting_options)
-  local result = client.request_sync(
-    'textDocument/formatting',
+  local result = s.request_sync(
+    client,
     params,
     opts.timeout_ms,
     bufnr
@@ -297,7 +309,7 @@ end
 function M.apply_async(bufnr, opts)
   local client = vim.tbl_filter(
     function(c) return c.name == opts.name end,
-    vim.lsp.get_active_clients()
+    get_clients()
   )[1]
 
   if (
@@ -342,13 +354,13 @@ function M.apply_async(bufnr, opts)
     vim.lsp.util.apply_text_edits(result, ctx.bufnr, encoding)
   end
 
-  client.request('textDocument/formatting', params, handler, bufnr)
+  s.make_request(client, 'textDocument/formatting', params, handler, bufnr)
 end
 
 function M.apply_range(bufnr, opts)
   local client = vim.tbl_filter(
     function(c) return c.name == opts.name end,
-    vim.lsp.get_active_clients()
+    get_clients()
   )[1]
 
   if (
@@ -362,12 +374,13 @@ function M.apply_range(bufnr, opts)
 
   local config = opts.formatting_options
 
+  ---@diagnostic disable-next-line: missing-parameter
   local params = vim.lsp.util.make_given_range_params()
-
+  ---@diagnostic disable-next-line: inject-field
   params.options = vim.lsp.util.make_formatting_params(config).options
 
-  local resp = client.request_sync(
-    'textDocument/rangeFormatting',
+  local resp = s.request_sync(
+    client,
     params,
     opts.timeout_ms,
     bufnr
@@ -381,7 +394,7 @@ end
 function M.apply_async_range(bufnr, opts)
   local client = vim.tbl_filter(
     function(c) return c.name == opts.name end,
-    vim.lsp.get_active_clients()
+    get_clients()
   )[1]
 
   if (
@@ -393,9 +406,11 @@ function M.apply_async_range(bufnr, opts)
     return
   end
 
+  ---@diagnostic disable-next-line: missing-parameter
   local params = vim.lsp.util.make_given_range_params()
-
   local config = opts.formatting_options
+
+  ---@diagnostic disable-next-line: inject-field
   params.options = vim.lsp.util.make_formatting_params(config).options
 
   local timer = uv.new_timer()
@@ -430,7 +445,7 @@ function M.apply_async_range(bufnr, opts)
     vim.lsp.util.apply_text_edits(result, ctx.bufnr, encoding)
   end
 
-  client.request('textDocument/rangeFormatting', params, handler, bufnr)
+  s.make_request(client, 'textDocument/rangeFormatting', params, handler, bufnr)
 end
 
 function s.setup_async_format(opts)
@@ -450,7 +465,7 @@ function s.setup_async_format(opts)
       callback = function(e)
         local client = vim.tbl_filter(
           function(c) return c.name == name end,
-          vim.lsp.get_active_clients()
+          get_clients()
         )[1]
 
         if (
@@ -459,7 +474,6 @@ function s.setup_async_format(opts)
         ) then
           return
         end
-
 
         s.request_format(client.id, e.buf, opts.format_opts, opts.timeout_ms)
       end,
@@ -503,6 +517,10 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   local timer = uv.new_timer()
 
   local client = vim.lsp.get_client_by_id(client_id)
+  if client == nil then
+    return
+  end
+
   local encoding = client.offset_encoding
   local client_name = client.name
     or string.format('Client %s', client.id)
@@ -534,7 +552,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
-  client.request('textDocument/formatting', params, handler, buffer)
+  s.make_request(client, 'textDocument/formatting', params, handler, buffer)
 end
 
 function s.format_handler(err, result, ctx)
@@ -610,6 +628,42 @@ function s.format_cleanup(buffer, client_name)
 
   if changedtick  == current_changedtick then
     buf_set(buffer, 'lsp_zero_changedtick', changedtick - 1)
+  end
+end
+
+function s.supports_formatting(client)
+  return client.supports_method('textDocument/formatting')
+end
+
+function s.make_request(client, method, params, handler, bufnr)
+  client.request(method, params, handler, bufnr)
+end
+
+function s.request_sync(client, params, timeout, bufnr)
+  return client.request_sync(
+    'textDocument/formatting',
+    params,
+    timeout,
+    bufnr
+  )
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  function s.supports_formatting(client)
+    return client:supports_method('textDocument/formatting')
+  end
+
+  function s.make_request(client, method, params, handler, bufnr)
+    client:request(method, params, handler, bufnr)
+  end
+
+  function s.request_sync(client, params, timeout, bufnr)
+    return client:request_sync(
+      'textDocument/formatting',
+      params,
+      timeout,
+      bufnr
+    )
   end
 end
 
