@@ -3,11 +3,17 @@ local s = {}
 local timeout_ms = 10000
 local uv = vim.uv or vim.loop
 
+local get_clients = vim.lsp.get_clients
+if get_clients == nil then
+  ---@diagnostic disable-next-line: deprecated
+  get_clients = vim.lsp.get_active_clients
+end
+
 local format_group = 'lsp_zero_format'
 local autocmd = [[
   augroup %s
     autocmd! * <buffer>
-    autocmd %s %s 
+    autocmd %s %s
   augroup END
 ]]
 
@@ -22,16 +28,6 @@ local buffer_default = {
 }
 
 local buffer_config = {}
-
-local supports_formatting = function(client)
-  return client.supports_method('textDocument/formatting')
-end
-
-if vim.fn.has('nvim-0.11') == 1 then
-  supports_formatting = function(client)
-    return client:supports_method('textDocument/formatting')
-  end
-end
 
 M.format_on_save = function(opts)
   local fmt = string.format
@@ -139,7 +135,7 @@ end
 M.async_autoformat = function(client, buffer, opts)
   opts = opts or {}
   local fmt = string.format
-  
+
   if vim.b.lsp_zero_enable_autoformat == nil then
     vim.b.lsp_zero_enable_autoformat = 1
   end
@@ -148,14 +144,14 @@ M.async_autoformat = function(client, buffer, opts)
     return
   end
 
-  if supports_formatting(client) == false then
+  if s.supports_formatting(client) == false then
     return
   end
 
   if buffer == nil then
     buffer = vim.api.nvim_get_current_buf()
   end
-  
+
   local config = {
     timeout_ms = buffer_default.timeout_ms
   }
@@ -202,7 +198,6 @@ M.keymap_action = function(key, opts)
     return
   end
 
-  local autocmd = vim.api.nvim_create_autocmd
   local augroup = vim.api.nvim_create_augroup
   local format_id = augroup('lsp_zero_format_mapping', {clear = true})
 
@@ -216,6 +211,10 @@ M.keymap_action = function(key, opts)
 
   local filetype_setup = function(event)
     local client = vim.lsp.get_client_by_id(event.data.client_id)
+    if client == nil then
+      return
+    end
+
     local files = list[client.name]
 
     if type(files) == 'string' then
@@ -245,9 +244,10 @@ M.keymap_action = function(key, opts)
       config.formatting_options = format_opts.formatting_options
     end
 
-    local exec = function() vim.lsp.buf.format(config) end
+    local cb = function() vim.lsp.buf.format(config) end
     local mapping = '<Plug>(lsp-zero-format)'
-    vim.keymap.set({'n', 'x', 'i', 's'}, mapping, exec, {buffer = event.buf})
+
+    vim.keymap.set({'n', 'x', 'i', 's'}, mapping, cb, {buffer = event.buf})
 
     local exec = {
       n = 'nnoremap <buffer> %s %s',
@@ -257,8 +257,6 @@ M.keymap_action = function(key, opts)
       i = 'inoremap <buffer> %s %s',
     }
 
-    local desc = string.format('Format buffer with %s', client.name)
-
     for _, m in pairs(mode) do
       if exec[m] then
         vim.cmd(exec[m]:format(key, mapping))
@@ -266,7 +264,7 @@ M.keymap_action = function(key, opts)
     end
   end
 
-  autocmd('LspAttach', {
+  vim.api.nvim_create_autocmd('LspAttach', {
     group = format_id,
     desc = string.format('Format buffer with %s', key),
     callback = filetype_setup,
@@ -275,7 +273,7 @@ end
 
 M.keymap_fallback = function(key, opts)
   local group = 'lsp_zero_format_mapping'
-  local autocmd = 'autocmd %s FileType %s %s'
+  local ft_autocmd = 'autocmd %s FileType %s %s'
   local cmd = 'LspZeroFormatBind'
 
   local keymap = {
@@ -307,7 +305,7 @@ M.keymap_fallback = function(key, opts)
       local mapping = keymap[m]
       if mapping then
         local exec = mapping:format(key, cmd, server)
-        vim.cmd(autocmd:format(group, pattern, exec))
+        vim.cmd(ft_autocmd:format(group, pattern, exec))
       end
     end
   end
@@ -316,9 +314,9 @@ M.keymap_fallback = function(key, opts)
 end
 
 local ensure_client = function(server, verbose)
-  local active = vim.lsp.get_active_clients()
+  local active = get_clients()
   local buffer = vim.api.nvim_get_current_buf()
-  
+
   local client = vim.tbl_filter(function(c)
     return c.name == server
   end, active)[1]
@@ -340,7 +338,7 @@ local ensure_client = function(server, verbose)
   end
 
 
-  if not supports_formatting(client) and verbose then
+  if not s.supports_formatting(client) and verbose then
     local msg = '[lsp-zero] %s does not support textDocument/formatting method'
     vim.notify(msg:format(server), vim.log.levels.WARN)
     return false, -1
@@ -382,7 +380,9 @@ M.apply_range_fallback = function(client, buffer, opts)
   local timeout = opts.timeout_ms or timeout_ms
   local config = opts.formatting_options
 
+  ---@diagnostic disable-next-line: missing-parameter
   local params = vim.lsp.util.make_given_range_params()
+  ---@diagnostic disable-next-line: inject-field
   params.options = vim.lsp.util.make_formatting_params(config).options
 
   local response = client.request_sync(
@@ -406,7 +406,10 @@ end
 M.apply_async_range_fallback = function(client, buffer, opts)
   opts = opts or {}
   local config = opts.formatting_options
+
+  ---@diagnostic disable-next-line: missing-parameter
   local params = vim.lsp.util.make_given_range_params()
+  ---@diagnostic disable-next-line: inject-field
   params.options = vim.lsp.util.make_formatting_params(config).options
 
   client.request('textDocument/rangeFormatting', params, nil, buffer)
@@ -414,8 +417,8 @@ end
 
 M.setup_format_bind = function(name, opts)
   opts = opts or {}
-  local command = function(name, attr, str)
-    vim.cmd(string.format('command! -buffer %s %s lua %s', attr, name, str))
+  local command = function(n, attr, str)
+    vim.cmd(string.format('command! -buffer %s %s lua %s', attr, n, str))
   end
 
   M.bind_opts = {
@@ -443,9 +446,9 @@ M.setup_format_bind = function(name, opts)
   )
 end
 
-M.format_bind = function(line1, line2, count, args)
+M.format_bind = function(_, line2, count, args)
   local server = args[1]
-  local active = vim.lsp.get_active_clients()
+  local active = get_clients()
   local client = vim.tbl_filter(function(c)
     return c.name == server
   end, active)[1]
@@ -524,11 +527,11 @@ if vim.lsp.buf.format then
 
   M.format_buffer = ensure_enabled(function()
     local config = {async = false, timeout_ms = timeout_ms}
-    local timeout_ms = vim.b.lsp_zero_format_timeout
+    local timeout = vim.b.lsp_zero_format_timeout
     local format_opts = vim.b.lsp_zero_formatting_options
 
     if timeout then
-      config.timeout_ms = timeout_ms
+      config.timeout_ms = timeout
     end
 
     if format_opts then
@@ -560,11 +563,11 @@ else
 
   M.format_buffer = ensure_enabled(function()
     local config = {timeout_ms = timeout_ms}
-    local timeout_ms = vim.b.lsp_zero_format_timeout
+    local timeout = vim.b.lsp_zero_format_timeout
     local format_opts = vim.b.lsp_zero_formatting_options
 
     if timeout then
-      config.timeout_ms = timeout_ms
+      config.timeout_ms = timeout
     end
 
     if format_opts then
@@ -605,6 +608,10 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   local timer = uv.new_timer()
 
   local client = vim.lsp.get_client_by_id(client_id)
+  if client == nil then
+    return
+  end
+
   local encoding = client.offset_encoding
   local client_name = client.name
     or string.format('Client %s', client.id)
@@ -636,7 +643,7 @@ function s.request_format(client_id, buffer, format_opts, timeout)
   end
 
   local params = vim.lsp.util.make_formatting_params(format_opts)
-  client.request('textDocument/formatting', params, handler, buffer)
+  s.make_request(client, params, handler, buffer)
 end
 
 function s.format_handler(err, result, ctx)
@@ -712,6 +719,24 @@ function s.format_cleanup(buffer, client_name)
 
   if changedtick  == current_changedtick then
     buf_set(buffer, 'lsp_zero_changedtick', changedtick - 1)
+  end
+end
+
+function s.supports_formatting(client)
+  return client.supports_method('textDocument/formatting')
+end
+
+function s.make_request(client, params, handler, buffer)
+  client.request('textDocument/formatting', params, handler, buffer)
+end
+
+if vim.fn.has('nvim-0.11') == 1 then
+  function s.supports_formatting(client)
+    return client:supports_method('textDocument/formatting')
+  end
+
+  function s.make_request(client, params, handler, buffer)
+    client:request('textDocument/formatting', params, handler, buffer)
   end
 end
 
