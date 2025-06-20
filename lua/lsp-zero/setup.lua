@@ -69,7 +69,6 @@ function s.setup_ui(opts)
     vim.lsp.handlers.signature_help,
     {border = opts.border}
   )
-
 end
 
 function s.setup_servers(list, opts)
@@ -93,6 +92,13 @@ function s.setup_installed(list, opts)
   end
 
   local mason = require('mason-lspconfig')
+  local mason_settings = require('mason-lspconfig.settings')
+  
+  if mason.setup_handlers == nil then
+    if mason_settings.current.automatic_enable then
+      return
+    end
+  end
 
   local servers = mason.get_installed_servers()
   vim.list_extend(servers, vim.tbl_keys(list))

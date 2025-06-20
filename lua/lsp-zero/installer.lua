@@ -9,8 +9,28 @@ function M.setup()
     return M.enabled
   end
 
-  local mason = M.load_module('mason')
-  local lspconfig = M.load_module('mason-lspconfig')
+  local mason, mason_mod = M.load_module('mason')
+  local lspconfig, lspconfig_mod = M.load_module('mason-lspconfig')
+
+  if mason == 'loaded' then
+    local setup = mason_mod.setup
+    if type(setup) == 'function' then
+      setup()
+    end
+  end
+
+  if lspconfig == 'loaded' then
+    local setup = lspconfig_mod.setup
+    local mason_v2 = lspconfig_mod.setup_handlers == nil
+
+    if type(setup) == 'function' then
+      if mason_v2 then
+        setup({automatic_enable = false})
+      else
+        setup()
+      end
+    end
+  end
 
   if mason == 'failed' or lspconfig == 'failed' then
     M.enabled = false
@@ -26,18 +46,16 @@ end
 
 function M.load_module(name)
   if package.loaded[name] ~= nil then
-    return 'loaded'
+    return 'loaded', {}
   end
 
   local ok, mod = pcall(require, name)
 
   if not ok then
-    return 'failed'
+    return 'failed', {}
   end
 
-  mod.setup()
-
-  return 'loaded'
+  return 'loaded', mod
 end
 
 function M.get_servers()
@@ -51,7 +69,17 @@ function M.ensure_installed(list)
   end
 
   require('mason-lspconfig.settings').set({ensure_installed = list})
-  require('mason-lspconfig.ensure_installed')()
+  local ok, ensure_installed = pcall(require, 'mason-lspconfig.ensure_installed')
+
+  if ok then
+    ensure_installed()
+    return
+  end
+
+  local ok_mason, mason_install = pcall(require, 'mason-lspconfig.features.ensure_installed')
+  if ok_mason then
+    mason_install()
+  end
 end
 
 return M
