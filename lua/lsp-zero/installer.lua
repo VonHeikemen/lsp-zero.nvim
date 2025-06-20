@@ -109,8 +109,14 @@ s.lsp.get_available = function()
   return require('nvim-lsp-installer.servers').get_available_server_names()
 end
 
-s.mason.setup = function()
+s.mason.setup = function(is_v1)
   local mason_file = vim.api.nvim_get_runtime_file('lua/mason/api/command.lua', 1)
+  local mason_lsp_settings = {}
+
+  if not is_v1 then
+    mason_lsp_settings.automatic_enable = false
+  end
+
   if #mason_file == 1 and package.loaded['mason.api.command'] == nil then
     -- Setup mason if user didn't
     require('mason').setup()
@@ -123,9 +129,9 @@ s.mason.setup = function()
   -- Same deal here but with `mason-lspconfig`
   local lsp_file = vim.api.nvim_get_runtime_file('lua/mason-lspconfig/api/command.lua', 1)
   if #lsp_file == 1 and package.loaded['mason-lspconfig.api.command'] == nil then
-    require('mason-lspconfig').setup()
+    require('mason-lspconfig').setup(mason_lsp_settings)
   elseif #lsp_file == 0 then
-    require('mason-lspconfig').setup()
+    require('mason-lspconfig').setup(mason_lsp_settings)
   end
 
   M.fn.setup = id
@@ -133,7 +139,10 @@ s.mason.setup = function()
 end
 
 s.mason.use = function(setup_server)
-  s.mason.setup()
+  local mason_lsp = require('mason-lspconfig')
+  local mason_v1 = type(mason_lsp.setup_handlers) == 'function'
+
+  s.mason.setup(mason_v1)
 
   -- Setup installed servers directly
   -- hopefully this will avoid weird behaviors 
@@ -143,15 +152,19 @@ s.mason.use = function(setup_server)
     setup_server(name)
   end
 
-  -- This will duplicate the call to `setup_server`
-  -- for now this is OK. `setup_server` will not configure a server twice
-  require('mason-lspconfig').setup_handlers({setup_server})
+
+  if mason_v1 then
+    -- This will duplicate the call to `setup_server`
+    -- for now this is OK. `setup_server` will not configure a server twice
+    mason_lsp.setup_handlers({setup_server})
+  end
 end
 
 s.mason.install = function(list)
   local global_config = require('lsp-zero.settings')
+  local old_mod, old_install_method = pcall(require, 'mason-lspconfig.ensure_installed')
 
-  s.mason.setup()
+  s.mason.setup(old_mod)
 
   if global_config.suggest_lsp_servers then
     for _, name in ipairs(list) do
@@ -159,8 +172,17 @@ s.mason.install = function(list)
     end
   end
 
+  local ok, mason_install = pcall(require, 'mason-lspconfig.features.ensure_installed')
   require('mason-lspconfig.settings').set({ensure_installed = list})
-  require('mason-lspconfig.ensure_installed')()
+
+  if ok then
+    mason_install()
+    return
+  end
+
+  if old_mod then
+    old_install_method()
+  end
 end
 
 s.mason.get_servers = function()
