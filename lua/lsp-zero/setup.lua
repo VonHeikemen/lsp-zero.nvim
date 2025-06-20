@@ -93,7 +93,7 @@ function s.setup_installed(list, opts)
 
   local mason = require('mason-lspconfig')
   local mason_settings = require('mason-lspconfig.settings')
-  
+
   if mason.setup_handlers == nil then
     if mason_settings.current.automatic_enable then
       return
