@@ -2,18 +2,9 @@
 
 Dead.
 
-It took about 3 years but finally Neovim has solved all the issues that led to the creation of this plugin. Neovim v0.11 can provide [everything you need without installing extra plugins](https://lsp-zero.netlify.app/blog/lsp-config-overview.html).
+It took about 3 years but finally Neovim has solved all the issues that led to the creation of this plugin. Neovim v0.11 can provide [everything you need without installing extra plugins](https://vonheikemen.github.io/learn-nvim/feature/lsp-setup.html).
 
-For those of you that still use Neovim v0.9 or v0.10, the [documentation site](https://lsp-zero.netlify.app/docs/getting-started.html) will teach you about Neovim's LSP client and the plugins that were popular between 2022 and 2024. Do note that the ecosystem is changing and I have no interest in keeping that up to date with the new trends.
-
-## Documentation
-
-You can browse the documentation here: [lsp-zero.netlify.app/docs](https://lsp-zero.netlify.app/docs/introduction.html)
-
-* [Tutorial for beginners](https://lsp-zero.netlify.app/docs/tutorial.html)
-* [Installation and Basic Usage](https://lsp-zero.netlify.app/docs/getting-started.html)
-* [LSP Configuration](https://lsp-zero.netlify.app/docs/language-server-configuration.html)
-* [Autocomplete](https://lsp-zero.netlify.app/docs/autocomplete.html)
+For those of you that still use Neovim v0.9 or v0.10, this blog post will show you a simple setup you can use as your base: [Getting started with Neovim's LSP client](https://dev.to/vonheikemen/getting-started-with-neovims-native-lsp-client-in-the-year-of-2022-the-easy-way-bp3).
 
 ## Support
 
