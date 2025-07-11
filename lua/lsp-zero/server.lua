@@ -369,7 +369,7 @@ end
 
 s.autostart = function(lsp, autostart)
   if autostart == nil then
-    autostart = vim.F.if_nil(lsp.autostart, true)
+    autostart = s.if_nil(lsp.autostart, true)
   end
 
   local has_filetype = vim.bo.filetype ~= ''
@@ -517,6 +517,14 @@ end
 
 s.supports_method = function(client, method)
   return client.supports_method(method)
+end
+
+s.if_nil = function(val, fallback)
+  if val ~= nil then
+    return val
+  end
+
+  return fallback
 end
 
 if vim.fn.has('nvim-0.11') == 1 then
